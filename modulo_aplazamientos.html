@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 6: Aplazamientos y Devoluciones</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        poliBlue: '#002E5D',
+                        poliYellow: '#FDB913',
+                        poliLightBlue: '#E6F0FA',
+                        poliGreen: '#10B981',
+                        poliRed: '#EF4444',
+                        poliOrange: '#F97316',
+                        poliPurple: '#8B5CF6'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 p-4 md:p-6 font-sans text-gray-800">
+
+    <div class="max-w-5xl mx-auto">
+
+        <!-- NAVEGACIÓN (BREADCRUMB PARA CANVAS) -->
+        <nav class="mb-4 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2 text-poliBlue hover:text-blue-800 font-semibold text-sm transition bg-white px-4 py-2 rounded-lg shadow-sm border border-gray-200">
+                <i class="fas fa-arrow-left"></i> Volver al Menú Principal
+            </a>
+            <div class="text-xs text-gray-500 font-medium">
+                Inicio <span class="mx-1">></span> <span class="text-poliBlue">Módulo 6: Aplazamientos y Devoluciones</span>
+            </div>
+        </nav>
+
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+            <!-- Header -->
+            <div class="bg-poliBlue p-8 text-white relative overflow-hidden flex items-center justify-between">
+                <div class="relative z-10">
+                    <span class="bg-poliYellow text-poliBlue text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block">Módulo 6</span>
+                    <h1 class="text-3xl md:text-4xl font-bold">Aplazamientos y Devoluciones</h1>
+                    <p class="mt-2 text-blue-200 text-lg">La última barrera de retención: Gestión financiera de contingencias.</p>
+                </div>
+                <i class="fas fa-hand-holding-usd text-7xl md:text-9xl text-poliYellow opacity-20 relative z-10 right-4"></i>
+                <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-blue-800 rounded-full opacity-50"></div>
+            </div>
+
+            <!-- MANTRA VENTA CONSULTIVA -->
+            <div class="bg-gradient-to-r from-red-50 to-white border-b border-red-200 p-5 text-center shadow-sm relative z-20">
+                <p class="text-red-800 font-medium text-sm md:text-base">
+                    <i class="fas fa-shield-alt text-red-600 mr-2 text-xl"></i> <strong>Misión de Retención:</strong> "No tomes el pedido. Si el estudiante pide irse o que le devuelvan el dinero, <strong>INDAGA EL POR QUÉ</strong>. Entiende su situación, plantea soluciones académicas o financieras y genera un compromiso. Si la decisión es definitiva, adviértele los riesgos reales."
+                </p>
+            </div>
+
+            <!-- Content -->
+            <div class="p-6 md:p-8">
+                
+                <!-- 1. DIAGNÓSTICO INICIAL (VITAL) -->
+                <div class="mb-10">
+                    <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-poliYellow pb-2 inline-block mb-6">1. Diagnóstico Inicial (El paso cero)</h2>
+                    <p class="text-sm text-gray-600 mb-4">Cuando el estudiante llama para decir "No voy a estudiar, quiero aplazar para no perder el cupo", lo primero que debes hacer es entrar a <strong>Analytics > Inscripción de Asignaturas > Matrículas</strong>. Dependiendo de lo que veas, el proceso cambia radicalmente:</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        
+                        <!-- Escenario A: No ha pagado -->
+                        <div class="bg-white border-2 border-gray-200 rounded-xl p-5 shadow-sm relative overflow-hidden hover:border-gray-400 transition">
+                            <h3 class="font-bold text-lg text-gray-700 mb-2 flex items-center gap-2"><i class="fas fa-times-circle text-gray-400"></i> Escenario A: NO está matriculado</h3>
+                            <p class="text-sm text-gray-600 mb-4">Aún no ha pagado. <strong>No requiere solicitud formal en el sistema.</strong> Si no paga, el sistema simplemente lo inactiva (Cese académico).</p>
+                            
+                            <div class="bg-yellow-50 p-4 rounded-lg border-l-4 border-poliYellow">
+                                <p class="text-xs font-bold text-yellow-800 uppercase mb-2"><i class="fas fa-bullhorn"></i> Argumento de Retención:</p>
+                                <p class="text-sm text-gray-700 italic">"Juan, si dejas de estudiar ahora pierdes tu continuidad. Cuando decidas volver, tendrás que hacer un Reintegro. ¡Ojo! Al regresar <strong>te acogerás a la resolución rectoral vigente</strong>, lo que significa que pueden cambiar tus materias y tendrás que asumir los incrementos anuales de precios (IPC). ¿Revisamos una alternativa de pago para que no te vayas?"</p>
+                            </div>
+                        </div>
+
+                        <!-- Escenario B: Ya pagó -->
+                        <div class="bg-white border-2 border-poliBlue rounded-xl p-5 shadow-sm relative overflow-hidden hover:shadow-md transition">
+                            <h3 class="font-bold text-lg text-poliBlue mb-2 flex items-center gap-2"><i class="fas fa-check-circle text-green-500"></i> Escenario B: SÍ está matriculado</h3>
+                            <p class="text-sm text-gray-600 mb-4">El estudiante ya pagó. <strong>¡Es OBLIGATORIO hacer la solicitud formal!</strong> La universidad no adivina contingencias; si no avisa, asumiremos que está estudiando y perderá su inversión.</p>
+                            
+                            <div class="bg-gray-800 p-4 rounded-lg text-white">
+                                <p class="text-xs font-bold text-poliLightBlue uppercase mb-2"><i class="fas fa-laptop-code"></i> Ruta de Acción (Ticket):</p>
+                                <p class="text-sm text-gray-300">Si después de intentar retenerlo su decisión es firme, indícale crear un ticket por: <br><strong class="text-poliYellow">Financiera > Devolución > Aplazamiento y devolución</strong>.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. EL APLAZAMIENTO -->
+                <div class="mb-10 border-t-2 border-dashed border-gray-200 pt-8">
+                    <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-poliYellow pb-2 inline-block mb-6">2. El Aplazamiento (Congelar el Dinero)</h2>
+                    
+                    <div class="bg-blue-50 border border-blue-200 rounded-xl p-6 shadow-sm flex flex-col md:flex-row gap-6 items-center mb-6">
+                        <div class="bg-white text-poliBlue w-20 h-20 rounded-full flex items-center justify-center flex-shrink-0 text-4xl shadow-sm border-4 border-blue-100">
+                            <i class="fas fa-snowflake"></i>
+                        </div>
+                        <div class="flex-grow">
+                            <h3 class="font-bold text-xl text-poliBlue mb-2">Congelamiento del 100%</h3>
+                            <p class="text-sm text-gray-700 mb-3">El aplazamiento formal permite <strong>congelar el 100% de lo efectivamente pagado</strong>, dejándolo como saldo a favor. Este proceso está amparado en el Art. 48 del Reglamento Estudiantil.</p>
+                            
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div class="bg-white p-3 rounded border border-gray-200">
+                                    <p class="font-bold text-gray-800 text-xs uppercase mb-1"><i class="fas fa-hourglass-half text-poliYellow"></i> Vigencia</p>
+                                    <p class="text-xs text-gray-600">Tiene una vigencia inicial de 1 periodo académico. Puede prorrogarse por 1 periodo adicional consecutivo (máx. 2). <strong>Si expira el tiempo, el estudiante pierde el dinero y su calidad de matriculado.</strong></p>
+                                </div>
+                                <div class="bg-white p-3 rounded border border-gray-200">
+                                    <p class="font-bold text-gray-800 text-xs uppercase mb-1"><i class="fas fa-user-graduate text-poliYellow"></i> Jóvenes a la U</p>
+                                    <p class="text-xs text-gray-600">Requieren ticket y siguen el mismo límite de 2 periodos. Tienen validaciones adicionales rigurosas por motivos de fuerza mayor.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Alerta Consultiva (Descuentos y Precios) -->
+                    <div class="bg-red-50 p-5 rounded-xl border-l-4 border-red-500 shadow-sm">
+                        <p class="font-bold text-red-800 mb-2 flex items-center gap-2"><i class="fas fa-user-md text-xl"></i> La Cruda Realidad (Para retener estudiantes nuevos)</p>
+                        <p class="text-sm text-gray-800 mb-3">Si tienes un estudiante de <strong>primer semestre (nuevo)</strong> que quiere aplazar, ¡adviértele lo siguiente! Es el mejor argumento para que no se vaya:</p>
+                        <div class="bg-white p-4 rounded border border-red-100 text-sm text-gray-700 italic shadow-inner">
+                            "Juan, la universidad te congelará el dinero que pagaste. PERO ten en cuenta que el descuento tan alto que te dio Admisiones era solo para esta temporada de ingreso. <strong>Al aplazar, pierdes ese beneficio inicial</strong>. Además, cuando decidas retomar (ej. el próximo año), tu saldo a favor se cruzará contra la matrícula nueva que ya tendrá el <strong>incremento anual del IPC</strong>. ¡Tendrás que pagar un excedente considerable de tu bolsillo!"
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. LAS DEVOLUCIONES -->
+                <div class="mb-10 border-t-2 border-dashed border-gray-200 pt-8">
+                    <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-poliYellow pb-2 inline-block mb-6">3. Devoluciones de Matrícula</h2>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Regla del 70% -->
+                        <div class="lg:col-span-1 bg-white border border-gray-200 rounded-xl p-6 shadow-sm flex flex-col justify-center items-center text-center">
+                            <div class="w-24 h-24 rounded-full bg-green-50 border-4 border-green-200 flex items-center justify-center mb-4">
+                                <span class="text-2xl font-black text-green-600">70%</span>
+                            </div>
+                            <h3 class="font-bold text-lg text-gray-800 mb-2">Regla Estándar</h3>
+                            <p class="text-sm text-gray-600">Si el estudiante desiste de estudiar y pide su dinero, <strong>se le devolverá únicamente el 70%</strong> del valor efectivamente pagado.</p>
+                            <p class="text-xs text-gray-500 mt-2">(Solo se devuelve el 100% en casos de servicio militar, muerte, invalidez total, o si la U no aperturó el programa).</p>
+                        </div>
+
+                        <!-- Proceso Operativo -->
+                        <div class="lg:col-span-2 space-y-4">
+                            <!-- Documentos -->
+                            <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 shadow-sm">
+                                <h4 class="font-bold text-poliBlue mb-2 flex items-center gap-2"><i class="fas fa-file-alt"></i> Documentos Exigidos en el Ticket</h4>
+                                <ul class="list-disc pl-5 text-sm text-gray-700 space-y-1 mb-2">
+                                    <li>Certificación bancaria del titular de la cuenta (no superior a 30 días).</li>
+                                    <li>Copia del documento de identidad legible.</li>
+                                </ul>
+                                <div class="bg-yellow-50 p-2 rounded border border-yellow-200 text-xs text-gray-800">
+                                    <strong class="text-yellow-800">¿Devolución a un tercero?</strong> Deben anexar carta de autorización dirigida a la Vicerrectoría Financiera argumentando la decisión, indicando parentesco, nombre y documento de quien recibirá el dinero.
+                                </div>
+                            </div>
+
+                            <!-- Tiempos de Desembolso -->
+                            <div class="bg-green-50 border border-green-200 rounded-xl p-4 shadow-sm">
+                                <h4 class="font-bold text-green-800 mb-2 flex items-center gap-2"><i class="fas fa-money-check-alt"></i> Tiempos y Desembolso</h4>
+                                <p class="text-sm text-gray-800 mb-2">El proceso de revisión oscila entre <strong>15 y 20 días hábiles</strong> desde la solicitud (sin contar tiempos de correcciones).</p>
+                                <p class="text-xs text-gray-700 bg-white p-2 rounded border border-green-100"><i class="fas fa-calendar-day text-green-600"></i> <strong>El ciclo de pagos:</strong> Normalmente Tesorería aprueba los viernes y se desembolsa al siguiente día hábil. Si el estudiante no tiene cuenta bancaria, se realiza mediante <strong>giro empresarial</strong> (lo cual puede demorar un poco más según la entidad).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. TIEMPOS, REGLAS Y EXCEPCIONES -->
+                <div class="mb-10 border-t-2 border-dashed border-gray-200 pt-8">
+                    <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-poliYellow pb-2 inline-block mb-6">4. Tiempos Límite y Reglas de Oro</h2>
+
+                    <div class="bg-white border border-gray-200 p-6 rounded-xl shadow-sm mb-6">
+                        <div class="flex items-center gap-3 mb-4">
+                            <i class="fas fa-stopwatch text-3xl text-red-500"></i>
+                            <div>
+                                <h3 class="font-bold text-lg text-gray-800">La Fecha Límite Oficial</h3>
+                                <p class="text-sm text-gray-600">Para que un aplazamiento o devolución regular sea aprobado, <strong>DEBE solicitarse dentro de los plazos del Calendario Académico</strong> (Normalmente dentro de los primeros 15 días hábiles desde el inicio de clases).</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded">
+                            <p class="font-bold text-red-800 mb-2 uppercase text-sm"><i class="fas fa-exclamation-circle"></i> Fuera de fecha: Solo Excepciones de Ley</p>
+                            <p class="text-sm text-gray-700 mb-3">Pasados los 15 días, <strong>SOLO</strong> se reciben solicitudes bajo 3 causales de fuerza mayor. Deben crear ticket por <em>"Requiero realizar Aplazamiento o Devolución fuera de Fecha"</em>, adjuntando carta al Consejo Académico y soportes formales:</p>
+                            <ul class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs text-gray-800">
+                                <li class="bg-white p-2 rounded border border-red-100 flex items-center gap-2"><i class="fas fa-briefcase-medical text-red-400"></i> Enfermedad grave.</li>
+                                <li class="bg-white p-2 rounded border border-red-100 flex items-center gap-2"><i class="fas fa-heart-broken text-red-400"></i> Muerte familiar (1er grado consang./dependencia).</li>
+                                <li class="bg-white p-2 rounded border border-red-100 flex items-center gap-2"><i class="fas fa-truck-moving text-red-400"></i> Traslado laboral (cambio de ciudad).</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Lo que NO tiene devolución -->
+                        <div class="bg-gray-100 p-5 rounded-xl border border-gray-200">
+                            <h4 class="font-bold text-gray-800 mb-3 flex items-center gap-2"><i class="fas fa-ban text-gray-500"></i> NO hay devoluciones para:</h4>
+                            <ul class="list-disc pl-5 text-sm text-gray-600 space-y-1">
+                                <li>Abandono o reprobación de asignaturas.</li>
+                                <li>Becas o descuentos institucionales.</li>
+                                <li>Inscripciones, certificados, constancias y carnés.</li>
+                                <li>Multas, supletorios, preparatorios u homologaciones.</li>
+                                <li>Cursos Intersemestrales, Vacacionales o Módulos Adicionales (a menos que se pida dentro de la fecha de la campaña).</li>
+                            </ul>
+                        </div>
+
+                        <!-- El caso ICETEX -->
+                        <div class="bg-blue-50 p-5 rounded-xl border border-blue-200">
+                            <h4 class="font-bold text-poliBlue mb-3 flex items-center gap-2"><i class="fas fa-university text-poliBlue"></i> Excepción: ICETEX</h4>
+                            <p class="text-sm text-gray-700 mb-3">Si el estudiante pide devolución/aplazamiento y pagó con ICETEX, el trámite es bidireccional:</p>
+                            <ul class="list-disc pl-5 text-sm text-gray-600 space-y-1">
+                                <li>Debe enviar carta formal <strong>a ICETEX y a la Universidad</strong> pidiendo la anulación del giro.</li>
+                                <li>Si el crédito aún no se legaliza, ICETEX lo anula automáticamente tras 15 días.</li>
+                                <li>Si ya se legalizó y se cancela, el estudiante inicia inmediatamente el pago de la deuda con la entidad.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>

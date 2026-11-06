@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 2: Operación Reintegro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        poliBlue: '#002E5D',
+                        poliYellow: '#FDB913',
+                        poliLightBlue: '#E6F0FA',
+                        poliGreen: '#10B981',
+                        poliRed: '#EF4444'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 p-4 md:p-6 font-sans text-gray-800">
+
+    <div class="max-w-5xl mx-auto">
+        
+        <!-- NAVEGACIÓN (BREADCRUMB PARA CANVAS) -->
+        <nav class="mb-4 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2 text-poliBlue hover:text-blue-800 font-semibold text-sm transition bg-white px-4 py-2 rounded-lg shadow-sm border border-gray-200">
+                <i class="fas fa-arrow-left"></i> Volver al Menú Principal
+            </a>
+            <div class="text-xs text-gray-500 font-medium">
+                Inicio <span class="mx-1">></span> <span class="text-poliBlue">Módulo 2: Reintegro</span>
+            </div>
+        </nav>
+
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+            
+            <!-- Header -->
+            <div class="bg-poliBlue p-8 text-white relative overflow-hidden flex items-center justify-between">
+                <div class="relative z-10">
+                    <span class="bg-poliYellow text-poliBlue text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block">Módulo 2</span>
+                    <h1 class="text-3xl md:text-4xl font-bold">Operación Reintegro</h1>
+                    <p class="mt-2 text-blue-200 text-lg">El arte de recuperar al estudiante y garantizar su permanencia.</p>
+                </div>
+                <i class="fas fa-undo-alt text-7xl md:text-9xl text-poliYellow opacity-20 relative z-10 right-4"></i>
+                <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-blue-800 rounded-full opacity-50"></div>
+            </div>
+
+            <!-- MANTRA VENTA CONSULTIVA -->
+            <div class="bg-gradient-to-r from-yellow-50 to-white border-b border-yellow-200 p-4 text-center shadow-sm relative z-20">
+                <p class="text-yellow-800 font-medium text-sm md:text-base">
+                    <i class="fas fa-bullseye text-poliYellow mr-2"></i> <strong>Mindset de Reintegro:</strong> "No vendemos, somos <strong>garantes de la permanencia</strong>. Si llama para volver, ya tenemos el 50% ganado. Aplica Venta Consultiva y llévalo al cierre."
+                </p>
+            </div>
+
+            <!-- ENLACES RÁPIDOS OPERATIVOS -->
+            <div class="bg-gray-100 px-6 py-4 flex flex-wrap justify-center gap-4 border-b border-gray-200">
+                <span class="text-sm font-bold text-gray-500 uppercase tracking-wider self-center hidden md:inline-block mr-2">Bases de Datos:</span>
+                <a href="https://whitneyintl.sharepoint.com/:x:/r/sites/PolitcnicoGrancolombianoRelacionamiento2/_layouts/15/Doc.aspx?sourcedoc=%7B6F1CEA64-F6EE-44E6-AC3F-D87F93D4D89A%7D&file=Novedades%20tramites%202026-10.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1" target="_blank" class="px-4 py-2 bg-poliBlue text-white text-sm font-bold rounded hover:bg-blue-900 transition shadow-sm flex items-center gap-2">
+                    <i class="fas fa-table"></i> Novedades de Programa
+                </a>
+                <a href="https://whitneyintl.sharepoint.com/sites/PolitcnicoGrancolombianoRelacionamiento2/Documentos%20compartidos/Forms/AllItems.aspx?viewid=38757de1%2D1113%2D4ee8%2D936c%2Daca268ce290b&id=%2Fsites%2FPolitcnicoGrancolombianoRelacionamiento2%2FDocumentos%20compartidos%2FProcesos%20POLI%2FOferta%20activa%20de%20programas" target="_blank" class="px-4 py-2 bg-green-600 text-white text-sm font-bold rounded hover:bg-green-700 transition shadow-sm flex items-center gap-2">
+                    <i class="fas fa-list-check"></i> Oferta Activa
+                </a>
+                <a href="https://www.poli.edu.co/sites/default/files/2025-12/derechos-pecuniarios-politecnico-grancolombiano-2026.pdf" target="_blank" class="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-bold rounded hover:bg-gray-50 transition shadow-sm flex items-center gap-2">
+                    <i class="fas fa-file-pdf text-red-500"></i> Derechos Pecuniarios 2026
+                </a>
+            </div>
+
+            <div class="p-6 md:p-8">
+                
+                <!-- FASE CERO: DIAGNÓSTICO EN ANALYTICS -->
+                <div class="mb-10 bg-gray-800 rounded-2xl p-6 md:p-8 border border-gray-700 shadow-lg relative overflow-hidden text-white">
+                    <div class="absolute -right-4 -top-4 text-gray-700 text-8xl opacity-30"><i class="fas fa-microscope"></i></div>
+                    <h2 class="text-xl font-bold text-poliYellow mb-4 relative z-10 flex items-center gap-2"><i class="fas fa-search"></i> Fase Cero: Diagnóstico Obligatorio en Analytics</h2>
+                    <p class="text-sm text-gray-300 mb-5 relative z-10">Antes de aplicar cualquier trámite o dar precios, debes confirmar dos cosas críticas en Analytics para saber si realmente aplica el reintegro y evitar reprocesos:</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
+                        <!-- Check 1: Continuidad -->
+                        <div class="bg-gray-900 p-5 rounded-xl border border-gray-700 shadow-sm">
+                            <h3 class="font-bold text-poliLightBlue flex items-center gap-2 mb-2"><i class="fas fa-history"></i> 1. Validar Continuidad</h3>
+                            <p class="text-xs text-gray-400 mb-2"><strong>Ruta:</strong> Sección <em>Inscripción de Asignaturas</em> > <em>Matrículas</em></p>
+                            <p class="text-sm text-gray-300">Verifica si el estudiante tuvo uno o más semestres en los que no pagó. Si pierden o rompen la continuidad (dejan de estudiar 1, 2 o más semestres), ahí es donde confirmamos que <strong>SÍ deben hacer un Reintegro</strong>.</p>
+                        </div>
+
+                        <!-- Check 2: Solicitudes Previas -->
+                        <div class="bg-gray-900 p-5 rounded-xl border border-gray-700 shadow-sm">
+                            <h3 class="font-bold text-poliLightBlue flex items-center gap-2 mb-2"><i class="fas fa-ticket-alt"></i> 2. Evitar Duplicidad</h3>
+                            <p class="text-xs text-gray-400 mb-2"><strong>Ruta:</strong> Sección <em>Servicio</em></p>
+                            <p class="text-sm text-gray-300">Asegúrate de que el estudiante <strong>no tenga ya una solicitud de reintegro creada</strong>. A veces llaman en la mañana, luego en la tarde, y si no revisas, generamos un reproceso al crear solicitudes duplicadas.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 1. LA OPERACIÓN BÁSICA -->
+                <div class="mb-10">
+                    <h2 class="text-xl font-bold text-gray-800 border-b-2 border-poliYellow pb-2 inline-block mb-6">1. El Flujo Operativo del Reintegro</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-white border border-gray-200 p-5 rounded-xl shadow-sm hover:shadow-md transition">
+                            <h3 class="font-bold text-poliBlue flex items-center gap-2 mb-3"><i class="fas fa-headset"></i> Solicitud a Backoffice</h3>
+                            <p class="text-sm text-gray-600 mb-3">Tú gestionas la llamada y pasas el caso a tus compañeros de Backoffice (BO) por el chat de piso. <strong>Usa siempre esta plantilla exacta:</strong></p>
+                            <div class="bg-gray-800 text-green-400 text-xs p-3 rounded font-mono mb-3">
+                                Ticket: [Número de ticket si aplica]<br>
+                                Programa origen: [Nombre del programa]<br>
+                                Programa destino: [Nombre del programa]<br>
+                                Sede destino: [Nombre de la sede]<br>
+                                Jornada destino: [Nombre de la jornada]<br>
+                                Nota: [Observaciones adicionales]<br>
+                                Usuario de quien crea la solicitud: [Tu nombre]
+                            </div>
+                            <div class="bg-blue-50 text-blue-800 text-xs p-2 rounded border border-blue-100 flex items-center gap-2">
+                                <i class="fas fa-clock"></i>
+                                <span><strong>SLA:</strong> Banner tarda <strong>3 días hábiles</strong> en procesarlo.</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-white border border-gray-200 p-5 rounded-xl shadow-sm hover:shadow-md transition">
+                            <h3 class="font-bold text-poliBlue flex items-center gap-2 mb-3"><i class="fas fa-search-location"></i> Valida la Oferta (SharePoint)</h3>
+                            <p class="text-sm text-gray-600 mb-3">Antes de prometerle al estudiante que puede volver, verifica en <strong>Novedades de Programa</strong> y <strong>Oferta Activa</strong> si la sede/jornada siguen vigentes.</p>
+                            <div class="bg-red-50 text-red-800 text-xs p-3 rounded border border-red-200">
+                                <i class="fas fa-exclamation-triangle"></i> <strong>Peligro de Retroceso:</strong> Hay programas puntuales donde NO podemos crear la solicitud para Banner; debe derivarse directamente a la <strong>Facultad</strong>. Si no indagas en la matriz, generarás alertas institucionales.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. REGLAS ACADÉMICAS Y EXCEPCIONES -->
+                <div class="mb-12">
+                    <div class="flex items-center gap-3 mb-6">
+                        <h2 class="text-xl font-bold text-gray-800 border-b-2 border-poliYellow pb-2 inline-block">2. Reglas Académicas y Excepciones</h2>
+                        <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded font-bold animate-pulse"><i class="fas fa-gavel"></i> ¡Evita Errores!</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Regla de Homologación -->
+                        <div class="border-l-4 border-poliBlue bg-white rounded-r-xl p-5 shadow-sm hover:shadow-md transition flex flex-col">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="bg-blue-100 w-10 h-10 rounded-full flex items-center justify-center text-poliBlue flex-shrink-0">
+                                    <i class="fas fa-sync"></i>
+                                </div>
+                                <h3 class="font-bold text-lg text-gray-800 leading-tight">Cambio a Programas Nuevos</h3>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-4">Si el estudiante se reintegra pero pide traslado a un programa que el Poli acaba de lanzar, hay una regla de oro por sistema:</p>
+                            <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 text-sm text-gray-700 mt-auto">
+                                <p class="font-bold text-poliBlue mb-1">Regla de los 4 Semestres:</p>
+                                Para aplicar a cambios académicos con programas nuevos, el programa destino <strong>debe llevar una antigüedad mínima de 4 semestres</strong> en la institución. ¿Por qué? Porque el sistema realiza una homologación interna automática que requiere esa madurez curricular.
+                            </div>
+                        </div>
+
+                        <!-- Regla de Empezar de Cero -->
+                        <div class="border-l-4 border-poliYellow bg-white rounded-r-xl p-5 shadow-sm hover:shadow-md transition flex flex-col">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="bg-yellow-100 w-10 h-10 rounded-full flex items-center justify-center text-yellow-600 flex-shrink-0">
+                                    <i class="fas fa-eraser"></i>
+                                </div>
+                                <h3 class="font-bold text-lg text-gray-800 leading-tight">"Quiero empezar de cero"</h3>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-4">A veces el estudiante dice: <em>"No me homologuen nada, quiero arrancar limpio"</em>. O te das cuenta que se matriculó hace años pero nunca cursó ni una materia (0 notas).</p>
+                            <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 text-sm text-gray-700 mt-auto">
+                                <p class="font-bold text-yellow-700 mb-1"><i class="fas fa-ticket-alt"></i> Ticket de Validación:</p>
+                                En estos casos <strong>NO prometas el reintegro de cero de inmediato</strong>. Debes crear un ticket por <strong>"Validación Plan de Estudios"</strong> para que el área académica analice la viabilidad de su solicitud.
+                            </div>
+                        </div>
+
+                        <!-- Resolución Rectoral -->
+                        <div class="border-l-4 border-green-500 bg-white rounded-r-xl p-5 shadow-sm hover:shadow-md transition flex flex-col">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="bg-green-100 w-10 h-10 rounded-full flex items-center justify-center text-green-600 flex-shrink-0">
+                                    <i class="fas fa-file-signature"></i>
+                                </div>
+                                <h3 class="font-bold text-lg text-gray-800 leading-tight">Resolución Rectoral</h3>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-4">¡Ten siempre la energía y actitud de decir: <em>"¡Qué bueno que quieras retomar tus estudios!"</em>. Independientemente de esto, nunca olvides su deber legal:</p>
+                            <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 text-sm text-gray-700 mt-auto">
+                                <strong class="text-green-700 mb-1 block">Regla de oro a comunicar:</strong>
+                                Siempre debes hacer mención de que el estudiante se acoge a la <strong>resolución rectoral vigente</strong>, lo que significa posibles <strong>cambios en su plan de estudios</strong> y la actualización a los <strong>valores que tenemos en este momento</strong>.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. EL CAZADOR DE DESCUENTOS (Venta Consultiva) -->
+                <div class="mb-12 bg-poliLightBlue rounded-2xl p-6 md:p-8 border border-blue-200 shadow-sm relative overflow-hidden">
+                    <i class="fas fa-user-ninja absolute -right-4 -bottom-4 text-8xl text-blue-200 opacity-40"></i>
+                    
+                    <div class="relative z-10 mb-6">
+                        <span class="bg-poliBlue text-white text-xs px-3 py-1 rounded-full uppercase font-bold tracking-wider">Caso Clínico: Venta Consultiva</span>
+                        <h2 class="text-2xl font-bold text-poliBlue mt-3">"El Cazador de Descuentos"</h2>
+                        <p class="text-sm text-gray-700 mt-2 max-w-2xl">Aprende a manejar las objeciones de precio sin regalar la casa ni perder al estudiante.</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
+                        <!-- El Problema -->
+                        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                            <div class="flex items-center gap-2 text-red-600 font-bold mb-3 border-b pb-2">
+                                <i class="fas fa-comment-dots text-xl"></i> El Estudiante dice:
+                            </div>
+                            <p class="text-sm text-gray-700 italic mb-4">"Hola, soy estudiante antiguo, me quiero reintegrar. Vi en Instagram que tienen un descuento por <strong>Pronto Pago del 15%</strong> y un bono para <strong>estudiantes nuevos (ingresantes)</strong>. Aplíquenme eso y pago."</p>
+                            
+                            <div class="bg-red-50 p-4 rounded text-red-800 text-sm font-semibold flex flex-col gap-3 border border-red-100">
+                                <span class="flex items-start gap-2"><i class="fas fa-times-circle text-red-600 mt-1"></i> Pronto Pago <strong>NO</strong> aplica para reintegros.</span>
+                                <span class="flex items-start gap-2"><i class="fas fa-times-circle text-red-600 mt-1"></i> Campaña Ingresantes <strong>NO</strong> aplica (ya no son nuevos).</span>
+                                <span class="flex items-start gap-2 mt-1 pt-3 border-t border-red-200 text-green-700"><i class="fas fa-check-circle mt-1"></i> <strong>SÍ APLICA:</strong> Solo el 10% de alivio por reintegro + descuento de su convenio.</span>
+                            </div>
+                        </div>
+
+                        <!-- La Solución -->
+                        <div class="bg-white p-5 rounded-xl shadow-sm border-2 border-poliBlue">
+                            <div class="flex items-center gap-2 text-poliBlue font-bold mb-3 border-b pb-2">
+                                <i class="fas fa-lightbulb text-xl text-poliYellow"></i> Tu Contra-Oferta (Venta Consultiva)
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">Usa la técnica del sándwich (Empatía + Regla + Beneficio real):</p>
+                            
+                            <div class="bg-blue-50 p-4 rounded-lg text-sm text-gray-800 italic border-l-4 border-poliBlue relative">
+                                <i class="fas fa-quote-left absolute text-blue-200 text-2xl top-2 left-2 opacity-50"></i>
+                                <span class="relative z-10">"Juan, me encanta que quieras retomar. Esas campañas son exclusivas para primera vez. <strong>SIN EMBARGO</strong>, por ser estudiante antiguo retomando, tú cuentas con un <strong>alivio del 10% por reintegro, ¡el cual es acumulable con el descuento de tu convenio!</strong> Mantienes tu historia académica. ¿Hacemos de una vez la solicitud para el reintegro?"</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. TRANSPARENCIA FINANCIERA (Derechos Pecuniarios) -->
+                <div class="mb-10">
+                    <h2 class="text-xl font-bold text-gray-800 border-b-2 border-poliYellow pb-2 inline-block mb-6">4. Transparencia y Costos Oficiales</h2>
+                    
+                    <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm flex flex-col md:flex-row items-center gap-6">
+                        <!-- Icono convertido en Enlace Clicable -->
+                        <a href="https://www.poli.edu.co/sites/default/files/2025-12/derechos-pecuniarios-politecnico-grancolombiano-2026.pdf" target="_blank" class="bg-red-50 text-red-500 hover:bg-red-500 hover:text-white transition w-16 h-16 rounded-full flex items-center justify-center text-2xl flex-shrink-0 shadow-sm cursor-pointer" title="Ver PDF de Derechos Pecuniarios">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                        </a>
+                        <div class="w-full">
+                            <h3 class="font-bold text-lg text-gray-800 mb-2">Tu Escudo Legal: Los Derechos Pecuniarios</h3>
+                            <p class="text-sm text-gray-600 mb-3">Durante el reintegro es común que cuestionen los precios. <strong>Nunca adivines.</strong> Este documento oficial (da clic en el icono rojo para abrirlo) brinda transparencia y respaldo legal a cada cobro de la universidad.</p>
+                            
+                            <div class="bg-blue-50 p-5 rounded-lg border-l-4 border-poliBlue mt-4 shadow-sm">
+                                <p class="text-xs font-bold text-poliBlue uppercase mb-2 flex items-center gap-1"><i class="fas fa-bullhorn text-lg"></i> Hook Comercial (Aterriza los Números):</p>
+                                <p class="text-sm text-gray-700 italic mb-3">"Mira Juan, para este año el costo de tu carrera es de $3.000.000 y el valor de tu matrícula queda en $2.500.000. <strong>Pero a este valor le podemos aplicar tu 10% de descuento por reintegro</strong>, quedándote solo en $2.250.000".</p>
+                                <p class="text-xs font-semibold text-gray-800"><i class="fas fa-check-circle text-green-600 mr-1"></i> <strong>Tip Consultivo:</strong> Invítalo al sí. Hablar con números reales y con el descuento ya calculado llama mucho más la atención del estudiante y acelera el cierre.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. TRÁMITES Y CAMBIOS ACADÉMICOS -->
+                <div class="mb-12 border-t-2 border-dashed border-gray-200 pt-8">
+                    <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-poliYellow pb-2 inline-block mb-4">5. Trámites y Cambios Académicos</h2>
+                    
+                    <div class="bg-blue-50 border-l-4 border-poliBlue p-5 rounded-r-lg mb-6 text-sm text-gray-700 shadow-sm">
+                        <p class="mb-3"><strong><i class="fas fa-info-circle text-poliBlue"></i> Contexto Operativo:</strong> Si el estudiante está solicitando el reintegro y de una vez te indica que desea hacer uno de estos cambios (Sede, Jornada, Programa), no lo pongas a hacer doble trámite. Notifícalo inmediatamente al pasarlo a Backoffice usando la <strong>Plantilla de Reintegro</strong>, y asegúrate de revisar primero la <a href="https://whitneyintl.sharepoint.com/sites/PolitcnicoGrancolombianoRelacionamiento2/Documentos%20compartidos/Forms/AllItems.aspx?viewid=38757de1%2D1113%2D4ee8%2D936c%2Daca268ce290b&id=%2Fsites%2FPolitcnicoGrancolombianoRelacionamiento2%2FDocumentos%20compartidos%2FProcesos%20POLI%2FOferta%20activa%20de%20programas" target="_blank" class="font-bold text-poliBlue hover:underline">Oferta Activa</a>.</p>
+                    </div>
+
+                    <div class="space-y-3">
+                        
+                        <!-- Acordeón: Doble Programa -->
+                        <details class="group bg-white border border-gray-200 rounded-lg shadow-sm">
+                            <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-4 hover:bg-gray-50 text-sm">
+                                <span class="flex items-center gap-2 text-poliBlue font-bold"><i class="fas fa-user-graduate w-5 text-center"></i> Doble Programa</span>
+                                <span class="transition group-open:rotate-180"><i class="fas fa-chevron-down text-gray-400"></i></span>
+                            </summary>
+                            <div class="p-4 bg-gray-50 border-t border-gray-200 text-sm text-gray-600">
+                                <p class="mb-3">Factor diferencial del Poli: Estudiar dos carreras al mismo tiempo pagando solo una.</p>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                    <div class="bg-white p-3 rounded border border-gray-200">
+                                        <p class="text-xs font-bold text-poliBlue uppercase mb-1">Condiciones</p>
+                                        <ul class="text-xs space-y-1 list-disc pl-4">
+                                            <li>Avance mínimo del <strong>30%</strong> en la carrera principal.</li>
+                                            <li>Debe ser la <strong>misma modalidad</strong> (Ej. Virtual + Virtual).</li>
+                                            <li>No aplica hacia programas nuevos (regla de 4 semestres).</li>
+                                            <li>Debe solicitarse <strong>antes de la matrícula</strong>.</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-white p-3 rounded border border-gray-200">
+                                        <p class="text-xs font-bold text-poliBlue uppercase mb-1">Pagos e Inscripción</p>
+                                        <ul class="text-xs space-y-1 list-disc pl-4">
+                                            <li>Solo se paga la carrera de <strong>mayor costo</strong>.</li>
+                                            <li>Inscribe la cantidad de materias que permita el plan pagado.</li>
+                                            <li>Las distribuye a su gusto (Ej. 3 de Psicología y 2 de Economía).</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="bg-gray-800 text-green-400 text-xs p-2 rounded font-mono inline-block">
+                                    <strong>Ruta Smart Campus:</strong> Trámites Académicos > Nuevo > Gestión Académica > Doble Programa
+                                </div>
+                            </div>
+                        </details>
+
+                        <!-- Acordeón: Segundo Ciclo -->
+                        <details class="group bg-white border border-gray-200 rounded-lg shadow-sm">
+                            <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-4 hover:bg-gray-50 text-sm">
+                                <span class="flex items-center gap-2 text-poliBlue font-bold"><i class="fas fa-level-up-alt w-5 text-center"></i> Segundo Ciclo (Propedéutico)</span>
+                                <span class="transition group-open:rotate-180"><i class="fas fa-chevron-down text-gray-400"></i></span>
+                            </summary>
+                            <div class="p-4 bg-gray-50 border-t border-gray-200 text-sm text-gray-600">
+                                <p class="mb-3">Paso de Tecnología a Profesional. Se debe pedir <strong>antes de pagar la matrícula</strong>.</p>
+                                
+                                <p class="font-bold text-gray-800 text-xs mb-2">Excepciones de Apertura (Materias pendientes):</p>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+                                    <div class="bg-white p-3 rounded border border-gray-200 text-xs">
+                                        <strong class="text-poliBlue">Presencial:</strong> Se habilita debiendo máx. <strong>2 materias</strong>. Se pagan en Intersemestrales.
+                                    </div>
+                                    <div class="bg-white p-3 rounded border border-gray-200 text-xs">
+                                        <strong class="text-poliBlue">Virtual:</strong> Se habilita debiendo máx. <strong>1 materia</strong>. Se paga como <em>Módulo Adicional</em>.
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-yellow-50 p-3 rounded border border-yellow-200 mb-4">
+                                    <p class="text-xs font-bold text-yellow-800 mb-1"><i class="fas fa-star"></i> Caso Especial Logística Virtual (Práctica Aplicada)</p>
+                                    <p class="text-xs text-gray-700"><strong>Asesoría de Venta:</strong> "Paga tu semestre Profesional. Inscribe tu Práctica de Tecnología (transversal) + 4 materias Profesionales. Paga el 'Módulo Adicional' para ver una Electiva Profesional, que siempre es de 2do bloque".</p>
+                                </div>
+
+                                <div class="bg-gray-800 text-green-400 text-xs p-2 rounded font-mono inline-block">
+                                    <strong>Ruta Smart Campus:</strong> Trámites Académicos > Nuevo > Gestión Académica > Segundo Ciclo
+                                </div>
+                            </div>
+                        </details>
+
+                        <!-- Acordeón: Cambio de Programa -->
+                        <details class="group bg-white border border-gray-200 rounded-lg shadow-sm">
+                            <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-4 hover:bg-gray-50 text-sm">
+                                <span class="flex items-center gap-2 text-poliBlue font-bold"><i class="fas fa-exchange-alt w-5 text-center"></i> Cambio de Programa</span>
+                                <span class="transition group-open:rotate-180"><i class="fas fa-chevron-down text-gray-400"></i></span>
+                            </summary>
+                            <div class="p-4 bg-gray-50 border-t border-gray-200 text-sm text-gray-600 space-y-3">
+                                <p>Traslado a otra carrera institucional. Debe solicitarse <strong>antes de que realice el pago de su matrícula</strong>.</p>
+                                <ul class="list-disc pl-5 space-y-2">
+                                    <li><strong>Validar Oferta:</strong> Revisa siempre la Oferta Activa. Si el programa no aplica o no está ofertado, sé honesto con el estudiante y aclárale por qué no se puede.</li>
+                                    <li><strong>Homologación:</strong> Se realiza homologación interna automática (recuerda la regla de los 4 semestres para programas nuevos).</li>
+                                </ul>
+                                <div class="bg-gray-800 text-green-400 text-xs p-2 rounded font-mono inline-block mt-2">
+                                    <strong>Ruta Smart Campus:</strong> Trámites Académicos > Nuevo > Gestión Académica > Cambio de Programa
+                                </div>
+                            </div>
+                        </details>
+
+                        <!-- Acordeón: Cambio de Sede -->
+                        <details class="group bg-white border border-gray-200 rounded-lg shadow-sm">
+                            <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-4 hover:bg-gray-50 text-sm">
+                                <span class="flex items-center gap-2 text-poliBlue font-bold"><i class="fas fa-map-marker-alt w-5 text-center"></i> Cambio de Sede</span>
+                                <span class="transition group-open:rotate-180"><i class="fas fa-chevron-down text-gray-400"></i></span>
+                            </summary>
+                            <div class="p-4 bg-gray-50 border-t border-gray-200 text-sm text-gray-600 space-y-3">
+                                <p>Traslado a otra sede física. Debe solicitarse <strong>antes de realizar el pago de matrícula</strong>.</p>
+                                <div class="bg-yellow-50 p-3 rounded border border-yellow-200">
+                                    <p class="text-xs font-bold text-yellow-800 mb-1"><i class="fas fa-exclamation-triangle"></i> Aclaración Vital al Estudiante:</p>
+                                    <p class="text-xs text-gray-700">Debes aclararle que si se cambia de sede, <strong>no se le va a homologar lo mismo</strong>. Los planes de estudio pueden variar y podría perder créditos avanzados.</p>
+                                </div>
+                                <p><strong>Validar Oferta:</strong> Revisa siempre la Oferta Activa antes de confirmar.</p>
+                                <div class="bg-gray-800 text-green-400 text-xs p-2 rounded font-mono inline-block mt-2">
+                                    <strong>Ruta Smart Campus:</strong> Trámites Académicos > Nuevo > Gestión Académica > Cambio de Sede
+                                </div>
+                            </div>
+                        </details>
+
+                        <!-- Acordeón: Cambio de Jornada -->
+                        <details class="group bg-white border border-gray-200 rounded-lg shadow-sm">
+                            <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-4 hover:bg-gray-50 text-sm">
+                                <span class="flex items-center gap-2 text-poliBlue font-bold"><i class="fas fa-sun w-5 text-center"></i> Cambio de Jornada</span>
+                                <span class="transition group-open:rotate-180"><i class="fas fa-chevron-down text-gray-400"></i></span>
+                            </summary>
+                            <div class="p-4 bg-gray-50 border-t border-gray-200 text-sm text-gray-600 space-y-3">
+                                <p>Traslado de horario. Debe solicitarse <strong>antes de realizar el pago de matrícula</strong>.</p>
+                                <div class="bg-blue-50 p-3 rounded border border-blue-100">
+                                    <p class="text-xs font-bold text-poliBlue mb-2"><i class="fas fa-clock"></i> Horarios de Referencia (Para dar peso a tu asesoría):</p>
+                                    <ul class="text-xs text-gray-700 space-y-1 pl-2">
+                                        <li><strong>Jornada Diurna:</strong> 7:00 a.m. a 5:00 p.m.</li>
+                                        <li><strong>Jornada Nocturna:</strong> 6:00 p.m. a 10:00 p.m.</li>
+                                    </ul>
+                                </div>
+                                <p><strong>Validar Oferta:</strong> Revisa siempre la Oferta Activa, ya que algunas jornadas pueden cerrar por falta de cupos.</p>
+                                <div class="bg-gray-800 text-green-400 text-xs p-2 rounded font-mono inline-block mt-2">
+                                    <strong>Ruta Smart Campus:</strong> Trámites Académicos > Nuevo > Gestión Académica > Cambio de Jornada
+                                </div>
+                            </div>
+                        </details>
+
+                        <!-- Acordeón: Cambio de Modalidad -->
+                        <details class="group bg-white border border-gray-200 rounded-lg shadow-sm">
+                            <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-4 hover:bg-gray-50 text-sm">
+                                <span class="flex items-center gap-2 text-poliBlue font-bold"><i class="fas fa-laptop-house w-5 text-center"></i> Cambio de Modalidad</span>
+                                <span class="transition group-open:rotate-180"><i class="fas fa-chevron-down text-gray-400"></i></span>
+                            </summary>
+                            <div class="p-4 bg-gray-50 border-t border-gray-200 text-sm text-gray-600 space-y-3">
+                                <p>Traslado entre formatos (Ej. de Presencial a Virtual). Debe solicitarse <strong>antes de realizar el pago de matrícula</strong>.</p>
+                                
+                                <div class="bg-red-50 p-4 rounded-lg border border-red-200 shadow-sm">
+                                    <p class="text-xs font-bold text-red-800 uppercase mb-2"><i class="fas fa-exclamation-triangle"></i> Advertencia Crítica al Estudiante:</p>
+                                    <p class="text-sm text-gray-800 font-semibold mb-2">Sé muy enfático en decirle que las materias NO se le van a homologar al 100%.</p>
+                                    <p class="text-xs text-gray-700">Entre modalidades cambian las materias institucionales y la malla curricular. Explícale claramente que es altamente probable que <strong>su porcentaje de avance académico quede inferior al que lleva actualmente</strong>.</p>
+                                </div>
+
+                                <p><strong>Validar Oferta:</strong> Revisa siempre la Oferta Activa. Recuerda que al cambiar la modalidad cambian los valores financieros.</p>
+                                <div class="bg-gray-800 text-green-400 text-xs p-2 rounded font-mono inline-block mt-2">
+                                    <strong>Ruta Smart Campus:</strong> Trámites Académicos > Nuevo > Gestión Académica > Cambio de Modalidad
+                                </div>
+                            </div>
+                        </details>
+
+                        <!-- Acordeón: Convalidación de Saberes -->
+                        <details class="group bg-white border border-gray-200 rounded-lg shadow-sm">
+                            <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-4 hover:bg-gray-50 text-sm">
+                                <span class="flex items-center gap-2 text-poliBlue font-bold"><i class="fas fa-brain w-5 text-center"></i> Convalidación de Saberes</span>
+                                <span class="transition group-open:rotate-180"><i class="fas fa-chevron-down text-gray-400"></i></span>
+                            </summary>
+                            <div class="p-5 bg-gray-50 border-t border-gray-200 text-sm text-gray-600 space-y-4">
+                                <p class="mb-2">El estudiante podrá realizar el proceso de convalidación de saberes con el fin de validar los conocimientos y las competencias adquiridas previamente y que corresponden con los contenidos de una asignatura o módulo de su plan de estudios.</p>
+                                <p class="font-bold text-gray-800 mb-2">La definición de los procesos estará a cargo de la dirección de la escuela y el trámite es el siguiente:</p>
+                                
+                                <ol class="list-decimal pl-5 space-y-2 text-sm text-gray-700 mb-4">
+                                    <li><strong>Inscribir la asignatura</strong> en el período que van a cursar.</li>
+                                    <li><strong>Solicitar la convalidación de saberes</strong> dentro de los <strong>8 días calendarios</strong> siguientes al inicio de clases, adjuntando la documentación que certifique que tienen suficiente experiencia laboral o las competencias relacionadas.</li>
+                                    <li>La dirección de la escuela estudiará la solicitud y tendrá la potestad de aprobarla o negarla. En caso de que sea aprobada, el estudiante deberá <strong>pagar los derechos correspondientes</strong>, los cuales no van a ser reembolsables.</li>
+                                    <li>La dirección de la escuela elegirá el Jurado correspondiente y fijará dentro de los <strong>15 días siguientes</strong> al inicio del semestre la fecha para realizar la prueba.</li>
+                                </ol>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="bg-white p-3 rounded border border-gray-200">
+                                        <p class="text-xs font-bold text-poliBlue uppercase mb-1"><i class="fas fa-star-half-alt"></i> Reglas de Aprobación</p>
+                                        <p class="text-xs text-gray-700">La nota mínima para aprobar es de <strong>3.5</strong>. Si la nota es inferior, no se puede volver a presentar la prueba y deberá cursar la asignatura o módulo como dentro de su Plan de estudios.</p>
+                                    </div>
+                                    <div class="bg-white p-3 rounded border border-gray-200">
+                                        <p class="text-xs font-bold text-poliBlue uppercase mb-1"><i class="fas fa-ban"></i> Límite</p>
+                                        <p class="text-xs text-gray-700">Máximo se pueden convalidar <strong>tres (3) materias</strong> en toda la carrera.</p>
+                                    </div>
+                                </div>
+
+                                <div class="bg-yellow-50 p-4 rounded-lg border-l-4 border-poliYellow shadow-sm mt-2">
+                                    <p class="text-xs font-bold text-yellow-800 uppercase mb-1 flex items-center gap-1"><i class="fas fa-lightbulb"></i> Recomendación Consultiva:</p>
+                                    <p class="text-sm text-gray-700">Fíjate que esto no es tan beneficioso para el estudiante como ellos creen. ¡Deben inscribirla dentro de lo que están pagando en el semestre! Si reprueban el examen, como ya tienen la materia cargada, igual tienen que verla. Asesóralo contándole este paso a paso para que tome una decisión consciente.</p>
+                                </div>
+                            </div>
+                        </details>
+
+                    </div>
+                </div>
+
+                <!-- 6. CIERRE FINANCIERO Y ALTERNATIVAS -->
+                <div class="bg-gradient-to-br from-gray-800 to-poliBlue rounded-2xl p-6 md:p-8 text-white shadow-lg">
+                    <div class="flex flex-col md:flex-row justify-between items-center border-b border-gray-600 pb-4 mb-6">
+                        <h2 class="text-2xl font-bold flex items-center gap-3"><i class="fas fa-flag-checkered text-poliYellow"></i> 6. Consolidación: Pago y Alternativas</h2>
+                        <span class="bg-gray-700 text-xs px-3 py-1 rounded-full uppercase tracking-wider mt-3 md:mt-0">Post-Aprobación</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-lg font-bold text-poliYellow mb-3">¿Cómo descarga la orden?</h3>
+                            <p class="text-sm text-gray-300 mb-4">Una vez aprobado el reintegro (3 días hábiles), guía al estudiante hacia la autogestión para su pago:</p>
+                            <div class="bg-gray-900 p-4 rounded-lg font-mono text-sm text-green-400">
+                                1. Ingresar a Smart Campus <br>
+                                2. Menú lateral izquierdo <span class="text-white">></span> <strong>Pagos</strong> <br>
+                                3. Clic en <strong>"Generar factura de pago"</strong>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-lg font-bold text-poliYellow mb-3">Opciones si no tiene el 100%</h3>
+                            <p class="text-sm text-gray-300 mb-4">Si el estudiante duda en reintegrarse por falta de liquidez, ¡Saca tu arsenal del Módulo Financiero!</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="bg-gray-700 border border-gray-600 px-2 py-1 rounded text-xs">Pago 50/50</span>
+                                <span class="bg-gray-700 border border-gray-600 px-2 py-1 rounded text-xs">Bloques (Virtual)</span>
+                                <span class="bg-gray-700 border border-gray-600 px-2 py-1 rounded text-xs">Abono del 20%</span>
+                                <span class="bg-gray-700 border border-gray-600 px-2 py-1 rounded text-xs">Credipoli / Icetex</span>
+                                <span class="bg-gray-700 border border-gray-600 px-2 py-1 rounded text-xs">Pago Mixto</span>
+                            </div>
+                            
+                            <!-- Botón Puente al Módulo 1 -->
+                            <a href="#" class="inline-flex items-center gap-2 text-sm font-bold text-poliYellow hover:text-white transition">
+                                <i class="fas fa-external-link-alt"></i> Repasar Facilidades en el Módulo 1
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>

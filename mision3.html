@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poli-Quest: Redacción y Análisis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f0f4fd 0%, #e4eaf5 100%);
+            color: #1e293b;
+            overflow-x: hidden;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+            border-radius: 20px;
+        }
+
+        .chat-bubble {
+            position: relative;
+            background: #ffffff;
+            border-radius: .4em;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .chat-bubble:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 0;
+            height: 0;
+            border: 15px solid transparent;
+            border-right-color: #ffffff;
+            border-left: 0;
+            border-bottom: 0;
+            margin-top: -7.5px;
+            margin-left: -15px;
+        }
+
+        .animate-fade-in { animation: fadeIn 0.5s ease-in-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        textarea {
+            resize: none;
+            transition: all 0.3s;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        .hide { display: none !important; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="h-screen flex flex-col">
+
+    <header class="bg-slate-800 text-white p-4 shadow-md flex justify-between items-center z-10 relative">
+        <div class="flex items-center gap-3">
+            <i class="fas fa-gamepad text-2xl text-blue-400"></i>
+            <h1 class="text-xl font-bold tracking-wider">POLI-QUEST <span class="text-xs text-slate-400 font-normal">Modo Redacción</span></h1>
+        </div>
+        <div class="flex gap-4 items-center">
+            <div class="text-right hidden md:block mr-4">
+                <p class="text-xs text-slate-400 uppercase">Progreso Misión</p>
+                <p class="text-sm font-bold text-green-400" id="progressDisplay">0 / 0 Casos</p>
+            </div>
+            <button onclick="toggleInventory()" class="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-xl font-semibold transition-colors flex items-center gap-2 shadow-lg">
+                <i class="fas fa-backpack"></i> <span class="hidden sm:inline">Abrir Inventario</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-1 overflow-y-auto p-4 md:p-8 flex items-center justify-center relative" id="gameContainer">
+        
+        <!-- Pantalla de Inicio -->
+        <div id="screen-start" class="glass-panel max-w-2xl w-full p-10 text-center animate-fade-in">
+            <div class="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
+                <i class="fas fa-users-cog text-5xl text-blue-600"></i>
+            </div>
+            <h2 class="text-3xl font-bold text-slate-800 mb-4">Simulador de Casos Reales</h2>
+            <p class="text-slate-600 mb-6 leading-relaxed text-left">
+                Escuadrón, su entrenadora está en otra misión. Hoy trabajarán de manera autónoma en equipos. 
+                Deberán leer cada caso, consultar su inventario y <b>redactar la respuesta exacta</b> que le darían al estudiante.
+            </p>
+            <div class="bg-yellow-50 border border-yellow-200 text-yellow-800 p-4 rounded-lg mb-8 text-sm text-left">
+                <i class="fas fa-info-circle mr-2"></i> <b>Instrucciones:</b> Al finalizar, el sistema generará un archivo Excel con todas sus respuestas para enviarlo a revisión. ¡Pónganse en los zapatos del estudiante!
+            </div>
+            <div class="mb-8 text-left">
+                <label class="block text-sm font-semibold text-slate-700 mb-2">Nombre del Equipo (o integrantes):</label>
+                <input type="text" id="teamNameInput" placeholder="Ej: Equipo 1 - Juan, María, Pedro..." class="w-full p-3 border border-slate-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none">
+                <p id="teamNameError" class="text-red-500 text-xs mt-1 hide">Por favor, ingresen el nombre del equipo para comenzar.</p>
+            </div>
+            <button onclick="startGame()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-lg font-bold py-3 px-8 rounded-xl hover:shadow-lg hover:scale-[1.02] transition-all">
+                INICIAR SIMULACIÓN <i class="fas fa-play ml-2"></i>
+            </button>
+        </div>
+
+        <!-- Pantalla de Nivel/Caso -->
+        <div id="screen-level" class="hide glass-panel max-w-4xl w-full p-6 md:p-8 flex flex-col gap-6 relative">
+            <div class="flex justify-between items-end border-b border-slate-200 pb-4">
+                <div>
+                    <span class="bg-indigo-100 text-indigo-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide" id="levelBadge">Módulo</span>
+                    <h2 class="text-2xl font-bold text-slate-800 mt-3" id="levelTitle">Título del Módulo</h2>
+                </div>
+                <div class="text-right">
+                    <span class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Caso Actual</span>
+                    <p class="text-xl font-bold text-slate-700"><span id="caseIndex">1</span>/<span id="caseTotal">2</span></p>
+                </div>
+            </div>
+
+            <!-- Escenario -->
+            <div class="flex flex-col md:flex-row gap-6 items-start mt-2">
+                <div class="flex-shrink-0 flex flex-col items-center">
+                    <img src="" alt="Estudiante" class="w-24 h-24 rounded-full border-4 border-white shadow-md bg-slate-100" id="studentAvatar">
+                    <span class="text-xs font-bold text-slate-500 mt-2 bg-slate-100 px-2 py-1 rounded-full">Estudiante</span>
+                </div>
+                <div class="chat-bubble flex-1 text-slate-800 text-lg border-l-4 border-indigo-500 font-medium">
+                    <i class="fas fa-quote-left text-indigo-200 text-2xl absolute -top-2 -left-2 bg-white px-1"></i>
+                    <p id="studentMessage" class="mt-2 indent-4">"Hola, necesito ayuda..."</p>
+                </div>
+            </div>
+
+            <div class="mt-4 bg-slate-50 p-5 rounded-xl border border-slate-200">
+                <label class="block text-sm font-semibold text-slate-700 mb-2">Redacta la respuesta oficial de tu equipo:</label>
+                <textarea id="userResponseInput" rows="5" placeholder="Estimado estudiante, comprendemos tu situación. Te informamos que..." class="w-full p-4 border border-slate-300 rounded-xl text-slate-700"></textarea>
+                <p id="responseError" class="text-red-500 text-sm mt-2 hide"><i class="fas fa-exclamation-triangle"></i> La respuesta no puede estar vacía. El estudiante necesita tu ayuda.</p>
+                
+                <div class="mt-4 flex justify-end">
+                    <button onclick="submitResponse()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-md flex items-center gap-2">
+                        <i class="fas fa-paper-plane"></i> Enviar Respuesta
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Feedback (Estilo Recomendaciones) -->
+        <div id="feedbackModal" class="hide absolute inset-0 bg-slate-900/60 backdrop-blur-sm z-20 flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl max-w-2xl w-full p-8 shadow-2xl transform scale-95 transition-transform flex flex-col max-h-[90vh]" id="feedbackContent">
+                <div class="flex items-center gap-4 border-b pb-4 mb-4">
+                    <div class="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-2xl flex-shrink-0">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-slate-800">Guía de Respuesta</h3>
+                        <p class="text-sm text-slate-500">Retroalimentación del caso práctico.</p>
+                    </div>
+                </div>
+                
+                <div class="overflow-y-auto flex-1 pr-2">
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg mb-6">
+                        <h4 class="font-bold text-blue-800 mb-2">En estos casos debemos tener en cuenta lo siguiente:</h4>
+                        <ul id="feedbackList" class="space-y-2 text-sm text-blue-900 list-disc pl-5">
+                            <!-- Llenado por JS -->
+                        </ul>
+                    </div>
+
+                    <div class="bg-green-50 border border-green-200 p-4 rounded-lg mb-6 flex gap-3 items-start">
+                        <i class="fas fa-hands-helping text-green-600 text-xl mt-0.5"></i>
+                        <p class="text-sm text-green-800"><b>Recuerda siempre:</b> Garantizar dar la información <b>clara y completa</b>. Ponte en el lugar del estudiante: muestra empatía, evita tecnicismos innecesarios e incluye las rutas claras para que todo quede resuelto en este contacto.</p>
+                    </div>
+
+                    <div class="p-4 bg-slate-50 border border-slate-200 rounded-lg">
+                        <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-2">Respuesta guardada por tu equipo:</p>
+                        <p class="text-sm text-slate-700 italic" id="previewUserResponse">...</p>
+                    </div>
+                </div>
+
+                <div class="mt-6 pt-4 border-t">
+                    <button onclick="nextCase()" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 px-4 rounded-xl transition-colors flex justify-center items-center gap-2">
+                        <span>Avanzar al siguiente caso</span> <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Inventario -->
+        <div id="inventoryModal" class="hide absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-30 flex justify-end">
+            <div class="bg-white h-full w-full max-w-md shadow-2xl flex flex-col animate-fade-in border-l border-slate-200">
+                <div class="p-6 bg-slate-800 text-white flex justify-between items-center">
+                    <div>
+                        <h3 class="text-xl font-bold"><i class="fas fa-toolbox text-blue-400 mr-2"></i> Herramientas</h3>
+                        <p class="text-xs text-slate-400 mt-1">Enlaces oficiales de consulta</p>
+                    </div>
+                    <button onclick="toggleInventory()" class="text-slate-400 hover:text-white bg-slate-700 p-2 rounded-lg transition-colors"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="p-6 overflow-y-auto flex-1 flex flex-col gap-2">
+                    <a href="https://www.poli.edu.co/grados" target="_blank" class="p-3 border rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors flex items-center gap-3 text-slate-700 font-medium"><i class="fas fa-graduation-cap text-blue-500 w-5"></i> Portal de Grados</a>
+                    <a href="https://www.poli.edu.co/reconocimiento-de-creditos" target="_blank" class="p-3 border rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors flex items-center gap-3 text-slate-700 font-medium"><i class="fas fa-sync text-green-500 w-5"></i> Reconoc. de Créditos</a>
+                    <a href="https://www.poli.edu.co/centro-de-idiomas" target="_blank" class="p-3 border rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors flex items-center gap-3 text-slate-700 font-medium"><i class="fas fa-language text-purple-500 w-5"></i> Centro de Idiomas</a>
+                    <a href="https://www.poli.edu.co/saber-pro" target="_blank" class="p-3 border rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors flex items-center gap-3 text-slate-700 font-medium"><i class="fas fa-pencil-alt text-orange-500 w-5"></i> Saber Pro</a>
+                    <a href="https://www.poli.edu.co/modulo-adicional" target="_blank" class="p-3 border rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors flex items-center gap-3 text-slate-700 font-medium"><i class="fas fa-plus-circle text-teal-500 w-5"></i> Módulo Adicional</a>
+                    <a href="https://www.poli.edu.co/cursos-vacacionales-modalidad-virtual" target="_blank" class="p-3 border rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors flex items-center gap-3 text-slate-700 font-medium"><i class="fas fa-sun text-yellow-500 w-5"></i> Cursos Vacacionales</a>
+                    <a href="https://www.poli.edu.co/cursos-intersemestrales" target="_blank" class="p-3 border rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors flex items-center gap-3 text-slate-700 font-medium"><i class="fas fa-calendar-alt text-indigo-500 w-5"></i> Intersemestrales</a>
+                    <a href="https://www.poli.edu.co/inscripciones-supletorios" target="_blank" class="p-3 border rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors flex items-center gap-3 text-slate-700 font-medium"><i class="fas fa-file-alt text-red-500 w-5"></i> Supletorios</a>
+                    
+                    <div class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                        <p class="text-sm text-blue-800"><i class="fas fa-file-excel mr-1"></i> Recuerda tener abierto tu archivo Excel local para consultar códigos y cumplimiento de créditos.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pantalla Final -->
+        <div id="screen-end" class="hide glass-panel max-w-2xl w-full p-10 text-center animate-fade-in">
+            <div class="w-24 h-24 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner text-5xl">
+                <i class="fas fa-check-double"></i>
+            </div>
+            <h2 class="text-3xl font-bold text-slate-800 mb-2">¡Simulación Completada!</h2>
+            <p class="text-slate-600 mb-8 text-lg">Excelente trabajo, <span id="displayFinalTeamName" class="font-bold">Equipo</span>. Han documentado todos los casos requeridos.</p>
+            
+            <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-6 mb-8 shadow-sm">
+                <p class="font-semibold text-indigo-900 mb-2"><i class="fas fa-file-download mr-2"></i> Instrucción Final:</p>
+                <p class="text-sm text-indigo-800">Descarguen el reporte de sus respuestas y envíenselo a su formadora para la revisión final y asignación de puntos de calidad.</p>
+            </div>
+            
+            <button onclick="downloadReport()" class="w-full bg-green-600 hover:bg-green-500 text-white text-xl font-bold py-4 px-8 rounded-xl shadow-lg hover:-translate-y-1 transition-all flex items-center justify-center gap-3 mb-4">
+                <i class="fas fa-file-excel"></i> Descargar Reporte de Respuestas
+            </button>
+            <button onclick="location.reload()" class="text-slate-500 text-sm hover:text-slate-700 underline mt-4">Reiniciar Simulador</button>
+        </div>
+
+    </main>
+
+    <script>
+        // BASE DE DATOS DE CASOS CON EL NUEVO ENFOQUE DE FEEDBACK
+        const gameData = [
+            {
+                levelName: "Módulo 1: Procesos de Grados y Créditos",
+                cases: [
+                    {
+                        tag: "Caso 1.1 - Grados",
+                        student: "\"Hola, quiero saber si ya puedo aplicar a mis grados, cómo lo reviso y cuál es el paso a paso para descargar la orden de pago. ¡Gracias!\"",
+                        avatarSeed: "Aneka",
+                        feedback: [
+                            "Debemos indicarle al estudiante que revise en Analytics el 100% de cumplimiento de su plan de estudios, los créditos y su requisito de Idiomas/Saber Pro.",
+                            "Mencionar la ruta o enviar el enlace oficial del portal de grados.",
+                            "Explicar el paso a paso exacto para descargar la orden de pago (ruta en Smart Campus / Financiero)."
+                        ]
+                    },
+                    {
+                        tag: "Caso 1.2 - Créditos",
+                        student: "\"Soy estudiante de Administración de Empresas modalidad Virtual. Necesito saber con urgencia cuántos y cuáles créditos me hacen falta para graduarme.\"",
+                        avatarSeed: "Felix",
+                        feedback: [
+                            "No podemos darle el cálculo 'a ojo'. Debemos explicarle cómo usar el archivo/Excel de créditos según el código de su programa.",
+                            "Indicarle que cruce la información del total de créditos requeridos con las materias aprobadas que le aparecen en su historial de Analytics."
+                        ]
+                    }
+                ]
+            },
+            {
+                levelName: "Módulo 2: Calificaciones y Procesos",
+                cases: [
+                    {
+                        tag: "Caso 2.1 - Presencial",
+                        student: "\"¡Hola! Soy estudiante presencial. Acabo de perder dos materias. Estoy muy frustrado y no quiero atrasarme un semestre completo. ¿Qué puedo hacer para nivelarme rápido?\"",
+                        avatarSeed: "Jasper",
+                        feedback: [
+                            "Identificar que es estudiante presencial, por lo que la opción a ofrecer es el Curso Vacacional.",
+                            "Explicar las condiciones del vacacional (fechas, número máximo de créditos).",
+                            "Dar la ruta clara en Analytics o Smart Campus para que el estudiante pueda generar y descargar su recibo de pago."
+                        ]
+                    },
+                    {
+                        tag: "Caso 2.2 - El Olvido",
+                        student: "\"Hola, resulta que tuve un problema terrible y se me olvidó subir el trabajo de investigación en mi bloque de materias que acaba de cerrar. ¿Cómo pago el supletorio para subirlo?\"",
+                        avatarSeed: "Mimi",
+                        feedback: [
+                            "Aclarar normativamente que el supletorio SOLO aplica para exámenes parciales y exámenes finales, NO para trabajos.",
+                            "Manejar la frustración del estudiante explicando que la plataforma se cierra por fechas estipuladas.",
+                            "Sugerir al estudiante que revise sus calificaciones finales en Analytics para validar si, a pesar del 0 en el trabajo, logró aprobar la asignatura."
+                        ]
+                    }
+                ]
+            },
+            {
+                levelName: "Módulo 3: Pruebas Saber Pro",
+                cases: [
+                    {
+                        tag: "Caso 3.1 - El Ansioso",
+                        student: "\"Revisé mi Analytics y tengo 70% de avance. Quiero inscribirme YA a las Saber Pro. ¿Cuánto cuesta por el Poli? ¿Puedo hacerlo individual? Y no me ha llegado la contraseña del ICFES.\"",
+                        avatarSeed: "Buster",
+                        feedback: [
+                            "Aclarar que aún NO puede inscribirse a través de la U porque el requisito mínimo normativo es tener más del 75% de avance.",
+                            "Informar los costos actuales, pero hacer énfasis en que debe esperar a cumplir el porcentaje.",
+                            "Explicar que el usuario y la contraseña los envía directamente el ICFES a su correo personal y que siempre deben revisar la bandeja de SPAM."
+                        ]
+                    },
+                    {
+                        tag: "Caso 3.2 - Inscripción Individual",
+                        student: "\"Les aviso que no quise esperar e hice mi inscripción a las pruebas Saber Pro de forma individual directamente con el ICFES. ¿Tienen que hacer algo ustedes o ya quedo listo para graduarme?\"",
+                        avatarSeed: "Lilly",
+                        feedback: [
+                            "Explicar que la inscripción individual es válida, pero que el estudiante tiene unos tiempos y pasos establecidos para notificar a la Universidad.",
+                            "Indicar el proceso exacto que debe realizar el estudiante para que la universidad reconozca su inscripción y quede reflejado en su historial académico."
+                        ]
+                    }
+                ]
+            },
+            {
+                levelName: "Módulo 4: Idiomas",
+                cases: [
+                    {
+                        tag: "Caso 4.1 - El Rebelde",
+                        student: "\"Odio el inglés, no quiero ver esas materias de la malla, me quitan tiempo para lo de mi carrera. ¿Qué alternativas me dan para no tener que cursarlas?\"",
+                        avatarSeed: "Coco",
+                        feedback: [
+                            "Identificar que en este caso el inglés es una 'Asignatura' dentro de su plan de estudios.",
+                            "Explicarle las alternativas del Centro de Idiomas: presentar exámenes de clasificación o solicitar homologación si cuenta con certificados externos válidos.",
+                            "Aclarar que, por normativa, el requisito debe cumplirse de una forma u otra para poder avanzar/graduarse."
+                        ]
+                    },
+                    {
+                        tag: "Caso 4.2 - Convenio SENA",
+                        student: "\"Miren, soy virtual del convenio SENA y tengo el inglés como requisito de grado, no como materia. ¿Cuáles son mis opciones reales para cumplir con esto antes de graduarme?\"",
+                        avatarSeed: "Max",
+                        feedback: [
+                            "Diferenciar correctamente el proceso: aquí es un 'Requisito de Grado', no se inscribe como materia regular.",
+                            "Explicar las alternativas aprobadas para convenios SENA: exámenes de validación externos, cursos libres o procesos de homologación.",
+                            "Redirigir correctamente a la información y gestión a través del Centro de Idiomas."
+                        ]
+                    }
+                ]
+            },
+            {
+                levelName: "Módulo 5: Ciclos Propedéuticos (Avanzado)",
+                cases: [
+                    {
+                        tag: "Caso 5.1 - El Salto",
+                        student: "\"Estoy en Tecnología en Logística. Solo me falta LA PRÁCTICA. ¿Puedo pasar a Ingeniería Industrial de una vez y ver materias de la profesional?\"",
+                        avatarSeed: "Oscar",
+                        feedback: [
+                            "Indicar la viabilidad informando la ruta en Smart Campus (Trámites académicos > Apertura de segundo ciclo).",
+                            "Explicar el modelo de inscripción: Debe matricular 4 materias de ingeniería + la Práctica (carga regular) garantizando su continuidad.",
+                            "Aclarar el tema financiero y operativo: Usar el 'Módulo Adicional' (con pago extra) para poder inscribir una electiva de 2do bloque de la profesional.",
+                            "Recordar que a futuro, para poder graduarse de ambas o avanzar completamente, primero deberá pagar los derechos de grado de la Tecnología."
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        let currentLevelObj = 0;
+        let currentCaseObj = 0;
+        let teamName = "";
+        let teamResponses = [];
+        let totalCases = 0;
+        let completedCases = 0;
+
+        const domStart = document.getElementById('screen-start');
+        const domLevel = document.getElementById('screen-level');
+        const domEnd = document.getElementById('screen-end');
+        const domFeedback = document.getElementById('feedbackModal');
+        const domInventory = document.getElementById('inventoryModal');
+        const userTextInput = document.getElementById('userResponseInput');
+        const responseError = document.getElementById('responseError');
+
+        // Calcular total de casos
+        gameData.forEach(lvl => totalCases += lvl.cases.length);
+        document.getElementById('progressDisplay').innerText = `0 / ${totalCases} Casos`;
+
+        function startGame() {
+            const nameInput = document.getElementById('teamNameInput').value.trim();
+            if (nameInput === "") {
+                document.getElementById('teamNameError').classList.remove('hide');
+                return;
+            }
+            teamName = nameInput;
+            document.getElementById('teamNameError').classList.add('hide');
+            domStart.classList.add('hide');
+            domLevel.classList.remove('hide');
+            loadCase();
+        }
+
+        function loadCase() {
+            domLevel.classList.remove('animate-fade-in');
+            void domLevel.offsetWidth; 
+            domLevel.classList.add('animate-fade-in');
+
+            const level = gameData[currentLevelObj];
+            const caso = level.cases[currentCaseObj];
+
+            document.getElementById('levelBadge').innerText = level.levelName.split(':')[0];
+            document.getElementById('levelTitle').innerText = level.levelName.split(':')[1] || level.levelName;
+            document.getElementById('caseIndex').innerText = completedCases + 1;
+            document.getElementById('caseTotal').innerText = totalCases;
+
+            document.getElementById('studentAvatar').src = `https://api.dicebear.com/7.x/bottts/svg?seed=${caso.avatarSeed}&backgroundColor=e2e8f0`;
+            document.getElementById('studentMessage').innerText = caso.student;
+
+            userTextInput.value = "";
+            responseError.classList.add('hide');
+        }
+
+        function submitResponse() {
+            const responseText = userTextInput.value.trim();
+            
+            if (responseText === "") {
+                responseError.classList.remove('hide');
+                userTextInput.focus();
+                return;
+            }
+            responseError.classList.add('hide');
+
+            const level = gameData[currentLevelObj];
+            const caso = level.cases[currentCaseObj];
+
+            // Guardar respuesta
+            teamResponses.push({
+                modulo: level.levelName,
+                etiquetaCaso: caso.tag,
+                estudiante: caso.student,
+                respuestaAgente: responseText
+            });
+
+            // Preparar Modal de Feedback (Estilo Guía)
+            const feedbackListContainer = document.getElementById('feedbackList');
+            feedbackListContainer.innerHTML = '';
+            
+            caso.feedback.forEach(item => {
+                const li = document.createElement('li');
+                li.className = "mb-2 text-sm leading-relaxed text-blue-900";
+                li.innerText = item;
+                feedbackListContainer.appendChild(li);
+            });
+
+            document.getElementById('previewUserResponse').innerText = `"${responseText}"`;
+
+            // Mostrar Modal
+            domFeedback.classList.remove('hide');
+            setTimeout(() => {
+                document.getElementById('feedbackContent').classList.remove('scale-95');
+                document.getElementById('feedbackContent').classList.add('scale-100');
+            }, 10);
+        }
+
+        function nextCase() {
+            domFeedback.classList.add('hide');
+            document.getElementById('feedbackContent').classList.remove('scale-100');
+            document.getElementById('feedbackContent').classList.add('scale-95');
+
+            completedCases++;
+            document.getElementById('progressDisplay').innerText = `${completedCases} / ${totalCases} Casos`;
+
+            currentCaseObj++;
+            if (currentCaseObj >= gameData[currentLevelObj].cases.length) {
+                currentLevelObj++;
+                currentCaseObj = 0;
+            }
+
+            if (currentLevelObj >= gameData.length) {
+                showEndScreen();
+            } else {
+                loadCase();
+            }
+        }
+
+        function showEndScreen() {
+            domLevel.classList.add('hide');
+            domEnd.classList.remove('hide');
+            document.getElementById('displayFinalTeamName').innerText = teamName;
+        }
+
+        function toggleInventory() {
+            if (domInventory.classList.contains('hide')) {
+                domInventory.classList.remove('hide');
+            } else {
+                domInventory.classList.add('hide');
+            }
+        }
+
+        function downloadReport() {
+            if (teamResponses.length === 0) return;
+
+            let csvContent = "\uFEFF"; 
+            csvContent += "Equipo,Módulo,Caso,Mensaje Estudiante,Respuesta del Equipo\n";
+
+            teamResponses.forEach(row => {
+                const escapeCSV = (text) => {
+                    if (text === null || text === undefined) return '""';
+                    const cleanedStr = text.toString().replace(/\r?\n|\r/g, ' ').replace(/"/g, '""');
+                    return `"${cleanedStr}"`;
+                };
+
+                const csvRow = [
+                    escapeCSV(teamName),
+                    escapeCSV(row.modulo),
+                    escapeCSV(row.etiquetaCaso),
+                    escapeCSV(row.estudiante),
+                    escapeCSV(row.respuestaAgente)
+                ].join(',');
+                
+                csvContent += csvRow + "\n";
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            const dateStr = new Date().toISOString().slice(0,10);
+            const safeTeamName = teamName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+            a.download = `Respuestas_PoliQuest_${safeTeamName}_${dateStr}.csv`;
+            
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

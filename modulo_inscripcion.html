@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repaso: Lógica Académica Poli</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        poliBlue: '#002E5D',
+                        poliYellow: '#FDB913',
+                        poliLightBlue: '#E6F0FA',
+                        poliGreen: '#10B981',
+                        poliRed: '#EF4444',
+                        poliPurple: '#8B5CF6'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 p-4 md:p-6 font-sans text-gray-800">
+
+    <div class="max-w-5xl mx-auto">
+
+        <!-- NAVEGACIÓN (BREADCRUMB PARA CANVAS) -->
+        <nav class="mb-4 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2 text-poliBlue hover:text-blue-800 font-semibold text-sm transition bg-white px-4 py-2 rounded-lg shadow-sm border border-gray-200">
+                <i class="fas fa-arrow-left"></i> Volver al Menú Principal
+            </a>
+            <div class="text-xs text-gray-500 font-medium">
+                Inicio <span class="mx-1">></span> <span class="text-poliBlue">Módulo 3: Lógica Académica</span>
+            </div>
+        </nav>
+
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+            <!-- Header -->
+            <div class="bg-poliBlue p-8 text-white relative overflow-hidden flex items-center justify-between">
+                <div class="relative z-10">
+                    <span class="bg-poliYellow text-poliBlue text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block">Módulo 3</span>
+                    <h1 class="text-3xl md:text-4xl font-bold">Lógica Académica y Créditos</h1>
+                    <p class="mt-2 text-blue-200 text-lg">Kit de Supervivencia para Inscripción de Materias</p>
+                </div>
+                <i class="fas fa-graduation-cap text-7xl md:text-9xl text-poliYellow opacity-20 relative z-10 right-4"></i>
+                <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-blue-800 rounded-full opacity-50"></div>
+            </div>
+
+            <!-- Content -->
+            <div class="p-6 md:p-8">
+                
+                <!-- FASE CERO: DIAGNÓSTICO EN ANALYTICS -->
+                <div class="mb-10 bg-gray-800 rounded-2xl p-6 border border-gray-700 shadow-lg relative overflow-hidden text-white">
+                    <div class="absolute -right-4 -top-4 text-gray-700 text-8xl opacity-30"><i class="fas fa-search-plus"></i></div>
+                    <h2 class="text-xl font-bold text-poliYellow mb-3 relative z-10 flex items-center gap-2"><i class="fas fa-microscope"></i> Fase Cero: Diagnóstico en el Sistema</h2>
+                    <p class="text-sm text-gray-300 mb-4 relative z-10">Antes de intentar resolver por qué un estudiante no puede inscribir materias, debes verificar el sistema en este orden exacto:</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 relative z-10">
+                        <!-- Paso 1 -->
+                        <div class="bg-gray-900 p-4 rounded-xl border border-gray-700 shadow-sm flex items-start gap-4">
+                            <div class="text-green-400 text-3xl mt-1"><i class="fas fa-user-check"></i></div>
+                            <div>
+                                <p class="font-bold text-poliLightBlue mb-1">1. Validar Matrícula</p>
+                                <p class="text-xs text-gray-400 mb-1"><strong>Ruta:</strong> <em>Inscripción de Asignaturas</em> > <em>Matrículas</em></p>
+                                <p class="text-sm text-gray-300">Asegúrate de que el estudiante efectivamente ya figure como <strong>matriculado</strong> en el periodo actual. Si no está matriculado, no podrá inscribir asignaturas.</p>
+                            </div>
+                        </div>
+
+                        <!-- Paso 2 -->
+                        <div class="bg-gray-900 p-4 rounded-xl border border-gray-700 shadow-sm flex items-start gap-4">
+                            <div class="text-poliYellow text-3xl mt-1"><i class="fas fa-sitemap"></i></div>
+                            <div>
+                                <p class="font-bold text-poliLightBlue mb-1">2. Verificar Proyecciones</p>
+                                <p class="text-xs text-gray-400 mb-1"><strong>Ruta:</strong> <em>Inscripción de Asignaturas</em> > <em>Proyecciones</em></p>
+                                <p class="text-sm text-gray-300">Verifica que tenga cargadas las proyecciones. Si no las tiene cargadas, <strong>debes derivar o escalar el ticket por 'Inscripción de asignaturas' a mesa de ayuda.</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 1. CONCEPTOS CLAVE BÁSICOS -->
+                <div class="mb-10">
+                    <h2 class="text-xl font-bold text-gray-800 border-b-2 border-poliYellow pb-2 inline-block mb-6">1. Conceptos Académicos Base</h2>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Card 1 -->
+                        <div class="bg-blue-50 p-5 rounded-xl border border-blue-100 hover:shadow-md transition">
+                            <div class="flex items-center gap-3 mb-3 text-poliBlue">
+                                <i class="fas fa-calendar-alt text-2xl"></i>
+                                <h3 class="font-bold text-lg">Bloques de 8 Semanas</h3>
+                            </div>
+                            <p class="text-sm text-gray-600">El semestre virtual dura 4 meses, pero se divide en 2 bloques. El estudiante cursa 3 materias enfocadas durante 8 semanas, y luego las otras 3. <strong>Beneficio:</strong> Evita la saturación del adulto que trabaja.</p>
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div class="bg-yellow-50 p-5 rounded-xl border border-yellow-100 hover:shadow-md transition">
+                            <div class="flex items-center gap-3 mb-3 text-yellow-600">
+                                <i class="fas fa-project-diagram text-2xl"></i>
+                                <h3 class="font-bold text-lg">Prerrequisitos</h3>
+                            </div>
+                            <p class="text-sm text-gray-600">Antes de inscribir, es obligatorio revisar el <strong>Plan de Estudios</strong>. En plataforma se ven como un conector ("ombliguito"). No se puede cursar una materia avanzada sin aprobar su base.</p>
+                        </div>
+
+                        <!-- Card 3 -->
+                        <div class="bg-green-50 p-5 rounded-xl border border-green-200 hover:shadow-md transition">
+                            <div class="flex items-center gap-3 mb-3 text-green-700">
+                                <i class="fas fa-user-edit text-2xl"></i>
+                                <h3 class="font-bold text-lg">¿Quién inscribe materias?</h3>
+                            </div>
+                            <ul class="text-sm text-gray-700 space-y-2">
+                                <li><strong>Nuevos (Primíparos Pregrado):</strong> La Universidad les inscribe sus materias, sin importar el convenio.</li>
+                                <li><strong>Antiguos (Pregrado):</strong> Desde 2do semestre, es responsabilidad 100% del estudiante.</li>
+                                <li><strong>Posgrados:</strong> La Universidad SIEMPRE les inscribe las materias.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. LA METODOLOGÍA POR CRÉDITOS -->
+                <div class="mb-10">
+                    <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-poliYellow pb-2 inline-block mb-6">2. La Metodología por Créditos (El "Coco")</h2>
+                    <p class="text-sm text-gray-600 mb-6">El sistema <strong>NO cuenta materias, cuenta CRÉDITOS</strong>. El estudiante inscribe de acuerdo al peso que pagó y a lo que dicta la estructura de su plan de estudios.</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+                            <h3 class="font-bold text-poliBlue mb-2 flex items-center gap-2"><i class="fas fa-battery-full text-green-500"></i> Matrícula Completa</h3>
+                            <p class="text-sm text-gray-700">Otorga el 100% de los créditos correspondientes a su semestre. La carga académica estándar es de <strong>15 a 18 créditos</strong> por semestre.</p>
+                        </div>
+                        <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+                            <h3 class="font-bold text-poliBlue mb-2 flex items-center gap-2"><i class="fas fa-battery-half text-yellow-500"></i> Media Matrícula</h3>
+                            <p class="text-sm text-gray-700">Otorga exactamente el <strong>50%</strong> de los créditos de su semestre.</p>
+                        </div>
+                    </div>
+
+                    <!-- Hook Consultivo de Créditos -->
+                    <div class="bg-poliLightBlue p-5 rounded-xl border-l-4 border-poliBlue shadow-sm">
+                        <p class="text-sm font-bold text-poliBlue uppercase mb-2"><i class="fas fa-bullseye text-poliYellow"></i> Venta Consultiva: La "Presión Sana"</p>
+                        <p class="text-sm text-gray-700 mb-3">Si un semestre tiene 15 créditos y el estudiante paga media matrícula, el sistema le habilita <strong>7.5 créditos</strong>. Como las materias suelen pesar 3 créditos, solo podrá inscribir 2 materias (6 créditos). <strong>Ese 1.5 sobrante NO se acumula para el otro semestre ni se devuelve el dinero.</strong></p>
+                        <p class="text-sm text-gray-800 italic font-semibold border-t border-blue-200 pt-2">"Juan, si pagas media matrícula vas a perder 1.5 créditos que ya estás pagando. ¡Mi recomendación es que pagues el semestre completo para aprovechar el 100% de tu dinero!"</p>
+                    </div>
+                </div>
+
+                <!-- 3. GUÍA DE ACCIÓN RÁPIDA (ACORDEONES) -->
+                <div class="mb-12">
+                    <h2 class="text-xl font-bold text-gray-800 border-b-2 border-poliYellow pb-2 inline-block mb-6">3. Guía de Acción en Plataforma</h2>
+                    
+                    <div class="space-y-4">
+                        <details class="group bg-white border border-gray-200 rounded-lg shadow-sm">
+                            <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-4 hover:bg-gray-50 transition">
+                                <span class="flex items-center gap-2 text-poliBlue"><i class="fas fa-mouse-pointer w-5 text-center"></i> ¿Cómo guiar la inscripción?</span>
+                                <span class="transition group-open:rotate-180"><i class="fas fa-chevron-down text-gray-400"></i></span>
+                            </summary>
+                            <div class="p-4 bg-gray-50 border-t border-gray-200 text-sm text-gray-600">
+                                <ol class="list-decimal pl-5 space-y-2">
+                                    <li>Guía al estudiante a revisar su Plan de Estudios primero (Prerrequisitos).</li>
+                                    <li>Identifiquen juntos materias pendientes y sin prerrequisitos bloqueantes.</li>
+                                    <li>Comparte los tutoriales en video para que lo hagan con autonomía.</li>
+                                </ol>
+                            </div>
+                        </details>
+
+                        <!-- Ajustes, Horarios y Electivas -->
+                        <details class="group bg-white border border-gray-200 rounded-lg shadow-sm">
+                            <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-4 hover:bg-gray-50 transition">
+                                <span class="flex items-center gap-2 text-poliBlue"><i class="fas fa-tools w-5 text-center"></i> Ajustes, Horarios y Electivas</span>
+                                <span class="transition group-open:rotate-180"><i class="fas fa-chevron-down text-gray-400"></i></span>
+                            </summary>
+                            <div class="p-4 bg-gray-50 border-t border-gray-200 text-sm text-gray-600 space-y-4">
+                                <p>En las páginas oficiales hay videotutoriales sobre cómo inscribir <strong>Electivas/Énfasis</strong> y cómo visualizar el <strong>Horario</strong>.</p>
+                                
+                                <div class="bg-red-50 border border-red-200 p-4 rounded-lg shadow-sm">
+                                    <p class="font-bold text-red-800 mb-2 flex items-center gap-2"><i class="fas fa-exclamation-triangle text-xl"></i> Peligro al Eliminar Materias:</p>
+                                    <p class="text-sm text-gray-800">Si un estudiante elimina una materia para cambiarla de grupo, <strong>adviértele que la inscripción es en tiempo real</strong>. Si suelta el cupo, otro estudiante podría tomarlo en milisegundos y se quedaría sin clase. ¡Bajo su propio riesgo!</p>
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+
+                <!-- 4. EXCEPCIONES Y CAMPAÑAS DE CIERRE -->
+                <div class="mb-10 border-t-2 border-dashed border-gray-200 pt-8">
+                    <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-poliYellow pb-2 inline-block mb-6">4. Excepciones y Campañas de Cierre</h2>
+                    
+                    <div class="space-y-6">
+                        
+                        <!-- Beneficio Presencial -->
+                        <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm flex flex-col md:flex-row gap-5 items-start hover:shadow-md transition">
+                            <div class="bg-indigo-100 text-indigo-600 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 text-xl">
+                                <i class="fas fa-laptop-house"></i>
+                            </div>
+                            <div class="w-full">
+                                <h3 class="font-bold text-lg text-gray-800 mb-2">Beneficio Presencial: Hasta 2 Materias Virtuales</h3>
+                                <p class="text-sm text-gray-600 mb-3">Tienen la oportunidad de inscribir hasta 2 asignaturas en modalidad virtual <strong>sin necesidad de crear solicitudes</strong>. ¡Excelente argumento para evitar cruces de horario!</p>
+                                
+                                <div class="bg-indigo-50 border-l-4 border-indigo-400 p-4 rounded-r-lg text-sm text-gray-800 mb-2 shadow-sm">
+                                    <p class="font-bold text-indigo-800 mb-1"><i class="fas fa-lock"></i> Materias con Restricción Académica</p>
+                                    <p class="mb-2">La facultad define materias que <strong>NO</strong> se pueden ver virtuales (ej. laboratorios). El estudiante debe revisar el listado de restricción en la página de inscripción.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Ampliación de Créditos -->
+                        <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm flex flex-col md:flex-row gap-5 items-start">
+                            <div class="bg-blue-100 text-poliBlue w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 text-xl">
+                                <i class="fas fa-plus-circle"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg text-gray-800 mb-2">Ampliación de Créditos (Máx. 2)</h3>
+                                <p class="text-sm text-gray-600 mb-2">Se permite ampliar un máximo de 2 créditos únicamente bajo estas dos condiciones:</p>
+                                <ul class="list-disc pl-5 text-sm text-gray-700 space-y-1">
+                                    <li>Falta solo 1 asignatura para completar su carga académica en <strong>Matrícula Completa</strong>.</li>
+                                    <li>En <strong>Media Matrícula</strong>, cuando debe inscribir <em>Práctica</em> u <em>Opción de Grado</em> (que suelen pesar más de 3 créditos) y necesita el pequeño ajuste para que quepan.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Asignatura Adicional (Último Semestre) -->
+                        <div class="bg-white p-5 rounded-xl border-2 border-poliYellow shadow-sm flex flex-col md:flex-row gap-5 items-start relative overflow-hidden">
+                            <div class="absolute -right-4 -top-4 text-yellow-100 text-6xl"><i class="fas fa-flag-checkered"></i></div>
+                            <div class="bg-yellow-100 text-yellow-600 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 text-xl relative z-10">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <div class="relative z-10 w-full">
+                                <span class="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-widest mb-1 inline-block animate-pulse">Campaña Permanente</span>
+                                <h3 class="font-bold text-lg text-gray-800 mb-2">Asignatura Adicional - Último Semestre</h3>
+                                <p class="text-sm text-gray-600 mb-3">El salvavidas para el estudiante que está a 1 paso de graduarse.</p>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                                    <div class="bg-gray-50 p-3 rounded border border-gray-200 text-sm">
+                                        <p class="font-bold text-poliBlue mb-1">Checklist Obligatorio:</p>
+                                        <ul class="list-none space-y-1 text-gray-700">
+                                            <li><i class="fas fa-check text-green-500 mr-1"></i> Último semestre.</li>
+                                            <li><i class="fas fa-check text-green-500 mr-1"></i> Matrícula completa pagada.</li>
+                                            <li><i class="fas fa-check text-green-500 mr-1"></i> Falta EXACTAMENTE UNA (1) materia.</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-yellow-50 p-3 rounded border border-yellow-200 text-sm">
+                                        <p class="font-bold text-yellow-800 mb-1"><i class="fas fa-laptop"></i> "Hack" Virtual:</p>
+                                        <ul class="list-disc pl-4 text-gray-800 space-y-1">
+                                            <li>Prioridad 1: Que la materia sea de Bloque 2 (Pagarla como Módulo Adicional).</li>
+                                            <li>Prioridad 2: Ticket por "Última Materia" acogiéndose al beneficio.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="bg-red-50 p-3 rounded-lg border-l-4 border-red-500 shadow-sm text-sm">
+                                    <p class="font-bold text-red-800 mb-1"><i class="fas fa-exclamation-circle"></i> Única Excepción (2 Materias):</p>
+                                    <p class="text-gray-700 mb-1">Si le faltan 2 materias, <strong>y una es prerrequisito de la otra</strong> (o le faltan 2 entre un Doble Programa), se autoriza pagar en dos periodos.</p>
+                                    <p class="text-red-700 font-semibold">¡Advertencia!: Si debe MÁS de 2 y solo inscribe una por prerrequisitos, NO APLICA. Debe pagar media matrícula.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- 5. EL UNIVERSO DE LA OPCIÓN DE GRADO -->
+                <div class="mb-10 border-t-2 border-dashed border-gray-200 pt-8">
+                    <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-poliYellow pb-2 inline-block mb-4">5. El Universo de la Opción de Grado</h2>
+                    <p class="text-sm text-gray-600 mb-6">No todas las carreras manejan la Opción de Grado igual. Como asesor, debes diagnosticar, guiar y aconsejar estratégicamente para cuidar el tiempo y bolsillo del estudiante.</p>
+
+                    <!-- Paso 1: Diagnóstico -->
+                    <div class="bg-gray-800 text-white p-5 rounded-xl shadow-md mb-6 relative overflow-hidden">
+                        <i class="fas fa-stethoscope absolute -right-4 -top-4 text-gray-600 text-7xl opacity-50"></i>
+                        <h3 class="font-bold text-poliYellow mb-2 relative z-10">Paso 1: ¿Es un Requisito o una Materia?</h3>
+                        <p class="text-sm text-gray-300 mb-3 relative z-10">Ruta: <strong>Analytics > Avance Curricular</strong></p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 relative z-10 text-sm">
+                            <div class="bg-gray-700 p-3 rounded border border-gray-600">
+                                <span class="text-green-400 font-bold block mb-1">Como Requisito:</span>
+                                Búscalo en la sección <em>"No programan curso"</em>. Aplican opciones como Diplomado, Coterminal o Trabajo.
+                            </div>
+                            <div class="bg-gray-700 p-3 rounded border border-gray-600">
+                                <span class="text-blue-400 font-bold block mb-1">Como Materia:</span>
+                                Aparece literal en el plan de estudios. <strong>Ojo:</strong> Igual debe inscribirla y pagarla en su matrícula normal para que le cruce la nota de lo que elija hacer.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Paso 2: Opciones (Acordeones) -->
+                    <h3 class="font-bold text-lg text-gray-800 mb-3">Paso 2: Rutas de Acción (Las más comunes)</h3>
+                    
+                    <div class="space-y-4">
+                        <!-- Diplomado -->
+                        <details class="group bg-white border border-gray-200 rounded-lg shadow-sm">
+                            <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-4 hover:bg-gray-50 transition">
+                                <span class="flex items-center gap-2 text-poliBlue font-bold"><i class="fas fa-medal w-5 text-center"></i> Opción 1: Diplomado</span>
+                                <span class="transition group-open:rotate-180"><i class="fas fa-chevron-down text-gray-400"></i></span>
+                            </summary>
+                            <div class="p-5 bg-gray-50 border-t border-gray-200 text-sm text-gray-600 space-y-4">
+                                <p>Duración máxima de 2 meses. Otorga una Insignia Digital. <strong>Requisito:</strong> Avance igual o superior al 75% en pregrado.</p>
+                                
+                                <div class="bg-yellow-50 p-3 rounded border border-yellow-300">
+                                    <p class="font-bold text-yellow-800 uppercase text-xs mb-2"><i class="fas fa-exclamation-triangle"></i> La trampa de la Modalidad "Online"</p>
+                                    <p class="text-xs text-gray-800">El estudiante suele creer que "Online" es a su ritmo. <strong>¡FALSO!</strong> Tiene encuentros sincrónicos obligatorios. Si no cumple el <strong>80% de asistencia</strong>, lo pierde.</p>
+                                </div>
+                            </div>
+                        </details>
+
+                        <!-- Semestre Coterminal -->
+                        <details class="group bg-white border border-gray-200 rounded-lg shadow-sm">
+                            <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-4 hover:bg-gray-50 transition">
+                                <span class="flex items-center gap-2 text-poliBlue font-bold"><i class="fas fa-level-up-alt w-5 text-center"></i> Opción 2: Semestre Coterminal</span>
+                                <span class="transition group-open:rotate-180"><i class="fas fa-chevron-down text-gray-400"></i></span>
+                            </summary>
+                            <div class="p-5 bg-gray-50 border-t border-gray-200 text-sm text-gray-600 space-y-4">
+                                <p>Cursar el primer semestre de un Posgrado. <strong>Requisito:</strong> Avance igual o superior al 75%.</p>
+                                
+                                <div class="bg-purple-50 border-l-4 border-purple-500 p-3 rounded shadow-sm">
+                                    <p class="font-bold text-purple-800 uppercase text-xs mb-2"><i class="fas fa-user-md"></i> Venta Consultiva: ¡Cuida al Estudiante!</p>
+                                    <p class="text-xs font-bold text-purple-900">Recomendación: "Inscribe tu materia de Opción de Grado en tu semestre normal, y te apuntas al Coterminal en la corte siguiente cuando ya tengas tiempo libre y presupuesto."</p>
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+
+                <!-- NUEVO: 6. EL MUNDO DE LAS PRÁCTICAS ACADÉMICAS -->
+                <div class="mb-10 border-t-2 border-dashed border-gray-200 pt-8">
+                    <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-poliYellow pb-2 inline-block mb-4">6. Prácticas Académicas: Un Mundo Aparte</h2>
+                    
+                    <!-- Contexto Base -->
+                    <div class="bg-red-50 border border-red-200 p-5 rounded-xl mb-6 shadow-sm">
+                        <p class="font-bold text-red-800 mb-2 flex items-center gap-2"><i class="fas fa-exclamation-triangle text-xl"></i> Regla Inquebrantable de Ventas</p>
+                        <p class="text-sm text-gray-800">La práctica es una materia obligatoria, un ejercicio formativo y evaluable. Por esta razón: <strong>NO ES HOMOLOGABLE por experiencia laboral previa bajo ninguna circunstancia ni modalidad.</strong></p>
+                    </div>
+
+                    <!-- El Proceso General -->
+                    <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm mb-6">
+                        <h3 class="font-bold text-poliBlue mb-4 border-b pb-2"><i class="fas fa-route"></i> El Proceso Vital (Paso a Paso)</h3>
+                        <div class="flex flex-col md:flex-row gap-4 items-center justify-between text-center">
+                            <div class="flex-1"><div class="bg-gray-100 w-10 h-10 mx-auto rounded-full flex items-center justify-center text-gray-500 mb-2 font-bold">1</div><p class="text-xs">Búsqueda de escenario (Autónoma)</p></div>
+                            <i class="fas fa-chevron-right text-gray-300 hidden md:block"></i>
+                            <div class="flex-1"><div class="bg-gray-100 w-10 h-10 mx-auto rounded-full flex items-center justify-center text-gray-500 mb-2 font-bold">2</div><p class="text-xs">Pedir Carta de Aprobación</p></div>
+                            <i class="fas fa-chevron-right text-gray-300 hidden md:block"></i>
+                            <div class="flex-1"><div class="bg-gray-100 w-10 h-10 mx-auto rounded-full flex items-center justify-center text-gray-500 mb-2 font-bold">3</div><p class="text-xs">Reunir documentos en PDF</p></div>
+                            <i class="fas fa-chevron-right text-poliBlue hidden md:block"></i>
+                            <div class="flex-1"><div class="bg-blue-100 w-10 h-10 mx-auto rounded-full flex items-center justify-center text-poliBlue mb-2 font-bold">4</div><p class="text-xs font-bold text-poliBlue">Legalización (Smart Campus)</p></div>
+                            <i class="fas fa-chevron-right text-poliYellow hidden md:block"></i>
+                            <div class="flex-1"><div class="bg-yellow-100 w-10 h-10 mx-auto rounded-full flex items-center justify-center text-yellow-600 mb-2 font-bold">5</div><p class="text-xs font-bold text-yellow-700">Inscribir la materia</p></div>
+                        </div>
+                        <div class="mt-4 bg-blue-50 p-3 rounded text-xs text-gray-700 border border-blue-100 text-center">
+                            <i class="fas fa-info-circle text-poliBlue"></i> El paso 4 (Legalización) es <strong>OBLIGATORIO</strong>. El área tarda máx. 20 días en responder, pero <strong>la fecha de inicio la define la empresa</strong> según la carta de aprobación, no el inicio del semestre.
+                        </div>
+                    </div>
+
+                    <!-- Modalidades -->
+                    <h3 class="font-bold text-lg text-gray-800 mb-3">Modalidades de Práctica (¿Cuál le aplica?)</h3>
+                    <div class="space-y-4 mb-6">
+                        
+                        <!-- Mi Primera Práctica -->
+                        <details class="group bg-white border border-gray-200 rounded-lg shadow-sm">
+                            <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-4 hover:bg-gray-50 transition">
+                                <span class="flex items-center gap-2 text-poliBlue font-bold"><i class="fas fa-briefcase w-5 text-center"></i> 1. Mi Primera Práctica</span>
+                                <span class="transition group-open:rotate-180"><i class="fas fa-chevron-down text-gray-400"></i></span>
+                            </summary>
+                            <div class="p-5 bg-gray-50 border-t border-gray-200 text-sm text-gray-600 space-y-4">
+                                <p>Búsqueda autónoma (Portales, correo, ORI). Duración de 4 a 6 meses, entre 20h semanales y la jornada laboral legal.</p>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="bg-white p-3 rounded border border-gray-200">
+                                        <p class="font-bold text-poliBlue uppercase text-xs mb-2">Contrato de Aprendizaje (SENA)</p>
+                                        <p class="text-xs text-gray-700 mb-1">Solo se hace 1 vez en la vida. Regido por ley. Otorga afiliación a EPS, ARL, 100% SMLV.</p>
+                                        <p class="text-xs text-gray-500 italic">No todas las empresas están autorizadas a darlo.</p>
+                                    </div>
+                                    <div class="bg-white p-3 rounded border border-gray-200">
+                                        <p class="font-bold text-poliYellow uppercase text-xs mb-2">Vinculación Formativa</p>
+                                        <p class="text-xs text-gray-700 mb-1">Acto Administrativo (Públicas) o Acuerdo de Voluntades (Privadas). Puede o no incluir auxilio económico.</p>
+                                    </div>
+                                </div>
+                                <div class="bg-gray-800 text-white text-xs p-3 rounded shadow-inner">
+                                    <i class="fas fa-key text-poliYellow"></i> <strong>Clave Documental:</strong> En esta modalidad, la Carta de Aprobación la debe pedir <strong>LA EMPRESA</strong>. Y en caso de vinculación formativa, si la empresa no paga la ARL, el estudiante debe solicitarla a la universidad mediante formulario.
+                                </div>
+                            </div>
+                        </details>
+
+                        <!-- Ya tengo trabajo -->
+                        <details class="group bg-white border border-gray-200 rounded-lg shadow-sm">
+                            <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-4 hover:bg-gray-50 transition">
+                                <span class="flex items-center gap-2 text-poliBlue font-bold"><i class="fas fa-id-badge w-5 text-center"></i> 2. Ya tengo trabajo</span>
+                                <span class="transition group-open:rotate-180"><i class="fas fa-chevron-down text-gray-400"></i></span>
+                            </summary>
+                            <div class="p-5 bg-gray-50 border-t border-gray-200 text-sm text-gray-600 space-y-4">
+                                <p>Aplica para estudiantes que ya trabajan y sus funciones están relacionadas con el programa que cursan.</p>
+                                <ul class="list-disc pl-5 text-xs space-y-1 text-gray-700">
+                                    <li><strong>Requisitos:</strong> Mínimo 6 meses de vinculación en la empresa.</li>
+                                    <li><strong>Contratos Válidos:</strong> Término indefinido, fijo, obra labor, o prestación de servicios.</li>
+                                    <li><strong>Académico:</strong> Como no se homologa por experiencia, el estudiante debe desarrollar un <strong>Proyecto de Mejora</strong> para la empresa durante el semestre.</li>
+                                </ul>
+                                <div class="bg-gray-800 text-white text-xs p-3 rounded shadow-inner">
+                                    <i class="fas fa-key text-poliYellow"></i> <strong>Clave Documental:</strong> En esta modalidad, la Carta de Aprobación la pide <strong>EL ESTUDIANTE</strong>. Además de la carta de aceptación, debe adjuntar soporte de Seguridad Social (o ARL) y un Certificado Laboral (con funciones y fecha de inicio).
+                                </div>
+                            </div>
+                        </details>
+
+                        <!-- Investigación / Emprendimiento -->
+                        <details class="group bg-white border border-gray-200 rounded-lg shadow-sm">
+                            <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-4 hover:bg-gray-50 transition">
+                                <span class="flex items-center gap-2 text-poliBlue font-bold"><i class="fas fa-lightbulb w-5 text-center"></i> 3. Investigación o Emprendimiento</span>
+                                <span class="transition group-open:rotate-180"><i class="fas fa-chevron-down text-gray-400"></i></span>
+                            </summary>
+                            <div class="p-5 bg-gray-50 border-t border-gray-200 text-sm text-gray-600">
+                                <p class="mb-2">Es una opción muy sesgada y limitada. Solo aplica para algunos programas <strong>Virtuales</strong>, viéndose como un módulo transversal de 16 semanas.</p>
+                                <p class="font-bold text-red-600 text-xs mb-1">NO APLICA PARA:</p>
+                                <ul class="list-disc pl-5 text-xs text-gray-700 space-y-1">
+                                    <li>Ningún programa Presencial.</li>
+                                    <li>Ningún programa de Ingeniería, Diseño e Innovación (Ellos en su lugar tienen la materia 'Opción de Grado').</li>
+                                    <li>Primer nivel de práctica de Psicología (Clínica).</li>
+                                </ul>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- Casos Especiales (Psicología y Licenciaturas) -->
+                    <h3 class="font-bold text-lg text-gray-800 mb-3">Casos Críticos (Especial Cuidado)</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <!-- Psicología -->
+                        <div class="bg-white border-2 border-poliPurple rounded-xl p-5 shadow-sm">
+                            <h4 class="font-bold text-poliPurple mb-2 flex items-center gap-2"><i class="fas fa-brain"></i> Psicología (Práctica Clínica)</h4>
+                            <p class="text-xs text-gray-600 mb-3">Debido al Ministerio de Educación, es una práctica obligatoria mediante <strong>convenios docencia-servicio</strong>. Ojo al catálogo de admisión del estudiante:</p>
+                            <ul class="text-xs text-gray-700 mb-3 list-disc pl-4 space-y-1">
+                                <li><strong>Catálogos 2021-1 al 2023-2:</strong> Es la Práctica 1 (y prerrequisito para la 2 y 3).</li>
+                                <li><strong>Catálogos 2023-2 en adelante:</strong> Es la Práctica 3.</li>
+                            </ul>
+                            <div class="bg-purple-50 p-2 rounded border border-purple-200 text-xs text-purple-900 space-y-1">
+                                <p><strong>Requisitos de Hierro:</strong></p>
+                                <p>- Carné y Uniforme institucional.</p>
+                                <p>- Vacunas: Hep B, DPT, Sarampión/Rubéola, Tétanos, Varicela, COVID.</p>
+                                <p>- Cursos certificados: Primera Ayuda Psicológica (PAP) y Violencias Sexuales.</p>
+                                <p>- <strong>Desplazamiento Obligatorio</strong> (Incluso si es virtual) y 15h semanales.</p>
+                            </div>
+                        </div>
+
+                        <!-- Licenciaturas & Notas extra -->
+                        <div class="space-y-4">
+                            <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+                                <h4 class="font-bold text-poliBlue mb-2 flex items-center gap-2"><i class="fas fa-chalkboard-teacher"></i> Prácticas Pedagógicas (Licenciaturas)</h4>
+                                <p class="text-xs text-gray-600">Al igual que la clínica, se rigen por convenios estrictos de Docencia-Servicio en instituciones educativas.</p>
+                            </div>
+                            
+                            <div class="bg-red-50 border-l-4 border-red-500 rounded p-4 shadow-sm">
+                                <p class="font-bold text-red-800 text-sm mb-1"><i class="fas fa-ban"></i> Advertencia Financiera</p>
+                                <p class="text-xs text-gray-800">Ni la práctica clínica de psicología, ni las prácticas de licenciatura son prácticas remunerables.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cartas Especiales -->
+                    <div class="bg-gray-100 p-4 rounded-lg text-sm text-gray-700">
+                        <p class="font-bold text-gray-800 mb-2"><i class="fas fa-envelope-open-text"></i> Diccionario de Cartas Especiales:</p>
+                        <ul class="space-y-2 text-xs">
+                            <li><strong>Carta de Postulación:</strong> Solo sirve para postularse como candidato a una vacante (No legaliza vinculación).</li>
+                            <li><strong>Habilitación de Cadena de Formación:</strong> Si el estudiante ya gastó su contrato SENA en una tecnología, la U emite esta carta confirmando la conexión curricular. <strong>El estudiante debe llevarla al SENA</strong> para pedir un segundo contrato (La universidad no la radica).</li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <!-- 7. ENLACES OFICIALES (Antiguo 6) -->
+                <div class="mt-10 border-t-2 border-gray-200 pt-8">
+                    
+                    <div class="mb-8 bg-gradient-to-r from-poliBlue to-blue-800 p-6 rounded-2xl shadow-lg text-white flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
+                        <i class="fas fa-book-reader absolute -right-4 -top-4 text-7xl text-blue-400 opacity-20"></i>
+                        <div class="relative z-10 w-full">
+                            <h3 class="font-bold text-xl text-poliYellow mb-2 flex items-center gap-2"><i class="fas fa-question-circle"></i> Glosario y Preguntas Frecuentes (FAQ)</h3>
+                            <p class="text-sm text-blue-100">Dentro de las páginas de inscripción de asignaturas encontrarás un Glosario oficial y una sección de FAQ. <strong>¡Son tu mejor arma como asesor!</strong> Acostúmbrate a revisarlos y recomiéndaselos al estudiante para despejar dudas y empoderarlo en su autogestión.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row gap-4 items-center mb-4">
+                        <span class="text-sm font-semibold text-gray-500 uppercase tracking-wider md:mr-2"><i class="fas fa-link"></i> Caja de Herramientas:</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+                        <!-- INSCRIPCIONES -->
+                        <a href="https://whitneyintl.sharepoint.com/sites/PolitcnicoGrancolombianoRelacionamiento2/Documentos%20compartidos/Forms/AllItems.aspx?id=%2Fsites%2FPolitcnicoGrancolombianoRelacionamiento2%2FDocumentos%20compartidos%2FProcesos%20POLI%2FInscripci%C3%B3n%20de%20Asignaturas%2FHerramientas%20para%20Metodolog%C3%ADas%20de%20Cr%C3%A9ditos&viewid=38757de1%2D1113%2D4ee8%2D936c%2Daca268ce290b" target="_blank" class="px-4 py-3 bg-poliYellow text-poliBlue text-xs font-bold rounded-lg hover:bg-yellow-400 transition shadow-sm flex flex-col items-center text-center gap-2">
+                            <i class="fas fa-database text-xl"></i> BD Créditos por Semestre
+                        </a>
+                        <a href="https://www.poli.edu.co/inscripcion-de-asignaturas-pregrado-presencial" target="_blank" class="px-4 py-3 bg-poliBlue text-white text-xs font-bold rounded-lg hover:bg-blue-900 transition shadow-sm flex flex-col items-center text-center gap-2">
+                            <i class="fas fa-building text-xl text-poliLightBlue"></i> Portal Inscripción Presencial
+                        </a>
+                        <a href="https://www.poli.edu.co/inscripcion-de-asignaturas-pregrado-virtual" target="_blank" class="px-4 py-3 bg-poliLightBlue text-poliBlue border border-blue-200 text-xs font-bold rounded-lg hover:bg-blue-200 transition shadow-sm flex flex-col items-center text-center gap-2">
+                            <i class="fas fa-laptop text-xl"></i> Portal Inscripción Virtual
+                        </a>
+                        <a href="https://www.poli.edu.co/matriculas" target="_blank" class="px-4 py-3 bg-white border border-gray-300 text-gray-700 text-xs font-bold rounded-lg hover:bg-gray-50 transition shadow-sm flex flex-col items-center text-center gap-2">
+                            <i class="fas fa-external-link-alt text-xl text-gray-400"></i> Proceso de Matrículas
+                        </a>
+                    </div>
+                    
+                    <!-- NUEVO: ENLACES DE PRÁCTICAS -->
+                    <div class="bg-gray-100 p-4 rounded-xl">
+                        <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3"><i class="fas fa-folder-open"></i> Recursos Oficiales de Prácticas</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                            <a href="https://www.poli.edu.co/practicas" target="_blank" class="px-3 py-2 bg-white text-poliBlue border border-gray-300 text-xs font-bold rounded hover:bg-gray-50 transition shadow-sm flex items-center gap-2">
+                                <i class="fas fa-globe"></i> Micrositio Prácticas
+                            </a>
+                            <a href="https://www.poli.edu.co/sites/default/files/2025-11/prerrequisitos-por-facultad-practicas.pdf" target="_blank" class="px-3 py-2 bg-white text-red-600 border border-gray-300 text-xs font-bold rounded hover:bg-red-50 transition shadow-sm flex items-center gap-2">
+                                <i class="fas fa-file-pdf"></i> Prerrequisitos por Facultad
+                            </a>
+                            <a href="https://www.poli.edu.co/sites/default/files/2025-11/guia-practicas-para-estudiantes.pdf" target="_blank" class="px-3 py-2 bg-white text-red-600 border border-gray-300 text-xs font-bold rounded hover:bg-red-50 transition shadow-sm flex items-center gap-2">
+                                <i class="fas fa-file-pdf"></i> Guía Prácticas Estudiantes
+                            </a>
+                            <a href="https://www.poli.edu.co/sites/default/files/2024-08/Proceso%20legalizacio%CC%81n%20de%20Pra%CC%81cticas.pdf" target="_blank" class="px-3 py-2 bg-white text-red-600 border border-gray-300 text-xs font-bold rounded hover:bg-red-50 transition shadow-sm flex items-center gap-2">
+                                <i class="fas fa-file-pdf"></i> Proceso Legalización
+                            </a>
+                            <a href="https://www.poli.edu.co/sites/default/files/2025-11/guia-abc-practicas-licenciaturas-escuela-eduacion-innovacion.pdf" target="_blank" class="px-3 py-2 bg-white text-red-600 border border-gray-300 text-xs font-bold rounded hover:bg-red-50 transition shadow-sm flex items-center gap-2">
+                                <i class="fas fa-file-pdf"></i> ABC Licenciaturas
+                            </a>
+                            <a href="https://www.poli.edu.co/practicas/sociedad-cultura-y-creatividad" target="_blank" class="px-3 py-2 bg-white text-poliBlue border border-gray-300 text-xs font-bold rounded hover:bg-gray-50 transition shadow-sm flex items-center gap-2">
+                                <i class="fas fa-link"></i> FSCC Prácticas
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>

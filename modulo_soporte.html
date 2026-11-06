@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 5: Soporte y Autogestión</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        poliBlue: '#002E5D',
+                        poliYellow: '#FDB913',
+                        poliLightBlue: '#E6F0FA',
+                        poliGreen: '#10B981',
+                        poliRed: '#EF4444',
+                        poliOrange: '#F97316',
+                        poliPurple: '#8B5CF6'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 p-4 md:p-6 font-sans text-gray-800">
+
+    <div class="max-w-5xl mx-auto">
+
+        <!-- NAVEGACIÓN (BREADCRUMB PARA CANVAS) -->
+        <nav class="mb-4 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2 text-poliBlue hover:text-blue-800 font-semibold text-sm transition bg-white px-4 py-2 rounded-lg shadow-sm border border-gray-200">
+                <i class="fas fa-arrow-left"></i> Volver al Menú Principal
+            </a>
+            <div class="text-xs text-gray-500 font-medium">
+                Inicio <span class="mx-1">></span> <span class="text-poliBlue">Módulo 5: Soporte y Certificados</span>
+            </div>
+        </nav>
+
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+            <!-- Header -->
+            <div class="bg-poliBlue p-8 text-white relative overflow-hidden flex items-center justify-between">
+                <div class="relative z-10">
+                    <span class="bg-poliYellow text-poliBlue text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block">Módulo 5</span>
+                    <h1 class="text-3xl md:text-4xl font-bold">Soporte y Autogestión</h1>
+                    <p class="mt-2 text-blue-200 text-lg">Certificados, Trámites Especiales y Accesos Institucionales.</p>
+                </div>
+                <i class="fas fa-user-shield text-7xl md:text-9xl text-poliYellow opacity-20 relative z-10 right-4"></i>
+                <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-blue-800 rounded-full opacity-50"></div>
+            </div>
+
+            <!-- MANTRA VENTA CONSULTIVA -->
+            <div class="bg-gradient-to-r from-blue-50 to-white border-b border-blue-200 p-4 text-center shadow-sm relative z-20">
+                <p class="text-blue-800 font-medium text-sm md:text-base">
+                    <i class="fas fa-bullseye text-poliYellow mr-2"></i> <strong>Mindset del Asesor:</strong> "No despaches, indaga. Si piden un 'Certificado de Estudio', pregúntales para qué entidad es y qué datos exactos debe llevar. ¡Evita que paguen por un documento que no les va a servir!"
+                </p>
+            </div>
+
+            <!-- Content -->
+            <div class="p-6 md:p-8">
+                
+                <!-- 1. CERTIFICADOS DE PRIMER NIVEL -->
+                <div class="mb-10">
+                    <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-poliYellow pb-2 inline-block mb-6">1. Certificados de Primer Nivel (Automáticos)</h2>
+                    <p class="text-sm text-gray-600 mb-6">Se generan de manera inmediata porque el sistema ya los tiene preconfigurados.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                        <!-- Paso 1 -->
+                        <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition">
+                            <h3 class="font-bold text-poliBlue mb-2 flex items-center gap-2"><i class="fas fa-mouse-pointer text-gray-400"></i> 1. Solicitud</h3>
+                            <p class="text-sm text-gray-600 mb-3">En el Smart Campus, menú lateral izquierdo > <strong>Certificados</strong>.</p>
+                            <p class="text-xs text-gray-500 bg-gray-50 p-2 rounded">Elige Categoría: Certificados > Servicio: [El que necesite].</p>
+                        </div>
+                        <!-- Paso 2 -->
+                        <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition">
+                            <h3 class="font-bold text-poliBlue mb-2 flex items-center gap-2"><i class="fas fa-credit-card text-green-500"></i> 2. Pago</h3>
+                            <p class="text-sm text-gray-600 mb-3">Una vez creada, ir al menú lateral izquierdo > <strong>Pagos</strong>.</p>
+                            <p class="text-xs text-gray-500 bg-gray-50 p-2 rounded">Pueden pagar en línea (PSE/TC) o descargar recibo para Banco de Bogotá.</p>
+                        </div>
+                        <!-- Paso 3 -->
+                        <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition">
+                            <h3 class="font-bold text-poliBlue mb-2 flex items-center gap-2"><i class="fas fa-envelope-open-text text-poliYellow"></i> 3. Descarga</h3>
+                            <p class="text-sm text-gray-600 mb-3">Volver a <strong>Certificados</strong>, buscarlo en la tabla y dar clic en <em>"Enviar email"</em>.</p>
+                            <p class="text-xs font-bold text-red-600 bg-red-50 p-2 rounded border border-red-100"><i class="fas fa-exclamation-circle"></i> ¡Ojo! Deben descargarlo antes de 30 días o perderán el documento.</p>
+                        </div>
+                    </div>
+
+                    <!-- Tips Consultivos -->
+                    <div class="bg-blue-50 p-5 rounded-xl border border-blue-100 flex flex-col md:flex-row gap-6">
+                        <div class="flex-1">
+                            <p class="font-bold text-poliBlue mb-2"><i class="fas fa-eye text-poliYellow"></i> El Truco de la Página Oficial</p>
+                            <p class="text-sm text-gray-700">Invita al estudiante a la <a href="https://www.poli.edu.co/certificados" target="_blank" class="text-poliBlue font-bold underline hover:text-blue-800">página oficial de certificados</a>. Ahí pueden <strong>dar clic sobre cada certificado para ver un ejemplo en PDF</strong>. Esto es vital para que confirmen si trae la información exacta que su empresa/entidad les exige antes de pagar.</p>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-bold text-poliBlue mb-2"><i class="fas fa-gift text-green-500"></i> Dato Curioso</p>
+                            <p class="text-sm text-gray-700">El único certificado que no tiene costo (es 100% gratis) es el de <strong>Retención en la Fuente</strong>.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. CERTIFICADOS DE SEGUNDO NIVEL Y ESPECIALES -->
+                <div class="mb-10 border-t-2 border-dashed border-gray-200 pt-8">
+                    <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-poliYellow pb-2 inline-block mb-6">2. Certificados de Segundo Nivel y Especiales</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- 2do Nivel -->
+                        <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+                            <h3 class="font-bold text-lg text-poliBlue mb-3 flex items-center gap-2"><i class="fas fa-user-clock text-gray-500"></i> 2do Nivel (Intervención Humana)</h3>
+                            <p class="text-sm text-gray-600 mb-3">Se piden igual por el Smart Campus, pero <strong>no son inmediatos</strong>. Requieren que un área administrativa los revise, consolide o firme.</p>
+                            <ul class="text-sm text-gray-700 space-y-1 list-disc pl-5 mb-2">
+                                <li>Notas por periodos.</li>
+                                <li>Notas generales.</li>
+                                <li>Certificados con firma original.</li>
+                            </ul>
+                            
+                            <!-- NUEVO: Invitación a ver el listado completo -->
+                            <div class="bg-blue-50 p-3 rounded-lg border border-blue-100 mb-3">
+                                <p class="text-xs text-gray-700 mb-1"><em>¡Y muchos más! (Ej. Giros ICETEX, duplicados de diploma o acta, pensiones, etc.)</em></p>
+                                <a href="https://www.poli.edu.co/certificados" target="_blank" class="text-xs font-bold text-poliBlue hover:underline flex items-center gap-1">
+                                    <i class="fas fa-list-ul"></i> Ver listado completo oficial
+                                </a>
+                            </div>
+
+                            <div class="bg-gray-100 text-gray-700 text-xs p-3 rounded font-bold">
+                                <i class="fas fa-hourglass-half"></i> Tiempos de entrega: De 2 a 5 días hábiles.
+                            </div>
+                        </div>
+
+                        <!-- Especiales (El Hack) -->
+                        <div class="bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-xl p-5 shadow-sm text-white">
+                            <h3 class="font-bold text-lg text-poliYellow mb-3 flex items-center gap-2"><i class="fas fa-star"></i> Certificados Especiales</h3>
+                            <p class="text-sm text-gray-300 mb-3">A veces una entidad pide un certificado "raro" con condiciones súper puntuales que no está en la lista estándar.</p>
+                            
+                            <p class="text-xs font-bold text-poliLightBlue uppercase mb-2">El Hack Operativo:</p>
+                            <ol class="text-xs text-gray-300 space-y-2 list-decimal pl-4 mb-3">
+                                <li>Pídele al estudiante que te envíe el modelo/formato que le exige la entidad.</li>
+                                <li>Para adelantar el pago, dile que ingrese al Smart Campus y pague un <em>"Certificado de créditos aprobados"</em>.</li>
+                                <li>Tú (como asesor) creas un <strong>Ticket derivado al Área Global</strong>, adjuntando el recibo pagado y el modelo exacto de cómo necesita el documento.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. EL UNIVERSO DEL INGLÉS -->
+                <div class="mb-10 border-t-2 border-dashed border-gray-200 pt-8">
+                    <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-poliYellow pb-2 inline-block mb-6">3. Certificados de Requisito de Inglés</h2>
+                    
+                    <div class="bg-red-50 border border-red-200 p-4 rounded-xl mb-6 shadow-sm flex items-start gap-3">
+                        <i class="fas fa-thumbtack text-red-600 text-2xl mt-1"></i>
+                        <div>
+                            <p class="font-bold text-red-800 mb-1">¡Regla de Oro!</p>
+                            <p class="text-sm text-gray-800">La universidad <strong>NO certifica el nivel de inglés</strong> (No emitimos un papel que diga "El estudiante es B1 o B2"). Solo certificamos el cumplimiento de nuestro requisito institucional.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        
+                        <!-- Flujo Operativo -->
+                        <div class="lg:col-span-1 bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition">
+                            <h3 class="font-bold text-lg text-poliBlue mb-4 border-b pb-2"><i class="fas fa-cogs"></i> Flujo de Solicitud</h3>
+                            <ol class="text-sm text-gray-700 space-y-4 relative border-l-2 border-gray-200 ml-2">
+                                <li class="pl-4 relative">
+                                    <span class="absolute -left-2.5 top-0 bg-gray-200 text-gray-600 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold">1</span>
+                                    <p>Tú solicitas la orden de pago en el <strong>chat de Piso</strong> a los compañeros de BO.</p>
+                                </li>
+                                <li class="pl-4 relative">
+                                    <span class="absolute -left-2.5 top-0 bg-gray-200 text-gray-600 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold">2</span>
+                                    <p>El estudiante paga.</p>
+                                </li>
+                                <li class="pl-4 relative">
+                                    <span class="absolute -left-2.5 top-0 bg-poliBlue text-white w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold">3</span>
+                                    <p>Una vez pagado, <strong>el estudiante crea un ticket</strong> indicando claramente cuál de los 3 certificados necesita y para qué trámite (evita reprocesos).</p>
+                                </li>
+                            </ol>
+                        </div>
+
+                        <!-- Los 3 Tipos -->
+                        <div class="lg:col-span-2 space-y-4">
+                            <div class="bg-blue-50 border-l-4 border-poliBlue p-4 rounded-r-xl shadow-sm">
+                                <p class="text-sm font-bold text-poliBlue mb-1">1. Uso de licencia de inglés</p>
+                                <p class="text-xs text-gray-700">Informa que la licencia de la plataforma es una opción válida para cumplir el requisito institucional. <em>(Súper común para pedir auxilios económicos en las empresas o sacar cesantías)</em>.</p>
+                            </div>
+                            <div class="bg-blue-50 border-l-4 border-poliBlue p-4 rounded-r-xl shadow-sm">
+                                <p class="text-sm font-bold text-poliBlue mb-1">2. Cumplimiento del requisito</p>
+                                <p class="text-xs text-gray-700">Detalla específicamente cómo el estudiante cumplió el requisito (si fue por examen, por homologación, o por plataforma).</p>
+                            </div>
+                            <div class="bg-blue-50 border-l-4 border-poliBlue p-4 rounded-r-xl shadow-sm">
+                                <p class="text-sm font-bold text-poliBlue mb-1">3. Certificado de obligatoriedad</p>
+                                <p class="text-xs text-gray-700">Señala que el requisito de inglés hace parte integral del plan de estudios y es de carácter <strong>obligatorio</strong> para poder graduarse.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- VENTA CONSULTIVA: EVITAR GASTOS INNECESARIOS -->
+                    <div class="mt-6 bg-yellow-50 border-2 border-yellow-300 p-5 rounded-xl shadow-sm relative overflow-hidden">
+                        <i class="fas fa-lightbulb absolute -right-2 -top-2 text-yellow-200 text-6xl opacity-50"></i>
+                        <h3 class="font-bold text-yellow-800 mb-2 relative z-10">Dilema Consultivo: ¿De verdad necesita el certificado?</h3>
+                        <p class="text-sm text-gray-700 mb-3 relative z-10">Si el estudiante pide un certificado solo porque <strong>"quiere confirmar que ya cumplió el requisito de inglés"</strong>, ¡detente!</p>
+                        <p class="text-sm text-gray-800 bg-white p-3 rounded border border-yellow-200 relative z-10">No le hagas gastar plata. Valida tú en el sistema si ya tiene la aprobación registrada. Si él completó el proceso pero no le aparece aprobado, <strong>escala el caso al analista correspondiente para que le actualicen el avance</strong>. Dile al estudiante: <em>"No necesitas pagar un certificado, con que te aparezca reflejado en tu avance curricular es suficiente para graduarte"</em>.</p>
+                    </div>
+
+                </div>
+
+                <!-- 4. AUTOGESTIÓN: CAMBIO DE CONTRASEÑA (CPO) -->
+                <div class="mb-6 border-t-2 border-dashed border-gray-200 pt-8">
+                    <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-poliYellow pb-2 inline-block mb-6">4. Gestión de Accesos (CPO Poli)</h2>
+                    
+                    <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm mb-6">
+                        <div class="flex flex-col md:flex-row items-start gap-4">
+                            <div class="bg-gray-100 text-gray-500 w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 text-3xl">
+                                <i class="fas fa-key"></i>
+                            </div>
+                            <div class="flex-grow">
+                                <p class="text-sm text-gray-600 mb-3">Es la consulta número 1 a inicio de semestre: <em>"Se me bloqueó la clave / Olvidé mi contraseña"</em>.</p>
+                                <p class="text-sm text-gray-700 mb-4">La plataforma oficial para esto es el <strong>CPO Poli (Centro de Producción de Usuarios)</strong>.</p>
+                                
+                                <!-- La Trampa del Smart Campus -->
+                                <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg shadow-sm">
+                                    <p class="font-bold text-red-800 text-sm mb-1"><i class="fas fa-exclamation-triangle"></i> La trampa del Smart Campus y los 40 días</p>
+                                    <p class="text-xs text-gray-800">La contraseña <strong>se vence cada 40 días</strong> (recientemente por ataques de Phishing, se recomienda a los estudiantes cambiarla cada 30 días). El problema es que a veces el estudiante la deja guardada en su navegador y entra al Smart Campus sin darse cuenta de que ya venció. Pero cuando intenta acceder a portales paralelos (Biblioteca, Grados), le da error de credenciales. <strong>¡No es un fallo del sistema, es que su clave expiró!</strong></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <!-- El Hack del Asesor -->
+                        <div class="bg-white border-2 border-poliBlue rounded-xl p-5 shadow-sm">
+                            <h3 class="font-bold text-lg text-poliBlue mb-3 flex items-center gap-2"><i class="fas fa-headset"></i> El "Hack" del Asesor (Agilidad)</h3>
+                            <p class="text-sm text-gray-600 mb-3">Para agilizar la llamada, ayúdale guiándolo por la opción de "Olvidó su contraseña":</p>
+                            <ol class="list-decimal pl-5 text-sm text-gray-700 space-y-2 mb-4 font-medium">
+                                <li>Ingresa a <strong>Analytics > Persona</strong> y confirma cuál es su correo personal.</li>
+                                <li>En el portal <strong>CPO Poli</strong>, elige <em>"Olvidé mi contraseña"</em>.</li>
+                                <li>Digita la cédula del estudiante y dale enviar.</li>
+                                <li>Avísale que le llegará un enlace a su correo personal verificado para crear la nueva clave.</li>
+                            </ol>
+                            <div class="bg-green-50 p-3 rounded text-xs text-green-800 border border-green-200">
+                                <i class="fas fa-stopwatch"></i> <strong>Tip Experto:</strong> Recuérdale que, tras cambiarla, debe esperar <strong>5 minutos</strong> para que se actualice en todas las plataformas institucionales.
+                            </div>
+                        </div>
+
+                        <!-- Reglas de la Contraseña -->
+                        <div class="bg-white border-2 border-poliYellow rounded-xl p-5 shadow-sm relative overflow-hidden">
+                            <i class="fas fa-shield-alt absolute -right-6 -bottom-6 text-yellow-50 text-8xl"></i>
+                            <div class="relative z-10">
+                                <h3 class="font-bold text-lg text-yellow-700 mb-3 flex items-center gap-2"><i class="fas fa-lock"></i> Reglas de la Nueva Contraseña</h3>
+                                <p class="text-sm text-gray-600 mb-3">Guíalo en la creación, el sistema es extremadamente estricto:</p>
+                                <ul class="list-disc pl-5 text-sm text-gray-700 space-y-2 mb-4 font-semibold">
+                                    <li>El Usuario se escribe <strong>SIN</strong> <code>@poligran.edu.co</code></li>
+                                    <li>Tener entre <strong>8 y 14</strong> caracteres.</li>
+                                    <li>Debe contener sí o sí: Mayúsculas (A,B,C), minúsculas (a,b,c), números (1,2,3) y símbolos (/%&*-+=¡?'¿). <br><span class="text-xs text-gray-500 font-normal">Ejemplo válido: <em>Poli12345678**</em> (pero ver regla abajo)</span></li>
+                                </ul>
+                                
+                                <div class="bg-red-50 p-3 rounded-lg text-xs text-red-800 border border-red-200 shadow-inner">
+                                    <p class="font-bold mb-1"><i class="fas fa-ban"></i> LO QUE NO DEBE CONTENER:</p>
+                                    <ul class="space-y-1 pl-2">
+                                        <li>- NO contener número de identificación, usuario o nombre.</li>
+                                        <li>- NO puede iniciar por la palabra "Poli".</li>
+                                        <li>- NO puede ser igual a ninguna de las últimas 2 contraseñas.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Enlaces Oficiales -->
+                    <div class="flex flex-wrap gap-3">
+                        <a href="https://cpo.poligran.edu.co/" target="_blank" class="px-4 py-2 bg-poliBlue text-white text-sm font-bold rounded-lg hover:bg-blue-900 transition shadow-sm flex items-center gap-2">
+                            <i class="fas fa-external-link-alt"></i> Portal CPO
+                        </a>
+                        <a href="https://cpo.poligran.edu.co/CambioContrasena" target="_blank" class="px-4 py-2 bg-white text-poliBlue border border-gray-300 text-sm font-bold rounded-lg hover:bg-gray-50 transition shadow-sm flex items-center gap-2">
+                            <i class="fas fa-key"></i> Cambio Directo
+                        </a>
+                        <a href="https://www.youtube.com/watch?v=nq9KavHabkc" target="_blank" class="px-4 py-2 bg-red-600 text-white border border-red-700 text-sm font-bold rounded-lg hover:bg-red-700 transition shadow-sm flex items-center gap-2">
+                            <i class="fab fa-youtube text-lg"></i> Video Tutorial CPO
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>

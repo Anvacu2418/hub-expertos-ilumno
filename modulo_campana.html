@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 4: Campañas Adicionales y Nivelación</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        poliBlue: '#002E5D',
+                        poliYellow: '#FDB913',
+                        poliLightBlue: '#E6F0FA',
+                        poliGreen: '#10B981',
+                        poliRed: '#EF4444',
+                        poliOrange: '#F97316',
+                        poliPurple: '#8B5CF6'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 p-4 md:p-6 font-sans text-gray-800">
+
+    <div class="max-w-5xl mx-auto">
+
+        <!-- NAVEGACIÓN (BREADCRUMB PARA CANVAS) -->
+        <nav class="mb-4 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2 text-poliBlue hover:text-blue-800 font-semibold text-sm transition bg-white px-4 py-2 rounded-lg shadow-sm border border-gray-200">
+                <i class="fas fa-arrow-left"></i> Volver al Menú Principal
+            </a>
+            <div class="text-xs text-gray-500 font-medium">
+                Inicio <span class="mx-1">></span> <span class="text-poliBlue">Módulo 4: Campañas Adicionales</span>
+            </div>
+        </nav>
+
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+            <!-- Header -->
+            <div class="bg-poliBlue p-8 text-white relative overflow-hidden flex items-center justify-between">
+                <div class="relative z-10">
+                    <span class="bg-poliYellow text-poliBlue text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block">Módulo 4</span>
+                    <h1 class="text-3xl md:text-4xl font-bold">Campañas Adicionales y Nivelación</h1>
+                    <p class="mt-2 text-blue-200 text-lg">Estrategias para recuperar evaluaciones, adelantar materias y proteger el avance.</p>
+                </div>
+                <i class="fas fa-rocket text-7xl md:text-9xl text-poliYellow opacity-20 relative z-10 right-4"></i>
+                <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-blue-800 rounded-full opacity-50"></div>
+            </div>
+
+            <!-- MANTRA VENTA CONSULTIVA -->
+            <div class="bg-gradient-to-r from-orange-50 to-white border-b border-orange-200 p-4 text-center shadow-sm relative z-20">
+                <p class="text-orange-800 font-medium text-sm md:text-base">
+                    <i class="fas fa-bullseye text-poliOrange mr-2"></i> <strong>Mindset del Asesor:</strong> "No dejes que la ansiedad del estudiante lo perjudique. Evalúa su situación (promedio, ausencias), advierte los riesgos y recétale la campaña que mejor lo proteja."
+                </p>
+            </div>
+
+            <!-- Content -->
+            <div class="p-6 md:p-8">
+                
+                <!-- 1. EXÁMENES SUPLETORIOS -->
+                <div class="mb-10">
+                    <div class="flex items-center justify-between mb-6 border-b-2 border-poliYellow pb-2">
+                        <h2 class="text-2xl font-bold text-gray-800">1. Exámenes Supletorios (La llamada de pánico)</h2>
+                        <a href="https://www.poli.edu.co/inscripciones-supletorios" target="_blank" class="text-sm font-bold text-poliBlue hover:underline flex items-center gap-1"><i class="fas fa-external-link-alt"></i> Portal Supletorios</a>
+                    </div>
+                    
+                    <div class="bg-white border-2 border-purple-100 rounded-xl p-6 shadow-sm hover:shadow-md transition relative overflow-hidden">
+                        <div class="absolute -right-6 -top-6 text-purple-50 text-8xl"><i class="fas fa-file-signature"></i></div>
+                        <div class="relative z-10">
+                            <p class="text-sm text-gray-600 mb-4">El estudiante llama angustiado porque <strong>no pudo presentar un examen parcial o final</strong>. Tu deber es explicarle que existe una segunda oportunidad a través del supletorio. <strong>¡Siempre invítalo a consultar las fechas exactas en la página web!</strong></p>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
+                                <div class="bg-purple-50 p-4 rounded-lg border border-purple-200">
+                                    <p class="font-bold text-purple-800 uppercase text-xs mb-2"><i class="fas fa-random"></i> Presencial vs. Virtual</p>
+                                    <ul class="text-sm text-gray-700 space-y-2 list-disc pl-4">
+                                        <li><strong>Presencial:</strong> Se programa de forma física en el campus con la facultad/docente en los horarios establecidos.</li>
+                                        <li><strong>Virtual:</strong> Se habilita la prueba directamente en la plataforma (Canvas) durante el fin de semana designado.</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                                    <p class="font-bold text-poliBlue uppercase text-xs mb-2"><i class="fas fa-hand-holding-usd"></i> Costos y Excusas</p>
+                                    <p class="text-sm text-gray-700 mb-2">Este trámite <strong>tiene un costo</strong> asociado. Invita al estudiante a consultar el valor exacto de la campaña en los <a href="https://www.poli.edu.co/sites/default/files/2025-12/derechos-pecuniarios-politecnico-grancolombiano-2026.pdf" target="_blank" class="text-poliBlue font-bold underline">Derechos Pecuniarios</a>.</p>
+                                    <p class="text-xs text-blue-900 bg-white p-2 rounded border border-blue-100"><strong>¿Qué pasa si tiene excusa médica o laboral?</strong> Se debe <em>crear un ticket</em> para escalar el caso con la facultad. Ellos validarán la excusa y determinarán si otorgan la ampliación sin generar cobro. (No prometas la exoneración inmediata).</p>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gray-800 text-green-400 text-xs p-3 rounded font-mono inline-block">
+                                <strong>Ruta Smart Campus:</strong> Trámites Académicos > Nuevo > Gestión Académica > Supletorios
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. INTERSEMESTRALES (SOLO PRESENCIAL) -->
+                <div class="mb-10 border-t-2 border-dashed border-gray-200 pt-8">
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-4 border-b-2 border-poliYellow pb-2 gap-2">
+                        <h2 class="text-2xl font-bold text-gray-800">2. Cursos Intersemestrales</h2>
+                        <div class="flex items-center gap-3">
+                            <a href="https://www.poli.edu.co/cursos-intersemestrales" target="_blank" class="text-sm font-bold text-poliBlue hover:underline flex items-center gap-1"><i class="fas fa-external-link-alt"></i> Ver Oferta Oficial</a>
+                            <span class="bg-indigo-100 text-indigo-800 text-xs px-3 py-1 rounded-full font-bold uppercase"><i class="fas fa-building"></i> Solo Presencial</span>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm flex flex-col md:flex-row gap-6 items-start hover:shadow-md transition">
+                        <div class="bg-indigo-50 text-indigo-600 w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 text-3xl">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <div class="flex-grow">
+                            <p class="text-sm text-gray-600 mb-3">Diseñados para <strong>estudiantes antiguos de modalidad presencial</strong> (Bogotá o Medellín) en nivel PREGRADO, que desean adelantar o nivelar materias durante el periodo de receso académico.</p>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                <div class="bg-indigo-50 p-4 rounded-lg border border-indigo-200">
+                                    <p class="font-bold text-indigo-800 uppercase text-xs mb-2">Condiciones Clave</p>
+                                    <ul class="text-xs text-gray-700 space-y-1 list-disc pl-4">
+                                        <li>Inscribir, pagar y cursar <strong>máximo 2 cursos</strong>.</li>
+                                        <li>Tener cumplidos los prerrequisitos.</li>
+                                        <li>Se ofertan presencial o bajo asistencia en TEAMS.</li>
+                                        <li>No se hacen ampliaciones de fechas.</li>
+                                        <li class="text-red-600 font-bold mt-1">NO aplica para estudiantes de Policía Nacional.</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-red-50 p-4 rounded-lg border border-red-200">
+                                    <p class="font-bold text-red-800 uppercase text-xs mb-2"><i class="fas fa-users"></i> Regla de Cupo Mínimo (10)</p>
+                                    <p class="text-xs text-gray-700">La generación del recibo de pago y la apertura del curso se hará SIEMPRE Y CUANDO la asignatura tenga un mínimo de <strong>10 estudiantes inscritos y pagos</strong>. La institución se reserva el derecho de no abrirlo.</p>
+                                </div>
+                            </div>
+                            
+                            <p class="text-sm text-gray-800 bg-gray-100 p-3 rounded-lg border border-gray-200"><strong class="text-indigo-700"><i class="fas fa-calendar-check"></i> Meta Presencial:</strong> Se ofertan 2 veces al año (mitad y final). En total, un estudiante puede adelantar <strong>hasta 4 materias al año</strong>.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. VACACIONALES (SOLO VIRTUAL) -->
+                <div class="mb-10 border-t-2 border-dashed border-gray-200 pt-8">
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-4 border-b-2 border-poliYellow pb-2 gap-2">
+                        <h2 class="text-2xl font-bold text-gray-800">3. Cursos Vacacionales</h2>
+                        <div class="flex items-center gap-3">
+                            <a href="https://www.poli.edu.co/cursos-vacacionales-modalidad-virtual" target="_blank" class="text-sm font-bold text-poliBlue hover:underline flex items-center gap-1"><i class="fas fa-external-link-alt"></i> Ver Oferta Oficial</a>
+                            <span class="bg-poliYellow text-yellow-900 text-xs px-3 py-1 rounded-full font-bold uppercase"><i class="fas fa-laptop"></i> Solo Virtual</span>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm flex flex-col md:flex-row gap-6 items-start hover:shadow-md transition">
+                        <div class="bg-yellow-50 text-yellow-600 w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 text-3xl">
+                            <i class="fas fa-umbrella-beach"></i>
+                        </div>
+                        <div class="flex-grow">
+                            <p class="text-sm text-gray-600 mb-3">Diseñados exclusivamente para <strong>estudiantes antiguos de modalidad virtual</strong> para nivelar o adelantar asignaturas en ciclos de <strong>8 semanas</strong>. Se ofertan solo una vez al año (a final de año).</p>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                                    <p class="font-bold text-yellow-800 uppercase text-xs mb-2">Condiciones y Restricciones</p>
+                                    <ul class="text-xs text-gray-700 space-y-1 list-disc pl-4">
+                                        <li>Máximo <strong>2 cursos</strong>. Deben cumplir prerrequisitos.</li>
+                                        <li>Se debe generar una <strong>factura de pago por cada curso</strong> seleccionado.</li>
+                                        <li>No hay ampliaciones de fechas.</li>
+                                        <li class="text-red-600 font-bold mt-1">NO SE OFERTAN: Módulos transversales, prácticas, coterminales, opción de grado e inglés.</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-red-50 p-4 rounded-lg border border-red-200">
+                                    <p class="font-bold text-red-800 uppercase text-xs mb-2"><i class="fas fa-users"></i> Regla de Cupo Mínimo (15)</p>
+                                    <p class="text-xs text-gray-700">Se abrirán con un cupo mínimo de <strong>15 estudiantes inscritos y pagados</strong>. Aunque el estudiante visualice el curso en el aula, solo tras la verificación del pago y el cupo mínimo se dará apertura.</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-100 p-3 rounded-lg border border-gray-200 text-sm text-gray-800 mb-3">
+                                <p class="font-bold text-poliBlue mb-1"><i class="fas fa-balance-scale"></i> ¿Cómo iguala el virtual las 4 materias del presencial?</p>
+                                <p>Para que el estudiante virtual también pueda adelantar 4 materias al año, la fórmula es: <strong>2 materias en Vacacionales + 2 Módulos Adicionales</strong> (uno en el primer semestre y otro en el segundo).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- IMPORTANTE: LÍNEA DE TIEMPO INTER Y VACACIONALES -->
+                <div class="mb-10 bg-red-50 rounded-2xl p-6 md:p-8 border border-red-200 shadow-sm relative overflow-hidden">
+                    <h3 class="text-xl font-bold text-red-800 mb-4 relative z-10"><i class="fas fa-exclamation-triangle text-2xl mr-2"></i> La Realidad Operativa (Intersemestrales y Vacacionales)</h3>
+                    <p class="text-sm text-gray-800 mb-5 relative z-10">Ambas campañas dependen del CUPO MÍNIMO (10 presencial, 15 virtual). El flujo de pagos confunde mucho al estudiante. ¡Sigue esta ruta para asesorarlos bien!</p>
+
+                    <div class="relative z-10 flex flex-col md:flex-row gap-4 mb-5 text-sm">
+                        <div class="flex-1 bg-white p-4 rounded-lg shadow-sm border border-red-100">
+                            <span class="bg-gray-800 text-white w-6 h-6 rounded-full inline-flex items-center justify-center font-bold text-xs mb-2">1</span>
+                            <p class="font-bold text-gray-800">Inscripción</p>
+                            <p class="text-xs text-gray-600 mt-1">El estudiante se anota en las fechas establecidas. <strong>Aclárale que la orden de pago NO se genera de inmediato.</strong></p>
+                        </div>
+                        <div class="hidden md:flex items-center justify-center text-red-300"><i class="fas fa-chevron-right text-2xl"></i></div>
+                        <div class="flex-1 bg-white p-4 rounded-lg shadow-sm border border-red-100">
+                            <span class="bg-gray-800 text-white w-6 h-6 rounded-full inline-flex items-center justify-center font-bold text-xs mb-2">2</span>
+                            <p class="font-bold text-gray-800">Pago</p>
+                            <p class="text-xs text-gray-600 mt-1">Se genera la orden <strong>solo después de cerrar inscripciones</strong> y verificar cupos. (Si se inscribe el 23, el 25 no tendrá recibo aún).</p>
+                        </div>
+                        <div class="hidden md:flex items-center justify-center text-red-300"><i class="fas fa-chevron-right text-2xl"></i></div>
+                        <div class="flex-1 bg-white p-4 rounded-lg shadow-sm border border-red-100">
+                            <span class="bg-gray-800 text-white w-6 h-6 rounded-full inline-flex items-center justify-center font-bold text-xs mb-2">3</span>
+                            <p class="font-bold text-gray-800">Publicación</p>
+                            <p class="text-xs text-gray-600 mt-1">La U publica qué cursos abrieron. Si pagó y su curso no abrió, puede <strong>cambiarse a uno abierto</strong> o pedir <strong>devolución/abono</strong>.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. EL MÓDULO ADICIONAL (SOLO VIRTUAL) -->
+                <div class="mb-10 border-t-2 border-dashed border-gray-200 pt-8">
+                    <div class="flex items-center justify-between mb-6 border-b-2 border-poliYellow pb-2">
+                        <h2 class="text-2xl font-bold text-gray-800">4. Módulo Adicional</h2>
+                        <span class="bg-poliYellow text-yellow-900 text-xs px-3 py-1 rounded-full font-bold uppercase"><i class="fas fa-laptop"></i> Solo Virtual</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-6">A diferencia de los vacacionales, esta opción <strong>depende 100% del estudiante</strong> (y de su rendimiento previo). Permite ver una materia extra durante su semestre regular.</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <!-- Requisitos -->
+                        <div class="bg-white border-2 border-poliBlue rounded-xl p-5 shadow-sm">
+                            <h3 class="font-bold text-lg text-poliBlue mb-3 flex items-center gap-2"><i class="fas fa-clipboard-check"></i> Requisitos de Hierro</h3>
+                            <ul class="space-y-3 text-sm text-gray-700">
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                    <span>Haber pagado <strong>Matrícula Completa</strong> en el semestre actual.</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                    <span>Tener un <strong>Promedio Mínimo de 3.8</strong> en el último periodo cursado.</span>
+                                </li>
+                            </ul>
+                            
+                            <div class="mt-4 bg-blue-50 p-3 rounded text-xs text-blue-900 italic border border-blue-200">
+                                <i class="fas fa-brain mr-1"></i> <strong>Lógica de Asesor:</strong> "¿Por qué le pedimos promedio? Fácil: Si a un estudiante no le fue bien cursando 5 materias, ¡ponerle una sexta lo va a perjudicar por la sobrecarga!"
+                            </div>
+                        </div>
+
+                        <!-- Restricción de Bloque -->
+                        <div class="bg-white border-2 border-poliYellow rounded-xl p-5 shadow-sm">
+                            <h3 class="font-bold text-yellow-700 mb-3 flex items-center gap-2"><i class="fas fa-calendar-week"></i> Restricción de Bloque</h3>
+                            <p class="text-sm text-gray-700 mb-3">El módulo adicional <strong>SOLO permite inscribir materias de Segundo Bloque</strong>.</p>
+                            
+                            <p class="text-xs font-bold text-gray-500 uppercase mb-1">Responsabilidad del Asesor:</p>
+                            <p class="text-sm text-gray-700 mb-2">Debes revisar en Analytics para asegurarte de que SÍ tenga materias disponibles de 2do bloque.</p>
+                            <ul class="list-disc pl-4 text-xs text-gray-600 space-y-1">
+                                <li>Revisa en <strong>Proyecciones</strong>.</li>
+                                <li>Si no le sale nada ahí, revisa en <strong>Avance Curricular</strong> si tiene <em>Electivas</em> pendientes (Casi siempre son de 2do bloque).</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Tiempos de Pago y Analytics -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Ruta Analytics Promedio -->
+                        <div class="md:col-span-1 bg-gray-800 text-white rounded-xl p-5 shadow-inner">
+                            <p class="font-bold text-poliYellow mb-2 flex items-center gap-2"><i class="fas fa-search"></i> ¿Dónde veo el Promedio?</p>
+                            <p class="text-xs text-gray-300 mb-2">Para validar el 3.8, ingresa a:</p>
+                            <div class="bg-gray-900 p-2 rounded border border-gray-600 font-mono text-[10px] text-green-400">
+                                Analytics > Certificados > (Bajar al final) > "Último periodo académico cursado"
+                            </div>
+                        </div>
+
+                        <!-- Tiempos de Pago (Alerta) -->
+                        <div class="md:col-span-2 bg-orange-50 border border-orange-200 rounded-xl p-5 shadow-sm flex items-start gap-4">
+                            <div class="text-orange-500 text-3xl"><i class="fas fa-clock"></i></div>
+                            <div>
+                                <p class="font-bold text-orange-800 mb-1">¡Nunca le cobres esto al inicio!</p>
+                                <p class="text-sm text-gray-700">A veces el estudiante pide: <em>"Genéreme la orden del semestre de una vez con el módulo adicional"</em>. <strong>¡Eso no se puede!</strong></p>
+                                <p class="text-xs text-gray-600 mt-2">Son procesos separados y en tiempos diferentes. Primero paga su matrícula normal, inicia clases (Ej. 3 de marzo) y <strong>la campaña del módulo adicional se abre y se paga semanas después</strong> (Ej. 6 de abril).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. AVISO PARROQUIAL: NIVELATORIOS -->
+                <div class="mb-6 border-t-2 border-gray-200 pt-8">
+                    <div class="bg-gray-100 rounded-xl p-6 flex flex-col md:flex-row items-center justify-between gap-6 border-l-4 border-gray-400">
+                        <div class="flex-grow">
+                            <h2 class="text-xl font-bold text-gray-600 mb-2 flex items-center gap-2"><i class="fas fa-store-alt-slash"></i> Aviso Parroquial: Los Nivelatorios</h2>
+                            <p class="text-sm text-gray-600">Si un estudiante veterano llama preguntando por la campaña de "Nivelatorios", debes saber que desde el año pasado se determinó institucionalmente que <strong>NO se volverán a ofertar</strong>.</p>
+                        </div>
+                        <div class="bg-white px-4 py-2 rounded shadow text-sm font-bold text-gray-500 flex items-center gap-2">
+                            <i class="fas fa-times-circle text-red-400"></i> Campaña Inactiva
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>

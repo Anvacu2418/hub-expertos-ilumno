@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ILUMNO | Curso para Expertos</title>
+    <!-- Favicon con fallback automático a images/logo.png -->
+    <link rel="icon" type="image/png" href="./images/logo.png" onerror="this.href='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2235%22 fill=%22none%22 stroke=%22%2300264D%22 stroke-width=%2216%22/></svg>'">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        ilumnoTeal: '#00A0C6',
+                        ilumnoDark: '#00264D',
+                        ilumnoYellow: '#FFB81C',
+                        ilumnoPink: '#E91E63',
+                        ilumnoLight: '#F3F7FA',
+                        ilumnoSlate: '#1E293B',
+                        canvasGray: '#F8FAFC'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Personalización de Scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F1F5F9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
+        .slide-transition {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="bg-[#F8FAFC] text-slate-800 font-sans antialiased flex flex-col h-screen overflow-hidden">
+
+    <!-- ========================================== -->
+    <!-- 1. HEADER SUPERIOR TIPO PLATAFORMA -->
+    <!-- ========================================== -->
+    <header class="bg-white border-b border-slate-200 h-16 flex-shrink-0 z-30 px-3 md:px-6 flex items-center justify-between shadow-xs">
+        
+        <div class="flex items-center gap-3">
+            <button id="toggle-sidebar-btn" class="p-2 rounded-xl text-slate-600 hover:text-ilumnoDark hover:bg-slate-100 transition focus:outline-none" title="Colapsar / Expandir navegación">
+                <i class="fas fa-bars text-lg"></i>
+            </button>
+            
+            <div class="flex items-center gap-2.5 cursor-pointer select-none group" onclick="navigateToLesson('home')">
+                <div class="w-10 h-10 rounded-xl bg-white border border-slate-200 shadow-xs flex items-center justify-center p-1 relative overflow-hidden group-hover:border-ilumnoTeal transition">
+                    <img src="./images/logo.png" alt="Logo Ilumno" class="w-full h-full object-contain" onerror="this.style.display='none'; document.getElementById('svg-logo-fallback').style.display='flex';">
+                    <div id="svg-logo-fallback" class="w-full h-full flex items-center justify-center">
+                        <svg viewBox="0 0 100 100" class="w-7 h-7">
+                            <defs>
+                                <mask id="split-o-cut">
+                                    <rect width="100" height="100" fill="white" />
+                                    <line x1="16" y1="84" x2="84" y2="16" stroke="black" stroke-width="15" stroke-linecap="square" />
+                                </mask>
+                            </defs>
+                            <circle cx="50" cy="50" r="34" fill="none" stroke="#00264D" stroke-width="18" mask="url(#split-o-cut)" />
+                        </svg>
+                    </div>
+                </div>
+                
+                <div class="leading-tight">
+                    <span class="font-black text-[#00264D] tracking-tight text-lg md:text-xl block leading-none">ILUMNO</span>
+                    <span class="text-[11px] font-bold text-ilumnoTeal uppercase tracking-wider block">Curso para expertos</span>
+                </div>
+            </div>
+
+            <div class="hidden md:flex items-center ml-3 pl-3 border-l border-slate-200 gap-2">
+                <button onclick="navigateToLesson('home')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100 hover:text-ilumnoTeal transition">
+                    <i class="fas fa-home text-slate-400"></i> <span>Inicio</span>
+                </button>
+                <button onclick="openSimulatorModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200 transition">
+                    <i class="fas fa-headset text-amber-600"></i> <span>Centro de Simuladores IA</span>
+                </button>
+                <button onclick="openEvaluationsModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition">
+                    <i class="fas fa-award text-indigo-600"></i> <span>Evaluaciones (90%)</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="hidden lg:flex items-center gap-3 w-1/3 max-w-xs">
+            <div class="w-full">
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-[10px] font-black text-slate-500 uppercase tracking-wider">Progreso Global</span>
+                    <span id="global-progress-text" class="text-xs font-black text-ilumnoTeal">0%</span>
+                </div>
+                <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden p-0.5 border border-slate-200">
+                    <div id="global-progress-bar" class="bg-gradient-to-r from-ilumnoTeal to-emerald-500 h-1 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <button onclick="openProfileModal()" class="flex items-center gap-2 p-1.5 md:px-3 md:py-1.5 rounded-xl border border-slate-200 hover:border-ilumnoTeal hover:bg-slate-50 transition group">
+                <div class="w-8 h-8 rounded-lg bg-ilumnoDark text-white font-bold flex items-center justify-center text-xs shadow-xs group-hover:scale-105 transition" id="profile-avatar">EX</div>
+                <div class="text-left hidden sm:block">
+                    <span id="user-display-name" class="text-xs font-bold text-slate-800 block leading-tight">Experto Ilumno</span>
+                    <span class="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse"></span> Formación Activa
+                    </span>
+                </div>
+                <i class="fas fa-chevron-down text-[10px] text-slate-400 ml-1"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- ========================================== -->
+    <!-- 2. CONTENIDO PRINCIPAL: WORKSPACE + SIDEBAR -->
+    <!-- ========================================== -->
+    <div class="flex flex-1 overflow-hidden relative">
+
+        <!-- VIEWPORT PRINCIPAL -->
+        <main id="main-viewport" class="flex-1 overflow-y-auto p-4 md:p-8 transition-all duration-300">
+            
+            <!-- VISTA ACTIVA: HOME -->
+            <div id="view-home" class="max-w-6xl mx-auto space-y-8 pb-12">
+                <div class="rounded-3xl shadow-xl overflow-hidden border border-slate-200 bg-white">
+                    <div class="bg-gradient-to-r from-[#0089A8] via-[#007A99] to-[#004D6B] p-6 md:p-10 relative flex flex-col lg:flex-row items-center justify-between gap-8 overflow-hidden">
+                        <div class="relative z-10 text-white lg:w-3/5 space-y-3">
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-xs font-bold uppercase tracking-wider">
+                                <i class="fas fa-compass"></i> Campus de Capacitación Integral
+                            </div>
+                            <h1 class="text-2xl sm:text-4xl md:text-5xl font-black leading-tight uppercase drop-shadow-xs tracking-tight">
+                                Curso de Formación para<br>
+                                <span class="text-ilumnoYellow">Expertos de Ilumno</span>
+                            </h1>
+                            <p class="text-xs sm:text-sm md:text-base text-cyan-50 font-normal leading-relaxed max-w-xl">
+                                Te damos la bienvenida. Hemos diseñado este espacio interactivo con un conjunto de actividades que facilitarán el proceso de enseñanza-aprendizaje en línea, donde tendrás acompañamiento continuo y herramientas de autogestión directa.
+                            </p>
+                            <div class="pt-3 flex flex-wrap gap-2.5">
+                                <button onclick="navigateToLesson('0.1')" class="px-5 py-2.5 bg-white text-ilumnoDark font-black text-xs md:text-sm rounded-xl hover:bg-cyan-50 transition shadow-md flex items-center gap-2">
+                                    <span>Comenzar Inducción</span> <i class="fas fa-arrow-right text-ilumnoTeal"></i>
+                                </button>
+                                <button onclick="navigateToLesson('2.1')" class="px-4 py-2.5 bg-ilumnoYellow text-slate-900 font-bold text-xs md:text-sm rounded-xl hover:bg-amber-400 transition shadow-md flex items-center gap-2">
+                                    <i class="fas fa-share-alt"></i> <span>Dashboard Procesos Poli</span>
+                                </button>
+                                <button onclick="openSimulatorModal()" class="px-4 py-2.5 bg-white/15 text-white font-bold text-xs md:text-sm rounded-xl hover:bg-white/25 backdrop-blur-md transition border border-white/20 flex items-center gap-2">
+                                    <i class="fas fa-headset"></i> <span>Centro de Simuladores</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="relative z-10 text-white lg:w-2/5 bg-slate-900/40 p-6 rounded-2xl border border-white/20 backdrop-blur-md shadow-2xl">
+                            <div class="flex items-center gap-2 text-ilumnoYellow font-black text-xs uppercase tracking-wider mb-2">
+                                <i class="fas fa-fire"></i> La Clave de Oro del Experto
+                            </div>
+                            <h3 class="font-black text-base md:text-lg text-white mb-2 leading-snug">"Si te bloqueas: ¡Aprende a indagar más!"</h3>
+                            <p class="text-xs md:text-sm text-slate-100 leading-relaxed">
+                                El estudiante les dice cualquier cosa, se bloquean y ¿qué hacen? Van y preguntan. <strong>No.</strong> Si te bloqueas o no entiendes: <em>pregunta más al estudiante</em>. «Ven, ¿pero cómo así? ¿Para qué lo necesitas? ¿En qué enlace estás ingresando y qué error exacto te aparece?». Indagar a profundidad resuelve el 90% de los casos antes de escalar.
+                            </p>
+                        </div>
+                        <div class="absolute -right-16 -top-16 w-80 h-80 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-100">
+                        <div class="bg-white p-6 md:p-8 text-center flex flex-col justify-between items-center hover:bg-slate-50 transition group cursor-pointer" onclick="navigateToLesson('1.1')">
+                            <div>
+                                <span class="px-3 py-1 rounded-full bg-blue-100 text-ilumnoDark text-xs font-black uppercase tracking-wider">1º MÓDULO</span>
+                                <h3 class="text-4xl font-black text-ilumnoDark my-3 flex items-baseline justify-center">
+                                    1<span class="text-xl font-bold underline decoration-4 underline-offset-4 ml-0.5">o</span>
+                                    <span class="text-lg font-bold ml-2 text-slate-500">MÓDULO</span>
+                                </h3>
+                                <h4 class="text-xl font-black text-ilumnoDark tracking-wide mb-1">TÉCNICO</h4>
+                                <p class="text-xs uppercase tracking-wider text-slate-500 font-bold mb-4">En Habilidades Comerciales y Venta Consultiva</p>
+                            </div>
+                            <button class="w-full py-2.5 bg-ilumnoDark text-white text-xs font-bold rounded-xl group-hover:bg-blue-950 transition flex items-center justify-center gap-2 shadow-xs">
+                                <span>Ver Habilidades Comerciales</span> <i class="fas fa-arrow-right text-[10px]"></i>
+                            </button>
+                        </div>
+
+                        <div class="bg-white p-6 md:p-8 text-center flex flex-col justify-between items-center hover:bg-slate-50 transition group cursor-pointer" onclick="navigateToLesson('2.1')">
+                            <div>
+                                <span class="px-3 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-black uppercase tracking-wider">2º MÓDULO</span>
+                                <h3 class="text-4xl font-black text-amber-500 my-3 flex items-baseline justify-center">
+                                    2<span class="text-xl font-bold underline decoration-4 underline-offset-4 ml-0.5">o</span>
+                                    <span class="text-lg font-bold ml-2 text-slate-500">MÓDULO</span>
+                                </h3>
+                                <h4 class="text-xl font-black text-slate-800 tracking-wide mb-1">TECNÓLOGO</h4>
+                                <p class="text-xs uppercase tracking-wider text-slate-500 font-bold mb-4">En Gestión de la Información & Procesos Poli</p>
+                            </div>
+                            <button class="w-full py-2.5 bg-ilumnoYellow text-slate-900 text-xs font-black rounded-xl group-hover:bg-amber-400 transition flex items-center justify-center gap-2 shadow-xs">
+                                <span>Ruta Completa de Procesos</span> <i class="fas fa-arrow-right text-[10px]"></i>
+                            </button>
+                        </div>
+
+                        <div class="bg-white p-6 md:p-8 text-center flex flex-col justify-between items-center hover:bg-slate-50 transition group cursor-pointer" onclick="navigateToLesson('3.1')">
+                            <div>
+                                <span class="px-3 py-1 rounded-full bg-pink-100 text-ilumnoPink text-xs font-black uppercase tracking-wider">3º MÓDULO</span>
+                                <h3 class="text-4xl font-black text-ilumnoPink my-3 flex items-baseline justify-center">
+                                    3<span class="text-xl font-bold underline decoration-4 underline-offset-4 ml-0.5">o</span>
+                                    <span class="text-lg font-bold ml-2 text-slate-500">MÓDULO</span>
+                                </h3>
+                                <h4 class="text-xl font-black text-ilumnoPink tracking-wide mb-1">PROFESIONAL</h4>
+                                <p class="text-xs uppercase tracking-wider text-slate-500 font-bold mb-4">En Aplicativos Nivel 1 (CRM, Genesys, Script)</p>
+                            </div>
+                            <button class="w-full py-2.5 bg-ilumnoPink text-white text-xs font-bold rounded-xl group-hover:bg-pink-600 transition flex items-center justify-center gap-2 shadow-xs">
+                                <span>Ver Sistemas Nivel 1</span> <i class="fas fa-arrow-right text-[10px]"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-r from-amber-500 to-amber-600 rounded-3xl p-6 md:p-8 text-white shadow-md flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div class="space-y-2 max-w-3xl">
+                        <span class="px-3 py-1 bg-black/20 rounded-full text-[11px] font-black uppercase tracking-wider inline-block">
+                            <i class="fas fa-robot mr-1"></i> Entrenamiento con IA
+                        </span>
+                        <h3 class="text-2xl font-black">Centro de Prácticas y Simuladores de Llamadas</h3>
+                        <p class="text-xs md:text-sm text-amber-50 leading-relaxed">
+                            Entrena antes de salir a operación. En el Módulo 1 tienes el simulador comercial, en el Módulo 2 los simuladores por cada proceso y en el Módulo 3 los 5 casos Role Play integrales calificados con matriz de calidad sobre 100.
+                        </p>
+                    </div>
+                    <button onclick="openSimulatorModal()" class="px-6 py-3 bg-white text-amber-600 hover:bg-amber-50 font-black text-xs md:text-sm rounded-xl shadow-md transition flex items-center gap-2 flex-shrink-0">
+                        <i class="fas fa-play-circle text-base"></i> <span>Abrir Simuladores</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- CONTENEDOR DINÁMICO DE LECCIONES -->
+            <div id="lesson-content-wrapper" class="hidden max-w-5xl mx-auto pb-16 h-full flex flex-col">
+                <!-- Se inyecta con JS dinámicamente -->
+            </div>
+        </main>
+
+        <!-- PANEL LATERAL (SIDEBAR) -->
+        <aside id="course-sidebar" class="w-80 md:w-96 bg-white border-l border-slate-200 flex flex-col flex-shrink-0 z-20 shadow-lg md:shadow-none transition-all duration-300">
+            
+            <div class="flex border-b border-slate-200 bg-slate-50">
+                <button onclick="switchSidebarTab('content')" id="tab-btn-content" class="flex-1 py-3.5 text-xs font-bold text-ilumnoTeal border-b-2 border-ilumnoTeal transition flex items-center justify-center gap-1.5">
+                    <i class="fas fa-list-ul"></i> Contenido
+                </button>
+                <button onclick="switchSidebarTab('questions')" id="tab-btn-questions" class="flex-1 py-3.5 text-xs font-bold text-slate-500 hover:text-slate-800 border-b-2 border-transparent transition flex items-center justify-center gap-1.5">
+                    <i class="fas fa-comment-dots"></i> Preguntas
+                </button>
+                <button onclick="switchSidebarTab('notes')" id="tab-btn-notes" class="flex-1 py-3.5 text-xs font-bold text-slate-500 hover:text-slate-800 border-b-2 border-transparent transition flex items-center justify-center gap-1.5">
+                    <i class="fas fa-sticky-note"></i> Mis Notas
+                </button>
+            </div>
+
+            <div id="tab-pane-content" class="flex-1 overflow-y-auto p-4 space-y-4">
+                
+                <div class="bg-gradient-to-r from-ilumnoTeal/10 to-transparent p-3.5 rounded-xl border border-ilumnoTeal/20">
+                    <span class="text-[10px] font-black uppercase text-ilumnoTeal tracking-wider block">Programa Oficial</span>
+                    <h3 class="text-sm font-black text-ilumnoDark">Formación para Expertos Ilumno</h3>
+                </div>
+
+                <!-- MÓDULO 0 -->
+                <div class="border border-slate-200 rounded-xl overflow-hidden shadow-2xs">
+                    <div class="bg-slate-100 p-3.5 flex items-center justify-between cursor-pointer" onclick="toggleAccordion('module-0-items')">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-folder-open text-ilumnoTeal text-sm"></i>
+                            <div>
+                                <h4 class="text-xs font-black text-slate-800">Módulo 0: Inducción & Cultura</h4>
+                                <span class="text-[10px] text-slate-500 font-semibold">5 lecciones requeridas</span>
+                            </div>
+                        </div>
+                        <i id="accordion-arrow-module-0-items" class="fas fa-chevron-up text-xs text-slate-400"></i>
+                    </div>
+
+                    <div id="module-0-items" class="divide-y divide-slate-100 bg-white">
+                        <div onclick="navigateToLesson('0.1')" id="nav-item-0-1" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition">
+                            <div class="mt-0.5 text-slate-400 status-icon" id="status-icon-0-1"><i class="far fa-circle"></i></div>
+                            <div class="flex-1"><span class="font-bold text-slate-700 block">0.1 Bienvenida General</span><span class="text-[10px] text-slate-400">Visión general y 3 fases formativas</span></div>
+                        </div>
+                        <div onclick="navigateToLesson('0.2')" id="nav-item-0-2" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition">
+                            <div class="mt-0.5 text-slate-400 status-icon" id="status-icon-0-2"><i class="far fa-circle"></i></div>
+                            <div class="flex-1"><span class="font-bold text-slate-700 block">0.2 Normas de Formación</span><span class="text-[10px] text-slate-400">8 normas, puntualidad y disciplina</span></div>
+                        </div>
+                        <div onclick="navigateToLesson('0.3')" id="nav-item-0-3" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition">
+                            <div class="mt-0.5 text-slate-400 status-icon" id="status-icon-0-3"><i class="far fa-circle"></i></div>
+                            <div class="flex-1"><span class="font-bold text-slate-700 block">0.3 Modelo Formativo (PDF Slides)</span><span class="text-[10px] text-slate-400">Ciclos formativos & Evaluación 90%</span></div>
+                        </div>
+                        <div onclick="navigateToLesson('0.4')" id="nav-item-0-4" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition">
+                            <div class="mt-0.5 text-slate-400 status-icon" id="status-icon-0-4"><i class="far fa-circle"></i></div>
+                            <div class="flex-1"><span class="font-bold text-slate-700 block">0.4 ESSENCE Ilumno HEP (Slides)</span><span class="text-[10px] text-slate-400">Cultura, SST, PAE & Desconexión</span></div>
+                        </div>
+                        <div onclick="navigateToLesson('0.5')" id="nav-item-0-5" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition bg-amber-50/40">
+                            <div class="mt-0.5 text-slate-400 status-icon" id="status-icon-0-5"><i class="far fa-circle"></i></div>
+                            <div class="flex-1"><span class="font-bold text-slate-800 block">0.5 Evaluación Oficial ESSENCE</span><span class="text-[10px] text-amber-700 font-semibold">Forms MS & Código QR</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MÓDULO 1 -->
+                <div class="border border-slate-200 rounded-xl overflow-hidden shadow-2xs">
+                    <div class="bg-blue-50 p-3.5 flex items-center justify-between cursor-pointer" onclick="toggleAccordion('module-1-items')">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-briefcase text-blue-600 text-sm"></i>
+                            <div>
+                                <h4 class="text-xs font-black text-slate-800">Módulo 1: Comercial & Venta</h4>
+                                <span class="text-[10px] text-blue-700 font-semibold">Habilidades & Simulador</span>
+                            </div>
+                        </div>
+                        <i id="accordion-arrow-module-1-items" class="fas fa-chevron-up text-xs text-slate-400"></i>
+                    </div>
+                    <div id="module-1-items" class="divide-y divide-slate-100 bg-white">
+                        <div onclick="navigateToLesson('1.1')" id="nav-item-1-1" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition">
+                            <div class="mt-0.5 text-slate-400 status-icon" id="status-icon-1-1"><i class="far fa-circle"></i></div>
+                            <div class="flex-1"><span class="font-bold text-slate-700 block">1.1 Objetivo Técnico Comercial</span><span class="text-[10px] text-slate-400">Venta consultiva, LAER & Pitch</span></div>
+                        </div>
+                        <div onclick="navigateToLesson('1.2')" id="nav-item-1-2" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition bg-amber-50/20">
+                            <div class="mt-0.5 text-slate-400 status-icon" id="status-icon-1-2"><i class="far fa-circle"></i></div>
+                            <div class="flex-1"><span class="font-bold text-amber-900 block">1.2 Simulador Comercial IA</span><span class="text-[10px] text-amber-700 font-semibold">Práctica de indagación en vivo</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MÓDULO 2 -->
+                <div class="border border-slate-200 rounded-xl overflow-hidden shadow-2xs">
+                    <div class="bg-amber-50 p-3.5 flex items-center justify-between cursor-pointer" onclick="toggleAccordion('module-2-items')">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-database text-amber-600 text-sm"></i>
+                            <div>
+                                <h4 class="text-xs font-black text-slate-800">Módulo 2: Procesos Poli</h4>
+                                <span class="text-[10px] text-amber-700 font-semibold">7 lecciones operativas</span>
+                            </div>
+                        </div>
+                        <i id="accordion-arrow-module-2-items" class="fas fa-chevron-down text-xs text-amber-600"></i>
+                    </div>
+                    <div id="module-2-items" class="divide-y divide-slate-100 bg-white hidden">
+                        <div onclick="navigateToLesson('2.1')" id="nav-item-2-1" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition">
+                            <div class="mt-0.5 text-slate-400 status-icon" id="status-icon-2-1"><i class="far fa-circle"></i></div>
+                            <div class="flex-1"><span class="font-bold text-slate-700 block">2.1 Escudo Financiero</span><span class="text-[10px] text-slate-400">Alternativas de pago y cortes</span></div>
+                        </div>
+                        <div onclick="navigateToLesson('2.2')" id="nav-item-2-2" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition">
+                            <div class="mt-0.5 text-slate-400 status-icon" id="status-icon-2-2"><i class="far fa-circle"></i></div>
+                            <div class="flex-1"><span class="font-bold text-slate-700 block">2.2 Operación Reintegro</span><span class="text-[10px] text-slate-400">Descuentos, traslados y Banner</span></div>
+                        </div>
+                        <div onclick="navigateToLesson('2.3')" id="nav-item-2-3" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition">
+                            <div class="mt-0.5 text-slate-400 status-icon" id="status-icon-2-3"><i class="far fa-circle"></i></div>
+                            <div class="flex-1"><span class="font-bold text-slate-700 block">2.3 Lógica e Inscripción</span><span class="text-[10px] text-slate-400">Metodología de créditos</span></div>
+                        </div>
+                        <div onclick="navigateToLesson('2.4')" id="nav-item-2-4" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition">
+                            <div class="mt-0.5 text-slate-400 status-icon" id="status-icon-2-4"><i class="far fa-circle"></i></div>
+                            <div class="flex-1"><span class="font-bold text-slate-700 block">2.4 Aceleración y Rescate</span><span class="text-[10px] text-slate-400">Supletorios e Intersemestrales</span></div>
+                        </div>
+                        <div onclick="navigateToLesson('2.5')" id="nav-item-2-5" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition">
+                            <div class="mt-0.5 text-slate-400 status-icon" id="status-icon-2-5"><i class="far fa-circle"></i></div>
+                            <div class="flex-1"><span class="font-bold text-slate-700 block">2.5 Soporte y Certificados</span><span class="text-[10px] text-slate-400">Accesos CPO y trámites</span></div>
+                        </div>
+                        <div onclick="navigateToLesson('2.6')" id="nav-item-2-6" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition">
+                            <div class="mt-0.5 text-slate-400 status-icon" id="status-icon-2-6"><i class="far fa-circle"></i></div>
+                            <div class="flex-1"><span class="font-bold text-slate-700 block">2.6 Barrera de Retención</span><span class="text-[10px] text-slate-400">Aplazamientos y Devoluciones</span></div>
+                        </div>
+                        <div onclick="navigateToLesson('2.7')" id="nav-item-2-7" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition">
+                            <div class="mt-0.5 text-slate-400 status-icon" id="status-icon-2-7"><i class="far fa-circle"></i></div>
+                            <div class="flex-1"><span class="font-bold text-slate-700 block">2.7 Grados e Idiomas</span><span class="text-[10px] text-slate-400">Requisitos y Multilingüismo</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MÓDULO 3 -->
+                <div class="border border-slate-200 rounded-xl overflow-hidden shadow-2xs">
+                    <div class="bg-pink-50 p-3.5 flex items-center justify-between cursor-pointer" onclick="toggleAccordion('module-3-items')">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-laptop-code text-pink-600 text-sm"></i>
+                            <div>
+                                <h4 class="text-xs font-black text-slate-800">Módulo 3: Aplicativos Nivel 1</h4>
+                                <span class="text-[10px] text-pink-700 font-semibold">Sistemas Core</span>
+                            </div>
+                        </div>
+                        <i id="accordion-arrow-module-3-items" class="fas fa-chevron-down text-xs text-pink-600"></i>
+                    </div>
+                    <div id="module-3-items" class="divide-y divide-slate-100 bg-white hidden">
+                        <div onclick="navigateToLesson('3.1')" id="nav-item-3-1" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition">
+                            <div class="mt-0.5 text-slate-400 status-icon" id="status-icon-3-1"><i class="far fa-circle"></i></div>
+                            <div class="flex-1"><span class="font-bold text-slate-700 block">3.1 Telefonía y CRM</span><span class="text-[10px] text-slate-400">Genesys y Leyes de HubSpot</span></div>
+                        </div>
+                        <div onclick="navigateToLesson('3.2')" id="nav-item-3-2" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition">
+                            <div class="mt-0.5 text-slate-400 status-icon" id="status-icon-3-2"><i class="far fa-circle"></i></div>
+                            <div class="flex-1"><span class="font-bold text-slate-700 block">3.2 Analytics y Tipificación</span><span class="text-[10px] text-slate-400">Trazabilidad y Videoteca</span></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- TABS 2 Y 3 (PREGUNTAS Y NOTAS) MANTENIDOS EXACTAMENTE IGUAL -->
+            <div id="tab-pane-questions" class="hidden flex-1 flex flex-col p-4 overflow-hidden">
+                <div class="mb-3">
+                    <span class="text-[10px] font-black text-ilumnoTeal uppercase tracking-wider block" id="question-lesson-badge">Lección Actual</span>
+                    <h3 class="text-xs font-bold text-slate-700">Muro de Preguntas & Consultas</h3>
+                    <p class="text-[11px] text-slate-500 mt-0.5">Registra aquí las dudas para que el formador te dé soporte.</p>
+                </div>
+                <div class="space-y-2 mb-4">
+                    <textarea id="question-input" rows="3" placeholder="¿Tienes alguna pregunta sobre este tema?" class="w-full text-xs p-3 rounded-xl border border-slate-300 focus:border-ilumnoTeal focus:ring-1 focus:ring-ilumnoTeal resize-none outline-none"></textarea>
+                    <button onclick="submitQuestion()" class="w-full py-2.5 bg-ilumnoTeal hover:bg-[#0089a8] text-white text-xs font-bold rounded-lg transition shadow-xs flex items-center justify-center gap-1.5">
+                        <i class="fas fa-paper-plane"></i> Publicar Pregunta
+                    </button>
+                </div>
+                <div class="flex-1 overflow-y-auto space-y-3 pr-1" id="questions-list"></div>
+            </div>
+
+            <div id="tab-pane-notes" class="hidden flex-1 flex flex-col p-4 overflow-hidden">
+                <div class="mb-3 flex justify-between items-center">
+                    <div>
+                        <span class="text-[10px] font-black text-ilumnoYellow uppercase tracking-wider block" id="notes-lesson-badge">Lección Actual</span>
+                        <h3 class="text-xs font-bold text-slate-700">Mi Cuaderno de Apuntes</h3>
+                    </div>
+                    <span class="text-[10px] text-emerald-600 font-semibold" id="notes-save-status"><i class="fas fa-check"></i> Almacenado</span>
+                </div>
+                <div class="flex-1 flex flex-col space-y-2">
+                    <textarea id="lesson-notes-textarea" placeholder="Escribe aquí tus notas clave, tips operativos, atajos o frases importantes..." class="flex-1 w-full text-xs p-3 rounded-xl border border-slate-300 focus:border-ilumnoYellow focus:ring-1 focus:ring-ilumnoYellow outline-none resize-none leading-relaxed"></textarea>
+                    <div class="flex gap-2">
+                        <button onclick="saveCurrentNotes(true)" class="flex-1 py-2.5 bg-ilumnoYellow hover:bg-amber-400 text-ilumnoDark font-black text-xs rounded-lg transition shadow-xs flex items-center justify-center gap-1.5">
+                            <i class="fas fa-save"></i> Guardar Notas
+                        </button>
+                        <button onclick="clearCurrentNotes()" class="px-3 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-xs rounded-lg transition" title="Limpiar notas">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-3 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+                <button onclick="navigateToLesson('home')" class="text-xs font-bold text-slate-600 hover:text-ilumnoDark flex items-center gap-1.5 py-1 px-2 rounded-md hover:bg-slate-200/60 transition">
+                    <i class="fas fa-home"></i> <span>Volver al Dashboard</span>
+                </button>
+                <span class="text-[10px] text-slate-400 font-mono">v4.0 • ILUMNO LMS</span>
+            </div>
+        </aside>
+
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 3. BARRA INFERIOR DE NAVEGACIÓN FIJA -->
+    <!-- ========================================== -->
+    <footer id="bottom-navigation-bar" class="bg-white border-t border-slate-200 h-16 flex-shrink-0 px-4 md:px-8 flex items-center justify-between z-30 shadow-xs">
+        <button id="btn-prev-lesson" onclick="goToPrevLesson()" class="px-4 py-2 rounded-xl text-xs font-bold border border-slate-300 text-slate-700 hover:bg-slate-100 transition flex items-center gap-2">
+            <i class="fas fa-arrow-left"></i> <span class="hidden sm:inline">Anterior</span>
+        </button>
+        <div class="text-center">
+            <span id="bottom-module-tag" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Dashboard Principal</span>
+            <span id="bottom-lesson-title" class="text-xs md:text-sm font-extrabold text-ilumnoDark block">Bienvenido al Curso</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <button id="btn-mark-complete" onclick="toggleCurrentLessonCompletion()" class="hidden sm:flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold border border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition">
+                <i class="fas fa-check-circle"></i> <span id="mark-complete-text">Completar</span>
+            </button>
+            <button id="btn-next-lesson" onclick="goToNextLesson()" class="px-5 py-2 rounded-xl text-xs font-black bg-ilumnoTeal hover:bg-[#0089A8] text-white transition flex items-center gap-2 shadow-xs">
+                <span class="hidden sm:inline">Siguiente</span> <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </footer>
+
+    <!-- MODAL PERFIL -->
+    <div id="modal-profile" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
+            <div class="flex justify-between items-center mb-5">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-ilumnoDark text-white font-black flex items-center justify-center text-base" id="modal-profile-avatar">EX</div>
+                    <div>
+                        <h3 class="text-base font-black text-slate-800">Perfil del Experto</h3>
+                        <p class="text-xs text-slate-500">Configura tu identificación para los reportes</p>
+                    </div>
+                </div>
+                <button onclick="closeProfileModal()" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg"><i class="fas fa-times text-base"></i></button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="text-xs font-bold text-slate-700 block mb-1">Nombre Completo del Asesor</label>
+                    <input type="text" id="user-input-name" placeholder="Ej: Camilo Andrés Pérez" class="w-full text-xs p-3 rounded-xl border border-slate-300 focus:border-ilumnoTeal focus:ring-1 focus:ring-ilumnoTeal outline-none font-semibold">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-slate-700 block mb-1">Campaña / Universidad</label>
+                    <input type="text" id="user-input-campaign" value="Politécnico Grancolombiano (POLI)" class="w-full text-xs p-3 rounded-xl border border-slate-300 focus:border-ilumnoTeal focus:ring-1 focus:ring-ilumnoTeal outline-none font-semibold text-slate-600">
+                </div>
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">

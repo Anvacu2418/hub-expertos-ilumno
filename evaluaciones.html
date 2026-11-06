@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluaciones 360 - Politécnico Grancolombiano</title>
+    <!-- Tailwind CSS para los estilos -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome para los íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* Ocultar elementos */
+        .hidden-view { display: none !important; }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans selection:bg-yellow-300 selection:text-blue-900 pb-12 min-h-screen">
+
+    <!-- Header Corporativo con Acceso Secreto en la 'P' -->
+    <header class="bg-blue-900 text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div 
+                    ondblclick="window.showAdminLogin()"
+                    class="w-10 h-10 bg-yellow-400 rounded-lg flex items-center justify-center font-black text-blue-900 text-xl cursor-default select-none"
+                    title="Poli"
+                >
+                    P
+                </div>
+                <div>
+                    <div class="font-bold tracking-wide leading-none">POLITÉCNICO</div>
+                    <div class="text-xs text-yellow-400 font-medium tracking-widest">GRANCOLOMBIANO</div>
+                </div>
+            </div>
+            <div class="text-sm font-medium text-blue-200 hidden sm:block">
+                Formación 360
+            </div>
+        </div>
+    </header>
+
+    <main class="px-4 mt-8" id="app-container">
+        
+        <!-- VISTA: HOME -->
+        <div id="view-home" class="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-xl border border-slate-100 fade-in">
+            <div class="flex justify-center mb-6">
+                <div class="bg-blue-900 p-4 rounded-full shadow-lg">
+                    <i class="fa-solid fa-shield-halved text-4xl text-yellow-400"></i>
+                </div>
+            </div>
+            <h1 class="text-2xl font-extrabold text-center text-blue-900 mb-2 cursor-default select-none">
+                Ecosistema de Conocimiento
+            </h1>
+            <p class="text-sm text-center text-slate-500 mb-8">Ingresa tus datos para comenzar.</p>
+
+            <form onsubmit="window.startQuiz(event)" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Nombre Completo</label>
+                    <input required id="student-name" type="text" placeholder="Ej. María Pérez" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Número de Documento</label>
+                    <input required id="student-cedula" type="number" placeholder="Ej. 1020304050" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Selecciona el módulo</label>
+                    <select id="student-phase" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none transition-all bg-white">
+                        <option value="fase2">Fase 2: Producto y Procesos</option>
+                        <option value="fase3">Fase 3: Herramientas (HubSpot/Genesys)</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-blue-900 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-800 transition-colors flex items-center justify-center gap-2 mt-4">
+                    Comenzar <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- VISTA: QUIZ -->
+        <div id="view-quiz" class="max-w-3xl mx-auto fade-in hidden-view">
+            <!-- Grilla de Navegación -->
+            <div id="quiz-grid" class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 mb-6 flex flex-wrap gap-2 justify-center">
+                <!-- Se llena con JS -->
+            </div>
+
+            <div class="bg-white p-8 rounded-2xl shadow-lg border border-slate-100">
+                <div class="mb-6">
+                    <span id="quiz-counter" class="inline-block bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider mb-3"></span>
+                    <h3 id="quiz-question-text" class="text-xl font-semibold text-slate-800 leading-relaxed"></h3>
+                    <div id="quiz-tip" class="mt-4 bg-yellow-50 border border-yellow-200 text-yellow-800 text-sm p-3 rounded-lg flex items-start gap-2 hidden-view">
+                        <i class="fa-solid fa-lightbulb text-yellow-500 mt-1"></i>
+                        <span id="quiz-tip-text" class="font-medium"></span>
+                    </div>
+                </div>
+
+                <div id="quiz-options" class="space-y-3">
+                    <!-- Se llena con JS -->
+                </div>
+                
+                <div class="mt-8 flex justify-between items-center border-t border-slate-100 pt-6">
+                    <button id="btn-prev" onclick="window.prevQuestion()" class="font-bold py-3 px-6 rounded-lg flex items-center gap-2 transition-colors bg-slate-100 text-slate-600 hover:bg-slate-200">
+                        <i class="fa-solid fa-arrow-left"></i> Anterior
+                    </button>
+                    
+                    <button id="btn-next" onclick="window.nextQuestion()" class="font-bold py-3 px-6 rounded-lg flex items-center gap-2 bg-blue-900 text-white hover:bg-blue-800 transition-colors shadow-md">
+                        Siguiente <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+
+                    <button id="btn-finish" onclick="window.finishQuiz()" class="font-bold py-3 px-8 rounded-lg flex items-center gap-2 transition-colors bg-yellow-400 text-blue-900 hover:bg-yellow-500 shadow-md hidden-view">
+                        Finalizar <i class="fa-solid fa-check-circle"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- VISTA: RESULTADO -->
+        <div id="view-result" class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-xl text-center border border-slate-100 fade-in hidden-view">
+            <div id="result-icon-container" class="mx-auto w-20 h-20 rounded-full flex items-center justify-center mb-6">
+                <i id="result-icon" class="fa-solid fa-award text-4xl"></i>
+            </div>
+            <h2 id="result-title" class="text-3xl font-extrabold text-blue-900 mb-2"></h2>
+            <p class="text-slate-500 mb-6">Resultados para: <span id="result-name" class="font-semibold text-slate-800"></span></p>
+            
+            <div class="bg-slate-50 rounded-xl p-6 mb-8 flex justify-center items-center gap-6">
+                <div class="text-center">
+                    <div id="result-score" class="text-4xl font-black text-blue-900">0</div>
+                    <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mt-1">Aciertos</div>
+                </div>
+                <div class="w-px h-12 bg-slate-300"></div>
+                <div class="text-center">
+                    <div id="result-total" class="text-4xl font-black text-blue-900">0</div>
+                    <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mt-1">Total</div>
+                </div>
+            </div>
+
+            <div id="feedback-container" class="text-left mb-8 hidden-view">
+                <h3 class="text-lg font-bold text-slate-800 mb-4 border-b pb-2">Repaso Recomendado:</h3>
+                <div id="feedback-accordion"></div>
+            </div>
+
+            <div class="space-y-4">
+                <button id="btn-continue-phase" onclick="window.continuePhase()" class="bg-blue-900 text-white font-bold py-4 px-8 rounded-xl hover:bg-blue-800 transition-colors w-full shadow-md flex justify-center items-center gap-2 hidden-view">
+                    Continuar con Fase X <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                
+                <a id="btn-survey" href="https://anvacu2418.github.io/formacion-poli/encuestasati.html" target="_blank" class="bg-yellow-400 text-blue-900 font-extrabold py-4 px-8 rounded-xl hover:bg-yellow-500 transition-colors w-full shadow-md justify-center items-center gap-2 flex hidden-view">
+                    Ir a Encuesta de Satisfacción <i class="fa-solid fa-check-circle"></i>
+                </a>
+                
+                <button onclick="window.goToHome()" class="text-slate-500 font-bold py-3 px-8 rounded-lg hover:bg-slate-100 transition-colors w-full">
+                    Volver al Inicio
+                </button>
+            </div>
+        </div>
+
+        <!-- VISTA: ADMIN LOGIN -->
+        <div id="view-admin-login" class="max-w-sm mx-auto bg-white p-8 rounded-2xl shadow-xl border border-slate-100 fade-in hidden-view">
+            <div class="flex justify-center mb-6">
+                <i class="fa-solid fa-shield-halved text-5xl text-blue-900"></i>
+            </div>
+            <h2 class="text-xl font-bold text-center text-blue-900 mb-6">Acceso Formadores</h2>
+            <form onsubmit="window.handleAdminLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Contraseña de Acceso</label>
+                    <input id="admin-password" type="password" required class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="••••••••">
+                </div>
+                <p id="admin-error" class="text-red-500 text-sm text-center font-medium hidden-view">Contraseña incorrecta.</p>
+                <button type="submit" class="w-full bg-blue-900 text-white font-bold py-3 rounded-lg hover:bg-blue-800 transition-colors">Ingresar</button>
+                <button type="button" onclick="window.goToHome()" class="w-full text-slate-500 text-sm hover:text-slate-800 font-medium">Volver al Inicio</button>
+            </form>
+        </div>
+
+        <!-- VISTA: ADMIN DASHBOARD -->
+        <div id="view-admin-dashboard" class="max-w-6xl mx-auto bg-white p-8 rounded-2xl shadow-xl border border-slate-100 fade-in hidden-view">
+            <div class="flex justify-between items-center mb-8 pb-6 border-b border-slate-100">
+                <div>
+                    <h2 class="text-2xl font-bold text-blue-900 flex items-center gap-2">
+                        <i class="fa-solid fa-database text-yellow-500"></i> Panel de Formadores
+                    </h2>
+                    <p class="text-slate-500 text-sm mt-1">Supervisión de resultados (Nube + Local).</p>
+                </div>
+                <button onclick="window.goToHome()" class="flex items-center gap-2 text-slate-500 hover:text-red-600 font-medium transition-colors bg-slate-50 px-4 py-2 rounded-lg">
+                    <i class="fa-solid fa-sign-out-alt"></i> Salir
+                </button>
+            </div>
+            <div id="admin-table-container">
+                <!-- Llenado con JS -->
+            </div>
+        </div>
+
+    </main>
+
+    <!-- SCRIPTS MÁGICOS Y LÓGICA -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        // TUS CREDENCIALES EXACTAS
+        const firebaseConfig = {
+            apiKey: "AIzaSyDTfwHBqGnB9axzTj4XzdVkcq6BcY_ZjqM",
+            authDomain: "poli-evaluaciones-360.firebaseapp.com",
+            projectId: "poli-evaluaciones-360",
+            storageBucket: "poli-evaluaciones-360.firebasestorage.app",
+            messagingSenderId: "12426009380",
+            appId: "1:12426009380:web:da9738f10949e7f585f1b1"
+        };
+
+        let db, auth;
+        try {
+            const app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+            signInAnonymously(auth).catch(e => console.log("Firebase Auth (Anónimo) requiere habilitarse en la consola."));
+        } catch (error) {
+            console.error("Error Firebase:", error);
+        }
+
+        // EL BANCO DE PREGUNTAS COMPLETO (50 Preguntas: 30 de Fase 2 | 20 de Fase 3)
+        const questionBank = {
+            fase2: [
+                { id: 201, topic: 'Analytics', text: "¿En qué pestaña y sección de Analytics validas si a un estudiante ya le registraron las materias que inscribió a través del Smart Campus?", options: ["Pestaña 'Académico' -> Avance Curricular", "Pestaña 'Inscripción de Asignaturas'", "Tabla 'Proceso de Grado'"], correct: 1 },
+                { id: 202, topic: 'Analytics', text: "Estás diagnosticando a un estudiante para saber si ya puede aplicar para sus derechos de grado. ¿En qué campo de Analytics confirmas si ya está listo para inscribirse?", options: ["Pestaña 'Académico' -> Notas", "Pestaña 'Proceso de Grado', revisar que le aparezca el cumplimiento en Yes", "Pestaña 'Servicio' -> Trámites"], correct: 1 },
+                { id: 203, topic: 'Analytics', text: "Necesitas saber si un estudiante virtual tiene el Inglés configurado como 'Materia' en su malla, o como 'Requisito Institucional'. ¿En qué pestaña buscas esta información?", options: ["Pestaña 'Avance curricular'", "Pestaña 'Inscripción de Asignaturas'", "Pestaña 'Bitácora'"], correct: 0 },
+                { id: 204, topic: 'Campañas', text: "¿Cuál es la característica principal de la campaña Módulo Adicional?", options: ["Es para adelantar materias únicamente en vacaciones.", "Son materias extra de su malla curricular que inscribe voluntariamente.", "Es una penalización por bajo rendimiento."], correct: 1 },
+                { id: 205, topic: 'Certificados', text: "Un estudiante necesita un certificado para pedir un auxilio económico en su empresa y poder pagar la licencia de English Discovery. ¿Qué tipo de certificado de inglés le sirve a este estudiante?", tip: "💡 Tip: Revisa en el soporte servicio por administrativo certificados.", options: ["Certificado de obligatoriedad", "Certificado de cumplimiento", "Certificado de uso de licencia"], correct: 0 },
+                { id: 206, topic: 'Financiación', text: "Financiación donde paga la mitad. Y tiene el beneficio o ventaja por inscribir todas sus materias firmando una carta de compromiso con la fecha establecida para poder cancelar la otra mitad una semana antes del inicio de clases.", options: ["Media Matrícula", "Pago 50/50", "Beca Institucional"], correct: 1 },
+                { id: 207, topic: 'Opciones de Grado', text: "¿Cuáles son las consideraciones y advertencias consultivas para promover la opción de grado al semestre coterminal?", options: ["Que se requiere un promedio de 3.5, y al finalizar el semestre coterminal tiene un valor diferencial, además deben cumplir mínimo el 75% de avance curricular para poder aplicar a esta opción que les permite cursar en un primer semestre una especialización o maestría.", "Requiere promedio de 3.8 y firmar un pagaré.", "Se puede cursar en cualquier semestre sin importar el avance curricular."], correct: 0 },
+                { id: 208, topic: 'Financiero', text: "Un estudiante Virtual quiere realizar un acuerdo de 'Pago por Bloques'. ¿Cuál es el paso OBLIGATORIO en Analytics antes de decirle que sí se puede?", options: ["Verificar que no tenga deudas en la biblioteca.", "Verificar en proyecciones que sí tenga material disponibles tanto para primer como segundo bloque.", "Validar si su admisión fue por convenio."], correct: 1 },
+                { id: 209, topic: 'Financiero', text: "Estudiante pagó en efectivo en el banco y no le aparecen materias inmediatamente. ¿Qué verificas?", options: ["Le digo que el sistema tarda 48 horas en procesarlo.", "Verifico que el dinero ya haya ingresado a través de Analytics Financiero y le confirmo que ya puede realizar su proceso de inscripción de asignaturas desde el Smart Campus.", "Que borre caché y cookies."], correct: 1 },
+                { id: 210, topic: 'Trámites', text: "Tiempo de respuesta para que se apruebe una solicitud de reintegro cuando nosotros la gestionamos dentro de la llamada.", options: ["Inmediato y con plazo máximo hasta 3 días antes del inicio de clases", "24 horas hábiles", "De 48 a 72 horas hábiles"], correct: 0 },
+                { id: 211, topic: 'Grados', text: "Cuando el estudiante genera su orden de pago para los Derechos de Grado, debe elegir el tipo de ceremonia. ¿Qué le debes advertir?", options: ["Que cuesta más si elige presencial.", "Es importante que seas consciente del tipo de ceremonia que vas a elegir ya que no se puede cambiar después de que se te genere la orden de pago.", "Que si no asiste, pierde el derecho al diploma."], correct: 1 },
+                { id: 212, topic: 'Certificados', text: "Para un certificado con formato especial de Colpensiones, ¿qué debe pagar en Smart Campus para escalar el ticket?", tip: "💡 Tip: Revisa en el Soporte Servicio por Administrativo > Certificados.", options: ["Certificado de notas generales", "Certificado de conducta", "Un certificado de créditos aprobados"], correct: 2 },
+                { id: 213, topic: 'Multilingüismo', text: "Para estudiantes presenciales, ¿en qué convenios específicos SÍ se permite adquirir licencia de English Discoveries?", options: ["Convenio SENA y Policía Nacional general", "Derecho – PONAL (TP) en Bogotá y Medellín, Psicología (TD) en Medellín – CESDE, Artes de la Escena en Teatro Nacional, Diseño de Modas en Arturo Tejada", "Ningún presencial puede tomar English Discoveries"], correct: 1 },
+                { id: 214, topic: 'Bienestar', text: "Un estudiante ingresa a talleres deportivos. ¿Cuántas horas se contabilizan?", options: ["1 hora exacta.", "Duración máxima hora y media, pero solamente en Bogotá cuando deciden tomar una clase deportiva de hora y media según la regla publicada en la página de bienestar, se le contabilizan 2 horas.", "3 horas por clase."], correct: 1 },
+                { id: 215, topic: 'Opciones de Grado', text: "[Falso/Verdadero] Si un estudiante aprueba un MOOC de Emprendimiento el 1 de mayo, al día siguiente ya tendrá el crédito cargado.", options: ["Verdadero", "Falso. Se carga una semana después del cierre y al finalizar el curso debe llenar el formulario."], correct: 1 },
+                { id: 216, topic: 'Opciones de Grado', text: "[Falso/Verdadero] Si un estudiante inscribe en el 202610 la materia de opción de grado y cursa el diplomado en el 202660 o en el siguiente periodo, debe volver a pagar la materia.", options: ["Verdadero", "Falso"], correct: 1 },
+                { id: 217, topic: 'Lógica Académica', text: "[Falso/Verdadero] En la metodología por créditos, si el estudiante paga Media Matrícula y le corresponden '7.5 créditos', el sistema redondeará a 8 créditos para no perjudicarlo.", options: ["Verdadero", "Falso. El sistema le asigna los 7.5, pero solo va a poder utilizar lo que le alcance con los 7."], correct: 1 },
+                { id: 218, topic: 'Grados', text: "¿Cuál de estos medios de pago NO es válido para pagar Derechos de Grado?", options: ["Pago en línea por PSE o Tarjeta de Crédito", "Recibo impreso pagado en el Banco de Bogotá", "Cesantías, Fondo Nacional del Ahorro, ningún tipo de carta crédito ICETEX, transferencias a Nequi o corresponsales bancarios"], correct: 2 },
+                { id: 219, topic: 'Financiero', text: "[Falso/Verdadero] Si un estudiante que ya pagó su matrícula decide aplazar el semestre, el dinero congelado (100%) a su favor tiene una vigencia indefinida; puede regresar en 10 años y usarlo.", options: ["Verdadero", "Falso (Tiene vigencia inicial de 1 periodo, prorrogable máximo a 2)"], correct: 1 },
+                { id: 220, topic: 'Multilingüismo', text: "[Falso/Verdadero] Los estudiantes que pertenecen a comunidades indígenas o raizales, cuya lengua materna es la de su comunidad, están eximidos del requisito de lengua extranjera presentando soporte de su líder.", options: ["Verdadero", "Falso"], correct: 0 },
+                { id: 221, topic: 'Plataformas', text: "[Falso/Verdadero] Las contraseñas del CPU Poli caducan cada 40 días, por lo que es común que el estudiante entre al SmartCampus por cookies, pero le dé error al entrar a Biblioteca.", options: ["Verdadero", "Falso"], correct: 0 },
+                { id: 222, topic: 'Validación', text: "En el proceso de validación de identidad para un trámite financiero, ¿qué documento es indispensable adjuntar?", options: ["Copia de la cédula de ciudadanía al 150%", "Registro Civil", "Certificado de notas"], correct: 0 },
+                { id: 223, topic: 'Trámites', text: "Si un estudiante solicita devolución de saldo a favor, ¿por qué medio se le reintegra el dinero?", options: ["Transferencia bancaria a cuenta a nombre del estudiante", "Cheque de gerencia", "Efectivo en ventanilla"], correct: 0 },
+                { id: 224, topic: 'Descuentos', text: "¿Qué área se encarga de aprobar los descuentos por convenios empresariales?", options: ["Área Financiera", "Área de Admisiones/Comercial", "Registro y Control"], correct: 1 },
+                { id: 225, topic: 'Trámites', text: "En caso de pérdida de carnet estudiantil, ¿cuál es el procedimiento?", options: ["Se emite gratis enviando un correo", "Pagar el duplicado en Smart Campus y solicitarlo en el centro de atención", "Se le entrega uno provisional de papel"], correct: 1 },
+                { id: 226, topic: 'Becas', text: "¿Cuál es el requisito de promedio acumulado general para aplicar a una beca de excelencia académica?", options: ["Promedio igual o superior a 4.5", "Promedio igual o superior a 4.0", "Promedio igual o superior a 3.8"], correct: 0 },
+                { id: 227, topic: 'Registro Académico', text: "Si un estudiante no inscribe materias en las fechas estipuladas regulares, ¿qué proceso debe realizar?", options: ["Inscripción extemporánea con recargo financiero", "Esperar al siguiente año obligatoriamente", "Inscribir en la segunda semana sin cobro adicional"], correct: 0 },
+                { id: 228, topic: 'Trámites', text: "¿Cuántas veces puede un estudiante solicitar el reintegro a la institución tras aplazamientos?", options: ["Solo una vez", "Ilimitadas, siempre que cumpla con los requisitos vigentes académicos y disciplinarios", "Dos veces en toda la carrera"], correct: 1 },
+                { id: 229, topic: 'Homologación', text: "Para la homologación de materias externas, ¿qué documentos técnicos debe presentar el estudiante obligatoriamente?", options: ["Copia del diploma y acta de grado", "Sabana de notas original y contenidos programáticos de la otra institución", "Una carta de recomendación del decano anterior"], correct: 1 },
+                { id: 230, topic: 'Grados', text: "¿Qué vigencia tiene la prueba Saber Pro (ECAES) una vez presentada para efectos del proceso de grado?", options: ["Es válida de forma indefinida una vez presentada y aprobada por el ICFES", "Tiene vigencia de 2 años", "Tiene vigencia de 5 años"], correct: 0 }
+            ],
+            fase3: [
+                { id: 301, topic: 'Genesys', text: "Acabas de terminar de atender a un estudiante y lo transferiste a la encuesta. ¿En qué ícono de Genesys debes ingresar para tipificar (Código de Conclusión) antes de que se acabe tu tiempo de ACW?", options: ["Botón rojo de colgar", "Ícono de la pequeña libreta con el 'check' en la barra lateral derecha.", "Pestaña de Historial de interacciones"], correct: 1 },
+                { id: 302, topic: 'HubSpot', text: "Tienes un estudiante que al buscar su contacto en HubSpot, te das cuenta que no cuenta con registro académico en Analytics. Para poder dejar la trazabilidad ya que no puedes crear ticket, ¿qué haces?", options: ["Botón 'Crear Negocio' (Deals)", "Desde el contacto de HubSpot ingreso en la columna de la mitad donde aparece la pestaña de actividades y doy clic donde dice notas crear nota", "Botón 'Llamar' nuevamente"], correct: 1 },
+                { id: 303, topic: 'Genesys', text: "¿Cuál es el estado de Genesys que debes usar solo 2 minutos antes de salir a break o terminar turno para evitar que te entre una llamada de 20 minutos?", options: ["En Cola", "Ausente", "Ocupado"], correct: 2 },
+                { id: 304, topic: 'HubSpot', text: "Analiza la situación: tienes un estudiante que te confirmó datos y el motivo de su consulta, pero la llamada se cortó antes de que le pudieras dar la solución, ¿qué haces?", options: ["Crear un ticket en HubSpot por información general y tipificar por llamada cortada en Genesys.", "No se crea ticket, se tipifica como llamada cortada.", "Crear un ticket de queja."], correct: 0 },
+                { id: 305, topic: 'Tipificación', text: "Analiza la siguiente situación: si el estudiante dentro de la llamada te hace varias consultas, de las cuales las 3 primeras son de información general que logras resolver en primer contacto, pero después te solicita que le ayudes a derivar o escalar un caso, ¿cuál es la regla?", options: ["Se crea ticket por primer contacto y ticket por derivación", "Se crea ÚNICAMENTE ticket de derivación pesa más", "No se crea ningún ticket"], correct: 1 },
+                { id: 306, topic: 'Métricas', text: "¿De cuánto es el ANS (Tiempo) máximo que tienes para contestar una llamada una vez ingresa a tu diadema?", options: ["15 Segundos", "5 Segundos", "10 Segundos"], correct: 1 },
+                { id: 307, topic: 'Tipificación', text: "Diferencia exacta entre 'Queja' y 'Reclamo':", options: ["Queja es por notas, Reclamo por dinero", "Son sinónimos", "Queja es inconformidad con PERSONA; Reclamo con PROCESO de la universidad"], correct: 2 },
+                { id: 308, topic: 'HubSpot', text: "En una llamada con el estudiante le explicas todo el proceso para inscripción a grados, costos y fechas, pero el estudiante te manifiesta que hay un error porque ya terminó materias y le están generando el cobro del próximo semestre. ¿Qué creas?", options: ["Ticket de primer contacto por información general del proceso de grados y ticket de derivación por orden de matrícula.", "Únicamente ticket de derivación por orden de matrícula pesa más.", "Únicamente ticket de primer contacto por información general del proceso de grados."], correct: 1 },
+                { id: 309, topic: 'Sistemas', text: "Requisito técnico indispensable en tu equipo para abrir URL real de Analytics:", options: ["Estar conectado activamente a la VPN Institucional", "Tener abierto HubSpot", "Borrar cookies a diario"], correct: 0 },
+                { id: 310, topic: 'Genesys', text: "Código para transferencia sin consulta para posgrados en Genesys cuando el estudiante desea comunicarse o desea validar información sobre un posgrado.", tip: "💡 Tip: Revisa en soporte servicio > procesos de operación > IVR Poli Adm", options: ["1002", "1003", "1004", "1000"], correct: 0 },
+                { id: 311, topic: 'HubSpot', text: "Información importante o indispensable al momento de crear un ticket:", options: ["Definir un nombre claro para el ticket.", "Transcribir literal palabra por palabra de todo lo sucedido en la llamada (lo que preguntó y lo que se respondió).", "Ser muy detallados en la descripción, colocar la información requerida, asociar el contacto con el ticket y verificar que realmente el ticket esté quedando dentro del contacto del estudiante."], correct: 2 },
+                { id: 312, topic: 'Genesys', text: "Proceso correcto para transferir a encuesta de satisfacción en Genesys:", options: ["Marcar 99", "En la columna central de Genesys, seleccionar 'Servicio' y dar clic en 'Transferir encuesta'", "Transferir a Admisiones"], correct: 1 },
+                { id: 313, topic: 'HubSpot', text: "[Falso/Verdadero] Si se comunica un estudiante solicitando información de un ticket que tiene creado desde hace una semana el cual sigue activo, ¿debes crear un nuevo ticket de primer contacto notificando por qué llamó y qué fue lo que le dijiste?", options: ["Verdadero", "Falso. Se abre el ticket existente y se deja una 'Nota' indicando la actualización."], correct: 1 },
+                { id: 314, topic: 'HubSpot', text: "[Falso/Verdadero] Si la llamada se corta antes de conocer el motivo de la consulta, pero el estudiante ya te había confirmado los datos, debes crear un ticket por información general de la institución relacionando o indicando que la llamada se cortó antes de conocer el motivo de consulta.", options: ["Verdadero", "Falso"], correct: 0 },
+                { id: 315, topic: 'HubSpot', text: "[Falso/Verdadero] Para crear un ticket, ya sea en primer contacto o en derivación, es obligatorio que siempre ingreses desde el registro académico del estudiante que se encuentra en la columna de la derecha.", options: ["Verdadero", "Falso"], correct: 0 },
+                { id: 316, topic: 'HubSpot', text: "[Falso/Verdadero] Estás atendiendo a un estudiante nuevo que aún no cuenta con registro académico en Analytics. El estudiante manifiesta que necesita urgente un certificado de pago. Dejas la nota dentro del contacto del estudiante en la pestaña de actividades y notificas a través de correo a tu jefe comercial con copia a calidad.", options: ["Verdadero", "Falso"], correct: 0 },
+                { id: 317, topic: 'HubSpot', text: "[Falso/Verdadero] El campo 'Motivo' al crear un ticket (tanto de primer contacto como de derivación) en HubSpot, siempre debe ser seleccionado como 'Solicitud'.", options: ["Verdadero", "Falso"], correct: 0 },
+                { id: 318, topic: 'Herramientas', text: "[Falso/Verdadero] Es recomendable tener las notificaciones de HubSpot (Correos al crear tickets) desactivadas en configuración para evitar que se sature tu bandeja de correo institucional.", options: ["Verdadero", "Falso"], correct: 0 },
+                { id: 319, topic: 'Habilidades Blandas', text: "¿Cuál es el procedimiento si en medio de la llamada el estudiante te pide hablar con tu supervisor directamente?", options: ["Escuchar empáticamente, intentar resolver en primera línea y si es mandatorio, escalar la llamada según la matriz de escalamiento.", "Cortar la llamada.", "Pasarlo de inmediato sin preguntar."], correct: 0 },
+                { id: 320, topic: 'HubSpot', text: "Al buscar un contacto en HubSpot, si encuentras correos duplicados, ¿qué correo debes priorizar para asociar el ticket?", options: ["El correo personal Gmail/Hotmail", "El correo institucional @poligran.edu.co si está activo", "Cualquiera al azar"], correct: 1 }
+            ]
+        };
+
+        // ESTADO GLOBAL DE LA APP
+        let state = {
+            studentName: '',
+            studentCedula: '',
+            phase: 'fase2',
+            questions: [],
+            currentIndex: 0,
+            answers: {},
+            completedPhases: []
+        };
+
+        const views = {
+            home: document.getElementById('view-home'),
+            quiz: document.getElementById('view-quiz'),
+            result: document.getElementById('view-result'),
+            adminLogin: document.getElementById('view-admin-login'),
+            adminDashboard: document.getElementById('view-admin-dashboard')
+        };
+
+        function setView(viewName) {
+            Object.values(views).forEach(el => el.classList.add('hidden-view'));
+            views[viewName].classList.remove('hidden-view');
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedProgress = localStorage.getItem('poli_progress');
+            if (savedProgress) {
+                const parsed = JSON.parse(savedProgress);
+                if (parsed.answers && Object.keys(parsed.answers).length > 0) {
+                    state = parsed;
+                    renderQuiz();
+                    setView('quiz');
+                }
+            }
+            const savedCompleted = localStorage.getItem('poli_completed');
+            if (savedCompleted) {
+                state.completedPhases = JSON.parse(savedCompleted);
+            }
+        });
+
+        function saveProgress() {
+            localStorage.setItem('poli_progress', JSON.stringify(state));
+        }
+
+        window.startQuiz = function(event) {
+            event.preventDefault();
+            state.studentName = document.getElementById('student-name').value;
+            state.studentCedula = document.getElementById('student-cedula').value;
+            state.phase = document.getElementById('student-phase').value;
+            state.questions = questionBank[state.phase];
+            state.currentIndex = 0;
+            state.answers = {};
+            
+            renderQuiz();
+            setView('quiz');
+        };
+
+        function renderQuiz() {
+            const q = state.questions[state.currentIndex];
+            const isAnswered = state.answers[state.currentIndex] !== undefined;
+            const isLast = state.currentIndex === state.questions.length - 1;
+
+            let gridHtml = '';
+            state.questions.forEach((_, idx) => {
+                let classes = 'w-8 h-8 rounded-md text-xs font-bold transition-colors flex items-center justify-center ';
+                if (state.currentIndex === idx) classes += 'bg-blue-900 text-white ring-2 ring-blue-300';
+                else if (state.answers[idx] !== undefined) classes += 'bg-green-100 text-green-700 border border-green-200';
+                else classes += 'bg-slate-100 text-slate-400 hover:bg-slate-200';
+                
+                gridHtml += `<button onclick="window.jumpToQuestion(${idx})" class="${classes}">${idx + 1}</button>`;
+            });
+            document.getElementById('quiz-grid').innerHTML = gridHtml;
+
+            document.getElementById('quiz-counter').innerText = `Pregunta ${state.currentIndex + 1} de ${state.questions.length}`;
+            document.getElementById('quiz-question-text').innerText = q.text;
+            
+            const tipEl = document.getElementById('quiz-tip');
+            if(q.tip) {
+                document.getElementById('quiz-tip-text').innerText = q.tip;
+                tipEl.classList.remove('hidden-view');
+            } else {
+                tipEl.classList.add('hidden-view');
+            }
+
+            let optionsHtml = '';
+            q.options.forEach((opt, idx) => {
+                let classes = 'w-full text-left px-5 py-4 rounded-xl border-2 transition-all ';
+                if (state.answers[state.currentIndex] === idx) {
+                    classes += 'border-blue-600 bg-blue-50 text-blue-900 font-medium shadow-sm';
+                } else {
+                    classes += 'border-slate-200 hover:border-blue-300 hover:bg-slate-50 text-slate-700';
+                }
+                optionsHtml += `<button onclick="window.handleAnswer(${idx})" class="${classes}">${opt}</button>`;
+            });
+            document.getElementById('quiz-options').innerHTML = optionsHtml;
+
+            document.getElementById('btn-prev').disabled = state.currentIndex === 0;
+            if(state.currentIndex === 0) {
+                document.getElementById('btn-prev').classList.add('bg-transparent', 'text-slate-300', 'cursor-not-allowed');
+                document.getElementById('btn-prev').classList.remove('bg-slate-100', 'text-slate-600', 'hover:bg-slate-200');
+            } else {
+                document.getElementById('btn-prev').classList.remove('bg-transparent', 'text-slate-300', 'cursor-not-allowed');
+                document.getElementById('btn-prev').classList.add('bg-slate-100', 'text-slate-600', 'hover:bg-slate-200');
+            }
+
+            const btnNext = document.getElementById('btn-next');
+            const btnFinish = document.getElementById('btn-finish');
+            
+            if (isLast) {
+                btnNext.classList.add('hidden-view');
+                btnFinish.classList.remove('hidden-view');
+                const allAnswered = Object.keys(state.answers).length === state.questions.length;
+                btnFinish.disabled = !allAnswered;
+                if(allAnswered) {
+                    btnFinish.classList.remove('bg-slate-200', 'text-slate-400', 'cursor-not-allowed');
+                    btnFinish.classList.add('bg-yellow-400', 'text-blue-900', 'hover:bg-yellow-500');
+                } else {
+                    btnFinish.classList.add('bg-slate-200', 'text-slate-400', 'cursor-not-allowed');
+                    btnFinish.classList.remove('bg-yellow-400', 'text-blue-900', 'hover:bg-yellow-500');
+                }
+            } else {
+                btnNext.classList.remove('hidden-view');
+                btnFinish.classList.add('hidden-view');
+            }
+
+            saveProgress();
+        }
+
+        window.handleAnswer = function(optIdx) {
+            state.answers[state.currentIndex] = optIdx;
+            renderQuiz();
+        };
+
+        window.nextQuestion = function() {
+            if (state.currentIndex < state.questions.length - 1) {
+                state.currentIndex++;
+                renderQuiz();
+            }
+        };
+
+        window.prevQuestion = function() {
+            if (state.currentIndex > 0) {
+                state.currentIndex--;
+                renderQuiz();
+            }
+        };
+
+        window.jumpToQuestion = function(idx) {
+            state.currentIndex = idx;
+            renderQuiz();
+        };
+
+        window.finishQuiz = async function() {
+            let correctCount = 0;
+            let incorrectAnswers = [];
+
+            state.questions.forEach((q, idx) => {
+                if (state.answers[idx] === q.correct) {
+                    correctCount++;
+                } else {
+                    incorrectAnswers.push({
+                        question: q.text,
+                        selected: q.options[state.answers[idx]] || "No respondida",
+                        correctAnswer: q.options[q.correct]
+                    });
+                }
+            });
+
+            const percentage = (correctCount / state.questions.length) * 100;
+            const isSuccess = percentage >= 60;
+
+            const resultData = {
+                name: state.studentName,
+                cedula: state.studentCedula,
+                phase: state.phase === 'fase2' ? 'Fase 2 (Producto)' : 'Fase 3 (Herramientas)',
+                score: correctCount,
+                total: state.questions.length,
+                percentage: percentage,
+                timestamp: new Date().toISOString()
+            };
+
+            const iconContainer = document.getElementById('result-icon-container');
+            const icon = document.getElementById('result-icon');
+            
+            iconContainer.className = `mx-auto w-20 h-20 rounded-full flex items-center justify-center mb-6 ${isSuccess ? 'bg-green-100' : 'bg-red-100'}`;
+            icon.className = `fa-solid ${isSuccess ? 'fa-award text-green-600' : 'fa-exclamation-circle text-red-500'} text-4xl`;
+            
+            document.getElementById('result-title').innerText = percentage === 100 ? '¡Conocimiento Perfecto!' : isSuccess ? '¡Buen trabajo!' : 'Oportunidad de Mejora';
+            document.getElementById('result-name').innerText = state.studentName;
+            document.getElementById('result-score').innerText = correctCount;
+            document.getElementById('result-total').innerText = state.questions.length;
+
+            const feedbackContainer = document.getElementById('feedback-container');
+            if (incorrectAnswers.length > 0) {
+                let accHtml = '';
+                incorrectAnswers.forEach((err, idx) => {
+                    accHtml += `
+                    <div class="border border-red-200 rounded-lg mb-3 overflow-hidden bg-white">
+                        <button onclick="this.nextElementSibling.classList.toggle('hidden-view'); this.querySelector('.fa-chevron-down').classList.toggle('hidden-view'); this.querySelector('.fa-chevron-up').classList.toggle('hidden-view');" class="w-full flex justify-between items-center p-4 bg-red-50 hover:bg-red-100 transition-colors text-left">
+                            <div class="flex items-center gap-3">
+                                <i class="fa-solid fa-exclamation-circle text-red-500"></i>
+                                <span class="font-semibold text-red-900 text-sm">Error en Pregunta</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-red-500"></i>
+                            <i class="fa-solid fa-chevron-up text-red-500 hidden-view"></i>
+                        </button>
+                        <div class="p-4 bg-white text-sm hidden-view">
+                            <p class="font-medium text-slate-800 mb-3">${err.question}</p>
+                            <div class="space-y-2">
+                                <div class="p-3 bg-slate-50 rounded-md border border-slate-200">
+                                    <span class="text-xs font-bold text-slate-500 uppercase">Tu respuesta:</span>
+                                    <p class="text-slate-600 mt-1">${err.selected}</p>
+                                </div>
+                                <div class="p-3 bg-green-50 rounded-md border border-green-200">
+                                    <span class="text-xs font-bold text-green-700 uppercase">Respuesta Correcta:</span>
+                                    <p class="text-green-800 mt-1 font-medium">${err.correctAnswer}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                });
+                document.getElementById('feedback-accordion').innerHTML = accHtml;
+                feedbackContainer.classList.remove('hidden-view');
+            } else {
+                feedbackContainer.classList.add('hidden-view');
+            }
+
+            if (!state.completedPhases.includes(state.phase)) {
+                state.completedPhases.push(state.phase);
+                localStorage.setItem('poli_completed', JSON.stringify(state.completedPhases));
+            }
+
+            const btnContinue = document.getElementById('btn-continue-phase');
+            const btnSurvey = document.getElementById('btn-survey');
+            
+            if (state.completedPhases.includes('fase2') && state.completedPhases.includes('fase3')) {
+                btnSurvey.classList.remove('hidden-view');
+                btnContinue.classList.add('hidden-view');
+            } else {
+                btnContinue.innerText = `Continuar con ${state.phase === 'fase2' ? 'Fase 3' : 'Fase 2'} ➔`;
+                btnContinue.classList.remove('hidden-view');
+                btnSurvey.classList.add('hidden-view');
+            }
+
+            localStorage.removeItem('poli_progress');
+            setView('result');
+
+            try {
+                let localData = JSON.parse(localStorage.getItem('poli_evaluations') || '[]');
+                localData.push({ id: Date.now().toString(), ...resultData });
+                localStorage.setItem('poli_evaluations', JSON.stringify(localData));
+            } catch (e) { console.error("Error guardando local", e); }
+
+            if (db) {
+                try {
+                    await addDoc(collection(db, 'evaluaciones_poli'), resultData);
+                    console.log("Guardado en Firebase exitosamente.");
+                } catch (err) {
+                    console.log("Firebase bloqueado (Posible falta de permisos). Se respaldó localmente.");
+                }
+            }
+        };
+
+        window.continuePhase = function() {
+            document.getElementById('student-phase').value = state.phase === 'fase2' ? 'fase3' : 'fase2';
+            setView('home');
+        };
+
+        window.goToHome = function() {
+            document.getElementById('student-name').value = '';
+            document.getElementById('student-cedula').value = '';
+            setView('home');
+        };
+
+        window.showAdminLogin = function() {
+            setView('adminLogin');
+        };
+
+        window.handleAdminLogin = function(event) {
+            event.preventDefault();
+            const pass = document.getElementById('admin-password').value;
+            if (pass === 'Poli2026') {
+                document.getElementById('admin-password').value = '';
+                document.getElementById('admin-error').classList.add('hidden-view');
+                loadAdminData();
+                setView('adminDashboard');
+            } else {
+                document.getElementById('admin-error').classList.remove('hidden-view');
+            }
+        };
+
+        function renderAdminTable(dataArray) {
+            const container = document.getElementById('admin-table-container');
+            if (dataArray.length === 0) {
+                container.innerHTML = `
+                <div class="text-center py-12 text-slate-500">
+                    <i class="fa-solid fa-database text-4xl text-slate-300 mb-3"></i>
+                    <p>Aún no hay registros en la base de datos.</p>
+                </div>`;
+                return;
+            }
+
+            let rows = '';
+            dataArray.forEach(sub => {
+                let colorClass = sub.percentage >= 80 ? 'bg-green-100 text-green-700' : sub.percentage >= 60 ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700';
+                rows += `
+                <tr class="hover:bg-slate-50 transition-colors border-b border-slate-100">
+                    <td class="p-4 font-medium text-blue-900">${sub.name}</td>
+                    <td class="p-4 text-slate-600">${sub.cedula}</td>
+                    <td class="p-4 text-slate-600"><span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-semibold">${sub.phase}</span></td>
+                    <td class="p-4 text-center">
+                        <div class="inline-flex items-center justify-center w-10 h-10 rounded-full font-bold text-sm ${colorClass}">
+                            ${sub.score}/${sub.total}
+                        </div>
+                    </td>
+                </tr>`;
+            });
+
+            container.innerHTML = `
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-50 text-slate-600 text-sm uppercase tracking-wider">
+                        <th class="p-4 rounded-tl-lg">Estudiante</th>
+                        <th class="p-4">Documento</th>
+                        <th class="p-4">Módulo</th>
+                        <th class="p-4 text-center rounded-tr-lg">Puntaje</th>
+                    </tr>
+                </thead>
+                <tbody>${rows}</tbody>
+            </table>`;
+        }
+
+        function loadAdminData() {
+            let localData = JSON.parse(localStorage.getItem('poli_evaluations') || '[]');
+            localData.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            renderAdminTable(localData);
+
+            if (db) {
+                onSnapshot(collection(db, 'evaluaciones_poli'), (snapshot) => {
+                    const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    if (docs.length > 0) {
+                        docs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                        renderAdminTable(docs);
+                    }
+                }, (error) => {
+                    console.log("Firestore en modo sólo lectura local debido a permisos.", error);
+                });
+            }
+        }
+    </script>
+</body>
+</html>
