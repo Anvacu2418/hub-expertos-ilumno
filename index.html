@@ -41,6 +41,8 @@
         ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 9999px; }
         ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
         .hidden-view { display: none !important; }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body class="bg-canvasGray text-slate-800 font-sans antialiased flex flex-col h-screen overflow-hidden">
@@ -69,17 +71,21 @@
                 </div>
                 <div>
                     <label class="text-xs font-bold text-slate-700 block mb-1">Universidad</label>
-                    <select id="login-uni" required class="w-full text-xs p-3 rounded-xl border border-slate-300 focus:border-ilumnoTeal outline-none cursor-pointer">
+                    <select id="login-uni" required class="w-full text-xs p-3 rounded-xl border border-slate-300 focus:border-ilumnoTeal outline-none cursor-pointer bg-white">
                         <option value="">Selecciona tu universidad</option>
                         <option value="Politécnico Grancolombiano (POLI)">Politécnico Grancolombiano (POLI)</option>
                         <option value="Universidad San Marcos (USAM)">Universidad San Marcos (USAM)</option>
                         <option value="Universidad del Área Andina (Areandina)">Universidad del Área Andina (Areandina)</option>
+                        <option value="Universidad del Istmo (UDI)">Universidad del Istmo (UDI)</option>
+                        <option value="HEP">HEP</option>
                     </select>
                 </div>
                 <div>
                     <label class="text-xs font-bold text-slate-700 block mb-1">Split Operativo</label>
-                    <select id="login-split" class="w-full text-xs p-3 rounded-xl border border-slate-300 focus:border-ilumnoTeal outline-none cursor-pointer">
-                        <option value="Rematrícula y Servicio - Admisiones">Rematrícula y Servicio - Admisiones</option>
+                    <select id="login-split" required class="w-full text-xs p-3 rounded-xl border border-slate-300 focus:border-ilumnoTeal outline-none cursor-pointer bg-white">
+                        <option value="">Selecciona tu split</option>
+                        <option value="Rematrícula y Servicio">Rematrícula y Servicio</option>
+                        <option value="Admisiones">Admisiones</option>
                     </select>
                 </div>
                 <div class="pt-2">
@@ -118,12 +124,13 @@
 
         <!-- Perfil -->
         <div class="flex items-center gap-2">
-            <div class="flex items-center gap-2 p-1.5 md:px-3 md:py-1.5 rounded-xl border border-slate-200 bg-slate-50">
+            <div class="flex items-center gap-2 p-1.5 md:px-3 md:py-1.5 rounded-xl border border-slate-200 bg-slate-50 cursor-pointer" onclick="logoutProfile()">
                 <div class="w-8 h-8 rounded-lg bg-ilumnoDark text-white font-bold flex items-center justify-center text-xs" id="profile-avatar">EX</div>
                 <div class="text-left hidden sm:block">
                     <span id="user-display-name" class="text-xs font-bold text-slate-800 block leading-tight">Experto</span>
-                    <span id="user-display-uni" class="text-[10px] text-ilumnoTeal font-semibold block truncate w-32">Universidad</span>
+                    <span id="user-display-uni" class="text-[10px] text-ilumnoTeal font-semibold block truncate w-36">Universidad</span>
                 </div>
+                <i class="fas fa-sign-out-alt text-xs text-slate-400 hover:text-rose-500 ml-1" title="Cambiar de usuario"></i>
             </div>
         </div>
     </header>
@@ -137,12 +144,8 @@
         <!-- ÁREA CENTRAL (VIEWPORT PRINCIPAL) -->
         <!-- ========================================== -->
         <main id="main-viewport" class="flex-1 overflow-y-auto p-4 md:p-8 transition-all duration-300">
-            
-            <!-- CONTENEDOR DINÁMICO DE LECCIONES Y DASHBOARDS -->
-            <div id="lesson-content-wrapper" class="max-w-5xl mx-auto pb-16">
-                <!-- Se inyecta con JS dinámicamente -->
-            </div>
-
+            <!-- CONTENEDOR DINÁMICO DE LECCIONES -->
+            <div id="lesson-content-wrapper" class="max-w-5xl mx-auto pb-16"></div>
         </main>
 
         <!-- ========================================== -->
@@ -159,99 +162,161 @@
             <!-- TAB 1: CONTENIDO DEL CURSO (ACORDEÓN INTERNO) -->
             <div id="tab-pane-content" class="flex-1 overflow-y-auto p-4 space-y-3">
                 
-                <!-- MÓDULO 0 -->
-                <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+                <!-- MÓDULO 0: INDUCCIÓN -->
+                <div class="border border-slate-200 rounded-xl overflow-hidden shadow-xs">
                     <div class="bg-slate-100 p-3.5 flex items-center justify-between cursor-pointer" onclick="toggleAccordion('module-0')">
-                        <div class="flex items-center gap-2"><i class="fas fa-flag text-ilumnoTeal text-sm"></i><div><h4 class="text-xs font-black text-slate-800">Módulo 0: Inducción</h4></div></div><i id="arrow-module-0" class="fas fa-chevron-up text-xs text-slate-400"></i>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-flag text-ilumnoTeal text-sm"></i>
+                            <div><h4 class="text-xs font-black text-slate-800">Módulo 0: Inducción</h4></div>
+                        </div>
+                        <i id="arrow-module-0" class="fas fa-chevron-up text-xs text-slate-400"></i>
                     </div>
                     <div id="module-0" class="divide-y divide-slate-100 bg-white">
-                        <div onclick="navigateToLesson('0.1')" id="nav-item-0-1" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer"><i class="fas fa-play-circle text-slate-300 mt-0.5"></i><span class="font-bold text-slate-700">0.1 Bienvenida General</span></div>
-                        <div onclick="navigateToLesson('0.2')" id="nav-item-0-2" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer"><i class="fas fa-play-circle text-slate-300 mt-0.5"></i><span class="font-bold text-slate-700">0.2 Normas de Formación</span></div>
+                        <div onclick="navigateToLesson('0.1')" id="nav-item-0-1" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition">
+                            <i class="fas fa-play-circle text-slate-300 mt-0.5"></i>
+                            <span class="font-bold text-slate-700">0.1 Bienvenida General</span>
+                        </div>
+                        <div onclick="navigateToLesson('0.2')" id="nav-item-0-2" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition">
+                            <i class="fas fa-play-circle text-slate-300 mt-0.5"></i>
+                            <span class="font-bold text-slate-700">0.2 Normas de Formación</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- MÓDULO 1 -->
-                <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+                <!-- MÓDULO 1: COMERCIAL -->
+                <div class="border border-slate-200 rounded-xl overflow-hidden shadow-xs">
                     <div class="bg-slate-100 p-3.5 flex items-center justify-between cursor-pointer" onclick="toggleAccordion('module-1')">
-                        <div class="flex items-center gap-2"><i class="fas fa-briefcase text-blue-600 text-sm"></i><div><h4 class="text-xs font-black text-slate-800">Módulo 1: Comercial</h4></div></div><i id="arrow-module-1" class="fas fa-chevron-down text-xs text-slate-400"></i>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-briefcase text-blue-600 text-sm"></i>
+                            <div><h4 class="text-xs font-black text-slate-800">Módulo 1: Comercial</h4></div>
+                        </div>
+                        <i id="arrow-module-1" class="fas fa-chevron-down text-xs text-slate-400"></i>
                     </div>
                     <div id="module-1" class="hidden divide-y divide-slate-100 bg-white">
-                        <div onclick="navigateToLesson('1.1')" id="nav-item-1-1" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer"><i class="fas fa-bullseye text-slate-300 mt-0.5"></i><span class="font-bold text-slate-700">1.1 Objetivo Fase 1</span></div>
-                        <div onclick="navigateToLesson('1.2')" id="nav-item-1-2" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer"><i class="fas fa-chart-line text-slate-300 mt-0.5"></i><span class="font-bold text-slate-700">1.2 Dashboard Fase 1</span></div>
-                        <div onclick="navigateToLesson('1.3')" id="nav-item-1-3" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer"><i class="fas fa-book text-slate-300 mt-0.5"></i><span class="font-bold text-slate-700">1.3 Tema 1</span></div>
-                        <div onclick="navigateToLesson('1.4')" id="nav-item-1-4" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer"><i class="fas fa-book-open text-slate-300 mt-0.5"></i><span class="font-bold text-slate-700">1.4 Tema 2</span></div>
+                        <div onclick="navigateToLesson('1.1')" id="nav-item-1-1" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition">
+                            <i class="fas fa-bullseye text-slate-300 mt-0.5"></i>
+                            <span class="font-bold text-slate-700">1.1 Objetivo Fase 1</span>
+                        </div>
+                        <div onclick="navigateToLesson('1.2')" id="nav-item-1-2" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition">
+                            <i class="fas fa-chart-line text-slate-300 mt-0.5"></i>
+                            <span class="font-bold text-slate-700">1.2 Dashboard Fase 1</span>
+                        </div>
+                        <div onclick="navigateToLesson('1.3')" id="nav-item-1-3" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition">
+                            <i class="fas fa-book text-slate-300 mt-0.5"></i>
+                            <span class="font-bold text-slate-700">1.3 Tema 1</span>
+                        </div>
+                        <div onclick="navigateToLesson('1.4')" id="nav-item-1-4" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition">
+                            <i class="fas fa-book-open text-slate-300 mt-0.5"></i>
+                            <span class="font-bold text-slate-700">1.4 Tema 2</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- MÓDULO 2 -->
-                <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+                <!-- MÓDULO 2: PROCESOS -->
+                <div class="border border-slate-200 rounded-xl overflow-hidden shadow-xs">
                     <div class="bg-slate-100 p-3.5 flex items-center justify-between cursor-pointer" onclick="toggleAccordion('module-2')">
-                        <div class="flex items-center gap-2"><i class="fas fa-cogs text-amber-500 text-sm"></i><div><h4 class="text-xs font-black text-slate-800">Módulo 2: Procesos</h4></div></div><i id="arrow-module-2" class="fas fa-chevron-down text-xs text-slate-400"></i>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-cogs text-amber-500 text-sm"></i>
+                            <div><h4 class="text-xs font-black text-slate-800">Módulo 2: Procesos</h4></div>
+                        </div>
+                        <i id="arrow-module-2" class="fas fa-chevron-down text-xs text-slate-400"></i>
                     </div>
                     <div id="module-2" class="hidden divide-y divide-slate-100 bg-white">
-                        <div onclick="navigateToLesson('2.1')" id="nav-item-2-1" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer"><i class="fas fa-bullseye text-slate-300 mt-0.5"></i><span class="font-bold text-slate-700">2.1 Objetivo Fase 2</span></div>
-                        <div onclick="navigateToLesson('2.2')" id="nav-item-2-2" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer"><i class="fas fa-chart-pie text-slate-300 mt-0.5"></i><span class="font-bold text-slate-700">2.2 Dashboard Fase 2</span></div>
-                        <div onclick="navigateToLesson('2.3')" id="nav-item-2-3" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer"><i class="fas fa-money-bill-wave text-slate-300 mt-0.5"></i><span class="font-bold text-slate-700">2.3 Financiero</span></div>
-                        <div onclick="navigateToLesson('2.4')" id="nav-item-2-4" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer"><i class="fas fa-undo text-slate-300 mt-0.5"></i><span class="font-bold text-slate-700">2.4 Reintegros</span></div>
+                        <div onclick="navigateToLesson('2.1')" id="nav-item-2-1" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition">
+                            <i class="fas fa-bullseye text-slate-300 mt-0.5"></i>
+                            <span class="font-bold text-slate-700">2.1 Objetivo Fase 2</span>
+                        </div>
+                        <div onclick="navigateToLesson('2.2')" id="nav-item-2-2" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition">
+                            <i class="fas fa-chart-pie text-slate-300 mt-0.5"></i>
+                            <span class="font-bold text-slate-700">2.2 Dashboard Fase 2</span>
+                        </div>
+                        <div onclick="navigateToLesson('2.3')" id="nav-item-2-3" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition">
+                            <i class="fas fa-money-bill-wave text-slate-300 mt-0.5"></i>
+                            <span class="font-bold text-slate-700">2.3 Financiero</span>
+                        </div>
+                        <div onclick="navigateToLesson('2.4')" id="nav-item-2-4" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition">
+                            <i class="fas fa-undo text-slate-300 mt-0.5"></i>
+                            <span class="font-bold text-slate-700">2.4 Reintegros</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- MÓDULO 3 -->
-                <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+                <!-- MÓDULO 3: HERRAMIENTAS -->
+                <div class="border border-slate-200 rounded-xl overflow-hidden shadow-xs">
                     <div class="bg-slate-100 p-3.5 flex items-center justify-between cursor-pointer" onclick="toggleAccordion('module-3')">
-                        <div class="flex items-center gap-2"><i class="fas fa-laptop-code text-pink-500 text-sm"></i><div><h4 class="text-xs font-black text-slate-800">Módulo 3: Herramientas</h4></div></div><i id="arrow-module-3" class="fas fa-chevron-down text-xs text-slate-400"></i>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-laptop-code text-pink-500 text-sm"></i>
+                            <div><h4 class="text-xs font-black text-slate-800">Módulo 3: Herramientas</h4></div>
+                        </div>
+                        <i id="arrow-module-3" class="fas fa-chevron-down text-xs text-slate-400"></i>
                     </div>
                     <div id="module-3" class="hidden divide-y divide-slate-100 bg-white">
-                        <div onclick="navigateToLesson('3.1')" id="nav-item-3-1" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer"><i class="fas fa-bullseye text-slate-300 mt-0.5"></i><span class="font-bold text-slate-700">3.1 Objetivo Fase 3</span></div>
-                        <div onclick="navigateToLesson('3.2')" id="nav-item-3-2" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer"><i class="fas fa-desktop text-slate-300 mt-0.5"></i><span class="font-bold text-slate-700">3.2 Dashboard Fase 3</span></div>
-                        <div onclick="navigateToLesson('3.3')" id="nav-item-3-3" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer"><i class="fas fa-headset text-slate-300 mt-0.5"></i><span class="font-bold text-slate-700">3.3 CRM & Telefonía</span></div>
+                        <div onclick="navigateToLesson('3.1')" id="nav-item-3-1" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition">
+                            <i class="fas fa-bullseye text-slate-300 mt-0.5"></i>
+                            <span class="font-bold text-slate-700">3.1 Objetivo Fase 3</span>
+                        </div>
+                        <div onclick="navigateToLesson('3.2')" id="nav-item-3-2" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition">
+                            <i class="fas fa-desktop text-slate-300 mt-0.5"></i>
+                            <span class="font-bold text-slate-700">3.2 Dashboard Fase 3</span>
+                        </div>
+                        <div onclick="navigateToLesson('3.3')" id="nav-item-3-3" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition">
+                            <i class="fas fa-headset text-slate-300 mt-0.5"></i>
+                            <span class="font-bold text-slate-700">3.3 CRM & Telefonía</span>
+                        </div>
                     </div>
                 </div>
 
                 <!-- EVALUACIONES FINALES -->
-                <div class="border border-purple-200 bg-purple-50 rounded-xl overflow-hidden shadow-sm mt-4">
+                <div class="border border-purple-200 bg-purple-50 rounded-xl overflow-hidden shadow-xs mt-4">
                     <div class="p-3.5 flex items-center justify-between cursor-pointer" onclick="toggleAccordion('module-eval')">
-                        <div class="flex items-center gap-2"><i class="fas fa-award text-purple-600 text-sm"></i><div><h4 class="text-xs font-black text-purple-900">Módulo Evaluaciones</h4></div></div><i id="arrow-module-eval" class="fas fa-chevron-down text-xs text-purple-500"></i>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-award text-purple-600 text-sm"></i>
+                            <div><h4 class="text-xs font-black text-purple-900">Módulo Evaluaciones</h4></div>
+                        </div>
+                        <i id="arrow-module-eval" class="fas fa-chevron-down text-xs text-purple-500"></i>
                     </div>
                     <div id="module-eval" class="hidden divide-y divide-purple-100 bg-white">
                         <div onclick="navigateToLesson('eval_quiz')" id="nav-item-eval_quiz" class="p-3 text-xs flex items-center justify-between hover:bg-purple-50 cursor-pointer transition">
-                            <span class="font-bold text-purple-700">Test de Conocimiento</span><i class="fas fa-brain text-purple-300"></i>
+                            <span class="font-bold text-purple-700">Test de Conocimiento</span>
+                            <i class="fas fa-brain text-purple-300"></i>
                         </div>
                         <div onclick="navigateToLesson('eval_survey')" id="nav-item-eval_survey" class="p-3 text-xs flex items-center justify-between hover:bg-purple-50 cursor-pointer transition">
-                            <span class="font-bold text-purple-700">Encuesta Satisfacción</span><i class="fas fa-heart text-purple-300"></i>
+                            <span class="font-bold text-purple-700">Encuesta Satisfacción</span>
+                            <i class="fas fa-heart text-purple-300"></i>
                         </div>
                     </div>
                 </div>
 
             </div>
 
-            <!-- TAB 2: PREGUNTAS (Simplificado) -->
+            <!-- TAB 2: PREGUNTAS -->
             <div id="tab-pane-questions" class="hidden flex-1 flex flex-col p-4 overflow-hidden">
                 <h3 class="text-xs font-bold text-slate-700 mb-2">Muro de Preguntas</h3>
-                <textarea rows="3" placeholder="¿Tienes alguna duda?" class="w-full text-xs p-3 rounded-xl border border-slate-300 outline-none mb-2"></textarea>
-                <button class="w-full py-2 bg-ilumnoTeal text-white text-xs font-bold rounded-lg mb-4">Publicar</button>
+                <textarea id="question-input" rows="3" placeholder="¿Tienes alguna duda sobre la formación?" class="w-full text-xs p-3 rounded-xl border border-slate-300 outline-none mb-2 resize-none"></textarea>
+                <button onclick="submitQuestion()" class="w-full py-2 bg-ilumnoTeal text-white text-xs font-bold rounded-lg mb-4 hover:bg-[#0089A8] transition">Publicar Pregunta</button>
+                <div id="questions-list" class="flex-1 overflow-y-auto space-y-2 text-xs">
+                    <p class="text-slate-400 text-center py-4">No hay dudas publicadas aún.</p>
+                </div>
             </div>
             
             <div class="p-3 bg-slate-50 border-t border-slate-200 text-center">
-                <span class="text-[10px] text-slate-400 font-mono">ILUMNO Ecosistema Interno</span>
+                <span class="text-[10px] text-slate-400 font-mono">ILUMNO • Ecosistema Interno</span>
             </div>
         </aside>
 
     </div>
 
+    <!-- TOAST NOTIFICACIONES -->
+    <div id="toast-container" class="fixed bottom-10 right-6 z-50 space-y-2 pointer-events-none"></div>
+
     <!-- ========================================== -->
-    <!-- BASE DE DATOS Y LÓGICA JAVASCRIPT -->
+    <!-- MOTOR DE DATOS Y LÓGICA DE JAVASCRIPT -->
     <!-- ========================================== -->
     <script>
-        // BASE DE DATOS INTERNA: Aquí guardamos todos los HTML que antes estaban por fuera
+        // BASE DE DATOS LOCAL UNIFICADA (TODOS LOS MÓDULOS INTERNOS)
         const LESSONS_DATA = {
-            
-            // ===================================
-            // HOME Y MÓDULO 0 (INDUCCIÓN)
-            // ===================================
             'home': {
                 html: `
-                    <!-- Banner Integrado (Diseño Bienvenida) -->
                     <div class="rounded-2xl shadow-xl overflow-hidden mb-8 border border-slate-200 bg-white fade-in">
                         <div class="bg-ilumnoTeal p-8 md:p-12 relative flex flex-col md:flex-row items-center justify-between gap-8">
                             <div class="relative z-10 text-white md:w-1/2">
@@ -262,22 +327,22 @@
                             </div>
                             <div class="relative z-10 text-white md:w-1/2 bg-white/10 p-6 rounded-xl border border-white/30 backdrop-blur-sm shadow-inner">
                                 <p class="text-sm leading-relaxed">
-                                    <strong>Te damos la bienvenida al curso de formación.</strong> Hemos diseñado este espacio con un conjunto de actividades que facilitarán el proceso de <strong>enseñanza-aprendizaje en línea</strong>, donde tendrás el acompañamiento de un tutor en cada uno de los temas.
+                                    <strong>Te damos la bienvenida al curso de formación para Expertos de Ilumno.</strong> Hemos diseñado este espacio con un conjunto de actividades que facilitarán el proceso de <strong>enseñanza-aprendizaje en línea</strong>, donde tendrás el acompañamiento de un tutor que servirá de guía en cada uno de los temas.
                                 </p>
                             </div>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-100">
-                            <div class="bg-ilumnoDark text-white p-8 text-center flex flex-col justify-center items-center">
+                            <div class="bg-ilumnoDark text-white p-8 text-center flex flex-col justify-center items-center cursor-pointer hover:bg-slate-900 transition" onclick="navigateToLesson('1.1')">
                                 <h3 class="text-4xl font-black mb-1 flex items-baseline justify-center">1<span class="text-xl font-bold underline decoration-4 underline-offset-4 ml-1">o</span><span class="text-xl ml-2 mt-3">MÓDULO</span></h3>
                                 <h4 class="text-xl font-bold tracking-widest mt-2 mb-1">TÉCNICO</h4>
                                 <p class="text-xs uppercase tracking-widest text-gray-300 font-semibold">Habilidades Comerciales</p>
                             </div>
-                            <div class="bg-ilumnoYellow text-white p-8 text-center flex flex-col justify-center items-center">
+                            <div class="bg-ilumnoYellow text-white p-8 text-center flex flex-col justify-center items-center cursor-pointer hover:bg-amber-500 transition" onclick="navigateToLesson('2.1')">
                                 <h3 class="text-4xl font-black mb-1 flex items-baseline justify-center drop-shadow-md">2<span class="text-xl font-bold underline decoration-4 underline-offset-4 ml-1">o</span><span class="text-xl ml-2 mt-3">MÓDULO</span></h3>
                                 <h4 class="text-xl font-bold tracking-widest mt-2 mb-1 drop-shadow-md">TECNÓLOGO</h4>
                                 <p class="text-xs uppercase tracking-widest text-yellow-100 font-bold">Gestión de Información</p>
                             </div>
-                            <div class="bg-ilumnoPink text-white p-8 text-center flex flex-col justify-center items-center">
+                            <div class="bg-ilumnoPink text-white p-8 text-center flex flex-col justify-center items-center cursor-pointer hover:bg-pink-600 transition" onclick="navigateToLesson('3.1')">
                                 <h3 class="text-4xl font-black mb-1 flex items-baseline justify-center">3<span class="text-xl font-bold underline decoration-4 underline-offset-4 ml-1">o</span><span class="text-xl ml-2 mt-3">MÓDULO</span></h3>
                                 <h4 class="text-xl font-bold tracking-widest mt-2 mb-1">PROFESIONAL</h4>
                                 <p class="text-xs uppercase tracking-widest text-pink-200 font-semibold">Aplicativos Nivel 1</p>
@@ -287,15 +352,26 @@
                 `
             },
             '0.1': { 
-                html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">0.1 Bienvenida General</h2><p>Contenido de bienvenida. (Inicia la inducción).</p></div>`
+                html: `
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in space-y-4">
+                        <h2 class="text-2xl font-black text-slate-800 border-b pb-2">0.1 Bienvenida General</h2>
+                        <p class="text-slate-600 leading-relaxed text-sm">
+                            En este módulo de inicio recorrerás los fundamentos de la cultura institucional, tus canales de soporte y el modelo formativo por competencias.
+                        </p>
+                        <div class="bg-cyan-50 border border-cyan-200 p-4 rounded-xl text-xs text-cyan-900">
+                            <strong>Clave de Indagación:</strong> "Si te bloqueas: ¡Aprende a indagar más!". Preguntar a profundidad antes de escalar resuelve más del 90% de los requerimientos en sala.
+                        </div>
+                    </div>` 
             },
             '0.2': { 
-                html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">0.2 Normas de Formación</h2><p>Código de convivencia y reglas.</p></div>`
+                html: `
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in space-y-4">
+                        <h2 class="text-2xl font-black text-slate-800 border-b pb-2">0.2 Normas de Formación</h2>
+                        <p class="text-slate-600 text-sm">
+                            Conexión puntual a las 08:00 a.m., cámara encendida al participar, uso exclusivo de computador institucional y respeto en todos los canales de interacción.
+                        </p>
+                    </div>` 
             },
-
-            // ===================================
-            // MÓDULO 1: COMERCIAL
-            // ===================================
             '1.1': {
                 html: `
                     <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-md overflow-hidden border border-slate-200 flex flex-col md:flex-row fade-in">
@@ -305,295 +381,265 @@
                             <h3 class="text-xl font-black tracking-widest z-10">FASE TÉCNICA</h3>
                         </div>
                         <div class="p-8 md:w-2/3 space-y-4">
-                            <h4 class="text-2xl font-black text-slate-800 border-b-4 border-ilumnoYellow pb-2 inline-block">Objetivo del Módulo</h4>
-                            <p class="text-slate-600 text-sm">Brindar herramientas prácticas para aplicar la Venta Consultiva enfocándose en entender al estudiante, proponer soluciones y generar retención académica.</p>
-                            <button onclick="navigateToLesson('1.2')" class="px-5 py-2.5 bg-ilumnoDark text-white font-bold text-xs rounded-xl hover:bg-blue-900 transition mt-4">Continuar al Dashboard</button>
+                            <h4 class="text-2xl font-black text-slate-800 border-b-4 border-ilumnoYellow pb-2 inline-block">Objetivo del Módulo Comercial</h4>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                Brindar herramientas prácticas para aplicar la <strong>Venta Consultiva</strong> de forma efectiva, enfocándose en entender la necesidad real del estudiante antes de negociar.
+                            </p>
+                            <button onclick="navigateToLesson('1.2')" class="px-5 py-2.5 bg-ilumnoDark text-white font-bold text-xs rounded-xl hover:bg-blue-900 transition mt-2">Continuar al Dashboard Comercial</button>
                         </div>
-                    </div>
-                `
+                    </div>`
             },
-            '1.2': {
-                html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">Dashboard Fase 1</h2><p>Ruta de aprendizaje Comercial.</p></div>`
-            },
-            '1.3': {
-                html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">Tema 1: Venta Consultiva</h2><p>Modelo LAER y 4 Pasos.</p></div>`
-            },
-            '1.4': {
-                html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">Tema 2: Manejo de Objeciones</h2><p>Casos prácticos de rebati.</p></div>`
-            },
+            '1.2': { html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">1.2 Dashboard Fase 1</h2><p class="text-sm text-slate-600">Ruta curricular de Venta Consultiva y Modelo LAER.</p></div>` },
+            '1.3': { html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">1.3 Tema 1: Pasos Consultivos</h2><p class="text-sm text-slate-600">Conectar, Dialogar, Solucionar y Negociar.</p></div>` },
+            '1.4': { html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">1.4 Tema 2: Manejo de Objeciones</h2><p class="text-sm text-slate-600">Modelo LAER aplicado a retención y costos.</p></div>` },
+            '2.1': { html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">2.1 Objetivo Fase 2</h2><p class="text-sm text-slate-600">Conocimiento integral de trámites, temporadas y reglamento institucional.</p></div>` },
+            '2.2': { html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">2.2 Dashboard Fase 2</h2><p class="text-sm text-slate-600">Mapa de procesos operativos Poli.</p></div>` },
+            '2.3': { html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">2.3 Módulo Financiero</h2><p class="text-sm text-slate-600">Validaciones en Analytics, fechas de pago y devoluciones de saldo a favor.</p></div>` },
+            '2.4': { html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">2.4 Módulo de Reintegros</h2><p class="text-sm text-slate-600">Trámites y tiempos de respuesta en vivo.</p></div>` },
+            '3.1': { html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">3.1 Objetivo Fase 3</h2><p class="text-sm text-slate-600">Dominio técnico de sistemas CRM, telefonía y tipificaciones.</p></div>` },
+            '3.2': { html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">3.2 Dashboard Fase 3</h2><p class="text-sm text-slate-600">Herramientas Nivel 1 en operación.</p></div>` },
+            '3.3': { html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">3.3 CRM HubSpot & Telefonía Genesys Cloud</h2><p class="text-sm text-slate-600">Guías de tipificación y códigos de conclusión.</p></div>` },
 
-            // ===================================
-            // MÓDULO 2: PROCESOS
-            // ===================================
-            '2.1': {
-                html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">2.1 Objetivo Fase 2</h2><p>Conocer a fondo los procesos de la Institución.</p></div>`
-            },
-            '2.2': {
-                html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">Dashboard Fase 2</h2><p>Mapa de procesos operativos.</p></div>`
-            },
-            '2.3': {
-                html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">2.3 Financiero</h2><p>Temas de pagos y devoluciones.</p></div>`
-            },
-            '2.4': {
-                html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">2.4 Reintegros</h2><p>Políticas de readmisión.</p></div>`
-            },
-
-            // ===================================
-            // MÓDULO 3: HERRAMIENTAS
-            // ===================================
-            '3.1': {
-                html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">3.1 Objetivo Fase 3</h2><p>Aprender el manejo de aplicativos.</p></div>`
-            },
-            '3.2': {
-                html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">Dashboard Fase 3</h2><p>Ruta de sistemas.</p></div>`
-            },
-            '3.3': {
-                html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">3.3 CRM & Telefonía</h2><p>Salesforce y Genesys Cloud.</p></div>`
-            },
-    <script>
-        // ==========================================
-        // BASE DE DATOS LOCAL DE LECCIONES DEL INDEX
-        // ==========================================
-        const LESSONS_DATA = {
-            '0.1': {
-                id: '0.1', title: 'Bienvenida General', module: 'Inducción y Cultura Ilumno', duration: '5 min',
-                htmlContent: `
-                    <div class="space-y-6">
-                        <div class="rounded-2xl shadow-xl overflow-hidden mb-8 border border-slate-200">
-                            <!-- Banner Integrado de 1 home_bienvenida.html -->
-                            <div class="bg-ilumnoTeal p-8 md:p-12 relative flex flex-col md:flex-row items-center justify-between gap-8">
-                                <div class="relative z-10 text-white md:w-1/2">
-                                    <h2 class="text-xl md:text-2xl font-bold mb-1 tracking-wide">Introducción</h2>
-                                    <h1 class="text-3xl md:text-4xl lg:text-5xl font-black leading-tight uppercase drop-shadow-sm">
-                                        Curso de formación para<br><span class="text-white">Expertos de Ilumno</span>
-                                    </h1>
-                                </div>
-                                <div class="relative z-10 text-white md:w-1/2 bg-white/10 p-6 rounded-xl border border-white/30 backdrop-blur-sm shadow-inner">
-                                    <p class="text-sm leading-relaxed">
-                                        <strong>Te damos la bienvenida al curso de formación para Expertos de Ilumno.</strong> Hemos diseñado este espacio con un conjunto de actividades que facilitarán el proceso de <strong>enseñanza-aprendizaje en línea</strong>, donde tendrás el acompañamiento de un tutor que servirá de guía en cada uno de los temas.
-                                    </p>
-                                </div>
+            // EVALUACIÓN DE CONOCIMIENTO (INTEGRADA)
+            'eval_quiz': {
+                html: `
+                    <div class="bg-white p-8 rounded-3xl shadow-lg border border-purple-100 fade-in space-y-6">
+                        <div class="flex items-center gap-3 border-b border-purple-100 pb-4">
+                            <div class="w-12 h-12 rounded-2xl bg-purple-600 text-white flex items-center justify-center text-xl shadow-md">
+                                <i class="fas fa-brain"></i>
                             </div>
-                            <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-100">
-                                <div class="bg-ilumnoDark text-white p-8 text-center flex flex-col justify-center items-center">
-                                    <h3 class="text-4xl font-black mb-1 flex items-baseline justify-center">1<span class="text-xl font-bold underline decoration-4 underline-offset-4 ml-1">o</span><span class="text-xl ml-2 mt-3">MÓDULO</span></h3>
-                                    <h4 class="text-xl font-bold tracking-widest mt-2 mb-1">TÉCNICO</h4>
-                                    <p class="text-xs uppercase tracking-widest text-gray-300 font-semibold">Habilidades Comerciales</p>
-                                </div>
-                                <div class="bg-ilumnoYellow text-white p-8 text-center flex flex-col justify-center items-center">
-                                    <h3 class="text-4xl font-black mb-1 flex items-baseline justify-center drop-shadow-md">2<span class="text-xl font-bold underline decoration-4 underline-offset-4 ml-1">o</span><span class="text-xl ml-2 mt-3">MÓDULO</span></h3>
-                                    <h4 class="text-xl font-bold tracking-widest mt-2 mb-1 drop-shadow-md">TECNÓLOGO</h4>
-                                    <p class="text-xs uppercase tracking-widest text-yellow-100 font-bold">Gestión de Información</p>
-                                </div>
-                                <div class="bg-ilumnoPink text-white p-8 text-center flex flex-col justify-center items-center">
-                                    <h3 class="text-4xl font-black mb-1 flex items-baseline justify-center">3<span class="text-xl font-bold underline decoration-4 underline-offset-4 ml-1">o</span><span class="text-xl ml-2 mt-3">MÓDULO</span></h3>
-                                    <h4 class="text-xl font-bold tracking-widest mt-2 mb-1">PROFESIONAL</h4>
-                                    <p class="text-xs uppercase tracking-widest text-pink-200 font-semibold">Aplicativos Nivel 1</p>
-                                </div>
+                            <div>
+                                <h2 class="text-2xl font-black text-purple-900">Evaluación de Conocimiento (90%)</h2>
+                                <p class="text-xs text-purple-600 font-semibold">Criterio aprobatorio institucional de acreditación</p>
                             </div>
-                        </div>
-                    </div>
-                `
-            },
-            '0.2': { id: '0.2', title: 'Normas de Formación Ilumno', module: 'Inducción y Cultura Ilumno', duration: '15 min', htmlContent: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 text-center"><i class="fas fa-book-reader text-4xl text-ilumnoTeal mb-4"></i><h3 class="font-black text-xl text-slate-800">Reglamento y Normativas</h3><p class="text-sm text-slate-500 mt-2">Contenido de normas disponible en tu manual operativo.</p></div>` },
-            '0.3': { id: '0.3', title: 'Modelo de Formación', module: 'Inducción y Cultura Ilumno', isSlideshow: true, slideshowId: 'deck-demo' },
-            '0.4': { id: '0.4', title: 'ESSENCE Ilumno', module: 'Inducción y Cultura Ilumno', isSlideshow: true, slideshowId: 'deck-demo' },
-            '0.5': { id: '0.5', title: 'Evaluación Oficial ESSENCE', module: 'Inducción y Cultura Ilumno', duration: 'Evaluación', htmlContent: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 text-center"><i class="fas fa-qrcode text-4xl text-ilumnoTeal mb-4"></i><h3 class="font-black text-xl text-slate-800">Evaluación de Cultura</h3><p class="text-sm text-slate-500 mt-2">Escanea el QR proporcionado por el formador o ingresa a Forms.</p></div>` },
-            'eval_final': {
-                id: 'Cierre', title: 'Certificación del Curso', module: 'Evaluaciones Finales', duration: '30 min',
-                htmlContent: `
-                    <div class="space-y-6">
-                        <div class="bg-gradient-to-r from-purple-800 to-indigo-900 rounded-3xl p-8 md:p-10 text-white shadow-xl relative overflow-hidden flex flex-col md:flex-row items-center gap-8">
-                            <div class="relative z-10 md:w-2/3 space-y-3">
-                                <span class="px-3 py-1 bg-white/20 rounded-full text-[10px] font-black uppercase tracking-wider">Etapa de Certificación</span>
-                                <h2 class="text-3xl font-black">Consolida tu Aprendizaje</h2>
-                                <p class="text-sm text-purple-100 leading-relaxed">
-                                    Has completado tu recorrido. Para finalizar el proceso y autorizar el alta en plataformas, aprueba el test de conocimientos (90%) y completa la encuesta.
-                                </p>
-                            </div>
-                            <div class="relative z-10 md:w-1/3 flex justify-center">
-                                <div class="w-24 h-24 bg-white/10 rounded-full flex items-center justify-center border-4 border-purple-400 shadow-2xl backdrop-blur-sm">
-                                    <i class="fas fa-graduation-cap text-4xl text-purple-200"></i>
-                                </div>
-                            </div>
-                            <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-purple-500/30 rounded-full blur-3xl"></div>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- Evaluación Conocimientos -->
-                            <div class="bg-white rounded-3xl p-6 border-2 border-purple-100 shadow-md hover:border-purple-400 transition flex flex-col justify-between group">
-                                <div>
-                                    <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform"><i class="fas fa-brain"></i></div>
-                                    <h3 class="text-lg font-black text-slate-800 mb-2">Evaluación de Conocimiento</h3>
-                                    <p class="text-xs text-slate-500 leading-relaxed">Valida tus competencias técnicas y de venta consultiva.</p>
-                                </div>
-                                <div class="mt-6 pt-4 border-t border-slate-100">
-                                    <button class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl transition shadow-sm flex items-center justify-center gap-2">
-                                        <span>Iniciar Examen</span> <i class="fas fa-external-link-alt"></i>
-                                    </button>
+                        <div class="bg-rose-50 border border-rose-200 p-4 rounded-2xl text-xs text-rose-900 leading-relaxed">
+                            <i class="fas fa-exclamation-triangle text-rose-600 mr-1.5"></i>
+                            <strong>Recordatorio:</strong> La nota mínima para pasar a operación es de <strong>90 sobre 100 puntos</strong>.
+                        </div>
+
+                        <div id="quiz-box" class="space-y-4">
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                                <span class="text-xs font-bold text-ilumnoTeal uppercase tracking-wider block mb-1">Pregunta 1 de 3</span>
+                                <h3 class="text-sm font-bold text-slate-800">Si un estudiante en una llamada te realiza 3 consultas de información general y luego solicita derivar un trámite, ¿cuál es la regla de tipificación?</h3>
+                                <div class="mt-3 space-y-2">
+                                    <label class="flex items-center gap-2 p-2.5 bg-white rounded-lg border border-slate-200 text-xs cursor-pointer hover:border-purple-400">
+                                        <input type="radio" name="q1" value="0"> Se crea ticket por primer contacto y otro por derivación.
+                                    </label>
+                                    <label class="flex items-center gap-2 p-2.5 bg-white rounded-lg border border-slate-200 text-xs cursor-pointer hover:border-purple-400">
+                                        <input type="radio" name="q1" value="1"> Se crea ÚNICAMENTE ticket de derivación (pesa más).
+                                    </label>
+                                    <label class="flex items-center gap-2 p-2.5 bg-white rounded-lg border border-slate-200 text-xs cursor-pointer hover:border-purple-400">
+                                        <input type="radio" name="q1" value="2"> No se crea ningún ticket.
+                                    </label>
                                 </div>
                             </div>
-                            <!-- Satisfacción -->
-                            <div class="bg-white rounded-3xl p-6 border-2 border-indigo-100 shadow-md hover:border-indigo-400 transition flex flex-col justify-between group">
-                                <div>
-                                    <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform"><i class="fas fa-heart"></i></div>
-                                    <h3 class="text-lg font-black text-slate-800 mb-2">Encuesta de Satisfacción</h3>
-                                    <p class="text-xs text-slate-500 leading-relaxed">Evalúa a tu formador y la calidad de la plataforma interactiva.</p>
+                            <button onclick="showToast('Respuesta guardada. Continúa con tu examen.', 'success')" class="px-6 py-3 bg-purple-600 text-white font-bold text-xs rounded-xl hover:bg-purple-700 transition shadow-md">
+                                Registrar Respuesta
+                            </button>
+                        </div>
+                    </div>`
+            },
+
+            // ENCUESTA DE SATISFACCIÓN (INTEGRADA)
+            'eval_survey': {
+                html: `
+                    <div class="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden fade-in">
+                        <div class="bg-gradient-to-r from-ilumnoDark to-blue-800 p-8 text-center text-white relative">
+                            <span class="bg-ilumnoYellow text-ilumnoDark text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-3 inline-block shadow-xs">¡Meta Alcanzada!</span>
+                            <h2 class="text-3xl font-black mb-2">Evaluación de Satisfacción</h2>
+                            <p class="text-blue-100 text-xs max-w-xl mx-auto leading-relaxed">
+                                Has completado con éxito las fases formativas. Tu retroalimentación sincera es vital para fortalecer nuestra academia de expertos.
+                            </p>
+                        </div>
+
+                        <div class="p-8 md:p-10 space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="bg-slate-50 border-2 border-dashed border-slate-200 rounded-2xl p-6 text-center flex flex-col justify-between items-center hover:border-ilumnoPink transition">
+                                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-xs mb-3 text-ilumnoPink text-2xl">
+                                        <i class="fas fa-desktop"></i>
+                                    </div>
+                                    <h3 class="font-bold text-slate-800 text-sm mb-1">Responde en tu Computador</h3>
+                                    <p class="text-xs text-slate-500 mb-4">Abre el formulario oficial directamente en tu navegador.</p>
+                                    <a href="https://forms.office.com/r/dGzrHaAfr9" target="_blank" class="w-full py-3 bg-ilumnoPink text-white font-bold text-xs rounded-xl hover:bg-pink-600 transition shadow-sm flex items-center justify-center gap-2">
+                                        <i class="fas fa-external-link-alt"></i> Ir a la Encuesta Web
+                                    </a>
                                 </div>
-                                <div class="mt-6 pt-4 border-t border-slate-100">
-                                    <button class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl transition shadow-sm flex items-center justify-center gap-2">
-                                        <span>Realizar Encuesta</span> <i class="fas fa-external-link-alt"></i>
-                                    </button>
+
+                                <div class="bg-slate-50 border-2 border-dashed border-slate-200 rounded-2xl p-6 text-center flex flex-col justify-between items-center hover:border-ilumnoTeal transition">
+                                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-xs mb-3 text-ilumnoTeal text-2xl">
+                                        <i class="fas fa-qrcode"></i>
+                                    </div>
+                                    <h3 class="font-bold text-slate-800 text-sm mb-1">Escanea con tu Celular</h3>
+                                    <p class="text-xs text-slate-500 mb-3">Abre la cámara de tu teléfono móvil para responder en línea.</p>
+                                    <div class="bg-white p-2 rounded-xl shadow-xs border border-slate-200">
+                                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https://forms.office.com/r/dGzrHaAfr9" alt="QR Encuesta" class="w-28 h-28 mx-auto">
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                `
+                    </div>`
             }
         };
 
-        const SLIDES_COLLECTION = {
-            'deck-demo': [{ title: "Contenido Interactivo", body: "<p class='text-sm text-slate-500 text-center mt-10'>Presentación de Diapositivas...</p>" }]
-        };
-
+        // ESTADO GLOBAL
         let currentLessonId = 'home';
-        let userProfile = { name: '', id: '', campaign: '', split: '' };
-        let completedLessons = {};
-        
+        let userProfile = null;
+
+        // INICIALIZACIÓN
         window.addEventListener('DOMContentLoaded', () => {
-            loadStateFromStorage();
+            loadUserProfile();
             document.getElementById('toggle-sidebar-btn').addEventListener('click', () => {
                 document.getElementById('course-sidebar').classList.toggle('hidden');
             });
         });
 
-        function loadStateFromStorage() {
-            const stored = localStorage.getItem('ilumno_ecosystem_profile');
-            if (stored) {
-                userProfile = JSON.parse(stored);
-                document.getElementById('ecosystem-login').classList.add('hidden');
-                updateProfileUI();
-            } else {
+        // GESTIÓN DE PERFIL Y ACCESO
+        function loadUserProfile() {
+            try {
+                const stored = localStorage.getItem('ilumno_ecosystem_profile');
+                if (stored) {
+                    userProfile = JSON.parse(stored);
+                    document.getElementById('ecosystem-login').classList.add('hidden');
+                    updateHeaderUI();
+                    navigateToLesson('home');
+                } else {
+                    document.getElementById('ecosystem-login').classList.remove('hidden');
+                }
+            } catch (e) {
+                console.error("Error al cargar perfil:", e);
                 document.getElementById('ecosystem-login').classList.remove('hidden');
             }
-            const comp = localStorage.getItem('ilumno_completed_lessons');
-            if(comp) completedLessons = JSON.parse(comp);
-            updateUIProgress();
         }
 
-        function processLogin() {
-            const n = document.getElementById('login-name').value.trim();
+        function processLogin(event) {
+            event.preventDefault(); // Evita recarga del navegador
+
+            const name = document.getElementById('login-name').value.trim();
             const id = document.getElementById('login-id').value.trim();
             const uni = document.getElementById('login-uni').value;
-            const sp = document.getElementById('login-split').value;
+            const split = document.getElementById('login-split').value;
 
-            if(!n || !id || !uni || !sp) { showToast('Completa todos los campos', 'info'); return; }
-
-            userProfile = { name: n, id: id, campaign: uni, split: sp };
-            localStorage.setItem('ilumno_ecosystem_profile', JSON.stringify(userProfile));
-            
-            document.getElementById('ecosystem-login').classList.add('opacity-0');
-            setTimeout(() => document.getElementById('ecosystem-login').classList.add('hidden'), 300);
-            
-            updateProfileUI();
-            showToast('¡Ecosistema Configurado Exitosamente!', 'success');
-        }
-
-        function updateProfileUI() {
-            document.getElementById('user-display-name').textContent = userProfile.name;
-            const initials = userProfile.name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
-            document.getElementById('profile-avatar').textContent = initials;
-        }
-
-        function navigateToLesson(id) {
-            currentLessonId = id;
-            const main = document.getElementById('view-home');
-            const wrap = document.getElementById('lesson-content-wrapper');
-            
-            document.querySelectorAll('#tab-pane-content > div > div > div').forEach(el => el.classList.remove('bg-cyan-50', 'border-l-4', 'border-ilumnoTeal'));
-            const activeItem = document.getElementById('nav-item-' + id.replace('.','-'));
-            if(activeItem) activeItem.classList.add('bg-cyan-50', 'border-l-4', 'border-ilumnoTeal');
-
-            if(id === 'home') {
-                main.classList.remove('hidden'); wrap.classList.add('hidden');
+            if (!name || !id || !uni || !split) {
+                showToast("Por favor completa todos los campos", "info");
                 return;
             }
 
-            const lesson = LESSONS_DATA[id];
-            main.classList.add('hidden'); wrap.classList.remove('hidden');
+            userProfile = { name, id, campaign: uni, split };
+            localStorage.setItem('ilumno_ecosystem_profile', JSON.stringify(userProfile));
+
+            document.getElementById('ecosystem-login').classList.add('opacity-0');
+            setTimeout(() => {
+                document.getElementById('ecosystem-login').classList.add('hidden');
+                document.getElementById('ecosystem-login').classList.remove('opacity-0');
+            }, 300);
+
+            updateHeaderUI();
+            navigateToLesson('home');
+            showToast(`¡Bienvenido(a), ${name}!`, "success");
+        }
+
+        function updateHeaderUI() {
+            if (!userProfile) return;
+            document.getElementById('user-display-name').textContent = userProfile.name;
+            document.getElementById('user-display-uni').textContent = userProfile.campaign;
             
-            if(lesson.isSlideshow) {
-                wrap.innerHTML = `<div class="bg-white p-10 rounded-2xl shadow-sm text-center"><h2>Presentación Interactiva: ${lesson.title}</h2></div>`;
-            } else {
-                wrap.innerHTML = `
-                    <div class="space-y-6">
-                        <!-- HEADER CON BOTÓN DE SIMULADOR AÑADIDO -->
-                        <div class="flex items-center justify-between pb-3 border-b border-slate-200">
-                            <div>
-                                <span class="text-[10px] font-black text-ilumnoTeal uppercase tracking-wider">${lesson.module}</span>
-                                <h2 class="text-xl md:text-2xl font-black text-slate-800">${lesson.id} ${lesson.title}</h2>
-                            </div>
-                            <div class="flex gap-2">
-                                <button onclick="openSimulatorModal()" class="px-3 md:px-4 py-2 rounded-xl text-xs font-black bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 transition shadow-sm flex items-center gap-1.5">
-                                    <i class="fas fa-headset"></i> <span class="hidden sm:inline">Simulador IA</span>
-                                </button>
-                                <button onclick="toggleCurrentLessonCompletion()" class="px-3 md:px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${completedLessons[id] ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
-                                    <i class="fas ${completedLessons[id] ? 'fa-check-circle' : 'fa-circle'}"></i>
-                                    <span class="hidden sm:inline">${completedLessons[id] ? 'Completada' : 'Marcar vista'}</span>
-                                </button>
-                            </div>
-                        </div>
-                        ${lesson.htmlContent}
-                    </div>
-                `;
+            const initials = userProfile.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+            document.getElementById('profile-avatar').textContent = initials || 'EX';
+        }
+
+        function logoutProfile() {
+            if (confirm("¿Deseas cerrar tu sesión o cambiar los datos del experto?")) {
+                localStorage.removeItem('ilumno_ecosystem_profile');
+                userProfile = null;
+                document.getElementById('ecosystem-login').classList.remove('hidden');
             }
         }
 
-        function toggleCurrentLessonCompletion() {
-            if(completedLessons[currentLessonId]) delete completedLessons[currentLessonId];
-            else completedLessons[currentLessonId] = true;
-            localStorage.setItem('ilumno_completed_lessons', JSON.stringify(completedLessons));
-            updateUIProgress();
-            navigateToLesson(currentLessonId); // Refresca UI
-        }
+        // NAVEGACIÓN DINÁMICA DE LECCIONES
+        function navigateToLesson(lessonId) {
+            currentLessonId = lessonId;
+            const container = document.getElementById('lesson-content-wrapper');
+            const lesson = LESSONS_DATA[lessonId];
 
-        function updateUIProgress() {
-            const keys = ['0.1', '0.2', '0.3', '0.4', '0.5'];
-            let c = 0;
-            keys.forEach(k => {
-                if(completedLessons[k]) {
-                    c++;
-                    const i = document.getElementById('status-icon-'+k.replace('.','-'));
-                    if(i) i.innerHTML = '<i class="fas fa-check-circle text-emerald-500"></i>';
-                }
+            if (!lesson) return;
+
+            // Inyectar HTML
+            container.innerHTML = lesson.html;
+            document.getElementById('main-viewport').scrollTop = 0;
+
+            // Resaltar ítem activo en la barra lateral
+            document.querySelectorAll('#tab-pane-content [id^="nav-item-"]').forEach(el => {
+                el.classList.remove('bg-cyan-50', 'border-l-4', 'border-ilumnoTeal');
             });
-            const p = Math.round((c/keys.length)*100);
-            document.getElementById('global-progress-text').textContent = p+'%';
-            document.getElementById('global-progress-bar').style.width = p+'%';
+            const activeNav = document.getElementById('nav-item-' + lessonId.replace('.', '-'));
+            if (activeNav) {
+                activeNav.classList.add('bg-cyan-50', 'border-l-4', 'border-ilumnoTeal');
+            }
         }
 
+        // CONTROLADORES DE INTERFAZ
         function toggleAccordion(id) {
             const el = document.getElementById(id);
-            const arrow = document.getElementById(`accordion-arrow-${id}`);
+            const arrow = document.getElementById('arrow-' + id);
+            if (!el) return;
+
             el.classList.toggle('hidden');
-            if (arrow) { arrow.classList.toggle('fa-chevron-down'); arrow.classList.toggle('fa-chevron-up'); }
+            if (arrow) {
+                arrow.classList.toggle('fa-chevron-down');
+                arrow.classList.toggle('fa-chevron-up');
+            }
         }
 
         function switchSidebarTab(tabName) {
-            ['content', 'questions', 'notes'].forEach(t => document.getElementById(`tab-pane-${t}`).classList.add('hidden'));
+            ['content', 'questions'].forEach(t => {
+                document.getElementById(`tab-pane-${t}`).classList.add('hidden');
+                document.getElementById(`tab-btn-${t}`).className = 'flex-1 py-3.5 text-xs font-bold text-slate-500 hover:text-slate-800 border-b-2 border-transparent transition';
+            });
+
             document.getElementById(`tab-pane-${tabName}`).classList.remove('hidden');
+            document.getElementById(`tab-btn-${tabName}`).className = 'flex-1 py-3.5 text-xs font-bold text-ilumnoTeal border-b-2 border-ilumnoTeal transition';
         }
 
-        function openSimulatorModal() { document.getElementById('modal-simulator').classList.remove('hidden'); }
-        function closeSimulatorModal() { document.getElementById('modal-simulator').classList.add('hidden'); }
+        function submitQuestion() {
+            const input = document.getElementById('question-input');
+            const text = input.value.trim();
+            if (!text) {
+                showToast("Escribe tu consulta primero", "info");
+                return;
+            }
+            const container = document.getElementById('questions-list');
+            if (container.querySelector('p')) container.innerHTML = '';
 
-        function showToast(msg, type) {
+            const item = document.createElement('div');
+            item.className = 'bg-slate-50 p-2.5 rounded-lg border border-slate-200 space-y-1';
+            item.innerHTML = `
+                <div class="flex justify-between items-center text-[10px] text-slate-400">
+                    <span class="font-bold text-slate-700">${userProfile ? userProfile.name : 'Asesor'}</span>
+                    <span>Ahora</span>
+                </div>
+                <p class="text-slate-700">${text}</p>
+            `;
+            container.prepend(item);
+            input.value = '';
+            showToast("Pregunta registrada", "success");
+        }
+
+        function showToast(msg, type = 'info') {
             const cont = document.getElementById('toast-container');
             const toast = document.createElement('div');
-            toast.className = `px-4 py-3 rounded-xl shadow-lg text-white text-xs flex items-center gap-2 transform transition-all duration-300 ${type==='success'?'bg-emerald-600':'bg-ilumnoDark'}`;
-            toast.innerHTML = `<i class="fas fa-info-circle"></i><span>${msg}</span>`;
+            const bg = type === 'success' ? 'bg-emerald-600' : 'bg-ilumnoDark';
+            const icon = type === 'success' ? 'fa-check-circle' : 'fa-info-circle';
+
+            toast.className = `${bg} text-white text-xs px-4 py-3 rounded-xl shadow-xl flex items-center gap-2 transform transition-all duration-300`;
+            toast.innerHTML = `<i class="fas ${icon}"></i><span>${msg}</span>`;
             cont.appendChild(toast);
-            setTimeout(()=>toast.remove(), 3000);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
         }
     </script>
 </body>
