@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 3: Venta Consultiva - Poli</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .poli-bg { background-color: #0b224e; } /* Azul oscuro Poli */
+        .poli-text { color: #0b224e; }
+        .poli-yellow { color: #facc15; }
+        .bg-poli-yellow { background-color: #facc15; }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-800">
+
+    <!-- Header Principal -->
+    <header class="poli-bg text-white py-12 px-6">
+        <div class="max-w-5xl mx-auto flex items-center justify-between">
+            <div class="w-2/3">
+                <span class="bg-poli-yellow text-gray-900 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">Fase Comercial</span>
+                <h1 class="text-4xl font-bold mt-4 mb-2">Venta Consultiva & Script</h1>
+                <p class="text-blue-100 text-sm">El ecosistema de habilidades del experto. Domina las técnicas para conectar con el estudiante, manejar objeciones y garantizar la retención académica.</p>
+            </div>
+            <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-lg text-4xl poli-text">
+                <i class="fas fa-handshake"></i>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto -mt-6 px-6 relative z-10 pb-12">
+        <!-- Tarjeta Mindset -->
+        <div class="bg-white rounded-xl shadow-md p-6 mb-8 border border-gray-100 flex items-start gap-4">
+            <div class="text-blue-500 text-2xl mt-1"><i class="fas fa-bullseye"></i></div>
+            <div>
+                <h3 class="font-bold text-gray-800 mb-1">Mindset Comercial: El poder del diálogo</h3>
+                <p class="text-sm text-gray-500">"La rematrícula no es despachar pedidos. Navega por estos módulos para aprender cómo escuchar al estudiante, diagnosticar su caso y presentar soluciones a la medida."</p>
+            </div>
+        </div>
+
+        <!-- Tarjetas de Módulos -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <!-- Tarjeta 1: Venta Consultiva -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col hover:shadow-md transition">
+                <div class="h-2 bg-gradient-to-r from-blue-400 to-blue-600"></div>
+                <div class="p-6 flex-1 flex flex-col">
+                    <div class="flex gap-2 mb-4 text-blue-500 text-xl">
+                        <i class="fas fa-users bg-blue-50 p-2 rounded-lg"></i>
+                        <i class="fas fa-comments bg-blue-50 p-2 rounded-lg"></i>
+                    </div>
+                    <span class="text-xs font-bold text-gray-400 mb-1 uppercase tracking-wider">Módulo 3.1</span>
+                    <h2 class="text-xl font-bold poli-text mb-2">Modelo de Venta Consultiva</h2>
+                    <p class="text-sm text-gray-600 mb-4 flex-1">Domina los pasos clave para generar empatía, indagar necesidades y aplicar el Modelo LAER para el manejo de objeciones[cite: 18].</p>
+                    
+                    <ul class="text-sm text-gray-500 space-y-2 mb-6">
+                        <li><i class="fas fa-check text-green-500 mr-2"></i> Los 4 Pasos Consultivos.</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i> Manejo de Objeciones (LAER).</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i> Elevator Pitch.</li>
+                    </ul>
+                    <a href="tema1.html" class="w-full block text-center poli-bg text-white font-semibold py-3 rounded-lg hover:bg-blue-800 transition">Iniciar Módulo de Venta &rarr;</a>
+                </div>
+            </div>
+
+            <!-- Tarjeta 2: Script -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col hover:shadow-md transition">
+                <div class="h-2 bg-gradient-to-r from-purple-400 to-purple-600"></div>
+                <div class="p-6 flex-1 flex flex-col">
+                    <div class="flex gap-2 mb-4 text-purple-500 text-xl">
+                        <i class="fas fa-desktop bg-purple-50 p-2 rounded-lg"></i>
+                        <i class="fas fa-database bg-purple-50 p-2 rounded-lg"></i>
+                    </div>
+                    <span class="text-xs font-bold text-gray-400 mb-1 uppercase tracking-wider">Módulo 3.2</span>
+                    <h2 class="text-xl font-bold poli-text mb-2">Gestión de Script & Genesys</h2>
+                    <p class="text-sm text-gray-600 mb-4 flex-1">Tu brújula para la trazabilidad. Aprende a registrar correctamente la voz del aspirante y los flujos operativos en el sistema.</p>
+                    
+                    <ul class="text-sm text-gray-500 space-y-2 mb-6">
+                        <li><i class="fas fa-check text-green-500 mr-2"></i> Captura de Voz del Aspirante.</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i> Flujo Inbound / Outbound.</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i> Manejo de Llamadas Programadas.</li>
+                    </ul>
+                    <a href="tema2.html" class="w-full block text-center bg-gray-800 text-white font-semibold py-3 rounded-lg hover:bg-gray-900 transition">Iniciar Módulo Operativo &rarr;</a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Banner Inferior Evaluativo -->
+        <div class="mt-8 poli-bg rounded-xl p-6 flex items-center justify-between shadow-lg">
+            <div class="text-white">
+                <h3 class="font-bold flex items-center gap-2"><i class="fas fa-bolt text-yellow-400"></i> Evaluación de Conocimiento</h3>
+                <p class="text-sm text-blue-200 mt-1">¿Finalizaste ambos módulos? Pon a prueba tus habilidades comerciales y operativas.</p>
+            </div>
+            <a href="evaluacion.html" class="bg-poli-yellow poli-text font-bold py-2 px-6 rounded-lg hover:bg-yellow-400 transition shadow">Ir al Examen</a>
+        </div>
+    </main>
+
+</body>
+</html>

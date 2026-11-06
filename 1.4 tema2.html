@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Script & Herramientas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .poli-bg { background-color: #0b224e; }
+        .poli-text { color: #0b224e; }
+        .poli-yellow { color: #facc15; }
+        .bg-poli-yellow { background-color: #facc15; }
+        
+        /* Custom timeline styles */
+        .timeline-number { background-color: #581c87; } /* Purple-900 para Outbound */
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-800 pb-16">
+
+    <div class="max-w-5xl mx-auto pt-8 px-6">
+        
+        <!-- Header del Tema -->
+        <div class="poli-bg rounded-2xl p-8 text-white mb-8 shadow-md">
+            <span class="text-xs font-bold text-blue-200 uppercase tracking-widest">Módulo 3: Operativo</span>
+            <h1 class="text-3xl font-bold mt-2 mb-3">Gestión de Diligenciamiento de Script</h1>
+            <p class="text-blue-100 text-sm md:w-3/4">Una guía que facilita la continuidad de las llamadas y la comunicación efectiva con nuestro usuario[cite: 42]. El script tiene como propósito obtener estadísticas que identifiquen oportunidades de mejora para las universidades y con los resultados se implementan planes de acción[cite: 43].</p>
+        </div>
+
+        <!-- Sección 1: Flujos de Gestión -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            
+            <!-- Outbound Timeline -->
+            <div class="bg-white rounded-2xl shadow-sm border p-6">
+                <h3 class="text-lg font-bold poli-text mb-6 border-b pb-2"><i class="fas fa-sign-out-alt mr-2"></i> Gestión Outbound</h3>
+                
+                <div class="space-y-4 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-gray-300 before:to-transparent">
+                    
+                    <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                        <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white timeline-number text-white font-bold shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow">1</div>
+                        <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-purple-50 p-4 rounded border border-purple-100 shadow-sm">
+                            <h4 class="font-bold text-purple-900 text-sm mb-1">Maduración</h4>
+                            <p class="text-xs text-gray-600">Lead que llega por medio de nuestras bases. Perfecto para iniciar un proceso de inscripción[cite: 44].</p>
+                        </div>
+                    </div>
+
+                    <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                        <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white timeline-number text-white font-bold shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow">2</div>
+                        <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-purple-50 p-4 rounded border border-purple-100 shadow-sm">
+                            <h4 class="font-bold text-purple-900 text-sm mb-1">Seguimiento</h4>
+                            <p class="text-xs text-gray-600">Los postulantes cambian a preinscritos o inscritos[cite: 44].</p>
+                        </div>
+                    </div>
+
+                    <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                        <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white timeline-number text-white font-bold shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow">3</div>
+                        <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-purple-50 p-4 rounded border border-purple-100 shadow-sm">
+                            <h4 class="font-bold text-purple-900 text-sm mb-1">Remarketing</h4>
+                            <p class="text-xs text-gray-600">Postulantes que no culminaron su proceso con la universidad[cite: 44].</p>
+                        </div>
+                    </div>
+
+                    <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                        <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white timeline-number text-white font-bold shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow">4</div>
+                        <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-purple-50 p-4 rounded border border-purple-100 shadow-sm">
+                            <h4 class="font-bold text-purple-900 text-sm mb-1">High School</h4>
+                            <p class="text-xs text-gray-600">Aspirantes que acaban de finalizar su colegio y muestran interés[cite: 44].</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Inbound & Genesys -->
+            <div class="space-y-6">
+                <!-- Inbound Alert -->
+                <div class="bg-blue-50 border border-blue-200 rounded-2xl p-6 shadow-sm">
+                    <h3 class="text-lg font-bold text-blue-900 mb-2"><i class="fas fa-sign-in-alt mr-2"></i> Gestión Inbound</h3>
+                    <p class="text-sm text-gray-700 mb-3">Es importante generar la captura de datos en inbound (En caso de no lograr inscripción)[cite: 45].</p>
+                    <div class="bg-white border-l-4 border-blue-500 p-3 rounded">
+                        <h4 class="font-bold text-sm text-blue-800">Debes leer el Habeas Data</h4>
+                        <p class="text-xs text-gray-600 mt-1">Es el derecho que tienen todas las personas a conocer, actualizar y rectificar las informaciones que se hayan recogido sobre ellas en bancos de datos[cite: 45].</p>
+                    </div>
+                </div>
+
+                <!-- Genesys Cloud -->
+                <div class="bg-white border rounded-2xl p-6 shadow-sm">
+                    <h3 class="text-lg font-bold poli-text mb-3"><i class="fas fa-cloud mr-2"></i> Genesys Cloud</h3>
+                    <p class="text-sm text-gray-600 mb-4">En este espacio podrás visualizar toda la información del aspirante, programa y segmento de interés[cite: 46].</p>
+                    <div class="bg-gray-100 rounded p-4 text-center border border-dashed border-gray-300">
+                        <i class="fas fa-id-card text-3xl text-gray-400 mb-2"></i>
+                        <p class="text-xs font-bold text-gray-500">Valida siempre: Nombre, Cédula, Programa y Modalidad antes de iniciar el abordaje.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección 2: Reglas del Script -->
+        <div class="bg-white rounded-2xl shadow-sm border p-8 mb-8">
+            <h2 class="text-xl font-bold poli-text mb-6 border-b pb-3">Reglas de Oro en el Script</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="font-bold text-gray-800 mb-3"><i class="fas fa-pen-square text-green-500 mr-2"></i> Campos del Script</h3>
+                    <p class="text-sm text-gray-600 mb-3">Todos los campos deben ser diligenciados durante la llamada. Al usar <strong>Botones de opción</strong>, asegúrate de tu elección, ya que queda registrada y si te devuelves quedará duplicada[cite: 48].</p>
+                    <div class="bg-green-50 border border-green-200 p-4 rounded-lg">
+                        <h4 class="font-bold text-green-800 text-sm mb-1">Voz Aspirante Texto</h4>
+                        <p class="text-xs text-gray-700">El campo de voz aspirante debe estar escrito en primera persona, con la información puntual que indicó el estudiante[cite: 48].</p>
+                        <p class="text-xs font-mono bg-white p-2 mt-2 rounded border text-gray-600">Ej: "No tengo el dinero completo para pagar, estoy esperando mis cesantías"[cite: 48].</p>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="font-bold text-gray-800 mb-3"><i class="fas fa-calendar-alt text-orange-500 mr-2"></i> Llamadas Programadas</h3>
+                    <ul class="space-y-3 text-sm text-gray-600">
+                        <li class="flex items-start">
+                            <i class="fas fa-chevron-right text-orange-400 mt-1 mr-2"></i>
+                            <div><strong>Programada al inicio:</strong> El experto debe diligenciar solo el campo hasta donde llega (Ej: Usuario indica que está ocupado y no habla más)[cite: 49].</div>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-chevron-right text-orange-400 mt-1 mr-2"></i>
+                            <div><strong>A la mitad del script:</strong> Aplica solamente cuando la persona se ocupa o corta en la mitad de la llamada. Diligencia hasta donde llegue la gestión[cite: 50].</div>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-chevron-right text-orange-400 mt-1 mr-2"></i>
+                            <div><strong>Para conocer decisión de matrícula:</strong> El experto debe diligenciar todo el script y dejar la nota en voz aspirante con la razón del programado (Ej: "Tengo una cirugía en dos semanas")[cite: 50].</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Protocolo de Errores (Troubleshooting) -->
+        <div class="bg-red-50 border border-red-200 rounded-2xl p-6 flex items-start gap-4">
+            <div class="text-red-500 text-3xl"><i class="fas fa-exclamation-triangle"></i></div>
+            <div>
+                <h3 class="font-bold text-red-800 text-lg mb-1">Protocolo para Errores</h3>
+                <p class="text-sm text-red-900 mb-2">Dar clic derecho al marco del script y elegir la opción <strong>volver a cargar marco</strong>[cite: 51].</p>
+                <p class="text-xs text-red-700 bg-white p-2 inline-block rounded border border-red-100">Si el error no se soluciona para poder gestionar la llamada, reporte con un print de pantalla donde se evidencie el error, la fecha y hora. (Supervisor, analista de calidad, analista de script)[cite: 51].</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer Breadcrumb -->
+    <div class="fixed bottom-0 w-full bg-white border-t py-3 shadow-lg z-50">
+        <div class="max-w-5xl mx-auto px-6 flex justify-between items-center text-xs font-bold text-gray-500">
+            <a href="tema1.html" class="hover:text-blue-600"><i class="fas fa-arrow-left mr-1"></i> Volver a Venta Consultiva</a>
+            <span>MÓDULO 3.2: OPERATIVO • Gestión de Script & Genesys</span>
+            <a href="evaluacion.html" class="bg-poli-bg text-white px-4 py-1.5 rounded bg-[#0b224e] hover:bg-blue-800 transition">Ir a la Evaluación <i class="fas fa-clipboard-check ml-1"></i></a>
+        </div>
+    </div>
+</body>
+</html>
