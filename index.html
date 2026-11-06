@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ILUMNO | Hub de Expertos</title>
-    <!-- Favicon limpio con la imagen estática -->
+    <title>ILUMNO | Curso para Expertos</title>
+    <!-- Favicon con logo estático -->
     <link rel="icon" type="image/png" href="./images/logo.png">
     
     <!-- Tailwind CSS -->
@@ -28,8 +28,6 @@
                         ilumnoDark: '#00264D',
                         ilumnoYellow: '#FFB81C',
                         ilumnoPink: '#E91E63',
-                        ilumnoLight: '#F3F7FA',
-                        ilumnoSlate: '#1E293B',
                         canvasGray: '#F8FAFC'
                     }
                 }
@@ -42,13 +40,13 @@
         ::-webkit-scrollbar-track { background: #F1F5F9; }
         ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 9999px; }
         ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
-        .slide-transition { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .hidden-view { display: none !important; }
     </style>
 </head>
-<body class="bg-[#F8FAFC] text-slate-800 font-sans antialiased flex flex-col h-screen overflow-hidden">
+<body class="bg-canvasGray text-slate-800 font-sans antialiased flex flex-col h-screen overflow-hidden">
 
     <!-- ========================================== -->
-    <!-- MODAL DE ACCESO AL ECOSISTEMA (LOGIN) -->
+    <!-- MODAL DE ECOSISTEMA (LOGIN) -->
     <!-- ========================================== -->
     <div id="ecosystem-login" class="fixed inset-0 bg-slate-900/90 backdrop-blur-md z-[100] flex items-center justify-center p-4 transition-opacity">
         <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl border border-slate-200 relative overflow-hidden">
@@ -60,18 +58,18 @@
                 <p class="text-xs text-slate-500 mt-1">Configura tu perfil para iniciar tu ruta de experto</p>
             </div>
             
-            <div class="space-y-4 relative z-10">
+            <form onsubmit="processLogin(event)" class="space-y-4 relative z-10">
                 <div>
                     <label class="text-xs font-bold text-slate-700 block mb-1">Nombre Completo</label>
-                    <input type="text" id="login-name" class="w-full text-xs p-3 rounded-xl border border-slate-300 focus:border-ilumnoTeal outline-none bg-slate-50 focus:bg-white transition" placeholder="Ej: Camilo Andrés Pérez">
+                    <input type="text" id="login-name" required class="w-full text-xs p-3 rounded-xl border border-slate-300 focus:border-ilumnoTeal outline-none" placeholder="Ej: Camilo Andrés Pérez">
                 </div>
                 <div>
                     <label class="text-xs font-bold text-slate-700 block mb-1">Cédula</label>
-                    <input type="text" id="login-id" class="w-full text-xs p-3 rounded-xl border border-slate-300 focus:border-ilumnoTeal outline-none bg-slate-50 focus:bg-white transition" placeholder="Número de documento de identidad">
+                    <input type="number" id="login-id" required class="w-full text-xs p-3 rounded-xl border border-slate-300 focus:border-ilumnoTeal outline-none" placeholder="Documento de identidad">
                 </div>
                 <div>
                     <label class="text-xs font-bold text-slate-700 block mb-1">Universidad</label>
-                    <select id="login-uni" class="w-full text-xs p-3 rounded-xl border border-slate-300 focus:border-ilumnoTeal outline-none bg-slate-50 focus:bg-white transition cursor-pointer">
+                    <select id="login-uni" required class="w-full text-xs p-3 rounded-xl border border-slate-300 focus:border-ilumnoTeal outline-none cursor-pointer">
                         <option value="">Selecciona tu universidad</option>
                         <option value="Politécnico Grancolombiano (POLI)">Politécnico Grancolombiano (POLI)</option>
                         <option value="Universidad San Marcos (USAM)">Universidad San Marcos (USAM)</option>
@@ -80,70 +78,58 @@
                 </div>
                 <div>
                     <label class="text-xs font-bold text-slate-700 block mb-1">Split Operativo</label>
-                    <select id="login-split" class="w-full text-xs p-3 rounded-xl border border-slate-300 focus:border-ilumnoTeal outline-none bg-slate-50 focus:bg-white transition cursor-pointer">
+                    <select id="login-split" class="w-full text-xs p-3 rounded-xl border border-slate-300 focus:border-ilumnoTeal outline-none cursor-pointer">
                         <option value="Rematrícula y Servicio - Admisiones">Rematrícula y Servicio - Admisiones</option>
                     </select>
                 </div>
                 <div class="pt-2">
-                    <button onclick="processLogin()" class="w-full py-3 bg-ilumnoDark text-white font-black text-xs rounded-xl hover:bg-blue-900 transition shadow-lg flex items-center justify-center gap-2 group">
-                        <span>Ingresar a la Plataforma</span>
-                        <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    <button type="submit" class="w-full py-3 bg-ilumnoDark text-white font-black text-xs rounded-xl hover:bg-blue-900 transition shadow-lg flex items-center justify-center gap-2">
+                        Ingresar a la Plataforma <i class="fas fa-arrow-right"></i>
                     </button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 
     <!-- ========================================== -->
-    <!-- HEADER SUPERIOR TIPO PLATAFORMA -->
+    <!-- 1. HEADER SUPERIOR -->
     <!-- ========================================== -->
     <header class="bg-white border-b border-slate-200 h-16 flex-shrink-0 z-30 px-3 md:px-6 flex items-center justify-between shadow-xs">
         <div class="flex items-center gap-3">
             <button id="toggle-sidebar-btn" class="p-2 rounded-xl text-slate-600 hover:text-ilumnoDark hover:bg-slate-100 transition focus:outline-none">
                 <i class="fas fa-bars text-lg"></i>
             </button>
-            
             <div class="flex items-center gap-2.5 cursor-pointer select-none group" onclick="navigateToLesson('home')">
                 <div class="w-10 h-10 rounded-xl bg-white border border-slate-200 shadow-xs flex items-center justify-center p-1 group-hover:border-ilumnoTeal transition">
-                    <img src="./images/logo.png" alt="Logo Ilumno" class="w-full h-full object-contain">
+                    <img src="./images/logo.png" alt="Logo" class="w-full h-full object-contain">
                 </div>
-                <div class="leading-tight hidden sm:block">
-                    <span class="font-black text-[#00264D] tracking-tight text-lg block leading-none">ILUMNO</span>
-                    <span class="text-[10px] font-bold text-ilumnoTeal uppercase tracking-wider block">Hub Expertos</span>
+                <div class="leading-tight">
+                    <span class="font-black text-[#00264D] tracking-tight text-lg md:text-xl block leading-none">ILUMNO</span>
+                    <span class="text-[11px] font-bold text-ilumnoTeal uppercase tracking-wider block">Hub Expertos</span>
                 </div>
+            </div>
+            
+            <div class="hidden md:flex items-center ml-3 pl-3 border-l border-slate-200 gap-2">
+                <button onclick="navigateToLesson('home')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100 hover:text-ilumnoTeal transition">
+                    <i class="fas fa-home"></i> Inicio
+                </button>
             </div>
         </div>
 
-        <!-- Progreso Global -->
-        <div class="hidden lg:flex items-center gap-3 w-1/3 max-w-xs">
-            <div class="w-full">
-                <div class="flex justify-between items-center mb-1">
-                    <span class="text-[10px] font-black text-slate-500 uppercase tracking-wider">Avance Inducción</span>
-                    <span id="global-progress-text" class="text-xs font-black text-ilumnoTeal">0%</span>
-                </div>
-                <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden border border-slate-200">
-                    <div id="global-progress-bar" class="bg-gradient-to-r from-ilumnoTeal to-emerald-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Acceso a Perfil -->
+        <!-- Perfil -->
         <div class="flex items-center gap-2">
-            <button onclick="openProfileModal()" class="flex items-center gap-2 p-1.5 md:px-3 md:py-1.5 rounded-xl border border-slate-200 hover:border-ilumnoTeal hover:bg-slate-50 transition group">
-                <div class="w-8 h-8 rounded-lg bg-ilumnoDark text-white font-bold flex items-center justify-center text-xs shadow-xs group-hover:scale-105 transition" id="profile-avatar">EX</div>
-                <div class="text-left hidden md:block">
-                    <span id="user-display-name" class="text-xs font-bold text-slate-800 block leading-tight">Experto Ilumno</span>
-                    <span class="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse"></span> Ecosistema Activo
-                    </span>
+            <div class="flex items-center gap-2 p-1.5 md:px-3 md:py-1.5 rounded-xl border border-slate-200 bg-slate-50">
+                <div class="w-8 h-8 rounded-lg bg-ilumnoDark text-white font-bold flex items-center justify-center text-xs" id="profile-avatar">EX</div>
+                <div class="text-left hidden sm:block">
+                    <span id="user-display-name" class="text-xs font-bold text-slate-800 block leading-tight">Experto</span>
+                    <span id="user-display-uni" class="text-[10px] text-ilumnoTeal font-semibold block truncate w-32">Universidad</span>
                 </div>
-                <i class="fas fa-chevron-down text-[10px] text-slate-400 ml-1"></i>
-            </button>
+            </div>
         </div>
     </header>
 
     <!-- ========================================== -->
-    <!-- CONTENIDO PRINCIPAL: WORKSPACE + SIDEBAR -->
+    <!-- 2. CONTENIDO PRINCIPAL: WORKSPACE + SIDEBAR -->
     <!-- ========================================== -->
     <div class="flex flex-1 overflow-hidden relative">
 
@@ -152,211 +138,218 @@
         <!-- ========================================== -->
         <main id="main-viewport" class="flex-1 overflow-y-auto p-4 md:p-8 transition-all duration-300">
             
-            <!-- VISTA ACTIVA: HOME / DASHBOARD (POR DEFECTO) -->
-            <div id="view-home" class="max-w-6xl mx-auto space-y-8 pb-12">
-                
-                <div class="bg-gradient-to-r from-slate-900 to-[#00264D] rounded-3xl p-8 md:p-10 text-white shadow-xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
-                    <div class="relative z-10 space-y-3 md:w-2/3">
-                        <span class="px-3 py-1 bg-white/10 rounded-full text-xs font-bold text-ilumnoYellow uppercase tracking-wider inline-block">Portal Institucional</span>
-                        <h1 class="text-3xl md:text-4xl font-black leading-tight drop-shadow-sm">
-                            Hub Central de<br><span class="text-ilumnoTeal">Entrenamiento Operativo</span>
-                        </h1>
-                        <p class="text-sm text-slate-300 leading-relaxed max-w-xl">
-                            Selecciona una lección del panel lateral para iniciar tu proceso de inducción institucional, o ingresa a los módulos propedéuticos de tu campaña para especializarte.
-                        </p>
-                    </div>
-                    <div class="relative z-10 md:w-1/3 flex justify-center">
-                        <div class="w-32 h-32 bg-white/5 rounded-full border border-white/10 flex items-center justify-center backdrop-blur-sm shadow-2xl">
-                            <i class="fas fa-network-wired text-6xl text-ilumnoTeal opacity-80"></i>
-                        </div>
-                    </div>
-                    <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-ilumnoTeal/20 rounded-full blur-3xl pointer-events-none"></div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div onclick="navigateToLesson('0.1')" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-ilumnoTeal hover:shadow-md transition cursor-pointer group flex flex-col justify-between">
-                        <div>
-                            <div class="w-10 h-10 rounded-xl bg-cyan-50 text-ilumnoTeal flex items-center justify-center text-lg mb-3"><i class="fas fa-flag"></i></div>
-                            <h4 class="font-black text-slate-800 text-sm">Módulo 0: Inducción</h4>
-                            <p class="text-xs text-slate-500 mt-1">Cultura Institucional ESSENCE.</p>
-                        </div>
-                    </div>
-                    <div onclick="window.location.href='1.2_dashboard_fase1.html'" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-ilumnoDark hover:shadow-md transition cursor-pointer group flex flex-col justify-between">
-                        <div>
-                            <div class="w-10 h-10 rounded-xl bg-blue-50 text-ilumnoDark flex items-center justify-center text-lg mb-3"><i class="fas fa-briefcase"></i></div>
-                            <h4 class="font-black text-slate-800 text-sm">Fase 1: Comercial</h4>
-                            <p class="text-xs text-slate-500 mt-1">Habilidades y Venta Consultiva.</p>
-                        </div>
-                    </div>
-                    <div onclick="window.location.href='2.2_dashboard_fase2.html'" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-ilumnoYellow hover:shadow-md transition cursor-pointer group flex flex-col justify-between">
-                        <div>
-                            <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg mb-3"><i class="fas fa-cogs"></i></div>
-                            <h4 class="font-black text-slate-800 text-sm">Fase 2: Procesos</h4>
-                            <p class="text-xs text-slate-500 mt-1">Reglamento, Trámites y Producto.</p>
-                        </div>
-                    </div>
-                    <div onclick="window.location.href='3.2_dashboard_fase3.html'" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-ilumnoPink hover:shadow-md transition cursor-pointer group flex flex-col justify-between">
-                        <div>
-                            <div class="w-10 h-10 rounded-xl bg-pink-50 text-ilumnoPink flex items-center justify-center text-lg mb-3"><i class="fas fa-laptop-code"></i></div>
-                            <h4 class="font-black text-slate-800 text-sm">Fase 3: Herramientas</h4>
-                            <p class="text-xs text-slate-500 mt-1">Salesforce, Genesys y Scripts.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- CONTENEDOR DINÁMICO DE LECCIONES (INCRUSTADO EN VIVO) -->
-            <div id="lesson-content-wrapper" class="hidden max-w-5xl mx-auto pb-16">
+            <!-- CONTENEDOR DINÁMICO DE LECCIONES Y DASHBOARDS -->
+            <div id="lesson-content-wrapper" class="max-w-5xl mx-auto pb-16">
                 <!-- Se inyecta con JS dinámicamente -->
             </div>
+
         </main>
 
         <!-- ========================================== -->
-        <!-- PANEL LATERAL (SIDEBAR ATOM COMMUNITY) -->
+        <!-- PANEL LATERAL (SIDEBAR ATOM) -->
         <!-- ========================================== -->
-        <aside id="course-sidebar" class="w-80 md:w-96 bg-white border-l border-slate-200 flex flex-col flex-shrink-0 z-20 shadow-lg md:shadow-none transition-all duration-300">
+        <aside id="course-sidebar" class="w-80 md:w-96 bg-white border-l border-slate-200 flex flex-col flex-shrink-0 z-20 transition-all duration-300">
             
+            <!-- PESTAÑAS -->
             <div class="flex border-b border-slate-200 bg-slate-50">
-                <button onclick="switchSidebarTab('content')" id="tab-btn-content" class="flex-1 py-3.5 text-[11px] font-bold text-ilumnoTeal border-b-2 border-ilumnoTeal transition flex items-center justify-center gap-1.5"><i class="fas fa-list-ul"></i> Contenido</button>
-                <button onclick="switchSidebarTab('questions')" id="tab-btn-questions" class="flex-1 py-3.5 text-[11px] font-bold text-slate-500 hover:text-slate-800 border-b-2 border-transparent transition flex items-center justify-center gap-1.5"><i class="fas fa-comment-dots"></i> Preguntas</button>
-                <button onclick="switchSidebarTab('notes')" id="tab-btn-notes" class="flex-1 py-3.5 text-[11px] font-bold text-slate-500 hover:text-slate-800 border-b-2 border-transparent transition flex items-center justify-center gap-1.5"><i class="fas fa-sticky-note"></i> Mis Notas</button>
+                <button onclick="switchSidebarTab('content')" id="tab-btn-content" class="flex-1 py-3.5 text-xs font-bold text-ilumnoTeal border-b-2 border-ilumnoTeal transition"><i class="fas fa-list-ul"></i> Contenido</button>
+                <button onclick="switchSidebarTab('questions')" id="tab-btn-questions" class="flex-1 py-3.5 text-xs font-bold text-slate-500 hover:text-slate-800 border-b-2 border-transparent transition"><i class="fas fa-comment-dots"></i> Preguntas</button>
             </div>
 
-            <!-- TAB 1: CONTENIDO DEL CURSO -->
+            <!-- TAB 1: CONTENIDO DEL CURSO (ACORDEÓN INTERNO) -->
             <div id="tab-pane-content" class="flex-1 overflow-y-auto p-4 space-y-3">
                 
-                <!-- MÓDULO 0: INDUCCIÓN & CULTURA (Dentro del Index) -->
-                <div class="border border-slate-200 rounded-xl overflow-hidden shadow-2xs">
-                    <div class="bg-slate-50 p-3.5 flex items-center justify-between cursor-pointer border-b border-slate-200" onclick="toggleAccordion('module-0-items')">
-                        <div class="flex items-center gap-2">
-                            <i class="fas fa-flag text-ilumnoTeal text-sm"></i>
-                            <div>
-                                <h4 class="text-xs font-black text-slate-800">Módulo 0: Inducción</h4>
-                                <span class="text-[10px] text-slate-500 font-semibold">Cultura Institucional</span>
-                            </div>
-                        </div>
-                        <i id="accordion-arrow-module-0-items" class="fas fa-chevron-up text-xs text-slate-400"></i>
+                <!-- MÓDULO 0 -->
+                <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+                    <div class="bg-slate-100 p-3.5 flex items-center justify-between cursor-pointer" onclick="toggleAccordion('module-0')">
+                        <div class="flex items-center gap-2"><i class="fas fa-flag text-ilumnoTeal text-sm"></i><div><h4 class="text-xs font-black text-slate-800">Módulo 0: Inducción</h4></div></div><i id="arrow-module-0" class="fas fa-chevron-up text-xs text-slate-400"></i>
                     </div>
-                    <div id="module-0-items" class="divide-y divide-slate-100 bg-white">
-                        <div onclick="navigateToLesson('0.1')" id="nav-item-0-1" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition"><div class="mt-0.5 text-slate-400 status-icon" id="status-icon-0-1"><i class="far fa-circle"></i></div><div class="flex-1"><span class="font-bold text-slate-700 block">0.1 Bienvenida General</span></div></div>
-                        <div onclick="navigateToLesson('0.2')" id="nav-item-0-2" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition"><div class="mt-0.5 text-slate-400 status-icon" id="status-icon-0-2"><i class="far fa-circle"></i></div><div class="flex-1"><span class="font-bold text-slate-700 block">0.2 Normas de Formación</span></div></div>
-                        <div onclick="navigateToLesson('0.3')" id="nav-item-0-3" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition"><div class="mt-0.5 text-slate-400 status-icon" id="status-icon-0-3"><i class="far fa-circle"></i></div><div class="flex-1"><span class="font-bold text-slate-700 block">0.3 Modelo Formativo (Slides)</span></div></div>
-                        <div onclick="navigateToLesson('0.4')" id="nav-item-0-4" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition"><div class="mt-0.5 text-slate-400 status-icon" id="status-icon-0-4"><i class="far fa-circle"></i></div><div class="flex-1"><span class="font-bold text-slate-700 block">0.4 ESSENCE (Slides)</span></div></div>
-                        <div onclick="navigateToLesson('0.5')" id="nav-item-0-5" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer transition"><div class="mt-0.5 text-slate-400 status-icon" id="status-icon-0-5"><i class="far fa-circle"></i></div><div class="flex-1"><span class="font-bold text-slate-700 block">0.5 Test Oficial ESSENCE</span></div></div>
+                    <div id="module-0" class="divide-y divide-slate-100 bg-white">
+                        <div onclick="navigateToLesson('0.1')" id="nav-item-0-1" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer"><i class="fas fa-play-circle text-slate-300 mt-0.5"></i><span class="font-bold text-slate-700">0.1 Bienvenida General</span></div>
+                        <div onclick="navigateToLesson('0.2')" id="nav-item-0-2" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer"><i class="fas fa-play-circle text-slate-300 mt-0.5"></i><span class="font-bold text-slate-700">0.2 Normas de Formación</span></div>
                     </div>
                 </div>
 
-                <!-- MÓDULO 1: COMERCIAL (Enlaces Externos Github) -->
-                <div class="border border-slate-200 rounded-xl overflow-hidden shadow-2xs">
-                    <div class="bg-slate-50 p-3.5 flex items-center justify-between cursor-pointer border-b border-slate-200" onclick="toggleAccordion('module-1-items')">
-                        <div class="flex items-center gap-2">
-                            <i class="fas fa-briefcase text-ilumnoDark text-sm"></i>
-                            <div><h4 class="text-xs font-black text-slate-800">Fase 1: Comercial</h4><span class="text-[10px] text-slate-500 font-semibold">Venta Consultiva</span></div>
-                        </div>
-                        <i id="accordion-arrow-module-1-items" class="fas fa-chevron-down text-xs text-slate-400"></i>
+                <!-- MÓDULO 1 -->
+                <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+                    <div class="bg-slate-100 p-3.5 flex items-center justify-between cursor-pointer" onclick="toggleAccordion('module-1')">
+                        <div class="flex items-center gap-2"><i class="fas fa-briefcase text-blue-600 text-sm"></i><div><h4 class="text-xs font-black text-slate-800">Módulo 1: Comercial</h4></div></div><i id="arrow-module-1" class="fas fa-chevron-down text-xs text-slate-400"></i>
                     </div>
-                    <div id="module-1-items" class="hidden divide-y divide-slate-100 bg-white">
-                        <a href="1.1_objetivo_fase1.html" class="block p-3 text-xs flex items-center gap-3 hover:bg-slate-50 transition"><i class="fas fa-external-link-alt text-slate-300"></i><span class="font-bold text-slate-600">1.1 Objetivo Fase 1</span></a>
-                        <a href="1.2_dashboard_fase1.html" class="block p-3 text-xs flex items-center gap-3 hover:bg-slate-50 transition"><i class="fas fa-external-link-alt text-slate-300"></i><span class="font-bold text-slate-600">1.2 Dashboard Fase 1</span></a>
-                        <a href="1.3_tema1.html" class="block p-3 text-xs flex items-center gap-3 hover:bg-slate-50 transition"><i class="fas fa-external-link-alt text-slate-300"></i><span class="font-bold text-slate-600">1.3 Tema 1</span></a>
-                        <a href="1.4_tema2.html" class="block p-3 text-xs flex items-center gap-3 hover:bg-slate-50 transition"><i class="fas fa-external-link-alt text-slate-300"></i><span class="font-bold text-slate-600">1.4 Tema 2</span></a>
-                        <a href="1.5_evaluacioncomercial.html" class="block p-3 text-xs flex items-center gap-3 hover:bg-slate-50 transition"><i class="fas fa-external-link-alt text-slate-300"></i><span class="font-bold text-slate-600">1.5 Evaluación Comercial</span></a>
+                    <div id="module-1" class="hidden divide-y divide-slate-100 bg-white">
+                        <div onclick="navigateToLesson('1.1')" id="nav-item-1-1" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer"><i class="fas fa-bullseye text-slate-300 mt-0.5"></i><span class="font-bold text-slate-700">1.1 Objetivo Fase 1</span></div>
+                        <div onclick="navigateToLesson('1.2')" id="nav-item-1-2" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer"><i class="fas fa-chart-line text-slate-300 mt-0.5"></i><span class="font-bold text-slate-700">1.2 Dashboard Fase 1</span></div>
+                        <div onclick="navigateToLesson('1.3')" id="nav-item-1-3" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer"><i class="fas fa-book text-slate-300 mt-0.5"></i><span class="font-bold text-slate-700">1.3 Tema 1</span></div>
+                        <div onclick="navigateToLesson('1.4')" id="nav-item-1-4" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer"><i class="fas fa-book-open text-slate-300 mt-0.5"></i><span class="font-bold text-slate-700">1.4 Tema 2</span></div>
                     </div>
                 </div>
 
-                <!-- MÓDULO 2: PROCESOS (Enlaces Externos Github) -->
-                <div class="border border-slate-200 rounded-xl overflow-hidden shadow-2xs">
-                    <div class="bg-slate-50 p-3.5 flex items-center justify-between cursor-pointer border-b border-slate-200" onclick="toggleAccordion('module-2-items')">
-                        <div class="flex items-center gap-2">
-                            <i class="fas fa-cogs text-ilumnoYellow text-sm"></i>
-                            <div><h4 class="text-xs font-black text-slate-800">Fase 2: Procesos</h4><span class="text-[10px] text-slate-500 font-semibold">Producto e Institución</span></div>
-                        </div>
-                        <i id="accordion-arrow-module-2-items" class="fas fa-chevron-down text-xs text-slate-400"></i>
+                <!-- MÓDULO 2 -->
+                <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+                    <div class="bg-slate-100 p-3.5 flex items-center justify-between cursor-pointer" onclick="toggleAccordion('module-2')">
+                        <div class="flex items-center gap-2"><i class="fas fa-cogs text-amber-500 text-sm"></i><div><h4 class="text-xs font-black text-slate-800">Módulo 2: Procesos</h4></div></div><i id="arrow-module-2" class="fas fa-chevron-down text-xs text-slate-400"></i>
                     </div>
-                    <div id="module-2-items" class="hidden divide-y divide-slate-100 bg-white">
-                        <a href="2.1_objetivo_fase2.html" class="block p-3 text-xs flex items-center gap-3 hover:bg-slate-50 transition"><i class="fas fa-external-link-alt text-slate-300"></i><span class="font-bold text-slate-600">2.1 Objetivo Fase 2</span></a>
-                        <a href="2.2_dashboard_fase2.html" class="block p-3 text-xs flex items-center gap-3 hover:bg-slate-50 transition"><i class="fas fa-external-link-alt text-slate-300"></i><span class="font-bold text-slate-600">2.2 Dashboard Fase 2</span></a>
-                        <a href="2.3_modulo_financiero.html" class="block p-3 text-xs flex items-center gap-3 hover:bg-slate-50 transition"><i class="fas fa-external-link-alt text-slate-300"></i><span class="font-bold text-slate-600">2.3 Financiero</span></a>
-                        <a href="2.4_modulo_reintegro.html" class="block p-3 text-xs flex items-center gap-3 hover:bg-slate-50 transition"><i class="fas fa-external-link-alt text-slate-300"></i><span class="font-bold text-slate-600">2.4 Reintegros</span></a>
-                        <a href="2.5_modulo_inscripcion.html" class="block p-3 text-xs flex items-center gap-3 hover:bg-slate-50 transition"><i class="fas fa-external-link-alt text-slate-300"></i><span class="font-bold text-slate-600">2.5 Inscripción</span></a>
-                        <a href="2.6_modulo_campana.html" class="block p-3 text-xs flex items-center gap-3 hover:bg-slate-50 transition"><i class="fas fa-external-link-alt text-slate-300"></i><span class="font-bold text-slate-600">2.6 Campaña</span></a>
-                        <a href="2.7_modulo_aplazamientos.html" class="block p-3 text-xs flex items-center gap-3 hover:bg-slate-50 transition"><i class="fas fa-external-link-alt text-slate-300"></i><span class="font-bold text-slate-600">2.7 Aplazamientos</span></a>
-                        <a href="2.8_modulo_soporte.html" class="block p-3 text-xs flex items-center gap-3 hover:bg-slate-50 transition"><i class="fas fa-external-link-alt text-slate-300"></i><span class="font-bold text-slate-600">2.8 Soporte</span></a>
-                        <a href="2.9_modulo_grados.html" class="block p-3 text-xs flex items-center gap-3 hover:bg-slate-50 transition"><i class="fas fa-external-link-alt text-slate-300"></i><span class="font-bold text-slate-600">2.9 Grados</span></a>
+                    <div id="module-2" class="hidden divide-y divide-slate-100 bg-white">
+                        <div onclick="navigateToLesson('2.1')" id="nav-item-2-1" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer"><i class="fas fa-bullseye text-slate-300 mt-0.5"></i><span class="font-bold text-slate-700">2.1 Objetivo Fase 2</span></div>
+                        <div onclick="navigateToLesson('2.2')" id="nav-item-2-2" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer"><i class="fas fa-chart-pie text-slate-300 mt-0.5"></i><span class="font-bold text-slate-700">2.2 Dashboard Fase 2</span></div>
+                        <div onclick="navigateToLesson('2.3')" id="nav-item-2-3" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer"><i class="fas fa-money-bill-wave text-slate-300 mt-0.5"></i><span class="font-bold text-slate-700">2.3 Financiero</span></div>
+                        <div onclick="navigateToLesson('2.4')" id="nav-item-2-4" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer"><i class="fas fa-undo text-slate-300 mt-0.5"></i><span class="font-bold text-slate-700">2.4 Reintegros</span></div>
                     </div>
                 </div>
 
-                <!-- MÓDULO 3: HERRAMIENTAS (Enlaces Externos Github) -->
-                <div class="border border-slate-200 rounded-xl overflow-hidden shadow-2xs">
-                    <div class="bg-slate-50 p-3.5 flex items-center justify-between cursor-pointer border-b border-slate-200" onclick="toggleAccordion('module-3-items')">
-                        <div class="flex items-center gap-2">
-                            <i class="fas fa-laptop-code text-ilumnoPink text-sm"></i>
-                            <div><h4 class="text-xs font-black text-slate-800">Fase 3: Herramientas</h4><span class="text-[10px] text-slate-500 font-semibold">Aplicativos Operativos</span></div>
-                        </div>
-                        <i id="accordion-arrow-module-3-items" class="fas fa-chevron-down text-xs text-slate-400"></i>
+                <!-- MÓDULO 3 -->
+                <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+                    <div class="bg-slate-100 p-3.5 flex items-center justify-between cursor-pointer" onclick="toggleAccordion('module-3')">
+                        <div class="flex items-center gap-2"><i class="fas fa-laptop-code text-pink-500 text-sm"></i><div><h4 class="text-xs font-black text-slate-800">Módulo 3: Herramientas</h4></div></div><i id="arrow-module-3" class="fas fa-chevron-down text-xs text-slate-400"></i>
                     </div>
-                    <div id="module-3-items" class="hidden divide-y divide-slate-100 bg-white">
-                        <a href="3.1_objetivo_fase3.html" class="block p-3 text-xs flex items-center gap-3 hover:bg-slate-50 transition"><i class="fas fa-external-link-alt text-slate-300"></i><span class="font-bold text-slate-600">3.1 Objetivo Fase 3</span></a>
-                        <a href="3.2_dashboard_fase3.html" class="block p-3 text-xs flex items-center gap-3 hover:bg-slate-50 transition"><i class="fas fa-external-link-alt text-slate-300"></i><span class="font-bold text-slate-600">3.2 Dashboard Fase 3</span></a>
-                        <a href="3.3_modulo_crm_telefonia.html" class="block p-3 text-xs flex items-center gap-3 hover:bg-slate-50 transition"><i class="fas fa-external-link-alt text-slate-300"></i><span class="font-bold text-slate-600">3.3 CRM & Telefonía</span></a>
-                        <a href="3.4_modulo_analytics.html" class="block p-3 text-xs flex items-center gap-3 hover:bg-slate-50 transition"><i class="fas fa-external-link-alt text-slate-300"></i><span class="font-bold text-slate-600">3.4 Analytics</span></a>
+                    <div id="module-3" class="hidden divide-y divide-slate-100 bg-white">
+                        <div onclick="navigateToLesson('3.1')" id="nav-item-3-1" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer"><i class="fas fa-bullseye text-slate-300 mt-0.5"></i><span class="font-bold text-slate-700">3.1 Objetivo Fase 3</span></div>
+                        <div onclick="navigateToLesson('3.2')" id="nav-item-3-2" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer"><i class="fas fa-desktop text-slate-300 mt-0.5"></i><span class="font-bold text-slate-700">3.2 Dashboard Fase 3</span></div>
+                        <div onclick="navigateToLesson('3.3')" id="nav-item-3-3" class="p-3 text-xs flex items-start gap-3 hover:bg-slate-50 cursor-pointer"><i class="fas fa-headset text-slate-300 mt-0.5"></i><span class="font-bold text-slate-700">3.3 CRM & Telefonía</span></div>
                     </div>
                 </div>
 
-                <!-- MÓDULO FINAL: EVALUACIONES (Moradito Integrado) -->
-                <div onclick="navigateToLesson('eval_final')" id="nav-item-eval_final" class="border border-purple-200 bg-purple-50 hover:bg-purple-100 rounded-xl p-3.5 flex items-center justify-between cursor-pointer transition mt-2">
-                    <div class="flex items-center gap-2">
-                        <i class="fas fa-award text-purple-600 text-sm"></i>
-                        <div><h4 class="text-xs font-black text-purple-900">Módulo Evaluaciones</h4><span class="text-[10px] text-purple-700 font-semibold">Cierre y Certificación</span></div>
+                <!-- EVALUACIONES FINALES -->
+                <div class="border border-purple-200 bg-purple-50 rounded-xl overflow-hidden shadow-sm mt-4">
+                    <div class="p-3.5 flex items-center justify-between cursor-pointer" onclick="toggleAccordion('module-eval')">
+                        <div class="flex items-center gap-2"><i class="fas fa-award text-purple-600 text-sm"></i><div><h4 class="text-xs font-black text-purple-900">Módulo Evaluaciones</h4></div></div><i id="arrow-module-eval" class="fas fa-chevron-down text-xs text-purple-500"></i>
                     </div>
-                    <i class="fas fa-arrow-right text-xs text-purple-500"></i>
+                    <div id="module-eval" class="hidden divide-y divide-purple-100 bg-white">
+                        <div onclick="navigateToLesson('eval_quiz')" id="nav-item-eval_quiz" class="p-3 text-xs flex items-center justify-between hover:bg-purple-50 cursor-pointer transition">
+                            <span class="font-bold text-purple-700">Test de Conocimiento</span><i class="fas fa-brain text-purple-300"></i>
+                        </div>
+                        <div onclick="navigateToLesson('eval_survey')" id="nav-item-eval_survey" class="p-3 text-xs flex items-center justify-between hover:bg-purple-50 cursor-pointer transition">
+                            <span class="font-bold text-purple-700">Encuesta Satisfacción</span><i class="fas fa-heart text-purple-300"></i>
+                        </div>
+                    </div>
                 </div>
 
             </div>
 
-            <!-- TAB 2 y 3: PREGUNTAS Y NOTAS (Igual lógica, resumidos para límite de texto) -->
+            <!-- TAB 2: PREGUNTAS (Simplificado) -->
             <div id="tab-pane-questions" class="hidden flex-1 flex flex-col p-4 overflow-hidden">
                 <h3 class="text-xs font-bold text-slate-700 mb-2">Muro de Preguntas</h3>
-                <textarea id="question-input" rows="3" placeholder="¿Tienes alguna pregunta?" class="w-full text-xs p-3 rounded-xl border border-slate-300 outline-none mb-2"></textarea>
-                <button onclick="submitQuestion()" class="w-full py-2 bg-ilumnoTeal text-white text-xs font-bold rounded-lg mb-4">Publicar Pregunta</button>
-                <div class="flex-1 overflow-y-auto space-y-3" id="questions-list"></div>
-            </div>
-
-            <div id="tab-pane-notes" class="hidden flex-1 flex flex-col p-4 overflow-hidden">
-                <h3 class="text-xs font-bold text-slate-700 mb-2">Mi Cuaderno de Apuntes</h3>
-                <textarea id="lesson-notes-textarea" placeholder="Escribe tus notas clave..." class="flex-1 w-full text-xs p-3 rounded-xl border border-slate-300 outline-none mb-2 resize-none"></textarea>
-                <button onclick="saveCurrentNotes(true)" class="w-full py-2 bg-ilumnoYellow text-ilumnoDark text-xs font-bold rounded-lg">Guardar Notas</button>
+                <textarea rows="3" placeholder="¿Tienes alguna duda?" class="w-full text-xs p-3 rounded-xl border border-slate-300 outline-none mb-2"></textarea>
+                <button class="w-full py-2 bg-ilumnoTeal text-white text-xs font-bold rounded-lg mb-4">Publicar</button>
             </div>
             
             <div class="p-3 bg-slate-50 border-t border-slate-200 text-center">
-                <span class="text-[10px] text-slate-400 font-mono">v4.0 • ILUMNO LMS</span>
+                <span class="text-[10px] text-slate-400 font-mono">ILUMNO Ecosistema Interno</span>
             </div>
         </aside>
 
     </div>
 
-    <!-- MODAL SIMULADORES -->
-    <div id="modal-simulator" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-xl w-full p-6 shadow-2xl space-y-4">
-            <div class="flex justify-between items-center pb-3 border-b border-slate-100">
-                <h3 class="text-base font-black text-slate-800"><i class="fas fa-headset text-amber-500 mr-2"></i>Centro de Simuladores IA</h3>
-                <button onclick="closeSimulatorModal()" class="text-slate-400 hover:text-slate-600"><i class="fas fa-times text-base"></i></button>
-            </div>
-            <div class="bg-amber-50 p-4 rounded-xl border border-amber-200 text-xs text-amber-900">
-                Selecciona la práctica para entrenar la <strong>indagación de fondo</strong> antes de producción.
-            </div>
-            <div class="space-y-2">
-                <div class="p-3 rounded-xl border border-slate-200 hover:border-ilumnoTeal bg-slate-50 transition cursor-pointer flex justify-between items-center">
-                    <span class="font-bold text-xs text-slate-800">Práctica 1: Venta Consultiva LAER</span>
-                    <span class="px-2 py-1 bg-emerald-100 text-emerald-800 rounded text-[10px] font-black">Abrir</span>
-                </div>
-                <!-- Aquí agregarás los demás simuladores en el futuro -->
-            </div>
-        </div>
-    </div>
+    <!-- ========================================== -->
+    <!-- BASE DE DATOS Y LÓGICA JAVASCRIPT -->
+    <!-- ========================================== -->
+    <script>
+        // BASE DE DATOS INTERNA: Aquí guardamos todos los HTML que antes estaban por fuera
+        const LESSONS_DATA = {
+            
+            // ===================================
+            // HOME Y MÓDULO 0 (INDUCCIÓN)
+            // ===================================
+            'home': {
+                html: `
+                    <!-- Banner Integrado (Diseño Bienvenida) -->
+                    <div class="rounded-2xl shadow-xl overflow-hidden mb-8 border border-slate-200 bg-white fade-in">
+                        <div class="bg-ilumnoTeal p-8 md:p-12 relative flex flex-col md:flex-row items-center justify-between gap-8">
+                            <div class="relative z-10 text-white md:w-1/2">
+                                <h2 class="text-xl md:text-2xl font-bold mb-1 tracking-wide">Introducción</h2>
+                                <h1 class="text-3xl md:text-4xl lg:text-5xl font-black leading-tight uppercase drop-shadow-sm">
+                                    Curso de formación para<br><span class="text-white">Expertos de Ilumno</span>
+                                </h1>
+                            </div>
+                            <div class="relative z-10 text-white md:w-1/2 bg-white/10 p-6 rounded-xl border border-white/30 backdrop-blur-sm shadow-inner">
+                                <p class="text-sm leading-relaxed">
+                                    <strong>Te damos la bienvenida al curso de formación.</strong> Hemos diseñado este espacio con un conjunto de actividades que facilitarán el proceso de <strong>enseñanza-aprendizaje en línea</strong>, donde tendrás el acompañamiento de un tutor en cada uno de los temas.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-100">
+                            <div class="bg-ilumnoDark text-white p-8 text-center flex flex-col justify-center items-center">
+                                <h3 class="text-4xl font-black mb-1 flex items-baseline justify-center">1<span class="text-xl font-bold underline decoration-4 underline-offset-4 ml-1">o</span><span class="text-xl ml-2 mt-3">MÓDULO</span></h3>
+                                <h4 class="text-xl font-bold tracking-widest mt-2 mb-1">TÉCNICO</h4>
+                                <p class="text-xs uppercase tracking-widest text-gray-300 font-semibold">Habilidades Comerciales</p>
+                            </div>
+                            <div class="bg-ilumnoYellow text-white p-8 text-center flex flex-col justify-center items-center">
+                                <h3 class="text-4xl font-black mb-1 flex items-baseline justify-center drop-shadow-md">2<span class="text-xl font-bold underline decoration-4 underline-offset-4 ml-1">o</span><span class="text-xl ml-2 mt-3">MÓDULO</span></h3>
+                                <h4 class="text-xl font-bold tracking-widest mt-2 mb-1 drop-shadow-md">TECNÓLOGO</h4>
+                                <p class="text-xs uppercase tracking-widest text-yellow-100 font-bold">Gestión de Información</p>
+                            </div>
+                            <div class="bg-ilumnoPink text-white p-8 text-center flex flex-col justify-center items-center">
+                                <h3 class="text-4xl font-black mb-1 flex items-baseline justify-center">3<span class="text-xl font-bold underline decoration-4 underline-offset-4 ml-1">o</span><span class="text-xl ml-2 mt-3">MÓDULO</span></h3>
+                                <h4 class="text-xl font-bold tracking-widest mt-2 mb-1">PROFESIONAL</h4>
+                                <p class="text-xs uppercase tracking-widest text-pink-200 font-semibold">Aplicativos Nivel 1</p>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            '0.1': { 
+                html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">0.1 Bienvenida General</h2><p>Contenido de bienvenida. (Inicia la inducción).</p></div>`
+            },
+            '0.2': { 
+                html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">0.2 Normas de Formación</h2><p>Código de convivencia y reglas.</p></div>`
+            },
 
-    <div id="toast-container" class="fixed bottom-10 right-6 z-50 space-y-2 pointer-events-none"></div>
+            // ===================================
+            // MÓDULO 1: COMERCIAL
+            // ===================================
+            '1.1': {
+                html: `
+                    <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-md overflow-hidden border border-slate-200 flex flex-col md:flex-row fade-in">
+                        <div class="bg-ilumnoDark text-white p-8 md:w-1/3 flex flex-col justify-center items-center text-center relative">
+                            <i class="fas fa-bullseye absolute opacity-5 text-8xl"></i>
+                            <h2 class="text-5xl font-black mb-2 text-ilumnoYellow z-10">1º</h2>
+                            <h3 class="text-xl font-black tracking-widest z-10">FASE TÉCNICA</h3>
+                        </div>
+                        <div class="p-8 md:w-2/3 space-y-4">
+                            <h4 class="text-2xl font-black text-slate-800 border-b-4 border-ilumnoYellow pb-2 inline-block">Objetivo del Módulo</h4>
+                            <p class="text-slate-600 text-sm">Brindar herramientas prácticas para aplicar la Venta Consultiva enfocándose en entender al estudiante, proponer soluciones y generar retención académica.</p>
+                            <button onclick="navigateToLesson('1.2')" class="px-5 py-2.5 bg-ilumnoDark text-white font-bold text-xs rounded-xl hover:bg-blue-900 transition mt-4">Continuar al Dashboard</button>
+                        </div>
+                    </div>
+                `
+            },
+            '1.2': {
+                html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">Dashboard Fase 1</h2><p>Ruta de aprendizaje Comercial.</p></div>`
+            },
+            '1.3': {
+                html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">Tema 1: Venta Consultiva</h2><p>Modelo LAER y 4 Pasos.</p></div>`
+            },
+            '1.4': {
+                html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">Tema 2: Manejo de Objeciones</h2><p>Casos prácticos de rebati.</p></div>`
+            },
 
+            // ===================================
+            // MÓDULO 2: PROCESOS
+            // ===================================
+            '2.1': {
+                html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">2.1 Objetivo Fase 2</h2><p>Conocer a fondo los procesos de la Institución.</p></div>`
+            },
+            '2.2': {
+                html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">Dashboard Fase 2</h2><p>Mapa de procesos operativos.</p></div>`
+            },
+            '2.3': {
+                html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">2.3 Financiero</h2><p>Temas de pagos y devoluciones.</p></div>`
+            },
+            '2.4': {
+                html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">2.4 Reintegros</h2><p>Políticas de readmisión.</p></div>`
+            },
+
+            // ===================================
+            // MÓDULO 3: HERRAMIENTAS
+            // ===================================
+            '3.1': {
+                html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">3.1 Objetivo Fase 3</h2><p>Aprender el manejo de aplicativos.</p></div>`
+            },
+            '3.2': {
+                html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">Dashboard Fase 3</h2><p>Ruta de sistemas.</p></div>`
+            },
+            '3.3': {
+                html: `<div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 fade-in"><h2 class="text-2xl font-black text-slate-800 border-b pb-2 mb-4">3.3 CRM & Telefonía</h2><p>Salesforce y Genesys Cloud.</p></div>`
+            },
     <script>
         // ==========================================
         // BASE DE DATOS LOCAL DE LECCIONES DEL INDEX
