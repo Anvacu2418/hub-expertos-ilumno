@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel del Formador | ILUMNO Formación</title>
+    <link rel="icon" type="image/png" href="./images/logo.png">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        ilumnoTeal: '#00A0C6',
+                        ilumnoDark: '#00264D',
+                        ilumnoYellow: '#FFB81C',
+                        ilumnoPink: '#E91E63',
+                        ilumnoSlate: '#1E293B',
+                        poliNavy: '#002060',
+                        poliCyan: '#23B9D7'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- HEADER SUPERIOR -->
+    <header class="bg-[#002060] text-white shadow-md h-16 flex-shrink-0 px-4 md:px-8 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-white p-1 flex items-center justify-center shadow-xs">
+                <img src="./images/logo.png" alt="Logo Ilumno" class="w-full h-full object-contain">
+            </div>
+            <div>
+                <h1 class="font-black text-lg leading-tight tracking-wide">PANEL DE FORMACIÓN Y SEGUIMIENTO</h1>
+                <p class="text-[10px] text-cyan-200 tracking-widest uppercase font-semibold">Consola Operativa del Tutor • Ilumno</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-4">
+            <div class="hidden sm:block text-right">
+                <span class="text-xs font-bold block leading-tight">Angie Vanessa Cuéllar G.</span>
+                <span class="text-[10px] text-cyan-300">Formadora Poli / USAM</span>
+            </div>
+            <a href="./index.html" class="px-3.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition flex items-center gap-1.5 border border-white/20">
+                <i class="fas fa-desktop text-xs"></i> <span>Ver Campus</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- NAVEGACIÓN SECUNDARIA / PESTAÑAS -->
+    <div class="bg-white border-b border-slate-200 px-4 md:px-8 flex gap-2 md:gap-6 overflow-x-auto">
+        <button onclick="switchTab('calificaciones')" id="btn-tab-calificaciones" class="py-3.5 border-b-2 border-ilumnoTeal text-ilumnoDark font-black text-xs md:text-sm flex items-center gap-2 whitespace-nowrap">
+            <i class="fas fa-graduation-cap"></i> Cuadro de Notas & Ranking
+        </button>
+        <button onclick="switchTab('asistencia')" id="btn-tab-asistencia" class="py-3.5 border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-bold text-xs md:text-sm flex items-center gap-2 whitespace-nowrap transition">
+            <i class="fas fa-calendar-check"></i> Registro de Asistencia Diaria
+        </button>
+        <button onclick="switchTab('preguntas')" id="btn-tab-preguntas" class="py-3.5 border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-bold text-xs md:text-sm flex items-center gap-2 whitespace-nowrap transition">
+            <i class="fas fa-comments"></i> Preguntas del Campus <span id="badge-preguntas" class="bg-rose-500 text-white text-[10px] px-1.5 py-0.2 rounded-full font-bold">0</span>
+        </button>
+        <button onclick="switchTab('correo')" id="btn-tab-correo" class="py-3.5 border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-bold text-xs md:text-sm flex items-center gap-2 whitespace-nowrap transition">
+            <i class="fas fa-envelope-open-text"></i> Generador de Correo Diario
+        </button>
+    </div>
+
+    <!-- ÁREA PRINCIPAL -->
+    <main class="flex-1 p-4 md:p-8 max-w-7xl w-full mx-auto space-y-6">
+
+        <!-- ========================================================================= -->
+        <!-- PESTAÑA 1: CUADRO DE NOTAS & RANKING                                      -->
+        <!-- ========================================================================= -->
+        <section id="view-calificaciones" class="space-y-4">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <div>
+                    <h2 class="text-xl font-black text-slate-800">Calificaciones Ponderadas</h2>
+                    <p class="text-xs text-slate-500">Ponderaciones: 1er Corte (20%), 2do Corte (30%), 3er Corte (40%), Puntos Extra (10%). Meta $\ge$ 90.00.</p>
+                </div>
+                <button onclick="openNewExpertModal()" class="px-4 py-2.5 bg-[#002060] hover:bg-blue-950 text-white rounded-xl text-xs font-bold transition flex items-center gap-2 shadow-sm">
+                    <i class="fas fa-user-plus"></i> Agregar Aspirante
+                </button>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden overflow-x-auto">
+                <table class="w-full text-left border-collapse text-xs">
+                    <thead>
+                        <tr class="bg-[#002060] text-white font-bold uppercase tracking-wider text-[11px] text-center">
+                            <th class="p-3">Req</th>
+                            <th class="p-3 text-left">Cédula</th>
+                            <th class="p-3 text-left">Apellidos & Nombres</th>
+                            <th class="p-3">Universidad</th>
+                            <th class="p-3">Split</th>
+                            <th class="p-3 bg-blue-950">1er Corte (20%)</th>
+                            <th class="p-3 bg-blue-950">2do Corte (30%)</th>
+                            <th class="p-3 bg-blue-950">3er Corte (40%)</th>
+                            <th class="p-3 bg-blue-950">Extra (10%)</th>
+                            <th class="p-3 bg-[#23B9D7] text-[#002060]">Total</th>
+                            <th class="p-3 bg-emerald-200 text-[#002060]">Ranking</th>
+                            <th class="p-3">Estado</th>
+                            <th class="p-3">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-calificaciones" class="divide-y divide-slate-100 text-center font-medium">
+                        <!-- Llenado dinámico -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- PESTAÑA 2: ASISTENCIA Y CONTROL DE DESERCIÓN                              -->
+        <!-- ========================================================================= -->
+        <section id="view-asistencia" class="hidden space-y-4">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <div>
+                    <h2 class="text-xl font-black text-slate-800">Seguimiento a la Incorporación</h2>
+                    <p class="text-xs text-slate-500">Regla estricta: 1 Falta ('F') o 3 Retardos ('R') generan causal automática de Baja.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <label class="text-xs font-bold text-slate-600">Día del Reporte:</label>
+                    <select id="select-dia-asistencia" onchange="renderAsistenciaTable()" class="px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-bold bg-white outline-none">
+                        <option value="1">Día 1</option>
+                        <option value="2">Día 2</option>
+                        <option value="3">Día 3</option>
+                        <option value="4">Día 4</option>
+                        <option value="5">Día 5</option>
+                        <option value="6">Día 6</option>
+                        <option value="7">Día 7</option>
+                        <option value="8" selected>Día 8 (Cierre)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Resumen Adherencia -->
+            <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+                    <span class="text-[10px] font-black uppercase text-slate-400">Total Convocados</span>
+                    <h3 id="stat-convocados" class="text-2xl font-black text-[#002060]">0</h3>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+                    <span class="text-[10px] font-black uppercase text-emerald-500">Asisten Hoy</span>
+                    <h3 id="stat-asisten" class="text-2xl font-black text-emerald-600">0</h3>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+                    <span class="text-[10px] font-black uppercase text-rose-500">Faltas / Bajas</span>
+                    <h3 id="stat-faltas" class="text-2xl font-black text-rose-600">0</h3>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+                    <span class="text-[10px] font-black uppercase text-cyan-600">Adherencia Formación</span>
+                    <h3 id="stat-adherencia" class="text-2xl font-black text-cyan-600">0%</h3>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden overflow-x-auto">
+                <table class="w-full text-left border-collapse text-xs">
+                    <thead>
+                        <tr class="bg-[#002060] text-white font-bold uppercase tracking-wider text-[11px] text-center">
+                            <th class="p-3">Cédula</th>
+                            <th class="p-3 text-left">Experto</th>
+                            <th class="p-3">Universidad</th>
+                            <th class="p-3">Split</th>
+                            <th class="p-3">Día 1</th>
+                            <th class="p-3">Día 2</th>
+                            <th class="p-3">Día 3</th>
+                            <th class="p-3">Día 4</th>
+                            <th class="p-3">Día 5</th>
+                            <th class="p-3">Día 6</th>
+                            <th class="p-3">Día 7</th>
+                            <th class="p-3">Día 8</th>
+                            <th class="p-3 text-left">Novedad / Motivo</th>
+                            <th class="p-3">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-asistencia" class="divide-y divide-slate-100 text-center font-medium">
+                        <!-- Llenado dinámico -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- PESTAÑA 3: PREGUNTAS DEL CAMPUS                                           -->
+        <!-- ========================================================================= -->
+        <section id="view-preguntas" class="hidden space-y-4">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h2 class="text-xl font-black text-slate-800">Dudas y Consultas de Expertos</h2>
+                    <p class="text-xs text-slate-500">Responde aquí a las inquietudes publicadas desde el sidebar de la plataforma del estudiante.</p>
+                </div>
+                <button onclick="loadFirebaseQuestions()" class="text-xs font-bold text-ilumnoTeal hover:underline">
+                    <i class="fas fa-sync-alt"></i> Actualizar
+                </button>
+            </div>
+
+            <div id="container-preguntas-lista" class="space-y-3">
+                <!-- Tarjetas dinámicas de preguntas -->
+            </div>
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- PESTAÑA 4: GENERADOR AUTOMATIZADO DE CORREO DIARIO                        -->
+        <!-- ========================================================================= -->
+        <section id="view-correo" class="hidden space-y-4">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                <div>
+                    <h2 class="text-xl font-black text-slate-800">Generador de Informe Diario de Formación</h2>
+                    <p class="text-xs text-slate-500">Arma automáticamente la plantilla HTML oficial con las tablas de notas, asistencias y temarios.</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <select id="correo-dia-select" onchange="generateMailHTML()" class="px-3 py-2 border border-slate-300 rounded-xl text-xs font-bold bg-white">
+                        <option value="5">Día 5 de Formación</option>
+                        <option value="6">Día 6 de Formación</option>
+                        <option value="7">Día 7 de Formación</option>
+                        <option value="8" selected>Día 8 (Cierre y Contratación)</option>
+                    </select>
+                    <button onclick="copyMailToClipboard()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
+                        <i class="fas fa-copy"></i> <span>Copiar para Outlook</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Vista previa del correo formateado exactamente como Outlook -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-3">Vista Previa del Correo:</span>
+                <div id="mail-preview-container" class="border border-slate-200 p-6 rounded-xl overflow-x-auto bg-white font-sans text-sm">
+                    <!-- Inyección del HTML del correo -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL: AGREGAR O EDITAR NOTAS DE ASPIRANTE -->
+    <div id="modal-expert" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 space-y-4">
+            <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+                <h3 id="modal-expert-title" class="font-black text-base text-[#002060]">Diligenciar Registro de Experto</h3>
+                <button onclick="closeExpertModal()" class="text-slate-400 hover:text-slate-600"><i class="fas fa-times"></i></button>
+            </div>
+
+            <form onsubmit="handleSaveExpert(event)" class="space-y-3 text-xs">
+                <input type="hidden" id="exp-id">
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="font-bold text-slate-700 block mb-1">Cédula</label>
+                        <input required id="exp-cedula" type="text" class="w-full p-2.5 rounded-lg border border-slate-300 font-semibold">
+                    </div>
+                    <div>
+                        <label class="font-bold text-slate-700 block mb-1">No. Requerimiento</label>
+                        <input id="exp-req" type="text" value="532" class="w-full p-2.5 rounded-lg border border-slate-300 font-semibold">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="font-bold text-slate-700 block mb-1">Nombres</label>
+                        <input required id="exp-nombres" type="text" class="w-full p-2.5 rounded-lg border border-slate-300 font-semibold">
+                    </div>
+                    <div>
+                        <label class="font-bold text-slate-700 block mb-1">Apellidos</label>
+                        <input required id="exp-apellidos" type="text" class="w-full p-2.5 rounded-lg border border-slate-300 font-semibold">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="font-bold text-slate-700 block mb-1">Universidad</label>
+                        <select id="exp-uni" class="w-full p-2.5 rounded-lg border border-slate-300 bg-white font-semibold">
+                            <option value="Politécnico Grancolombiano">Politécnico Grancolombiano</option>
+                            <option value="Universidad San Marcos">Universidad San Marcos</option>
+                            <option value="Universidad del Área Andina">Universidad del Área Andina</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="font-bold text-slate-700 block mb-1">Split</label>
+                        <select id="exp-split" class="w-full p-2.5 rounded-lg border border-slate-300 bg-white font-semibold">
+                            <option value="Rematrícula y Servicio">Rematrícula y Servicio</option>
+                            <option value="Admisiones">Admisiones</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- NOTAS Y CORTES -->
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2">
+                    <span class="font-black text-[#002060] uppercase text-[10px] block">Notas de Corte:</span>
+                    <div class="grid grid-cols-4 gap-2">
+                        <div>
+                            <label class="text-[10px] text-slate-500 font-bold block">1er Corte (20%)</label>
+                            <input id="exp-corte1" type="number" step="0.1" min="0" max="100" placeholder="100.0" class="w-full p-2 rounded border border-slate-300 text-center font-bold">
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-slate-500 font-bold block">2do Corte (30%)</label>
+                            <input id="exp-corte2" type="number" step="0.1" min="0" max="100" placeholder="100.0" class="w-full p-2 rounded border border-slate-300 text-center font-bold">
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-slate-500 font-bold block">3er Corte (40%)</label>
+                            <input id="exp-corte3" type="number" step="0.1" min="0" max="100" placeholder="90.0" class="w-full p-2 rounded border border-slate-300 text-center font-bold">
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-slate-500 font-bold block">Extra (10%)</label>
+                            <input id="exp-extra" type="number" step="0.1" min="0" max="100" value="100.0" class="w-full p-2 rounded border border-slate-300 text-center font-bold">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="font-bold text-slate-700 block mb-1">Supervisor(a)</label>
+                        <input id="exp-supervisor" type="text" value="Lizeth Calderon" class="w-full p-2.5 rounded-lg border border-slate-300 font-semibold">
+                    </div>
+                    <div>
+                        <label class="font-bold text-slate-700 block mb-1">Estado</label>
+                        <select id="exp-estado" class="w-full p-2.5 rounded-lg border border-slate-300 bg-white font-semibold">
+                            <option value="Activo">Activo</option>
+                            <option value="Baja">Baja</option>
+                            <option value="Contratado">Contratado</option>
+                            <option value="Back Up">Back Up</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="pt-2 flex justify-end gap-2">
+                    <button type="button" onclick="closeExpertModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-xl font-bold">Cancelar</button>
+                    <button type="submit" class="px-5 py-2 bg-[#002060] hover:bg-blue-950 text-white rounded-xl font-bold">Guardar Registro</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- SCRIPTS & LÓGICA COMPLETA -->
+    <script>
+        // TEMARIOS PRECONFIGURADOS EXTRAÍDOS DE LOS CORREOS
+        const SYLLABUS_TEMARIOS = {
+            '5': [
+                "Saludo y confirmación de asistencia.",
+                "Repaso de lo aprendido el día anterior.",
+                "SmartCampus: pre-inscripción Saber Pro en el exterior (mínimo 73% de avance curricular).",
+                "Guía de idiomas desde Soporte Servicio y validación en Analytics según programa.",
+                "Licencia English Discoveries: costos, orden de pago, tiempos de activación e instructivo.",
+                "Servicios ORRI: cursos de inglés en el exterior, doble titulación y convenios.",
+                "Reconocimiento de créditos en plan de estudios (No Cursos) y consulta de MOOCS de emprendimiento e investigación.",
+                "Cursos Cisco para créditos de informática (aprobación mínima 60%) y talleres de biblioteca.",
+                "Créditos optativos de Bienestar y workshops de permanencia.",
+                "Políticas de atención a terceros (reserva de datos financieros y académicos).",
+                "Campañas para adelantar materias: Vacacionales y Módulo Adicional.",
+                "Campañas de Nivelatorios y Supletorios, validación en Canvas y tips consultivos."
+            ],
+            '6': [
+                "Saludo y confirmación de asistencia.",
+                "Interfaz de Genesys: estados, conexión a cola, área de trabajo y gestión de monitoreos de calidad.",
+                "Escuchas de llamada reales: ingreso, transferencia a encuesta, código de conclusión y tiempo tras llamada (ACW: 75 seg).",
+                "Estudio de la Matriz de Tipificación con apoyo del Soporte Servicio.",
+                "Ingreso a HubSpot en Sandbox Poli con usuarios de prueba.",
+                "Charla de Matriz de Calidad y políticas de reincidentes por el área de Calidad (2 hrs).",
+                "Creación y cierre de tickets en primer contacto y derivación, adjuntando soportes.",
+                "Tips de preparación y confianza para el Role Play final."
+            ],
+            '7': [
+                "Saludo y confirmación de asistencia.",
+                "Ejercicios prácticos de creación de tickets de reintegro en Sandbox Poli.",
+                "Rutas de consulta de procesos en Soporte Servicio y matriz de tipificación.",
+                "Actividad intensiva de 30 min: 5 tickets en HubSpot (2 de derivación y 3 de primer contacto).",
+                "Revisión y feedback personalizado caso a caso.",
+                "Interpretación de historial y perfil de estudiante en Analytics institucional.",
+                "2 horas de Canguro en operación real con expertos asignados."
+            ],
+            '8': [
+                "Saludo y confirmación de asistencia.",
+                "Presentación de la Evaluación Comercial (Fase 1).",
+                "Presentación de la Evaluación de Producto y Procesos (Fase 2).",
+                "Presentación de la Evaluación Final de Herramientas y Role Play (Fase 3).",
+                "Diligenciamiento de la Encuesta Oficial de Satisfacción de la Formación.",
+                "Consolidación de notas y selección de personal para contratación y Back Ups."
+            ]
+        };
+
+        // BASE DE DATOS INICIAL CON LOS ASPIRANTES DEL CORREO
+        let expertosList = [
+            {
+                id: '1030664570',
+                req: '532',
+                cedula: '1030664570',
+                nombres: 'Diris Gisella',
+                apellidos: 'Cortes',
+                university: 'Politécnico Grancolombiano',
+                split: 'Rematrícula y Servicio',
+                supervisor: 'Lizeth Calderon',
+                corte1: 100.0,
+                corte2: 100.0,
+                corte3: 87.2,
+                extra: 100.0,
+                estado: 'Contratado',
+                novedad: '',
+                asistencia: { 1: 'A', 2: 'A', 3: 'A', 4: 'A', 5: 'A', 6: 'A', 7: 'A', 8: 'A' }
+            },
+            {
+                id: '1000363954',
+                req: '532',
+                cedula: '1000363954',
+                nombres: 'Angie Dayan',
+                apellidos: 'Sogamoso Cardozo',
+                university: 'Politécnico Grancolombiano',
+                split: 'Rematrícula y Servicio',
+                supervisor: 'Lizeth Calderon',
+                corte1: 95.8,
+                corte2: 99.2,
+                corte3: 88.0,
+                extra: 100.0,
+                estado: 'Back Up',
+                novedad: 'Urgencias con su niño (Día 6)',
+                asistencia: { 1: 'A', 2: 'A', 3: 'A', 4: 'A', 5: 'A', 6: 'F', 7: 'A', 8: 'A' }
+            },
+            {
+                id: '1023958265',
+                req: '532',
+                cedula: '1023958265',
+                nombres: 'Angie Carolina',
+                apellidos: 'Ricaurte Avila',
+                university: 'Politécnico Grancolombiano',
+                split: 'Rematrícula y Servicio',
+                supervisor: 'Lizeth Calderon',
+                corte1: 76.0,
+                corte2: 98.0,
+                corte3: 91.6,
+                extra: 100.0,
+                estado: 'Back Up',
+                novedad: '',
+                asistencia: { 1: 'A', 2: 'A', 3: 'A', 4: 'A', 5: 'A', 6: 'A', 7: 'A', 8: 'A' }
+            },
+            {
+                id: '1001300950',
+                req: '532',
+                cedula: '1001300950',
+                nombres: 'Cinthia Valeria',
+                apellidos: 'Rojas Martinez',
+                university: 'Politécnico Grancolombiano',
+                split: 'Rematrícula y Servicio',
+                supervisor: 'Lizeth Calderon',
+                corte1: 0,
+                corte2: 0,
+                corte3: 0,
+                extra: 0,
+                estado: 'Baja',
+                novedad: 'Se retira de la formación',
+                asistencia: { 1: 'A', 2: 'F', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '' }
+            },
+            {
+                id: '1012326299',
+                req: '532',
+                cedula: '1012326299',
+                nombres: 'Jary',
+                apellidos: 'Cardenas Rojas',
+                university: 'Politécnico Grancolombiano',
+                split: 'Rematrícula y Servicio',
+                supervisor: 'Lizeth Calderon',
+                corte1: 0,
+                corte2: 0,
+                corte3: 0,
+                extra: 0,
+                estado: 'Baja',
+                novedad: 'Se retira de la formación',
+                asistencia: { 1: 'A', 2: 'F', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '' }
+            }
+        ];
+
+        let campusQuestionsList = [];
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadLocalFormadorData();
+            renderCalificacionesTable();
+            renderAsistenciaTable();
+            generateMailHTML();
+        });
+
+        function loadLocalFormadorData() {
+            const saved = localStorage.getItem('ilumno_formador_expertos');
+            if (saved) {
+                try { expertosList = JSON.parse(saved); } catch(e){}
+            }
+        }
+
+        function saveLocalFormadorData() {
+            localStorage.setItem('ilumno_formador_expertos', JSON.stringify(expertosList));
+        }
+
+        // FÓRMULA DE PROMEDIO TOTAL PONDERADO
+        function computeTotal(exp) {
+            const c1 = parseFloat(exp.corte1) || 0;
+            const c2 = parseFloat(exp.corte2) || 0;
+            const c3 = parseFloat(exp.corte3) || 0;
+            const ex = parseFloat(exp.extra) || 0;
+            const total = (c1 * 0.20) + (c2 * 0.30) + (c3 * 0.40) + (ex * 0.10);
+            return total.toFixed(2);
+        }
+
+        // PESTAÑAS
+        function switchTab(tabKey) {
+            ['calificaciones', 'asistencia', 'preguntas', 'correo'].forEach(t => {
+                document.getElementById(`view-${t}`).classList.add('hidden');
+                document.getElementById(`btn-tab-${t}`).className = 'py-3.5 border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-bold text-xs md:text-sm flex items-center gap-2 whitespace-nowrap transition';
+            });
+
+            document.getElementById(`view-${tabKey}`).classList.remove('hidden');
+            document.getElementById(`btn-tab-${tabKey}`).className = 'py-3.5 border-b-2 border-ilumnoTeal text-ilumnoDark font-black text-xs md:text-sm flex items-center gap-2 whitespace-nowrap';
+
+            if (tabKey === 'correo') generateMailHTML();
+        }
+
+        // RENDER DE CALIFICACIONES
+        function renderCalificacionesTable() {
+            const tbody = document.getElementById('tbody-calificaciones');
+            tbody.innerHTML = '';
+
+            // Ordenamos por nota para generar Ranking automático
+            const sorted = [...expertosList].sort((a, b) => computeTotal(b) - computeTotal(a));
+
+            sorted.forEach(exp => {
+                const total = computeTotal(exp);
+                const isTop = total >= 90.0;
+                const totalColor = isTop ? 'text-cyan-600 font-black' : 'text-slate-700 font-bold';
+                const rankBadge = isTop ? '<span class="bg-cyan-100 text-cyan-800 font-black px-2 py-0.5 rounded text-[10px]">TOP</span>' : '<span class="text-slate-400 font-semibold">-</span>';
+
+                let estadoClass = exp.estado === 'Baja' ? 'bg-rose-100 text-rose-700' : exp.estado === 'Contratado' ? 'bg-emerald-100 text-emerald-800 font-bold' : exp.estado === 'Back Up' ? 'bg-amber-100 text-amber-800 font-bold' : 'bg-blue-100 text-blue-800';
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+                        <td class="p-3 text-slate-500 font-mono">${exp.req || '532'}</td>
+                        <td class="p-3 text-left font-mono font-bold text-slate-700">${exp.cedula}</td>
+                        <td class="p-3 text-left font-bold text-slate-800">${exp.apellidos} ${exp.nombres}</td>
+                        <td class="p-3">${exp.university}</td>
+                        <td class="p-3">${exp.split}</td>
+                        <td class="p-3 font-mono ${exp.corte1 < 90 ? 'text-rose-600 font-bold' : ''}">${parseFloat(exp.corte1).toFixed(2)}</td>
+                        <td class="p-3 font-mono ${exp.corte2 < 90 ? 'text-rose-600 font-bold' : ''}">${parseFloat(exp.corte2).toFixed(2)}</td>
+                        <td class="p-3 font-mono ${exp.corte3 < 90 ? 'text-rose-600 font-bold' : ''}">${parseFloat(exp.corte3).toFixed(2)}</td>
+                        <td class="p-3 font-mono text-emerald-600 font-bold">${parseFloat(exp.extra).toFixed(2)}</td>
+                        <td class="p-3 font-mono text-sm ${totalColor}">${total}</td>
+                        <td class="p-3">${rankBadge}</td>
+                        <td class="p-3"><span class="px-2 py-0.5 rounded-full text-[10px] uppercase ${estadoClass}">${exp.estado}</span></td>
+                        <td class="p-3 flex justify-center gap-1.5">
+                            <button onclick="editExpert('${exp.cedula}')" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded" title="Editar"><i class="fas fa-pencil-alt"></i></button>
+                            <button onclick="deleteExpert('${exp.cedula}')" class="p-1.5 text-rose-500 hover:bg-rose-50 rounded" title="Eliminar"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // RENDER DE ASISTENCIA Y FÓRMULAS DE BAJA
+        function renderAsistenciaTable() {
+            const currentDay = parseInt(document.getElementById('select-dia-asistencia').value) || 8;
+            const tbody = document.getElementById('tbody-asistencia');
+            tbody.innerHTML = '';
+
+            let convocadosCount = 0;
+            let asistenCount = 0;
+            let faltasCount = 0;
+
+            expertosList.forEach(exp => {
+                const markToday = exp.asistencia[currentDay] || '';
+                
+                // Si está convocado ese día (no estaba retirado previamente)
+                if (markToday !== '') {
+                    convocadosCount++;
+                    if (markToday === 'A') asistenCount++;
+                    if (markToday === 'F') faltasCount++;
+                }
+
+                // Cálculo total de faltas y retardos para disparar baja automática
+                let totalFaltas = 0;
+                let totalRetardos = 0;
+                for (let d = 1; d <= 8; d++) {
+                    if (exp.asistencia[d] === 'F') totalFaltas++;
+                    if (exp.asistencia[d] === 'R') totalRetardos++;
+                }
+                if (totalFaltas >= 1 || totalRetardos >= 3) {
+                    if (exp.estado !== 'Baja') exp.estado = 'Baja';
+                }
+
+                let daysCells = '';
+                for (let d = 1; d <= 8; d++) {
+                    const val = exp.asistencia[d] || '';
+                    const color = val === 'A' ? 'bg-cyan-50 text-cyan-800 font-bold' : val === 'F' ? 'bg-rose-100 text-rose-700 font-black' : val === 'R' ? 'bg-amber-100 text-amber-800 font-bold' : 'bg-slate-50 text-slate-300';
+                    daysCells += `
+                        <td class="p-2 cursor-pointer hover:ring-2 hover:ring-ilumnoTeal transition ${color}" onclick="cycleAttendance('${exp.cedula}', ${d})">
+                            ${val || '-'}
+                        </td>
+                    `;
+                }
+
+                let estadoClass = exp.estado === 'Baja' ? 'bg-rose-500 text-white font-black' : 'bg-emerald-100 text-emerald-800 font-bold';
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+                        <td class="p-3 font-mono font-bold text-slate-700">${exp.cedula}</td>
+                        <td class="p-3 text-left font-bold text-slate-800">${exp.apellidos} ${exp.nombres}</td>
+                        <td class="p-3">${exp.university}</td>
+                        <td class="p-3">${exp.split}</td>
+                        ${daysCells}
+                        <td class="p-3 text-left">
+                            <input type="text" value="${exp.novedad || ''}" onchange="updateNovedad('${exp.cedula}', this.value)" placeholder="Registrar novedad..." class="w-full text-xs p-1 rounded border border-slate-200">
+                        </td>
+                        <td class="p-3"><span class="px-2 py-0.5 rounded-full text-[10px] uppercase ${estadoClass}">${exp.estado}</span></td>
+                    </tr>
+                `;
+            });
+
+            // Actualización de Métricas del Día
+            const adherencia = convocadosCount > 0 ? Math.round((asistenCount / convocadosCount) * 100) : 0;
+            document.getElementById('stat-convocados').textContent = convocadosCount;
+            document.getElementById('stat-asisten').textContent = asistenCount;
+            document.getElementById('stat-faltas').textContent = faltasCount;
+            document.getElementById('stat-adherencia').textContent = `${adherencia}%`;
+        }
+
+        // CICLAR ASISTENCIA AL DAR CLIC: A -> F -> R -> ''
+        function cycleAttendance(cedula, day) {
+            const exp = expertosList.find(e => e.cedula === cedula);
+            if (!exp) return;
+            const current = exp.asistencia[day] || '';
+            const next = current === 'A' ? 'F' : current === 'F' ? 'R' : current === 'R' ? '' : 'A';
+            exp.asistencia[day] = next;
+
+            saveLocalFormadorData();
+            renderAsistenciaTable();
+            renderCalificacionesTable();
+        }
+
+        function updateNovedad(cedula, value) {
+            const exp = expertosList.find(e => e.cedula === cedula);
+            if (exp) {
+                exp.novedad = value;
+                saveLocalFormadorData();
+            }
+        }
+
+        // ==========================================
+        // GENERADOR DE CORREO DIARIO (OUTLOOK NATIVO)
+        // ==========================================
+        function generateMailHTML() {
+            const day = document.getElementById('correo-dia-select').value;
+            const preview = document.getElementById('mail-preview-container');
+
+            // Métricas del día seleccionado
+            let conv = 0, asis = 0;
+            expertosList.forEach(e => {
+                if (e.asistencia[day] !== '') {
+                    conv++;
+                    if (e.asistencia[day] === 'A') asis++;
+                }
+            });
+            const adh = conv > 0 ? Math.round((asis / conv) * 100) : 100;
+
+            const temarios = SYLLABUS_TEMARIOS[day] || SYLLABUS_TEMARIOS['8'];
+
+            // Filtro de contratados vs backups
+            const sortedActivos = expertosList.filter(e => e.estado !== 'Baja').sort((a,b) => computeTotal(b) - computeTotal(a));
+            const principal = sortedActivos.slice(0, 1);
+            const backups = sortedActivos.slice(1);
+
+            function buildNotesRows(list) {
+                return list.map(e => `
+                    <tr>
+                        <td style="border: 0.5pt solid rgb(217, 217, 217); text-align: center; padding: 4px;">${e.req || '532'}</td>
+                        <td style="border: 0.5pt solid rgb(217, 217, 217); text-align: left; padding: 4px;">${e.cedula}</td>
+                        <td style="border: 0.5pt solid rgb(217, 217, 217); text-align: center; padding: 4px;">${e.university}</td>
+                        <td style="border: 0.5pt solid rgb(217, 217, 217); text-align: center; padding: 4px;">${e.split}</td>
+                        <td style="border: 0.5pt solid rgb(217, 217, 217); text-align: center; padding: 4px;">${e.apellidos}</td>
+                        <td style="border: 0.5pt solid rgb(217, 217, 217); text-align: center; padding: 4px;">${e.nombres}</td>
+                        <td style="border: 0.5pt solid rgb(217, 217, 217); text-align: center; padding: 4px; background-color: rgb(0, 32, 96); color: rgb(35, 185, 215); font-weight: bold;">${parseFloat(e.corte1).toFixed(2)}</td>
+                        <td style="border: 0.5pt solid rgb(217, 217, 217); text-align: center; padding: 4px; background-color: rgb(0, 32, 96); color: rgb(35, 185, 215); font-weight: bold;">${parseFloat(e.corte2).toFixed(2)}</td>
+                        <td style="border: 0.5pt solid rgb(217, 217, 217); text-align: center; padding: 4px; background-color: rgb(0, 32, 96); color: rgb(35, 185, 215); font-weight: bold;">${parseFloat(e.corte3).toFixed(2)}</td>
+                        <td style="border: 0.5pt solid rgb(217, 217, 217); text-align: center; padding: 4px; background-color: rgb(0, 32, 96); color: rgb(35, 185, 215); font-weight: bold;">${parseFloat(e.extra).toFixed(2)}</td>
+                        <td style="border: 0.5pt solid rgb(217, 217, 217); text-align: center; padding: 4px; font-weight: bold; color: rgb(35, 185, 215);">${computeTotal(e)}</td>
+                        <td style="border: 0.5pt solid rgb(217, 217, 217); text-align: center; padding: 4px; font-weight: bold; color: rgb(35, 185, 215);">TOP</td>
+                    </tr>
+                `).join('');
+            }
+
+            const mailHtml = `
+<div style="font-family: Calibri, Aptos, sans-serif; font-size: 11pt; color: #000; line-height: 1.5;">
+    <p>Hola equipo 👋🏻 Buen día para todos 😊</p>
+    <p>A continuación, les reporto por este medio la asistencia y deserción del grupo nuevo <strong>Poli Rematrícula y Servicio</strong> para el <strong>día ${day}</strong>.</p>
+    
+    <p><strong>Generalidades:</strong></p>
+    <ul>
+        <li>Para hoy la adherencia de formación fue del <strong>${adh}%</strong>, con un total de <strong>${asis} convocados de ${conv} aspirantes</strong> en formación.</li>
+        ${day === '8' ? '<li>Relaciono los resultados del proceso de formación para dar paso a la contratación del personal requerido (1) y dos backups (2).</li>' : ''}
+    </ul>
+
+    <!-- TABLA CABECERA DE OPERACIÓN -->
+    <table cellspacing="0" cellpadding="0" style="width: 100%; max-width: 650px; border-collapse: collapse; margin: 15px 0;">
+        <tr style="background-color: #002060; color: white; font-weight: bold; text-align: center;">
+            <td style="border: 0.5pt solid #99c3d3; padding: 6px;">Universidad</td>
+            <td style="border: 0.5pt solid #99c3d3; padding: 6px;">Fecha Inicio</td>
+            <td style="border: 0.5pt solid #99c3d3; padding: 6px;">Fecha Fin</td>
+            <td style="border: 0.5pt solid #99c3d3; padding: 6px;">Formador</td>
+            <td style="border: 0.5pt solid #99c3d3; padding: 6px;">Horario</td>
+        </tr>
+        <tr style="text-align: center; color: #00284e;">
+            <td style="border: 0.5pt solid #99c3d3; padding: 5px;">Poli</td>
+            <td style="border: 0.5pt solid #99c3d3; padding: 5px;">12-feb-25</td>
+            <td style="border: 0.5pt solid #99c3d3; padding: 5px;">21-feb-25</td>
+            <td style="border: 0.5pt solid #99c3d3; padding: 5px;">Angie Cuéllar</td>
+            <td style="border: 0.5pt solid #99c3d3; padding: 5px;">8:00 am a 2:00 pm</td>
+        </tr>
+    </table>
+
+    ${day === '8' ? `
+    <p><strong>Resultados Aprobatorios (Personal Principal):</strong></p>
+    <table cellspacing="0" cellpadding="0" style="width: 100%; border-collapse: collapse; font-size: 9pt; margin-bottom: 15px;">
+        <tr style="background-color: #002060; color: white; font-weight: bold; text-align: center;">
+            <td style="border: 0.5pt solid #d9d9d9; padding: 6px;">No. Requerimiento</td>
+            <td style="border: 0.5pt solid #d9d9d9; padding: 6px;">Cédula</td>
+            <td style="border: 0.5pt solid #d9d9d9; padding: 6px;">Universidad</td>
+            <td style="border: 0.5pt solid #d9d9d9; padding: 6px;">Split</td>
+            <td style="border: 0.5pt solid #d9d9d9; padding: 6px;">Apellidos</td>
+            <td style="border: 0.5pt solid #d9d9d9; padding: 6px;">Nombres</td>
+            <td style="border: 0.5pt solid #d9d9d9; padding: 6px;">1er Corte</td>
+            <td style="border: 0.5pt solid #d9d9d9; padding: 6px;">2do Corte</td>
+            <td style="border: 0.5pt solid #d9d9d9; padding: 6px;">3er Corte</td>
+            <td style="border: 0.5pt solid #d9d9d9; padding: 6px;">Puntos Extra</td>
+            <td style="border: 0.5pt solid #d9d9d9; padding: 6px; background-color: #23B9D7; color: #002060;">Promedio Total</td>
+            <td style="border: 0.5pt solid #d9d9d9; padding: 6px; background-color: #85F1E1; color: #00294D;">Ranking</td>
+        </tr>
+        ${buildNotesRows(principal)}
+    </table>
+
+    <p><strong>Back Up:</strong></p>
+    <table cellspacing="0" cellpadding="0" style="width: 100%; border-collapse: collapse; font-size: 9pt; margin-bottom: 15px;">
+        <tr style="background-color: #002060; color: white; font-weight: bold; text-align: center;">
+            <td style="border: 0.5pt solid #d9d9d9; padding: 6px;">No. Requerimiento</td>
+            <td style="border: 0.5pt solid #d9d9d9; padding: 6px;">Cédula</td>
+            <td style="border: 0.5pt solid #d9d9d9; padding: 6px;">Universidad</td>
+            <td style="border: 0.5pt solid #d9d9d9; padding: 6px;">Split</td>
+            <td style="border: 0.5pt solid #d9d9d9; padding: 6px;">Apellidos</td>
+            <td style="border: 0.5pt solid #d9d9d9; padding: 6px;">Nombres</td>
+            <td style="border: 0.5pt solid #d9d9d9; padding: 6px;">1er Corte</td>
+            <td style="border: 0.5pt solid #d9d9d9; padding: 6px;">2do Corte</td>
+            <td style="border: 0.5pt solid #d9d9d9; padding: 6px;">3er Corte</td>
+            <td style="border: 0.5pt solid #d9d9d9; padding: 6px;">Puntos Extra</td>
+            <td style="border: 0.5pt solid #d9d9d9; padding: 6px; background-color: #23B9D7; color: #002060;">Promedio Total</td>
+            <td style="border: 0.5pt solid #d9d9d9; padding: 6px; background-color: #85F1E1; color: #00294D;">Ranking</td>
+        </tr>
+        ${buildNotesRows(backups)}
+    </table>
+    ` : ''}
+
+    <p><strong>Temario desarrollado:</strong></p>
+    <ul>
+        ${temarios.map(t => `<li>${t}</li>`).join('')}
+    </ul>
+
+    <p style="margin-top: 25px;">Cordialmente,</p>
+    <p><strong>ANGIE VANESSA CUÉLLAR G.</strong><br>
+    <em>Formadora</em><br>
+    +57 3223371037<br>
+    <a href="http://www.ilumno.com" style="color: #a61e65; text-decoration: underline; font-weight: bold;">www.ilumno.com</a></p>
+</div>`;
+
+            preview.innerHTML = mailHtml;
+        }
+
+        function copyMailToClipboard() {
+            const container = document.getElementById('mail-preview-container');
+            const range = document.createRange();
+            range.selectNode(container);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            document.execCommand('copy');
+            window.getSelection().removeAllRanges();
+            alert("¡Correo copiado con formato institucional! Pégalo directamente en Outlook (Ctrl + V).");
+        }
+
+        // ==========================================
+        // GESTIÓN DE MODAL Y REGISTROS
+        // ==========================================
+        function openNewExpertModal() {
+            document.getElementById('exp-id').value = '';
+            document.getElementById('exp-cedula').value = '';
+            document.getElementById('exp-nombres').value = '';
+            document.getElementById('exp-apellidos').value = '';
+            document.getElementById('exp-corte1').value = '100';
+            document.getElementById('exp-corte2').value = '100';
+            document.getElementById('exp-corte3').value = '90';
+            document.getElementById('exp-extra').value = '100';
+            document.getElementById('modal-expert-title').textContent = 'Agregar Nuevo Aspirante';
+            document.getElementById('modal-expert').classList.remove('hidden');
+        }
+
+        function closeExpertModal() {
+            document.getElementById('modal-expert').classList.add('hidden');
+        }
+
+        function editExpert(cedula) {
+            const exp = expertosList.find(e => e.cedula === cedula);
+            if (!exp) return;
+            document.getElementById('exp-id').value = exp.cedula;
+            document.getElementById('exp-cedula').value = exp.cedula;
+            document.getElementById('exp-req').value = exp.req || '532';
+            document.getElementById('exp-nombres').value = exp.nombres;
+            document.getElementById('exp-apellidos').value = exp.apellidos;
+            document.getElementById('exp-uni').value = exp.university;
+            document.getElementById('exp-split').value = exp.split;
+            document.getElementById('exp-corte1').value = exp.corte1;
+            document.getElementById('exp-corte2').value = exp.corte2;
+            document.getElementById('exp-corte3').value = exp.corte3;
+            document.getElementById('exp-extra').value = exp.extra;
+            document.getElementById('exp-supervisor').value = exp.supervisor || 'Lizeth Calderon';
+            document.getElementById('exp-estado').value = exp.estado;
+            document.getElementById('modal-expert-title').textContent = 'Editar Notas del Aspirante';
+            document.getElementById('modal-expert').classList.remove('hidden');
+        }
+
+        function handleSaveExpert(e) {
+            e.preventDefault();
+            const id = document.getElementById('exp-id').value;
+            const cedula = document.getElementById('exp-cedula').value.trim();
+
+            const data = {
+                id: cedula,
+                req: document.getElementById('exp-req').value.trim() || '532',
+                cedula: cedula,
+                nombres: document.getElementById('exp-nombres').value.trim(),
+                apellidos: document.getElementById('exp-apellidos').value.trim(),
+                university: document.getElementById('exp-uni').value,
+                split: document.getElementById('exp-split').value,
+                supervisor: document.getElementById('exp-supervisor').value,
+                corte1: parseFloat(document.getElementById('exp-corte1').value) || 0,
+                corte2: parseFloat(document.getElementById('exp-corte2').value) || 0,
+                corte3: parseFloat(document.getElementById('exp-corte3').value) || 0,
+                extra: parseFloat(document.getElementById('exp-extra').value) || 0,
+                estado: document.getElementById('exp-estado').value,
+                novedad: '',
+                asistencia: { 1: 'A', 2: 'A', 3: 'A', 4: 'A', 5: 'A', 6: 'A', 7: 'A', 8: 'A' }
+            };
+
+            const index = expertosList.findIndex(x => x.cedula === (id || cedula));
+            if (index >= 0) {
+                data.asistencia = expertosList[index].asistencia;
+                data.novedad = expertosList[index].novedad;
+                expertosList[index] = data;
+            } else {
+                expertosList.push(data);
+            }
+
+            saveLocalFormadorData();
+            closeExpertModal();
+            renderCalificacionesTable();
+            renderAsistenciaTable();
+        }
+
+        function deleteExpert(cedula) {
+            if (confirm(`¿Eliminar al aspirante con cédula ${cedula}?`)) {
+                expertosList = expertosList.filter(e => e.cedula !== cedula);
+                saveLocalFormadorData();
+                renderCalificacionesTable();
+                renderAsistenciaTable();
+            }
+        }
+    </script>
+
+    <!-- MÓDULO FIREBASE EN TIEMPO REAL (PREGUNTAS & SINCRONIZACIÓN) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, collection, doc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDTfwHBqGnB9axzTj4XzdVkcq6BcY_ZjqM",
+            authDomain: "poli-evaluaciones-360.firebaseapp.com",
+            projectId: "poli-evaluaciones-360",
+            storageBucket: "poli-evaluaciones-360.firebasestorage.app",
+            messagingSenderId: "12426009380",
+            appId: "1:12426009380:web:da9738f10949e7f585f1b1"
+        };
+
+        let db;
+        try {
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
+            db = getFirestore(app);
+            signInAnonymously(auth).catch(() => {});
+        } catch(e) { console.error("Firebase Formador:", e); }
+
+        window.loadFirebaseQuestions = function() {
+            if (!db) return;
+            onSnapshot(collection(db, 'preguntas_expertos'), (snap) => {
+                const list = [];
+                snap.docs.forEach(d => list.push({ docId: d.id, ...d.data() }));
+                list.sort((a,b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
+                renderQuestionsAdmin(list);
+            }, () => {});
+        };
+
+        function renderQuestionsAdmin(list) {
+            const container = document.getElementById('container-preguntas-lista');
+            const badge = document.getElementById('badge-preguntas');
+            const unans = list.filter(q => !q.answered).length;
+            badge.textContent = unans;
+
+            if (list.length === 0) {
+                container.innerHTML = `<div class="bg-white p-8 rounded-2xl text-center text-slate-400 text-xs">No hay preguntas registradas actualmente desde el Campus.</div>`;
+                return;
+            }
+
+            container.innerHTML = list.map(q => `
+                <div class="bg-white p-5 rounded-2xl border ${q.answered ? 'border-slate-200' : 'border-amber-300 bg-amber-50/20'} shadow-xs space-y-3">
+                    <div class="flex justify-between items-start text-xs">
+                        <div>
+                            <span class="font-black text-[#002060]">${q.studentName || 'Experto'}</span>
+                            <span class="text-slate-400 font-mono text-[11px] ml-1">(${q.studentCedula || 'Sin cédula'}) • Lección ${q.lessonId || '0.1'}</span>
+                        </div>
+                        <span class="text-[10px] text-slate-400">${q.date || ''}</span>
+                    </div>
+
+                    <p class="text-xs text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-100">${q.text}</p>
+
+                    ${q.answered ? `
+                        <div class="bg-cyan-50/60 p-3 rounded-xl border border-cyan-200 text-xs">
+                            <span class="font-bold text-ilumnoTeal block text-[10px] uppercase">Tu Respuesta:</span>
+                            <p class="text-slate-700 mt-0.5">${q.reply}</p>
+                        </div>
+                    ` : `
+                        <div class="flex gap-2">
+                            <input id="reply-input-${q.docId}" type="text" placeholder="Escribe la respuesta que verá el estudiante..." class="flex-1 text-xs p-2.5 rounded-xl border border-slate-300 outline-none">
+                            <button onclick="sendReplyToStudent('${q.docId}')" class="px-4 py-2 bg-ilumnoTeal hover:bg-[#0089A8] text-white font-bold text-xs rounded-xl transition shadow-xs">
+                                Responder
+                            </button>
+                        </div>
+                    `}
+                </div>
+            `).join('');
+        }
+
+        window.sendReplyToStudent = async function(docId) {
+            const input = document.getElementById(`reply-input-${docId}`);
+            const replyText = input.value.trim();
+            if (!replyText || !db) return;
+
+            try {
+                await updateDoc(doc(db, 'preguntas_expertos', docId), {
+                    answered: true,
+                    reply: replyText,
+                    replyTimestamp: new Date().toISOString()
+                });
+                alert("Respuesta enviada. El estudiante la verá de inmediato en su campus.");
+            } catch(e) {
+                alert("Error al enviar la respuesta.");
+            }
+        };
+
+        if (db) window.loadFirebaseQuestions();
+    </script>
+</body>
+</html>
