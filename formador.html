@@ -262,6 +262,9 @@
                     <button onclick="openAddCandidateModal()" class="px-4 py-2.5 bg-ilumnoDark hover:bg-blue-950 text-white font-bold text-xs rounded-xl transition flex items-center gap-2 self-start sm:self-auto shadow-xs">
                         <i class="fas fa-user-plus"></i> Agregar Aspirante
                     </button>
+                    <button onclick="openBulkPasteModal()" class="px-4 py-2.5 bg-ilumnoTeal hover:bg-[#0089A8] text-white font-bold text-xs rounded-xl transition flex items-center gap-2 shadow-xs">
+    <i class="fas fa-file-excel"></i> Pegar Lista desde Excel
+</button>
                 </div>
 
                 <div class="overflow-x-auto">
@@ -1525,5 +1528,79 @@
             });
         };
     </script>
+    <!-- MODAL: PEGAR DESDE EXCEL (FORMULARIO INICIAL DÍA 1) -->
+<div id="modal-bulk-excel" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 space-y-4">
+        <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+            <div>
+                <h3 class="font-black text-base text-ilumnoDark">Importar Aspirantes desde Excel</h3>
+                <p class="text-[11px] text-slate-500">Copia las filas de tu Excel y pégalas aquí (separadas por tabulación)</p>
+            </div>
+            <button onclick="document.getElementById('modal-bulk-excel').classList.add('hidden')" class="text-slate-400 hover:text-slate-600"><i class="fas fa-times"></i></button>
+        </div>
+
+        <div class="bg-blue-50 p-3 rounded-xl border border-blue-100 text-[11px] text-ilumnoDark">
+            <strong>Orden de columnas aceptado:</strong><br>
+            <code>Req | Cédula | Universidad | Split | Apellidos | Nombres | Supervisor</code><br>
+            <span class="text-slate-500">(O también: <code>Cédula | Apellidos | Nombres</code> y el sistema autocompleta Poli y Rematrícula).</span>
+        </div>
+
+        <textarea id="bulk-excel-textarea" rows="6" placeholder="Pega aquí las celdas copiadas de Excel (Ctrl + V)..." class="w-full p-3 rounded-xl border border-slate-300 text-xs font-mono outline-none focus:border-ilumnoTeal"></textarea>
+
+        <div class="flex justify-end gap-2">
+            <button type="button" onclick="document.getElementById('modal-bulk-excel').classList.add('hidden')" class="px-4 py-2.5 bg-slate-100 rounded-xl text-xs font-bold">Cancelar</button>
+            <button type="button" onclick="processBulkExcelPaste()" class="px-5 py-2.5 bg-ilumnoDark text-white rounded-xl text-xs font-black">Importar Filas</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openBulkPasteModal() {
+        document.getElementById('bulk-excel-textarea').value = '';
+        document.getElementById('modal-bulk-excel').classList.remove('hidden');
+    }
+
+    function processBulkExcelPaste() {
+        const raw = document.getElementById('bulk-excel-textarea').value.trim();
+        if (!raw) return;
+
+        const lines = raw.split('\n');
+        let added = 0;
+
+        lines.forEach(line => {
+            const cols = line.split('\t').map(c => c.trim());
+            if (cols.length >= 3) {
+                let req = '532', cedula = '', uni = 'Politécnico Grancolombiano', split = 'Rematricula y Servicio', apellidos = '', nombres = '', sup = 'Lizeth Calderon';
+
+                if (cols.length >= 6) {
+                    [req, cedula, uni, split, apellidos, nombres, sup] = cols;
+                } else {
+                    [cedula, apellidos, nombres] = cols;
+                }
+
+                if (cedula) {
+                    candidates.push({
+                        req: req || '532',
+                        cedula: cedula,
+                        university: uni || 'Politécnico Grancolombiano',
+                        split: split || 'Rematricula y Servicio',
+                        apellidos: apellidos || '',
+                        nombres: nombres || '',
+                        novedad: '',
+                        supervisor: sup || 'Lizeth Calderon',
+                        corte1: 100, corte2: 100, corte3: 90, extra: 100,
+                        days: { 1: 'A', 2: 'A', 3: 'A', 4: 'A', 5: 'A', 6: 'A', 7: 'A', 8: 'A' }
+                    });
+                    added++;
+                }
+            }
+        });
+
+        persistData();
+        renderAll();
+        document.getElementById('modal-bulk-excel').classList.add('hidden');
+        showToast(`¡Se importaron ${added} aspirantes desde Excel!`, 'success');
+    }
+</script>
 </body>
 </html>
