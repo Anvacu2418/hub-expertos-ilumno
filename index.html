@@ -126,11 +126,6 @@
                 </div>
             </form>
             <!-- Botón de acceso directo a la Consola del Formador desde el Login -->
-<div class="mt-5 pt-4 border-t border-slate-100 text-center">
-    <button type="button" onclick="openTrainerAuthModal()" class="text-xs font-bold text-slate-400 hover:text-ilumnoTeal transition inline-flex items-center gap-1.5">
-        <i class="fas fa-user-shield"></i> <span>Acceso Exclusivo Formadores</span>
-    </button>
-</div>
         </div>
     </div>
 
@@ -145,17 +140,39 @@
                 <i class="fas fa-bars text-lg"></i>
             </button>
             
-            <div class="flex items-center gap-2.5 cursor-pointer select-none group" onclick="navigateToLesson('home')">
-                <!-- Cajita de Logo EXCLUSIVA para ./images/logo.png (sin SVG duplicado) -->
+            <!-- Logo y Nombre Dinámico (Con doble clic secreto en el logo para el Formador) -->
+            <div class="flex items-center gap-2.5 cursor-pointer select-none group" onclick="navigateToLesson('home')" ondblclick="event.stopPropagation(); openTrainerAuthModal();" title="Ir al Inicio">
                 <div class="w-10 h-10 rounded-xl bg-white border border-slate-200 shadow-xs flex items-center justify-center p-1 relative overflow-hidden group-hover:border-ilumnoTeal transition">
-                    <img src="./images/logo.png" alt="Logo Ilumno" class="w-full h-full object-contain">
+                    <img id="header-logo-img" src="./images/logo.png" alt="Logo Institución" class="w-full h-full object-contain">
                 </div>
                 
                 <div class="leading-tight">
-                    <span class="font-black text-[#00264D] tracking-tight text-base sm:text-lg md:text-xl block leading-none">ILUMNO</span>
-                    <span class="text-[10px] sm:text-[11px] font-bold text-ilumnoTeal uppercase tracking-wider block">Curso para expertos</span>
+                    <span id="header-brand-title" class="font-black text-[#00264D] tracking-tight text-base sm:text-lg md:text-xl block leading-none">ILUMNO</span>
+                    <span id="header-brand-subtitle" class="text-[10px] sm:text-[11px] font-bold text-ilumnoTeal uppercase tracking-wider block">Curso para expertos</span>
                 </div>
             </div>
+
+            <!-- Lado Derecho: Botón Exclusivo Formador (Oculto a estudiantes) + Acceso a Perfil -->
+        <div class="flex items-center gap-2.5">
+            <!-- Solo se muestra si sessionStorage tiene 'ilumno_trainer_auth' === 'true' -->
+            <a id="trainer-return-btn" href="./formador.html" class="hidden items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-black bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition">
+                <i class="fas fa-user-shield text-ilumnoYellow"></i>
+                <span class="hidden md:inline">Consola Formador</span>
+            </a>
+
+            <button onclick="openProfileModal()" class="flex items-center gap-2 p-1.5 md:px-3 md:py-1.5 rounded-xl border border-slate-200 hover:border-ilumnoTeal hover:bg-slate-50 transition group">
+                <div class="w-8 h-8 rounded-lg bg-ilumnoDark text-white font-bold flex items-center justify-center text-xs shadow-xs group-hover:scale-105 transition" id="profile-avatar">
+                    EX
+                </div>
+                <div class="text-left hidden sm:block max-w-[150px]">
+                    <span id="user-display-name" class="text-xs font-bold text-slate-800 block leading-tight truncate">Experto Ilumno</span>
+                    <span id="user-display-meta" class="text-[10px] text-emerald-600 font-semibold flex items-center gap-1 truncate">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse flex-shrink-0"></span> <span class="truncate">Formación Activa</span>
+                    </span>
+                </div>
+                <i class="fas fa-chevron-down text-[10px] text-slate-400 ml-1"></i>
+            </button>
+        </div>
 
             <!-- Accesos Rápidos Superiores -->
             <div class="hidden xl:flex items-center ml-3 pl-3 border-l border-slate-200 gap-2">
@@ -881,19 +898,27 @@
                     </div>
                 </div>
 
-                <div class="pt-2 flex gap-2">
-                    <button onclick="saveUserProfile()" class="flex-1 py-3 bg-ilumnoTeal text-white font-bold text-xs rounded-xl hover:bg-[#0089a8] transition shadow-xs">
-                        Guardar Cambios
+                <!-- Botones con aire y jerarquía visual limpia -->
+                <div class="pt-3 space-y-2.5">
+                    <button type="button" onclick="saveUserProfile()" class="w-full py-3.5 px-6 bg-ilumnoTeal hover:bg-[#0089a8] text-white font-black text-xs sm:text-sm rounded-xl transition shadow-md flex items-center justify-center gap-2">
+                        <i class="fas fa-check-circle"></i> <span>Guardar Cambios</span>
                     </button>
-                    <button onclick="reopenLoginOverlay()" class="px-3.5 py-3 bg-slate-100 text-slate-700 font-bold text-xs rounded-xl hover:bg-slate-200 transition" title="Cambiar usuario">
-                        Cambiar Usuario
-                    </button>
-                    <button onclick="resetCourseProgress()" class="px-3.5 py-3 bg-rose-50 text-rose-600 font-bold text-xs rounded-xl hover:bg-rose-100 transition" title="Reiniciar progreso">
-                        <i class="fas fa-redo-alt"></i>
-                    </button>
-                    <button type="button" onclick="closeProfileModal(); openTrainerAuthModal();" class="px-3.5 py-3 bg-indigo-50 text-indigo-700 font-bold text-xs rounded-xl hover:bg-indigo-100 transition flex items-center gap-1.5" title="Abrir Consola del Formador">
-    <i class="fas fa-user-shield"></i> <span>Formador</span>
-</button>
+
+                    <div class="grid grid-cols-2 gap-2.5 pt-1">
+                        <button type="button" onclick="logoutExpertSession()" class="py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition flex items-center justify-center gap-2">
+                            <i class="fas fa-sign-out-alt text-slate-500"></i> <span>Cerrar Sesión</span>
+                        </button>
+                        <button type="button" onclick="resetCourseProgress()" class="py-2.5 px-4 bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs rounded-xl transition flex items-center justify-center gap-2" title="Reiniciar lecciones vistas">
+                            <i class="fas fa-redo-alt"></i> <span>Reiniciar Avance</span>
+                        </button>
+                    </div>
+
+                    <!-- Barra exclusiva que SOLO ve el Formador dentro del modal -->
+                    <div id="profile-trainer-shortcut" class="hidden pt-2 border-t border-slate-100">
+                        <a href="./formador.html" class="w-full py-2.5 px-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-black text-xs rounded-xl transition flex items-center justify-center gap-2">
+                            <i class="fas fa-user-shield"></i> <span>Regresar a Consola del Formador</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1860,15 +1885,81 @@
 
         function syncProfileHeaderUI() {
             const displayName = userProfile.name || 'Experto Ilumno';
+            const uni = userProfile.campaign || 'Politécnico Grancolombiano (POLI)';
+            const split = userProfile.split || 'Formación Activa';
+
+            // 1. Actualizar tarjeta de perfil superior derecha
             document.getElementById('user-display-name').textContent = displayName;
-            document.getElementById('user-display-meta').innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse flex-shrink-0"></span> <span class="truncate">${userProfile.split || 'Formación Activa'}</span>`;
+            document.getElementById('user-display-meta').innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse flex-shrink-0"></span> <span class="truncate">${uni === 'HEP' ? 'HEP • ' : ''}${split}</span>`;
             document.getElementById('profile-avatar').textContent = getInitials(displayName);
             document.getElementById('modal-profile-avatar').textContent = getInitials(displayName);
 
+            // 2. Actualizar marca y logo en la esquina superior izquierda según la Universidad seleccionada
+            const brandTitle = document.getElementById('header-brand-title');
+            const brandSubtitle = document.getElementById('header-brand-subtitle');
+            const brandLogo = document.getElementById('header-logo-img');
+
+            const brandMap = {
+                'HEP': {
+                    title: 'HEP',
+                    subtitle: 'Curso para expertos',
+                    logo: './images/logo.png' // Si luego subes images/logo_hep.png, cámbialo aquí
+                },
+                'Politécnico Grancolombiano (POLI)': {
+                    title: 'ILUMNO • POLI',
+                    subtitle: 'Curso para expertos',
+                    logo: './images/logo.png'
+                },
+                'Universidad San Marcos (USAM)': {
+                    title: 'ILUMNO • USAM',
+                    subtitle: 'Curso para expertos',
+                    logo: './images/logo.png'
+                },
+                'Universidad del Área Andina (Areandina)': {
+                    title: 'AREANDINA',
+                    subtitle: 'Curso para expertos',
+                    logo: './images/logo.png'
+                },
+                'Universidad del Istmo (UDI)': {
+                    title: 'ILUMNO • UDI',
+                    subtitle: 'Curso para expertos',
+                    logo: './images/logo.png'
+                }
+            };
+
+            const selectedBrand = brandMap[uni] || { title: 'ILUMNO', subtitle: 'Curso para expertos', logo: './images/logo.png' };
+            if (brandTitle) brandTitle.textContent = selectedBrand.title;
+            if (brandSubtitle) brandSubtitle.textContent = selectedBrand.subtitle;
+            if (brandLogo) brandLogo.src = selectedBrand.logo;
+            document.title = `${selectedBrand.title} | Curso para Expertos`;
+
+            // 3. Sincronizar inputs dentro del modal de Perfil
             document.getElementById('user-input-name').value = userProfile.name || '';
             document.getElementById('user-input-cedula').value = userProfile.cedula || '';
-            document.getElementById('user-input-campaign').value = userProfile.campaign || 'Politécnico Grancolombiano (POLI)';
+            document.getElementById('user-input-campaign').value = uni;
             document.getElementById('user-input-split').value = userProfile.split || 'Rematrícula y Servicio';
+
+            // 4. Mostrar botón "Consola Formador" SOLO si el usuario entró con clave de Formador
+            const isTrainer = sessionStorage.getItem('ilumno_trainer_auth') === 'true';
+            const trainerHeaderBtn = document.getElementById('trainer-return-btn');
+            const trainerProfileBtn = document.getElementById('profile-trainer-shortcut');
+            if (trainerHeaderBtn) {
+                trainerHeaderBtn.classList.toggle('hidden', !isTrainer);
+                trainerHeaderBtn.classList.toggle('flex', isTrainer);
+            }
+            if (trainerProfileBtn) {
+                trainerProfileBtn.classList.toggle('hidden', !isTrainer);
+            }
+        }
+
+        // Función para Cerrar Sesión limpiamente y volver a la portada de acceso
+        function logoutExpertSession() {
+            closeProfileModal();
+            localStorage.removeItem('ilumno_user_profile');
+            userProfile = { name: '', cedula: '', campaign: 'Politécnico Grancolombiano (POLI)', split: 'Rematrícula y Servicio' };
+            document.getElementById('initial-access-form').reset();
+            document.getElementById('login-overlay').classList.remove('hidden');
+            showToast("Has cerrado sesión correctamente", "info");
         }
 
         function loadStateFromStorage() {
