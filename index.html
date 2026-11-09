@@ -132,64 +132,43 @@
     <!-- ========================================== -->
     <!-- 1. HEADER SUPERIOR TIPO PLATAFORMA         -->
     <!-- ========================================== -->
-    <header class="bg-white border-b border-slate-200 h-16 flex-shrink-0 z-30 px-3 md:px-6 flex items-center justify-between shadow-xs">
+    <header class="bg-white border-b border-slate-200 h-16 flex-shrink-0 z-30 px-3 lg:px-5 flex items-center justify-between gap-2 shadow-xs">
         
-        <!-- Lado Izquierdo: Menú Hamburguesa & Branding Exclusivo con images/logo.png -->
-        <div class="flex items-center gap-2.5 sm:gap-3">
-            <button id="toggle-sidebar-btn" class="p-2 rounded-xl text-slate-600 hover:text-ilumnoDark hover:bg-slate-100 transition focus:outline-none" title="Colapsar / Expandir navegación">
+        <!-- Lado Izquierdo: Menú Hamburguesa + Logo/Marca + Accesos Rápidos -->
+        <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+            <button id="toggle-sidebar-btn" class="p-2 rounded-xl text-slate-600 hover:text-ilumnoDark hover:bg-slate-100 transition focus:outline-none flex-shrink-0" title="Colapsar / Expandir navegación">
                 <i class="fas fa-bars text-lg"></i>
             </button>
             
-            <!-- Logo y Nombre Dinámico (Con doble clic secreto en el logo para el Formador) -->
-            <div class="flex items-center gap-2.5 cursor-pointer select-none group" onclick="navigateToLesson('home')" ondblclick="event.stopPropagation(); openTrainerAuthModal();" title="Ir al Inicio">
-                <div class="w-10 h-10 rounded-xl bg-white border border-slate-200 shadow-xs flex items-center justify-center p-1 relative overflow-hidden group-hover:border-ilumnoTeal transition">
+            <!-- Logo y Nombre (ILUMNO por defecto | Higher Ed Partners Latam solo en HEP) -->
+            <!-- Doble clic sobre el logo abre el modal de contraseña del Formador -->
+            <div class="flex items-center gap-2.5 cursor-pointer select-none group min-w-0" onclick="navigateToLesson('home')" ondblclick="event.stopPropagation(); openTrainerAuthModal();" title="Ir al Inicio (Doble clic: Acceso Formador)">
+                <div class="w-10 h-10 rounded-xl bg-white border border-slate-200 shadow-xs flex items-center justify-center p-1 relative overflow-hidden group-hover:border-ilumnoTeal transition flex-shrink-0">
                     <img id="header-logo-img" src="./images/logo.png" alt="Logo Institución" class="w-full h-full object-contain">
                 </div>
                 
-                <div class="leading-tight">
-                    <span id="header-brand-title" class="font-black text-[#00264D] tracking-tight text-base sm:text-lg md:text-xl block leading-none">ILUMNO</span>
-                    <span id="header-brand-subtitle" class="text-[10px] sm:text-[11px] font-bold text-ilumnoTeal uppercase tracking-wider block">Curso para expertos</span>
+                <div class="leading-tight truncate">
+                    <span id="header-brand-title" class="font-black text-[#00264D] tracking-tight text-sm sm:text-base lg:text-lg block leading-none truncate">ILUMNO</span>
+                    <span id="header-brand-subtitle" class="text-[10px] font-bold text-ilumnoTeal uppercase tracking-wider block truncate mt-0.5">Curso para expertos</span>
                 </div>
             </div>
 
-            <!-- Lado Derecho: Botón Exclusivo Formador (Oculto a estudiantes) + Acceso a Perfil -->
-        <div class="flex items-center gap-2.5">
-            <!-- Solo se muestra si sessionStorage tiene 'ilumno_trainer_auth' === 'true' -->
-            <a id="trainer-return-btn" href="./formador.html" class="hidden items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-black bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition">
-                <i class="fas fa-user-shield text-ilumnoYellow"></i>
-                <span class="hidden md:inline">Consola Formador</span>
-            </a>
-
-            <button onclick="openProfileModal()" class="flex items-center gap-2 p-1.5 md:px-3 md:py-1.5 rounded-xl border border-slate-200 hover:border-ilumnoTeal hover:bg-slate-50 transition group">
-                <div class="w-8 h-8 rounded-lg bg-ilumnoDark text-white font-bold flex items-center justify-center text-xs shadow-xs group-hover:scale-105 transition" id="profile-avatar">
-                    EX
-                </div>
-                <div class="text-left hidden sm:block max-w-[150px]">
-                    <span id="user-display-name" class="text-xs font-bold text-slate-800 block leading-tight truncate">Experto Ilumno</span>
-                    <span id="user-display-meta" class="text-[10px] text-emerald-600 font-semibold flex items-center gap-1 truncate">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse flex-shrink-0"></span> <span class="truncate">Formación Activa</span>
-                    </span>
-                </div>
-                <i class="fas fa-chevron-down text-[10px] text-slate-400 ml-1"></i>
-            </button>
-        </div>
-
-            <!-- Accesos Rápidos Superiores -->
-            <div class="hidden xl:flex items-center ml-3 pl-3 border-l border-slate-200 gap-2">
-                <button onclick="navigateToLesson('home')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100 hover:text-ilumnoTeal transition">
+            <!-- Accesos Rápidos Superiores (Adaptados para que quepan perfecto en portátil) -->
+            <div class="hidden lg:flex items-center ml-2 pl-3 border-l border-slate-200 gap-1.5 flex-shrink-0">
+                <button onclick="navigateToLesson('home')" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100 hover:text-ilumnoTeal transition whitespace-nowrap">
                     <i class="fas fa-home text-slate-400"></i> <span>Inicio</span>
                 </button>
-                <button onclick="openSimulatorModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200 transition">
+                <button onclick="openSimulatorModal()" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200 transition whitespace-nowrap">
                     <i class="fas fa-headset text-amber-600"></i> <span>Centro de Simuladores IA</span>
                 </button>
-                <button onclick="navigateToLesson('4.1')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition">
+                <button onclick="navigateToLesson('4.1')" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition whitespace-nowrap">
                     <i class="fas fa-award text-indigo-600"></i> <span>Evaluaciones (90%)</span>
                 </button>
             </div>
         </div>
 
-        <!-- Centro: Progreso Global del Curso -->
-        <div class="hidden md:flex items-center gap-3 w-1/4 max-w-xs">
+        <!-- Centro: Progreso Global del Curso (Fluido sin empujar los bordes en portátil) -->
+        <div class="hidden xl:flex items-center gap-3 w-48 2xl:w-64 flex-shrink-0">
             <div class="w-full">
                 <div class="flex justify-between items-center mb-1">
                     <span class="text-[10px] font-black text-slate-500 uppercase tracking-wider">Progreso Global</span>
@@ -201,19 +180,25 @@
             </div>
         </div>
 
-        <!-- Lado Derecho: Acceso a Perfil -->
-        <div class="flex items-center gap-2">
-            <button onclick="openProfileModal()" class="flex items-center gap-2 p-1.5 md:px-3 md:py-1.5 rounded-xl border border-slate-200 hover:border-ilumnoTeal hover:bg-slate-50 transition group">
-                <div class="w-8 h-8 rounded-lg bg-ilumnoDark text-white font-bold flex items-center justify-center text-xs shadow-xs group-hover:scale-105 transition" id="profile-avatar">
+        <!-- Lado Derecho: ÚNICO Botón de Perfil + Botón Formador (Oculto para estudiantes) -->
+        <div class="flex items-center gap-2 flex-shrink-0">
+            <!-- Solo aparece cuando tú entraste como Formadora -->
+            <a id="trainer-return-btn" href="./formador.html" class="hidden items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition whitespace-nowrap">
+                <i class="fas fa-user-shield text-ilumnoYellow"></i>
+                <span class="hidden sm:inline">Consola Formador</span>
+            </a>
+
+            <button onclick="openProfileModal()" class="flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 rounded-xl border border-slate-200 hover:border-ilumnoTeal hover:bg-slate-50 transition group">
+                <div class="w-8 h-8 rounded-lg bg-ilumnoDark text-white font-bold flex items-center justify-center text-xs shadow-xs group-hover:scale-105 transition flex-shrink-0" id="profile-avatar">
                     EX
                 </div>
-                <div class="text-left hidden sm:block max-w-[150px]">
+                <div class="text-left hidden sm:block max-w-[140px]">
                     <span id="user-display-name" class="text-xs font-bold text-slate-800 block leading-tight truncate">Experto Ilumno</span>
                     <span id="user-display-meta" class="text-[10px] text-emerald-600 font-semibold flex items-center gap-1 truncate">
                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse flex-shrink-0"></span> <span class="truncate">Formación Activa</span>
                     </span>
                 </div>
-                <i class="fas fa-chevron-down text-[10px] text-slate-400 ml-1"></i>
+                <i class="fas fa-chevron-down text-[10px] text-slate-400 ml-0.5"></i>
             </button>
         </div>
     </header>
@@ -1883,6 +1868,15 @@
             document.getElementById('login-overlay').classList.remove('hidden');
         }
 
+        // Logo oficial HEP en SVG integrado como respaldo automático si no existe ./images/logo_hep.png
+        const HEP_SVG_DATA_URI = "data:image/svg+xml;utf8," + encodeURIComponent(`
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+                <rect width="120" height="120" rx="24" fill="#00264D"/>
+                <text x="60" y="68" font-family="Arial, sans-serif" font-size="42" font-weight="900" fill="#FFFFFF" text-anchor="middle" letter-spacing="1">HEP</text>
+                <rect x="25" y="82" width="70" height="6" rx="3" fill="#00A0C6"/>
+            </svg>
+        `);
+
         function syncProfileHeaderUI() {
             const displayName = userProfile.name || 'Experto Ilumno';
             const uni = userProfile.campaign || 'Politécnico Grancolombiano (POLI)';
@@ -1890,56 +1884,44 @@
 
             // 1. Actualizar tarjeta de perfil superior derecha
             document.getElementById('user-display-name').textContent = displayName;
-            document.getElementById('user-display-meta').innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse flex-shrink-0"></span> <span class="truncate">${uni === 'HEP' ? 'HEP • ' : ''}${split}</span>`;
+            document.getElementById('user-display-meta').innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse flex-shrink-0"></span> <span class="truncate">${split}</span>`;
             document.getElementById('profile-avatar').textContent = getInitials(displayName);
             document.getElementById('modal-profile-avatar').textContent = getInitials(displayName);
 
-            // 2. Actualizar marca y logo en la esquina superior izquierda según la Universidad seleccionada
+            // 2. Regla estricta: ILUMNO en todas, EXCEPTO en HEP -> Higher Ed Partners Latam + Logo HEP
             const brandTitle = document.getElementById('header-brand-title');
             const brandSubtitle = document.getElementById('header-brand-subtitle');
             const brandLogo = document.getElementById('header-logo-img');
 
-            const brandMap = {
-                'HEP': {
-                    title: 'HEP',
-                    subtitle: 'Curso para expertos',
-                    logo: './images/logo.png' // Si luego subes images/logo_hep.png, cámbialo aquí
-                },
-                'Politécnico Grancolombiano (POLI)': {
-                    title: 'ILUMNO • POLI',
-                    subtitle: 'Curso para expertos',
-                    logo: './images/logo.png'
-                },
-                'Universidad San Marcos (USAM)': {
-                    title: 'ILUMNO • USAM',
-                    subtitle: 'Curso para expertos',
-                    logo: './images/logo.png'
-                },
-                'Universidad del Área Andina (Areandina)': {
-                    title: 'AREANDINA',
-                    subtitle: 'Curso para expertos',
-                    logo: './images/logo.png'
-                },
-                'Universidad del Istmo (UDI)': {
-                    title: 'ILUMNO • UDI',
-                    subtitle: 'Curso para expertos',
-                    logo: './images/logo.png'
+            if (uni === 'HEP') {
+                if (brandTitle) brandTitle.textContent = 'Higher Ed Partners Latam';
+                if (brandSubtitle) brandSubtitle.textContent = 'Curso para expertos';
+                if (brandLogo) {
+                    brandLogo.onerror = function() {
+                        this.onerror = null;
+                        this.src = HEP_SVG_DATA_URI;
+                    };
+                    // Si tienes un archivo logo_hep.png en /images lo usa; si no, muestra el emblema HEP integrado
+                    brandLogo.src = './images/logo_hep.png';
                 }
-            };
+                document.title = 'Higher Ed Partners Latam | Curso para Expertos';
+            } else {
+                if (brandTitle) brandTitle.textContent = 'ILUMNO';
+                if (brandSubtitle) brandSubtitle.textContent = 'Curso para expertos';
+                if (brandLogo) {
+                    brandLogo.onerror = null;
+                    brandLogo.src = './images/logo.png';
+                }
+                document.title = 'ILUMNO | Curso para Expertos';
+            }
 
-            const selectedBrand = brandMap[uni] || { title: 'ILUMNO', subtitle: 'Curso para expertos', logo: './images/logo.png' };
-            if (brandTitle) brandTitle.textContent = selectedBrand.title;
-            if (brandSubtitle) brandSubtitle.textContent = selectedBrand.subtitle;
-            if (brandLogo) brandLogo.src = selectedBrand.logo;
-            document.title = `${selectedBrand.title} | Curso para Expertos`;
-
-            // 3. Sincronizar inputs dentro del modal de Perfil
+            // 3. Sincronizar campos dentro del modal de Perfil
             document.getElementById('user-input-name').value = userProfile.name || '';
             document.getElementById('user-input-cedula').value = userProfile.cedula || '';
             document.getElementById('user-input-campaign').value = uni;
             document.getElementById('user-input-split').value = userProfile.split || 'Rematrícula y Servicio';
 
-            // 4. Mostrar botón "Consola Formador" SOLO si el usuario entró con clave de Formador
+            // 4. Mostrar botón "Consola Formador" SOLO si el usuario inició sesión como Formador
             const isTrainer = sessionStorage.getItem('ilumno_trainer_auth') === 'true';
             const trainerHeaderBtn = document.getElementById('trainer-return-btn');
             const trainerProfileBtn = document.getElementById('profile-trainer-shortcut');
