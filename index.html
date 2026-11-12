@@ -125,7 +125,6 @@
                     </button>
                 </div>
             </form>
-            <!-- Botón de acceso directo a la Consola del Formador desde el Login -->
         </div>
     </div>
 
@@ -153,7 +152,7 @@
                 </div>
             </div>
 
-            <!-- Accesos Rápidos Superiores (Adaptados para que quepan perfecto en portátil) -->
+            <!-- Accesos Rápidos Superiores -->
             <div class="hidden lg:flex items-center ml-2 pl-3 border-l border-slate-200 gap-1.5 flex-shrink-0">
                 <button onclick="navigateToLesson('home')" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100 hover:text-ilumnoTeal transition whitespace-nowrap">
                     <i class="fas fa-home text-slate-400"></i> <span>Inicio</span>
@@ -167,7 +166,7 @@
             </div>
         </div>
 
-        <!-- Centro: Progreso Global del Curso (Fluido sin empujar los bordes en portátil) -->
+        <!-- Centro: Progreso Global del Curso -->
         <div class="hidden xl:flex items-center gap-3 w-48 2xl:w-64 flex-shrink-0">
             <div class="w-full">
                 <div class="flex justify-between items-center mb-1">
@@ -180,9 +179,8 @@
             </div>
         </div>
 
-        <!-- Lado Derecho: ÚNICO Botón de Perfil + Botón Formador (Oculto para estudiantes) -->
+        <!-- Lado Derecho: ÚNICO Botón de Perfil + Botón Formador -->
         <div class="flex items-center gap-2 flex-shrink-0">
-            <!-- Solo aparece cuando tú entraste como Formadora -->
             <a id="trainer-return-btn" href="./formador.html" class="hidden items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition whitespace-nowrap">
                 <i class="fas fa-user-shield text-ilumnoYellow"></i>
                 <span class="hidden sm:inline">Consola Formador</span>
@@ -898,7 +896,6 @@
                         </button>
                     </div>
 
-                    <!-- Barra exclusiva que SOLO ve el Formador dentro del modal -->
                     <div id="profile-trainer-shortcut" class="hidden pt-2 border-t border-slate-100">
                         <a href="./formador.html" class="w-full py-2.5 px-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-black text-xs rounded-xl transition flex items-center justify-center gap-2">
                             <i class="fas fa-user-shield"></i> <span>Regresar a Consola del Formador</span>
@@ -1124,7 +1121,6 @@
         // 2. BASE DE DATOS DE LECCIONES Y CONTENIDOS
         // ==========================================
         const LESSONS_DATA = {
-            // LECCIÓN 0.1 REEMPLAZADA MILIMÉTRICAMENTE CON 1 home_bienvenida.html
             '0.1': {
                 id: '0.1',
                 title: 'Bienvenida - Curso Expertos Ilumno',
@@ -1378,21 +1374,21 @@
             },
 
             // =========================================================================
-            // MÓDULO 1: TÉCNICO EN HABILIDADES COMERCIALES (ARCHIVOS EXTERNOS EMBEBIDOS)
+            // MÓDULO 1: TÉCNICO EN HABILIDADES COMERCIALES
             // =========================================================================
             '1.1': {
                 id: '1.1',
                 title: 'Objetivo Técnico Comercial (Fase 1)',
                 module: 'Comercial & Venta Consultiva',
                 externalFile: '1.1_objetivo_fase1.html',
-                hasSimulator: false // En Objetivos NO va botón de simulador
+                hasSimulator: false
             },
             '1.2': {
                 id: '1.2',
                 title: 'Dashboard Comercial (Fase 1)',
                 module: 'Comercial & Venta Consultiva',
                 externalFile: '1.2_dashboard_fase1.html',
-                hasSimulator: false // En Dashboards NO va botón de simulador
+                hasSimulator: false
             },
             '1.3': {
                 id: '1.3',
@@ -1419,7 +1415,7 @@
             },
 
             // =========================================================================
-            // MÓDULO 2: TECNÓLOGO EN GESTIÓN DE LA INFORMACIÓN (ARCHIVOS EXTERNOS)
+            // MÓDULO 2: TECNÓLOGO EN GESTIÓN DE LA INFORMACIÓN
             // =========================================================================
             '2.1': {
                 id: '2.1',
@@ -1493,7 +1489,7 @@
             },
 
             // =========================================================================
-            // MÓDULO 3: PROFESIONAL EN APLICATIVOS NIVEL 1 (ARCHIVOS EXTERNOS)
+            // MÓDULO 3: PROFESIONAL EN APLICATIVOS NIVEL 1
             // =========================================================================
             '3.1': {
                 id: '3.1',
@@ -1543,7 +1539,6 @@
                 hasSimulator: false,
                 htmlContent: `
                     <div class="max-w-5xl mx-auto w-full flex flex-col">
-                        <!-- GRAN BANNER DE CELEBRACIÓN (3.4 evaluacion_satisfaccion.html) -->
                         <div class="bg-gradient-to-r from-[#002E5D] to-blue-800 rounded-t-3xl shadow-xl p-8 md:p-14 text-center relative overflow-hidden">
                             <i class="fas fa-star absolute top-10 left-10 text-4xl text-[#FDB913] opacity-20 animate-pulse"></i>
                             <i class="fas fa-star absolute bottom-10 right-20 text-6xl text-[#FDB913] opacity-20 animate-pulse"></i>
@@ -1558,12 +1553,10 @@
                             </div>
                         </div>
 
-                        <!-- CONTENIDO PRINCIPAL (INTERACTIVO) -->
                         <div class="bg-white p-6 md:p-12 rounded-b-3xl shadow-xl border border-t-0 border-gray-200 flex flex-col items-center justify-center">
                             <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-8 text-center">¿Cómo calificarías tu viaje de aprendizaje?</h2>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl">
-                                <!-- OPCIÓN 1: LINK DIRECTO -->
                                 <div class="bg-gray-50 border-2 border-dashed border-gray-300 rounded-2xl p-6 sm:p-8 flex flex-col items-center text-center hover:border-[#E91E63] hover:bg-pink-50 transition duration-300 group">
                                     <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-md mb-6 group-hover:scale-110 transition duration-300">
                                         <i class="fas fa-desktop text-4xl text-[#E91E63]"></i>
@@ -1576,7 +1569,6 @@
                                     </a>
                                 </div>
 
-                                <!-- OPCIÓN 2: CÓDIGO QR -->
                                 <div class="bg-gray-50 border-2 border-dashed border-gray-300 rounded-2xl p-6 sm:p-8 flex flex-col items-center text-center hover:border-[#002E5D] hover:bg-blue-50 transition duration-300 group">
                                     <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-md mb-6 group-hover:scale-110 transition duration-300">
                                         <i class="fas fa-mobile-alt text-4xl text-[#002E5D]"></i>
@@ -1590,7 +1582,6 @@
                                 </div>
                             </div>
 
-                            <!-- MENSAJE FINAL DE FELICITACIÓN Y CONFIANZA -->
                             <div class="mt-10 w-full max-w-4xl">
                                 <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 p-6 md:p-8 rounded-2xl shadow-sm flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
                                     <div class="bg-white w-20 h-20 rounded-full flex items-center justify-center text-4xl text-[#FDB913] shadow-md flex-shrink-0">
@@ -1610,9 +1601,9 @@
             }
         };
 
-        // ==========================================
-        // 3. DIAPOSITIVAS INTERACTIVAS (SLIDESHOWS 0.3 y 0.4)
-        // ==========================================
+        // =========================================================================
+        // 3. DIAPOSITIVAS INTERACTIVAS RESTAURADAS AL 100% (SLIDESHOWS 0.3 y 0.4)
+        // =========================================================================
         const SLIDES_COLLECTION = {
             'deck-formacion': [
                 {
@@ -1663,6 +1654,17 @@
                                     <span class="text-[11px] text-slate-500">Propósito y trascendencia</span>
                                 </div>
                             </div>
+                            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                                <h5 class="text-xs font-black text-slate-700 uppercase mb-3 text-center">Estrategias Didácticas de Aprendizaje:</h5>
+                                <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 text-center text-xs font-bold text-slate-600">
+                                    <span class="p-2.5 bg-white rounded-xl border border-slate-200"><i class="fas fa-chalkboard-teacher text-ilumnoTeal mr-1"></i> Teórica</span>
+                                    <span class="p-2.5 bg-white rounded-xl border border-slate-200"><i class="fas fa-headphones text-ilumnoTeal mr-1"></i> Escucha de llamadas</span>
+                                    <span class="p-2.5 bg-white rounded-xl border border-slate-200"><i class="fas fa-users-cog text-ilumnoTeal mr-1"></i> Peer Coaching</span>
+                                    <span class="p-2.5 bg-white rounded-xl border border-slate-200"><i class="fas fa-hands-helping text-ilumnoTeal mr-1"></i> Canguro</span>
+                                    <span class="p-2.5 bg-white rounded-xl border border-slate-200"><i class="fas fa-briefcase text-ilumnoTeal mr-1"></i> Casos prácticos</span>
+                                    <span class="p-2.5 bg-white rounded-xl border border-slate-200"><i class="fas fa-book-reader text-ilumnoTeal mr-1"></i> Autoestudio</span>
+                                </div>
+                            </div>
                         </div>
                     `
                 },
@@ -1671,21 +1673,33 @@
                     subtitle: "Formación por Ciclos Propedéuticos (Sincrónica & Operativa)",
                     tag: "Lámina 3 / 6",
                     body: `
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                            <div class="p-4 bg-pink-50 rounded-2xl border-2 border-ilumnoPink/40">
-                                <span class="text-[10px] font-black uppercase text-ilumnoPink block">Técnico (Fase 1) • 1 Día</span>
-                                <h4 class="text-xs font-black text-slate-800 my-1">Experiencia Ilumno & Modelo Comercial</h4>
-                                <p class="text-[11px] text-slate-600">Inducción cultural y bases de ventas consultivas.</p>
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                <div class="p-4 bg-pink-50 rounded-2xl border-2 border-ilumnoPink/40">
+                                    <span class="text-[10px] font-black uppercase text-ilumnoPink block">Técnico (Fase 1) • 1 Día</span>
+                                    <h4 class="text-xs font-black text-slate-800 my-1">Experiencia Ilumno & Modelo Comercial</h4>
+                                    <p class="text-[11px] text-slate-600">Inducción cultural y bases de ventas consultivas.</p>
+                                </div>
+                                <div class="p-4 bg-cyan-50 rounded-2xl border-2 border-ilumnoTeal/40">
+                                    <span class="text-[10px] font-black uppercase text-ilumnoTeal block">Tecnólogo (Fase 2) • 4 Días</span>
+                                    <h4 class="text-xs font-black text-slate-800 my-1">Conociendo mi Universidad</h4>
+                                    <p class="text-[11px] text-slate-600">Portafolio de productos y procesos de admisión.</p>
+                                </div>
+                                <div class="p-4 bg-blue-50 rounded-2xl border-2 border-ilumnoDark/40">
+                                    <span class="text-[10px] font-black uppercase text-ilumnoDark block">Profesional (Fase 3) • 3 Días</span>
+                                    <h4 class="text-xs font-black text-slate-800 my-1">Aplicativos</h4>
+                                    <p class="text-[11px] text-slate-600">CRM Salesforce, Genesys Cloud y Scripting.</p>
+                                </div>
                             </div>
-                            <div class="p-4 bg-cyan-50 rounded-2xl border-2 border-ilumnoTeal/40">
-                                <span class="text-[10px] font-black uppercase text-ilumnoTeal block">Tecnólogo (Fase 2) • 4 Días</span>
-                                <h4 class="text-xs font-black text-slate-800 my-1">Conociendo mi Universidad</h4>
-                                <p class="text-[11px] text-slate-600">Portafolio de productos y procesos de admisión.</p>
-                            </div>
-                            <div class="p-4 bg-blue-50 rounded-2xl border-2 border-ilumnoDark/40">
-                                <span class="text-[10px] font-black uppercase text-ilumnoDark block">Profesional (Fase 3) • 3 Días</span>
-                                <h4 class="text-xs font-black text-slate-800 my-1">Aplicativos</h4>
-                                <p class="text-[11px] text-slate-600">CRM, Genesys Cloud y Scripting.</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+                                <div class="p-3.5 bg-emerald-50 rounded-xl border border-emerald-200">
+                                    <span class="text-[10px] font-black uppercase text-emerald-800 block">Seminario de Grado (Fase 4) • 10 Días</span>
+                                    <p class="text-xs text-slate-700 mt-1">Conexión del experto a la operación, complemento formativo, refuerzos diarios y monitoreo.</p>
+                                </div>
+                                <div class="p-3.5 bg-indigo-50 rounded-xl border border-indigo-200">
+                                    <span class="text-[10px] font-black uppercase text-indigo-800 block">Práctica Profesional (Fase 5) • 30 Días</span>
+                                    <p class="text-xs text-slate-700 mt-1">Seguimiento focalizado y monitoreo de calidad por experto.</p>
+                                </div>
                             </div>
                         </div>
                     `
@@ -1695,21 +1709,29 @@
                     subtitle: "Ruta de Formación Propedéutica por Temporada",
                     tag: "Lámina 4 / 6",
                     body: `
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                            <div class="p-4 bg-white rounded-xl border border-slate-200">
-                                <span class="text-[10px] font-black text-ilumnoPink block uppercase">Fase 1 (1 Día)</span>
-                                <h5 class="text-xs font-bold text-slate-800 mt-1">Experiencia Ilumno</h5>
-                                <p class="text-[11px] text-slate-500">Modelo de gestión comercial y enfoque de servicio.</p>
+                        <div class="space-y-4">
+                            <div class="bg-amber-50/70 p-4 rounded-2xl border border-amber-200 text-xs text-amber-900">
+                                <i class="fas fa-sync-alt mr-1.5 text-amber-600"></i> Enfocado en permanencia académica, resolución de incidencias de autoservicio y retención.
                             </div>
-                            <div class="p-4 bg-white rounded-xl border border-slate-200">
-                                <span class="text-[10px] font-black text-ilumnoTeal block uppercase">Fase 2 (4 Días)</span>
-                                <h5 class="text-xs font-bold text-slate-800 mt-1">Conociendo mi Universidad</h5>
-                                <p class="text-[11px] text-slate-500">Procesos de temporada (matrícula, asignaturas, grados).</p>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                <div class="p-4 bg-white rounded-xl border border-slate-200 shadow-2xs">
+                                    <span class="text-[10px] font-black text-ilumnoPink block uppercase">Fase 1 (1 Día)</span>
+                                    <h5 class="text-xs font-bold text-slate-800 mt-1">Experiencia Ilumno</h5>
+                                    <p class="text-[11px] text-slate-500">Modelo de gestión comercial y enfoque de servicio.</p>
+                                </div>
+                                <div class="p-4 bg-white rounded-xl border border-slate-200 shadow-2xs">
+                                    <span class="text-[10px] font-black text-ilumnoTeal block uppercase">Fase 2 (4 Días)</span>
+                                    <h5 class="text-xs font-bold text-slate-800 mt-1">Conociendo mi Universidad</h5>
+                                    <p class="text-[11px] text-slate-500">Título de impacto por temporada (matrícula, asignaturas, grados).</p>
+                                </div>
+                                <div class="p-4 bg-white rounded-xl border border-slate-200 shadow-2xs">
+                                    <span class="text-[10px] font-black text-ilumnoDark block uppercase">Fase 3 (3 Días)</span>
+                                    <h5 class="text-xs font-bold text-slate-800 mt-1">Aplicativos</h5>
+                                    <p class="text-[11px] text-slate-500">CRM Salesforce, Genesys y guiones de soporte.</p>
+                                </div>
                             </div>
-                            <div class="p-4 bg-white rounded-xl border border-slate-200">
-                                <span class="text-[10px] font-black text-ilumnoDark block uppercase">Fase 3 (3 Días)</span>
-                                <h5 class="text-xs font-bold text-slate-800 mt-1">Aplicativos</h5>
-                                <p class="text-[11px] text-slate-500">CRM, Genesys y guiones de soporte.</p>
+                            <div class="p-4 bg-slate-100 rounded-xl text-center text-xs text-slate-600">
+                                <strong>Conexión en Operación:</strong> Seminario de Grado (10 Días) y Práctica Profesional (30 Días con refuerzos focalizados).
                             </div>
                         </div>
                     `
@@ -1719,11 +1741,38 @@
                     subtitle: "Ponderaciones y Criterios de Aprobación (90% Obligatorio)",
                     tag: "Lámina 5 / 6",
                     body: `
-                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-                            <div class="bg-white p-4 rounded-2xl border-2 border-ilumnoPink"><h4 class="text-2xl font-black text-ilumnoPink">20%</h4><span class="text-xs font-black text-slate-700 block mt-1">Preparatorio Técnico</span></div>
-                            <div class="bg-white p-4 rounded-2xl border-2 border-ilumnoTeal"><h4 class="text-2xl font-black text-ilumnoTeal">30%</h4><span class="text-xs font-black text-slate-700 block mt-1">Preparatorio Tecnólogo</span></div>
-                            <div class="bg-white p-4 rounded-2xl border-2 border-ilumnoDark"><h4 class="text-2xl font-black text-ilumnoDark">40%</h4><span class="text-xs font-black text-slate-700 block mt-1">Examen de Egreso</span></div>
-                            <div class="bg-white p-4 rounded-2xl border-2 border-emerald-500"><h4 class="text-2xl font-black text-emerald-600">10%</h4><span class="text-xs font-black text-slate-700 block mt-1">Bonus de Actitud</span></div>
+                        <div class="space-y-4">
+                            <div class="bg-rose-50 border border-rose-200 p-3.5 rounded-2xl text-center">
+                                <span class="text-xs font-black text-rose-700 uppercase tracking-wide">
+                                    <i class="fas fa-exclamation-circle mr-1"></i> NOTA MÍNIMA DE APROBACIÓN A PARTIR DEL PREPARATORIO DE TECNÓLOGO: 90 / 100
+                                </span>
+                            </div>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+                                <div class="bg-white p-4 rounded-2xl border-2 border-ilumnoPink shadow-2xs">
+                                    <h4 class="text-2xl font-black text-ilumnoPink">20%</h4>
+                                    <span class="text-xs font-black text-slate-700 block mt-1">Preparatorio de Técnico*</span>
+                                    <span class="text-[11px] text-slate-500">Evaluación escrita inicial</span>
+                                </div>
+                                <div class="bg-white p-4 rounded-2xl border-2 border-ilumnoTeal shadow-2xs">
+                                    <h4 class="text-2xl font-black text-ilumnoTeal">30%</h4>
+                                    <span class="text-xs font-black text-slate-700 block mt-1">Preparatorio Tecnólogo</span>
+                                    <span class="text-[11px] text-slate-500">Evaluación escrita procesos</span>
+                                </div>
+                                <div class="bg-white p-4 rounded-2xl border-2 border-ilumnoDark shadow-2xs">
+                                    <h4 class="text-2xl font-black text-ilumnoDark">40%</h4>
+                                    <span class="text-xs font-black text-slate-700 block mt-1">Examen de Egreso</span>
+                                    <span class="text-[11px] text-slate-500">Trabajo en sala, Eval. Final & Role Play**</span>
+                                </div>
+                                <div class="bg-white p-4 rounded-2xl border-2 border-emerald-500 shadow-2xs">
+                                    <h4 class="text-2xl font-black text-emerald-600">10%</h4>
+                                    <span class="text-xs font-black text-slate-700 block mt-1">Bonus de Actitud</span>
+                                    <span class="text-[11px] text-slate-500">Asistencia, Puntualidad y Participación</span>
+                                </div>
+                            </div>
+                            <p class="text-[11px] text-slate-400 text-center italic">
+                                *El aspirante podrá pasar de Técnico a Tecnólogo sin importar la nota mínima; la exigencia de 90 se aplica a partir de Tecnólogo.<br>
+                                **Nota de calidad en simulación RolePlay.
+                            </p>
                         </div>
                     `
                 },
@@ -1733,10 +1782,18 @@
                     tag: "Lámina 6 / 6",
                     body: `
                         <div class="text-center py-6 space-y-4">
+                            <div class="w-20 h-20 bg-gradient-to-tr from-ilumnoTeal to-ilumnoDark text-white rounded-3xl mx-auto flex items-center justify-center text-3xl shadow-lg">
+                                <i class="fas fa-medal"></i>
+                            </div>
                             <h3 class="text-2xl font-black text-ilumnoDark">¡Excelencia en la Gestión!</h3>
-                            <button onclick="markLessonCompleteAndToast('0.3')" class="px-6 py-2.5 bg-emerald-600 text-white font-black text-xs rounded-xl hover:bg-emerald-700 transition">
-                                Marcar Módulo Formativo como Visto
-                            </button>
+                            <p class="text-xs md:text-sm text-slate-600 max-w-lg mx-auto leading-relaxed">
+                                Tu rigurosidad, puntualidad y constante deseo de aprender marcarán la diferencia en la experiencia de cada uno de nuestros estudiantes.
+                            </p>
+                            <div class="pt-2">
+                                <button onclick="markLessonCompleteAndToast('0.3')" class="px-6 py-2.5 bg-emerald-600 text-white font-black text-xs rounded-xl hover:bg-emerald-700 transition">
+                                    Marcar Módulo Formativo como Visto
+                                </button>
+                            </div>
                         </div>
                     `
                 }
@@ -1746,37 +1803,153 @@
                     title: "ESSENCE Ilumno & HEP LatAm",
                     subtitle: "Visión Estratégica y Propósito",
                     tag: "Lámina 1 / 6",
-                    body: `<div class="bg-blue-50 p-5 rounded-2xl border border-blue-100"><span class="text-xs font-black text-ilumnoTeal uppercase block">Misión Corporativa</span><p class="text-sm font-bold text-slate-800 mt-1">Ampliar el acceso a la educación superior de calidad en Latinoamérica.</p></div>`
+                    body: `
+                        <div class="space-y-4">
+                            <div class="bg-blue-50 p-5 rounded-2xl border border-blue-100">
+                                <span class="text-xs font-black text-ilumnoTeal uppercase tracking-wider block">Misión Corporativa</span>
+                                <p class="text-sm font-bold text-slate-800 mt-1">Ampliar el acceso a la educación superior de calidad en Latinoamérica.</p>
+                            </div>
+                            <div class="bg-cyan-50 p-5 rounded-2xl border border-cyan-100">
+                                <span class="text-xs font-black text-ilumnoDark uppercase tracking-wider block">Propósito</span>
+                                <p class="text-xs text-slate-700 mt-1 leading-relaxed">Nos conectamos con el propósito de vida de cada persona para transformar sociedades a través del acceso a la educación superior.</p>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                                <div class="bg-white p-3 rounded-xl border border-slate-200">
+                                    <strong class="text-slate-800 block mb-1">¿Qué hacemos?</strong>
+                                    <p class="text-slate-600">Ayudamos a aliados a mejorar admisión y retención para un crecimiento sostenible y presencia online de alta demanda.</p>
+                                </div>
+                                <div class="bg-white p-3 rounded-xl border border-slate-200">
+                                    <strong class="text-slate-800 block mb-1">Alianzas HEP + Ilumno</strong>
+                                    <p class="text-slate-600">4 Aliados tradicionales + 7 aliados OPM en LatAm conformando el prestador de servicios en línea más grande de la región.</p>
+                                </div>
+                            </div>
+                        </div>
+                    `
                 },
                 {
                     title: "Cultura y Valores Corporativos",
                     subtitle: "Nuestros Cuatro Pilares",
                     tag: "Lámina 2 / 6",
-                    body: `<div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs"><div class="p-4 bg-white rounded-2xl border"><strong>Profesionales Comprometidos:</strong> Asume errores, capacidad analítica y respeto.</div><div class="p-4 bg-white rounded-2xl border"><strong>Impecables:</strong> Obsesionados con la calidad y la información correcta.</div><div class="p-4 bg-white rounded-2xl border"><strong>Innovadores:</strong> Se reinventan y simplifican procesos.</div><div class="p-4 bg-white rounded-2xl border"><strong>Smartworker:</strong> Autonomía y eficiencia en entornos digitales.</div></div>`
+                    body: `
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                            <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-2xs">
+                                <div class="flex items-center gap-2 mb-2 text-ilumnoDark font-black text-xs uppercase">
+                                    <i class="fas fa-user-check text-ilumnoTeal"></i> Profesionales Comprometidos
+                                </div>
+                                <p class="text-xs text-slate-600">Asume errores sin responsabilizar a otros, se dirige con respeto, tiene capacidad analítica y dice no con argumentos sólidos.</p>
+                            </div>
+                            <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-2xs">
+                                <div class="flex items-center gap-2 mb-2 text-ilumnoDark font-black text-xs uppercase">
+                                    <i class="fas fa-gem text-amber-500"></i> Impecables
+                                </div>
+                                <p class="text-xs text-slate-600">Obsesionados con la calidad, entregan más de lo esperado, brindan información correcta y mantienen informado al cliente.</p>
+                            </div>
+                            <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-2xs">
+                                <div class="flex items-center gap-2 mb-2 text-ilumnoDark font-black text-xs uppercase">
+                                    <i class="fas fa-lightbulb text-ilumnoPink"></i> Innovadores
+                                </div>
+                                <p class="text-xs text-slate-600">Se reinventan constantemente, sistematizan actividades para simplificar y cuestionan constructivamente el por qué de las cosas.</p>
+                            </div>
+                            <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-2xs">
+                                <div class="flex items-center gap-2 mb-2 text-ilumnoDark font-black text-xs uppercase">
+                                    <i class="fas fa-laptop text-emerald-600"></i> Smartworker
+                                </div>
+                                <p class="text-xs text-slate-600">Capacidad para trabajar en entornos digitales, autonomía, uso eficiente de recursos y herramientas colaborativas.</p>
+                            </div>
+                        </div>
+                    `
                 },
                 {
                     title: "Gestión Humana & Canales",
                     subtitle: "Bienestar Integral y Líneas de Escucha",
                     tag: "Lámina 3 / 6",
-                    body: `<div class="bg-slate-50 p-4 rounded-2xl border text-xs space-y-1"><p>• <strong>Comité de Convivencia:</strong> comitedeconvivencia@ilumno.com</p><p>• <strong>Línea Ética:</strong> LineaEtica@ilumno.com</p><p>• <strong>Nómina:</strong> nomina@ilumno.com</p><p>• <strong>COPASST:</strong> copasst@ilumno.com</p></div>`
+                    body: `
+                        <div class="space-y-4">
+                            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                                <h5 class="text-xs font-black text-ilumnoDark uppercase mb-2">Canales Formales de Comunicación</h5>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-600">
+                                    <p>• <strong>Comité de Convivencia:</strong> <span class="text-ilumnoTeal font-mono">comitedeconvivencia@ilumno.com</span></p>
+                                    <p>• <strong>Línea Ética:</strong> <span class="text-ilumnoTeal font-mono">LineaEtica@ilumno.com</span> (Tel: 601-7452323 Opción 9)</p>
+                                    <p>• <strong>Nómina:</strong> <span class="text-ilumnoTeal font-mono">nomina@ilumno.com</span></p>
+                                    <p>• <strong>COPASST:</strong> <span class="text-ilumnoTeal font-mono">copasst@ilumno.com</span></p>
+                                </div>
+                            </div>
+                            <div class="bg-cyan-50/60 p-4 rounded-2xl border border-cyan-100 flex items-center justify-between">
+                                <div>
+                                    <h5 class="text-xs font-bold text-slate-800">Firma Corporativa Obligatoria:</h5>
+                                    <p class="text-xs text-slate-600">Tipografía Sans Serif (Arial en Windows / Helvética en Mac) sin fondos de colores.</p>
+                                </div>
+                                <span class="text-xs font-mono font-bold text-slate-500">Sans-Serif</span>
+                            </div>
+                        </div>
+                    `
                 },
                 {
                     title: "Programa PAE & Bienestar OLife",
                     subtitle: "Programa de Asistencia al Empleado (100% Gratuito y Confidencial)",
                     tag: "Lámina 4 / 6",
-                    body: `<div class="p-5 bg-blue-50 rounded-2xl border text-center text-xs"><p class="font-bold">Orientación Psicológica, Legal, Financiera y Nutricional 24/7.</p><p class="mt-2">Portal: www.icascolombia.com | Tel: 018005180835</p></div>`
+                    body: `
+                        <div class="space-y-4">
+                            <div class="p-5 bg-blue-50 rounded-2xl border border-blue-100 text-center">
+                                <h4 class="text-sm font-black text-ilumnoDark uppercase">Beneficios Gratuitos del PAE (24/7 - 365 días)</h4>
+                                <p class="text-xs text-slate-600 mt-1">Línea de apoyo y orientación personal para ti y tu familia:</p>
+                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-3 text-xs font-bold text-slate-700">
+                                    <span class="p-2 bg-white rounded-lg border border-blue-200">Psicológica</span>
+                                    <span class="p-2 bg-white rounded-lg border border-blue-200">Legal y Financiera</span>
+                                    <span class="p-2 bg-white rounded-lg border border-blue-200">Coaching Líderes</span>
+                                    <span class="p-2 bg-white rounded-lg border border-blue-200">Nutricional</span>
+                                </div>
+                            </div>
+                            <div class="p-4 bg-slate-100 rounded-2xl text-xs text-slate-600 flex flex-col sm:flex-row justify-between items-center gap-2">
+                                <span>Portal: <strong>www.icascolombia.com</strong> | Tel: <strong>018005180835</strong></span>
+                                <span class="font-mono bg-white px-2.5 py-1 rounded border border-slate-300">App: ICAS Assists (código: usuariocol)</span>
+                            </div>
+                        </div>
+                    `
                 },
                 {
                     title: "Teletrabajo, SST y Desconexión Laboral",
                     subtitle: "Decálogo del SmartWorker y Ley 2191 de 2022",
                     tag: "Lámina 5 / 6",
-                    body: `<div class="p-4 bg-emerald-50 rounded-2xl border text-xs"><p><strong>Derecho a la Desconexión Laboral (Ley 2191 de 2022):</strong> Inicia al finalizar tu jornada laboral. Se respetan estrictamente vacaciones, incapacidades y descansos.</p></div>`
+                    body: `
+                        <div class="space-y-4 text-xs">
+                            <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-200">
+                                <span class="font-black text-emerald-800 uppercase block mb-1">Derecho a la Desconexión Laboral (Ley 2191 de 2022)</span>
+                                <p class="text-slate-600 leading-relaxed">Inicia al finalizar tu jornada laboral. El correo no es un medio inmediato después del horario. Se respetan estrictamente vacaciones, incapacidades y descansos.</p>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div class="p-3 bg-white rounded-xl border border-slate-200">
+                                    <strong class="text-slate-800 block mb-1">Puesto Ergonómico OLife:</strong>
+                                    <p class="text-slate-500">• Espalda recta y pies en el suelo o reposapiés.<br>• Pantalla al nivel de los ojos sin reflejos.<br>• Pausas activas para descansar vista y postura.</p>
+                                </div>
+                                <div class="p-3 bg-white rounded-xl border border-slate-200">
+                                    <strong class="text-slate-800 block mb-1">Directrices de Traslado:</strong>
+                                    <p class="text-slate-500">• Notificación con mínimo 15 días de antelación.<br>• Máximo 3 meses consecutivos fuera del país.<br>• Cualquier incumplimiento es falta grave.</p>
+                                </div>
+                            </div>
+                        </div>
+                    `
                 },
                 {
                     title: "Evaluación del Módulo ESSENCE",
                     subtitle: "Paso Final Requerido",
                     tag: "Lámina 6 / 6",
-                    body: `<div class="text-center py-6 space-y-4"><h3 class="text-xl font-black text-slate-800">¡Has completado el recorrido ESSENCE!</h3><button onclick="navigateToLesson('0.5')" class="px-6 py-2.5 bg-ilumnoTeal text-white font-black text-xs rounded-xl">Ir a la Evaluación ESSENCE</button></div>`
+                    body: `
+                        <div class="text-center py-6 space-y-4">
+                            <div class="w-16 h-16 rounded-2xl bg-ilumnoTeal text-white mx-auto flex items-center justify-center text-2xl shadow-md">
+                                <i class="fas fa-clipboard-check"></i>
+                            </div>
+                            <h3 class="text-xl font-black text-slate-800">¡Has completado el recorrido ESSENCE!</h3>
+                            <p class="text-xs text-slate-600 max-w-md mx-auto">
+                                Ahora pasa a la Lección 0.5 para resolver el formulario de evaluación institucional y registrar tu nota.
+                            </p>
+                            <div class="pt-2 flex justify-center gap-3">
+                                <button onclick="navigateToLesson('0.5')" class="px-6 py-2.5 bg-ilumnoTeal text-white font-black text-xs rounded-xl hover:bg-[#0089a8] transition shadow-xs flex items-center gap-2">
+                                    <span>Ir a la Evaluación ESSENCE</span> <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `
                 }
             ]
         };
@@ -1868,7 +2041,6 @@
             document.getElementById('login-overlay').classList.remove('hidden');
         }
 
-        // Logo oficial HEP en SVG integrado como respaldo automático si no existe ./images/logo_hep.png
         const HEP_SVG_DATA_URI = "data:image/svg+xml;utf8," + encodeURIComponent(`
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
                 <rect width="120" height="120" rx="24" fill="#00264D"/>
@@ -1882,13 +2054,11 @@
             const uni = userProfile.campaign || 'Politécnico Grancolombiano (POLI)';
             const split = userProfile.split || 'Formación Activa';
 
-            // 1. Actualizar tarjeta de perfil superior derecha
             document.getElementById('user-display-name').textContent = displayName;
             document.getElementById('user-display-meta').innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse flex-shrink-0"></span> <span class="truncate">${split}</span>`;
             document.getElementById('profile-avatar').textContent = getInitials(displayName);
             document.getElementById('modal-profile-avatar').textContent = getInitials(displayName);
 
-            // 2. Regla estricta: ILUMNO en todas, EXCEPTO en HEP -> Higher Ed Partners Latam + Logo HEP
             const brandTitle = document.getElementById('header-brand-title');
             const brandSubtitle = document.getElementById('header-brand-subtitle');
             const brandLogo = document.getElementById('header-logo-img');
@@ -1901,7 +2071,6 @@
                         this.onerror = null;
                         this.src = HEP_SVG_DATA_URI;
                     };
-                    // Si tienes un archivo logo_hep.png en /images lo usa; si no, muestra el emblema HEP integrado
                     brandLogo.src = './images/logo_hep.png';
                 }
                 document.title = 'Higher Ed Partners Latam | Curso para Expertos';
@@ -1915,13 +2084,11 @@
                 document.title = 'ILUMNO | Curso para Expertos';
             }
 
-            // 3. Sincronizar campos dentro del modal de Perfil
             document.getElementById('user-input-name').value = userProfile.name || '';
             document.getElementById('user-input-cedula').value = userProfile.cedula || '';
             document.getElementById('user-input-campaign').value = uni;
             document.getElementById('user-input-split').value = userProfile.split || 'Rematrícula y Servicio';
 
-            // 4. Mostrar botón "Consola Formador" SOLO si el usuario inició sesión como Formador
             const isTrainer = sessionStorage.getItem('ilumno_trainer_auth') === 'true';
             const trainerHeaderBtn = document.getElementById('trainer-return-btn');
             const trainerProfileBtn = document.getElementById('profile-trainer-shortcut');
@@ -1934,7 +2101,6 @@
             }
         }
 
-        // Función para Cerrar Sesión limpiamente y volver a la portada de acceso
         function logoutExpertSession() {
             closeProfileModal();
             localStorage.removeItem('ilumno_user_profile');
@@ -2021,7 +2187,6 @@
             updateActiveNavHighlight(lessonId);
             updateSidebarPanesForLesson(lessonId);
 
-            // Botón de Simulador Condicional (SOLO EN TEMAS, NO EN OBJETIVOS NI DASHBOARDS)
             const simulatorBtnHtml = lesson.hasSimulator ? `
                 <button onclick="openTopicSimulator('${lesson.id}', '${lesson.simulatorUrl || ''}')" class="px-4 py-2 rounded-xl text-xs font-black bg-amber-500 hover:bg-amber-600 text-white transition shadow-sm flex items-center gap-2">
                     <i class="fas fa-headset"></i> <span>Ir al Simulador del Tema</span>
@@ -2045,12 +2210,11 @@
             `;
 
             if (lesson.isSlideshow) {
-                renderSlideshow(lesson.slideshowId, lesson, headerBarHtml);
+                renderSlideshow(lesson.slideshowId, lesson);
             } else if (lesson.isCustomEvaluation) {
                 lessonWrapper.innerHTML = headerBarHtml + `<div id="eval-360-mount"></div>`;
                 renderEvaluation360Home();
             } else if (lesson.externalFile) {
-                // VISOR EMBEBIDO SIN ENLACES EXTERNOS (CARGA EL HTML INDEPENDIENTE EN EL MISMO ESPACIO VISUAL)
                 lessonWrapper.innerHTML = `
                     <div class="fade-in">
                         ${headerBarHtml}
@@ -2075,22 +2239,100 @@
             }
         }
 
+        // =========================================================================
+        // PUENTE INTELIGENTE PARA DASHBOARDS Y ENLACES INTERNOS DE IFRAMES (EVITA 404)
+        // =========================================================================
+        function resolveLessonIdFromTarget(rawTarget, linkText = '') {
+            if (!rawTarget && !linkText) return null;
+            const combined = ((rawTarget || '') + ' ' + (linkText || '')).toLowerCase();
+
+            // Coincidencia directa por código de lección (ej: 1.3, 2.4, 3.3)
+            for (const [key, data] of Object.entries(LESSONS_DATA)) {
+                if (data.externalFile && combined.includes(data.externalFile.toLowerCase())) {
+                    return key;
+                }
+            }
+
+            // Mapa de palabras clave usadas en botones de Objetivos y Dashboards
+            if (combined.includes('simulador_')) {
+                const match = combined.match(/simulador_(\d+\.\d+\.html)/);
+                if (match) return { isSimulator: true, url: `simulador_${match[1]}` };
+            }
+            if (combined.includes('home_bienvenida') || combined.includes('bienvenida')) return '0.1';
+            if (combined.includes('objetivo_fase1')) return '1.1';
+            if (combined.includes('dashboard_fase1') || combined.includes('dashboard comercial')) return '1.2';
+            if (combined.includes('tema1') || combined.includes('tema 1') || combined.includes('fundamentos comerciales')) return '1.3';
+            if (combined.includes('tema2') || combined.includes('tema 2') || combined.includes('venta consultiva')) return '1.4';
+            if (combined.includes('evaluacioncomercial') || combined.includes('evaluacion_comercial') || combined.includes('evaluación comercial')) return '1.5';
+
+            if (combined.includes('objetivo_fase2')) return '2.1';
+            if (combined.includes('dashboard_fase2') || combined.includes('dashboard procesos')) return '2.2';
+            if (combined.includes('financiero')) return '2.3';
+            if (combined.includes('reintegro')) return '2.4';
+            if (combined.includes('inscripcion') || combined.includes('inscripción') || combined.includes('asignaturas')) return '2.5';
+            if (combined.includes('campana') || combined.includes('campaña')) return '2.6';
+            if (combined.includes('aplazamiento')) return '2.7';
+            if (combined.includes('soporte')) return '2.8';
+            if (combined.includes('grado')) return '2.9';
+
+            if (combined.includes('objetivo_fase3')) return '3.1';
+            if (combined.includes('dashboard_fase3') || combined.includes('dashboard herramientas') || combined.includes('dashboard aplicativos')) return '3.2';
+            if (combined.includes('crm') || combined.includes('telefonia') || combined.includes('telefonía') || combined.includes('hubspot') || combined.includes('genesys')) return '3.3';
+            if (combined.includes('analytics')) return '3.4';
+
+            if (combined.includes('evaluacion_satisfaccion') || combined.includes('satisfaccion') || combined.includes('satisfacción')) return '4.2';
+            if (combined.includes('evaluacion') || combined.includes('evaluación')) return '4.1';
+            if (combined.includes('index.html') || combined.includes('inicio')) return 'home';
+
+            return null;
+        }
+
         function adjustIframeHeight(iframe) {
             try {
-                if (iframe.contentWindow && iframe.contentWindow.document && iframe.contentWindow.document.body) {
-                    const height = iframe.contentWindow.document.body.scrollHeight;
-                    if (height > 500) {
-                        iframe.style.height = (height + 40) + 'px';
-                    }
+                const doc = iframe.contentWindow.document;
+                if (!doc || !doc.body) return;
+
+                // 1. Ajustar altura automáticamente
+                const height = doc.body.scrollHeight;
+                if (height > 500) {
+                    iframe.style.height = (height + 40) + 'px';
                 }
+
+                // 2. Interceptar todos los enlaces <a> y botones con onclick dentro del iframe para evitar errores 404
+                const clickableElements = doc.querySelectorAll('a[href], button[onclick], div[onclick]');
+                clickableElements.forEach(el => {
+                    const href = el.getAttribute('href') || '';
+                    const onclickAttr = el.getAttribute('onclick') || '';
+
+                    // No interceptar enlaces externos reales (https://forms.office.com, etc.) ni anclas vacías (#)
+                    if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('mailto:')) return;
+
+                    const targetMatch = resolveLessonIdFromTarget(href + ' ' + onclickAttr, el.textContent || '');
+                    if (targetMatch) {
+                        el.removeAttribute('onclick');
+                        if (el.tagName.toLowerCase() === 'a') {
+                            el.setAttribute('href', 'javascript:void(0)');
+                            el.removeAttribute('target');
+                        }
+                        el.style.cursor = 'pointer';
+                        el.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            if (typeof targetMatch === 'object' && targetMatch.isSimulator) {
+                                openTopicSimulator(currentLessonId, targetMatch.url);
+                            } else {
+                                navigateToLesson(targetMatch);
+                            }
+                        });
+                    }
+                });
             } catch (e) {
-                // Si se abre en local con file:// el navegador usa el min-h-[76vh] con scroll propio
+                // Si se abre en local con file:// el navegador aplica políticas CORS; en GitHub Pages funciona al 100%
             }
         }
 
         function openTopicSimulator(lessonId, simulatorUrl) {
             if (!simulatorUrl) return;
-            // Cargamos el simulador independiente en el mismo visor o en pestaña según disponibilidad
             const frame = document.getElementById('embedded-lesson-frame');
             if (frame) {
                 frame.src = `./${simulatorUrl}`;
@@ -2174,7 +2416,7 @@
                 if (evalState.currentIndex === idx) classes += 'bg-[#00264D] text-white ring-2 ring-blue-300';
                 else if (evalState.answers[idx] !== undefined) classes += 'bg-emerald-100 text-emerald-800 border border-emerald-300';
                 else classes += 'bg-slate-100 text-slate-500 hover:bg-slate-200';
-                gridHtml += `<button onclick="jumpIntegratedQuiz(${idx})" class="${classes}">${idx + 1}</button>`;
+                gridHtml += `<button type="button" onclick="jumpIntegratedQuiz(${idx})" class="${classes}">${idx + 1}</button>`;
             });
 
             let optionsHtml = '';
@@ -2185,7 +2427,7 @@
                 } else {
                     classes += 'border-slate-200 hover:border-blue-300 hover:bg-slate-50 text-slate-700';
                 }
-                optionsHtml += `<button onclick="answerIntegratedQuiz(${idx})" class="${classes}">${opt}</button>`;
+                optionsHtml += `<button type="button" onclick="answerIntegratedQuiz(${idx})" class="${classes}">${opt}</button>`;
             });
 
             mount.innerHTML = `
@@ -2215,16 +2457,16 @@
                         </div>
 
                         <div class="mt-8 flex justify-between items-center border-t border-slate-100 pt-6">
-                            <button onclick="prevIntegratedQuiz()" ${evalState.currentIndex === 0 ? 'disabled' : ''} class="font-bold py-2.5 px-5 rounded-xl text-xs sm:text-sm flex items-center gap-2 transition ${evalState.currentIndex === 0 ? 'text-slate-300 cursor-not-allowed' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
+                            <button type="button" onclick="prevIntegratedQuiz()" ${evalState.currentIndex === 0 ? 'disabled' : ''} class="font-bold py-2.5 px-5 rounded-xl text-xs sm:text-sm flex items-center gap-2 transition ${evalState.currentIndex === 0 ? 'text-slate-300 cursor-not-allowed' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
                                 <i class="fa-solid fa-arrow-left"></i> Anterior
                             </button>
 
                             ${!isLast ? `
-                                <button onclick="nextIntegratedQuiz()" class="font-bold py-2.5 px-6 rounded-xl text-xs sm:text-sm flex items-center gap-2 bg-[#00264D] text-white hover:bg-blue-950 transition shadow-md">
+                                <button type="button" onclick="nextIntegratedQuiz()" class="font-bold py-2.5 px-6 rounded-xl text-xs sm:text-sm flex items-center gap-2 bg-[#00264D] text-white hover:bg-blue-950 transition shadow-md">
                                     Siguiente <i class="fa-solid fa-arrow-right"></i>
                                 </button>
                             ` : `
-                                <button onclick="finishIntegratedQuiz()" ${!allAnswered ? 'disabled' : ''} class="font-black py-3 px-7 rounded-xl text-xs sm:text-sm flex items-center gap-2 transition shadow-md ${allAnswered ? 'bg-ilumnoYellow text-[#00264D] hover:bg-amber-400' : 'bg-slate-200 text-slate-400 cursor-not-allowed'}">
+                                <button type="button" onclick="finishIntegratedQuiz()" ${!allAnswered ? 'disabled' : ''} class="font-black py-3 px-7 rounded-xl text-xs sm:text-sm flex items-center gap-2 transition shadow-md ${allAnswered ? 'bg-ilumnoYellow text-[#00264D] hover:bg-amber-400' : 'bg-slate-200 text-slate-400 cursor-not-allowed'}">
                                     Finalizar Evaluación <i class="fa-solid fa-check-circle"></i>
                                 </button>
                             `}
@@ -2292,7 +2534,6 @@
                 localStorage.setItem('poli_completed', JSON.stringify(evalState.completedPhases));
             }
 
-            // Guardar en localStorage y Firebase
             try {
                 let localData = JSON.parse(localStorage.getItem('poli_evaluations') || '[]');
                 localData.push({ id: Date.now().toString(), ...resultData });
@@ -2356,10 +2597,10 @@
                     ${feedbackHtml}
 
                     <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                        <button onclick="switchQuizPhaseAndRestart()" class="px-6 py-3.5 bg-[#00264D] text-white font-bold text-xs sm:text-sm rounded-xl hover:bg-blue-950 transition">
+                        <button type="button" onclick="switchQuizPhaseAndRestart()" class="px-6 py-3.5 bg-[#00264D] text-white font-bold text-xs sm:text-sm rounded-xl hover:bg-blue-950 transition">
                             Presentar ${evalState.phase === 'fase2' ? 'Fase 3 (Herramientas)' : 'Fase 2 (Producto)'}
                         </button>
-                        <button onclick="navigateToLesson('4.2')" class="px-6 py-3.5 bg-ilumnoYellow text-[#00264D] font-black text-xs sm:text-sm rounded-xl hover:bg-amber-400 transition">
+                        <button type="button" onclick="navigateToLesson('4.2')" class="px-6 py-3.5 bg-ilumnoYellow text-[#00264D] font-black text-xs sm:text-sm rounded-xl hover:bg-amber-400 transition">
                             Ir a Encuesta de Satisfacción <i class="fas fa-arrow-right ml-1"></i>
                         </button>
                     </div>
@@ -2372,10 +2613,10 @@
             renderEvaluation360Home();
         }
 
-        // ==========================================
-        // 7. MOTOR DE DIAPOSITIVAS INTERACTIVAS
-        // ==========================================
-        function renderSlideshow(deckId, lesson, headerBarHtml) {
+        // =========================================================================
+        // 7. MOTOR DE DIAPOSITIVAS INTERACTIVAS (IDÉNTICO A TUS CAPTURAS)
+        // =========================================================================
+        function renderSlideshow(deckId, lesson) {
             currentSlideshowDeck = deckId;
             currentSlideIndex = 0;
             const wrapper = document.getElementById('lesson-content-wrapper');
@@ -2383,23 +2624,45 @@
 
             wrapper.innerHTML = `
                 <div class="space-y-5 fade-in">
-                    ${headerBarHtml}
-                    <div class="bg-white rounded-3xl border border-slate-200 shadow-md overflow-hidden flex flex-col min-h-[420px]">
+                    <div class="flex items-center justify-between pb-3 border-b border-slate-200">
+                        <div>
+                            <span class="text-xs font-black text-ilumnoTeal uppercase tracking-wider">${lesson.module}</span>
+                            <h2 class="text-xl md:text-2xl font-black text-slate-800">${lesson.title}</h2>
+                        </div>
+                        <span class="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200">
+                            <i class="fas fa-file-powerpoint text-amber-500 mr-1"></i> Presentación Interactiva
+                        </span>
+                    </div>
+
+                    <!-- CAJA DEL SLIDE DECK -->
+                    <div class="bg-white rounded-3xl border border-slate-200 shadow-md overflow-hidden flex flex-col min-h-[460px]">
+                        <!-- Top Bar de la Diapositiva -->
                         <div class="bg-ilumnoDark text-white p-4 px-6 flex justify-between items-center">
                             <div class="flex items-center gap-2">
                                 <span class="w-2.5 h-2.5 rounded-full bg-ilumnoTeal inline-block"></span>
                                 <span id="slide-deck-tag" class="text-xs font-mono font-bold tracking-wider text-cyan-200">Lámina 1 / ${slides.length}</span>
                             </div>
-                            <button onclick="resetSlideshow()" class="text-slate-400 hover:text-white text-xs px-2 py-1 rounded" title="Reiniciar Diapositivas">
-                                <i class="fas fa-redo-alt"></i>
-                            </button>
+                            <div class="flex items-center gap-2">
+                                <button onclick="resetSlideshow()" class="text-slate-400 hover:text-white text-xs px-2 py-1 rounded" title="Reiniciar Diapositivas">
+                                    <i class="fas fa-redo-alt"></i>
+                                </button>
+                            </div>
                         </div>
-                        <div id="slide-viewport" class="p-6 md:p-10 flex-1 flex flex-col justify-center slide-transition"></div>
+
+                        <!-- Cuerpo del Slide -->
+                        <div id="slide-viewport" class="p-6 md:p-10 flex-1 flex flex-col justify-center slide-transition">
+                            <!-- Inyectado dinámicamente -->
+                        </div>
+
+                        <!-- Barra de Controles Inferior del Slide Deck -->
                         <div class="bg-slate-50 p-4 px-6 border-t border-slate-200 flex items-center justify-between">
                             <button id="btn-slide-prev" onclick="prevSlide()" class="px-4 py-2 bg-white border border-slate-300 text-slate-700 text-xs font-bold rounded-xl hover:bg-slate-100 transition flex items-center gap-2">
                                 <i class="fas fa-chevron-left"></i> Anterior
                             </button>
+
+                            <!-- Puntos indicadores de slide -->
                             <div id="slide-dots-container" class="flex items-center gap-2"></div>
+
                             <button id="btn-slide-next" onclick="nextSlide()" class="px-5 py-2 bg-ilumnoTeal hover:bg-[#0089a8] text-white text-xs font-black rounded-xl transition flex items-center gap-2 shadow-xs">
                                 Siguiente <i class="fas fa-chevron-right"></i>
                             </button>
@@ -2798,7 +3061,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, collection, doc, setDoc, addDoc, onSnapshot, query, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, doc, setDoc, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDTfwHBqGnB9axzTj4XzdVkcq6BcY_ZjqM",
@@ -2819,7 +3082,6 @@
             console.error("Error inicializando Firebase:", err);
         }
 
-        // 1. Sincronizar perfil, avance y apuntes del Experto en la colección 'expertos_progreso'
         window.syncExpertToFirebase = async function() {
             if (!db || !userProfile.cedula) return;
             try {
@@ -2840,7 +3102,6 @@
             }
         };
 
-        // 2. Guardar evaluación en 'evaluaciones_poli'
         window.saveEvalToFirebase = async function(resultData) {
             if (!db) return;
             try {
@@ -2851,7 +3112,6 @@
             }
         };
 
-        // 3. Publicar pregunta en 'preguntas_expertos' para que el formador la responda
         window.pushQuestionToFirebase = async function(questionObj) {
             if (!db) return;
             try {
@@ -2861,7 +3121,6 @@
             }
         };
 
-        // 4. Escuchar respuestas del formador en tiempo real
         if (db) {
             onSnapshot(collection(db, 'preguntas_expertos'), (snapshot) => {
                 const remoteQuestions = {};
@@ -2881,42 +3140,43 @@
             }, () => {});
         }
     </script>
-   <!-- MODAL DE SEGURIDAD PARA IR A FORMADOR.HTML -->
-<div id="modal-trainer-auth" class="fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-[60] hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 text-center space-y-4 fade-in">
-        <div class="w-12 h-12 rounded-2xl bg-ilumnoDark text-ilumnoYellow flex items-center justify-center mx-auto text-xl shadow-md">
-            <i class="fas fa-user-shield"></i>
-        </div>
-        <div>
-            <h3 class="text-base font-black text-ilumnoDark">Acceso Consola del Formador</h3>
-            <p class="text-xs text-slate-500">Ingresa tu clave docente para continuar</p>
-        </div>
-        <form onsubmit="verifyAndGoToTrainer(event)" class="space-y-3">
-            <input id="idx-trainer-pass" type="password" required placeholder="Contraseña (Poli2026)" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-center text-sm font-bold outline-none focus:border-ilumnoTeal">
-            <p id="idx-trainer-err" class="text-xs font-bold text-rose-600 hidden">Clave incorrecta</p>
-            <div class="flex gap-2">
-                <button type="button" onclick="document.getElementById('modal-trainer-auth').classList.add('hidden')" class="flex-1 py-2.5 bg-slate-100 text-slate-600 font-bold text-xs rounded-xl">Cancelar</button>
-                <button type="submit" class="flex-1 py-2.5 bg-ilumnoTeal text-white font-black text-xs rounded-xl">Entrar</button>
-            </div>
-        </form>
-    </div>
-</div>
 
-<script>
-    function openTrainerAuthModal() {
-        document.getElementById('idx-trainer-pass').value = '';
-        document.getElementById('idx-trainer-err').classList.add('hidden');
-        document.getElementById('modal-trainer-auth').classList.remove('hidden');
-    }
-    function verifyAndGoToTrainer(e) {
-        e.preventDefault();
-        if (document.getElementById('idx-trainer-pass').value.trim() === 'Poli2026') {
-            sessionStorage.setItem('ilumno_trainer_auth', 'true');
-            window.location.href = './formador.html';
-        } else {
-            document.getElementById('idx-trainer-err').classList.remove('hidden');
+    <!-- MODAL DE SEGURIDAD PARA IR A FORMADOR.HTML -->
+    <div id="modal-trainer-auth" class="fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-[60] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 text-center space-y-4 fade-in">
+            <div class="w-12 h-12 rounded-2xl bg-ilumnoDark text-ilumnoYellow flex items-center justify-center mx-auto text-xl shadow-md">
+                <i class="fas fa-user-shield"></i>
+            </div>
+            <div>
+                <h3 class="text-base font-black text-ilumnoDark">Acceso Consola del Formador</h3>
+                <p class="text-xs text-slate-500">Ingresa tu clave docente para continuar</p>
+            </div>
+            <form onsubmit="verifyAndGoToTrainer(event)" class="space-y-3">
+                <input id="idx-trainer-pass" type="password" required placeholder="Contraseña (Poli2026)" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-center text-sm font-bold outline-none focus:border-ilumnoTeal">
+                <p id="idx-trainer-err" class="text-xs font-bold text-rose-600 hidden">Clave incorrecta</p>
+                <div class="flex gap-2">
+                    <button type="button" onclick="document.getElementById('modal-trainer-auth').classList.add('hidden')" class="flex-1 py-2.5 bg-slate-100 text-slate-600 font-bold text-xs rounded-xl">Cancelar</button>
+                    <button type="submit" class="flex-1 py-2.5 bg-ilumnoTeal text-white font-black text-xs rounded-xl">Entrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openTrainerAuthModal() {
+            document.getElementById('idx-trainer-pass').value = '';
+            document.getElementById('idx-trainer-err').classList.add('hidden');
+            document.getElementById('modal-trainer-auth').classList.remove('hidden');
         }
-    }
-</script> 
+        function verifyAndGoToTrainer(e) {
+            e.preventDefault();
+            if (document.getElementById('idx-trainer-pass').value.trim() === 'Poli2026') {
+                sessionStorage.setItem('ilumno_trainer_auth', 'true');
+                window.location.href = './formador.html';
+            } else {
+                document.getElementById('idx-trainer-err').classList.remove('hidden');
+            }
+        }
+    </script> 
 </body>
 </html>
