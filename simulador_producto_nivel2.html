@@ -1,0 +1,1830 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador de Llamadas - Nivel 2: Producto y Procesos | Politécnico Grancolombiano</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            poli: {
+              blue: '#10385b',
+              sky: '#44aed8',
+              lime: '#a3cb36',
+              yellow: '#fbb017',
+              berry: '#d8066b',
+              dark: '#0a233a'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .glass-card {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    .pulse-mic {
+      animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    }
+    @keyframes pulse-ring {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(216, 6, 107, 0.7); }
+      70% { transform: scale(1.05); box-shadow: 0 0 0 14px rgba(216, 6, 107, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(216, 6, 107, 0); }
+    }
+    .tab-btn.active {
+      background-color: #10385b;
+      color: #ffffff;
+      border-color: #10385b;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col font-sans">
+
+  <!-- TOP HEADER INSTITUCIONAL -->
+  <header class="bg-poli-blue text-white shadow-lg sticky top-0 z-50 border-b-4 border-poli-berry">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <a href="../index.html" class="flex items-center space-x-2 text-slate-200 hover:text-white transition group" title="Regresar al Entorno">
+          <i class="fa-solid fa-arrow-left text-sm group-hover:-translate-x-1 transition-transform"></i>
+          <span class="text-xs font-semibold uppercase tracking-wider hidden sm:inline">Entorno General</span>
+        </a>
+        <span class="text-slate-500">|</span>
+        <div class="flex items-center space-x-2">
+          <div class="w-8 h-8 rounded-lg bg-poli-berry/20 flex items-center justify-center text-poli-berry border border-poli-berry/40 font-bold">
+            <i class="fa-solid fa-layer-group text-sm"></i>
+          </div>
+          <div>
+            <h1 class="text-sm font-bold tracking-tight text-white flex items-center gap-2">
+              SIMULADOR INTEGRAL DE SERVICIO <span class="bg-poli-sky text-[10px] uppercase font-extrabold px-2 py-0.5 rounded-full text-poli-dark">Nivel 2 • 21 Casos</span>
+            </h1>
+            <p class="text-[11px] text-slate-300">Solución Clara y Completa • Venta Consultiva • Matriz Calidad 2.1</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- MÉTRICAS DE AUDITORÍA EN TIEMPO REAL -->
+      <div class="flex items-center space-x-6">
+        <div class="flex items-center space-x-2 bg-poli-dark/60 px-3 py-1.5 rounded-xl border border-white/10">
+          <div class="text-right">
+            <span class="text-[10px] text-slate-400 uppercase font-semibold block leading-none">Índice IKQ Actual</span>
+            <span id="header-ikq" class="text-base font-extrabold text-poli-lime">100 / 100</span>
+          </div>
+          <div class="w-2.5 h-2.5 rounded-full bg-poli-lime animate-pulse" id="ikq-indicator"></div>
+        </div>
+        <div class="hidden md:flex items-center space-x-2 text-xs text-slate-300">
+          <i class="fa-regular fa-clock text-poli-yellow"></i>
+          <span id="call-timer" class="font-mono font-bold text-white">00:00</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAVEGACIÓN DE TEMAS (7 CATEGORÍAS DE PRODUCTO) -->
+  <div class="bg-white border-b border-slate-200 shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 py-2.5 flex items-center gap-2 overflow-x-auto custom-scrollbar" id="topic-tabs">
+      <button data-topic="Financiero" class="tab-btn active px-3.5 py-1.5 rounded-xl text-xs font-bold border border-slate-300 whitespace-nowrap transition flex items-center gap-1.5">
+        <i class="fa-solid fa-coins"></i> 1. Financiero (3)
+      </button>
+      <button data-topic="Reintegro" class="tab-btn px-3.5 py-1.5 rounded-xl text-xs font-bold border border-slate-300 text-slate-600 hover:bg-slate-50 whitespace-nowrap transition flex items-center gap-1.5">
+        <i class="fa-solid fa-rotate-left"></i> 2. Reintegro (3)
+      </button>
+      <button data-topic="Inscripcion" class="tab-btn px-3.5 py-1.5 rounded-xl text-xs font-bold border border-slate-300 text-slate-600 hover:bg-slate-50 whitespace-nowrap transition flex items-center gap-1.5">
+        <i class="fa-solid fa-calendar-check"></i> 3. Inscripción Asignaturas (3)
+      </button>
+      <button data-topic="Campanas" class="tab-btn px-3.5 py-1.5 rounded-xl text-xs font-bold border border-slate-300 text-slate-600 hover:bg-slate-50 whitespace-nowrap transition flex items-center gap-1.5">
+        <i class="fa-solid fa-rocket"></i> 4. Campañas Adelantar (3)
+      </button>
+      <button data-topic="Aplazamientos" class="tab-btn px-3.5 py-1.5 rounded-xl text-xs font-bold border border-slate-300 text-slate-600 hover:bg-slate-50 whitespace-nowrap transition flex items-center gap-1.5">
+        <i class="fa-solid fa-pause-circle"></i> 5. Aplazamientos (3)
+      </button>
+      <button data-topic="Certificados" class="tab-btn px-3.5 py-1.5 rounded-xl text-xs font-bold border border-slate-300 text-slate-600 hover:bg-slate-50 whitespace-nowrap transition flex items-center gap-1.5">
+        <i class="fa-solid fa-file-certificate"></i> 6. Certificados (3)
+      </button>
+      <button data-topic="Grados" class="tab-btn px-3.5 py-1.5 rounded-xl text-xs font-bold border border-slate-300 text-slate-600 hover:bg-slate-50 whitespace-nowrap transition flex items-center gap-1.5">
+        <i class="fa-solid fa-graduation-cap"></i> 7. Grados (3)
+      </button>
+    </div>
+  </div>
+
+  <!-- CONTENIDO PRINCIPAL: GRID LAYOUT -->
+  <main class="max-w-7xl w-full mx-auto p-4 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-5">
+
+    <!-- PANEL IZQUIERDO: SELECTOR DE CASOS & FICHA DEL ESTUDIANTE (4 COLS) -->
+    <aside class="lg:col-span-4 flex flex-col space-y-4">
+      
+      <!-- SELECTOR DE CASOS DEL TEMA ACTIVO -->
+      <div class="glass-card rounded-2xl p-4 shadow-sm border border-slate-200">
+        <label class="text-xs font-bold text-poli-blue uppercase tracking-wide flex items-center justify-between mb-2">
+          <span id="topic-label-title">Escenarios: Financiero</span>
+          <span class="text-[10px] bg-poli-sky/15 text-poli-blue px-2 py-0.5 rounded-md font-bold">3 Llamadas</span>
+        </label>
+        <select id="case-selector" class="w-full text-xs font-semibold bg-white border border-slate-300 rounded-xl px-3 py-2.5 text-slate-700 focus:outline-none focus:ring-2 focus:ring-poli-sky transition">
+        </select>
+      </div>
+
+      <!-- FICHA CONTEXTUAL DEL ESTUDIANTE (CRM & ANALYTICS SIMULADO) -->
+      <div class="glass-card rounded-2xl p-4 shadow-sm border border-slate-200 flex-1 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between border-b border-slate-200 pb-3 mb-3">
+            <div class="flex items-center space-x-3">
+              <div id="student-avatar" class="w-11 h-11 rounded-full bg-poli-blue text-white flex items-center justify-center font-bold text-base shadow-md">
+                ST
+              </div>
+              <div>
+                <h2 id="student-name" class="text-sm font-bold text-slate-900 leading-tight">Estudiante</h2>
+                <p id="student-program" class="text-[11px] text-slate-500 font-medium">Programa</p>
+              </div>
+            </div>
+            <span id="student-tag" class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-blue-100 text-poli-blue uppercase tracking-wide">
+              Caso
+            </span>
+          </div>
+
+          <div class="space-y-2.5 text-xs">
+            <!-- VISTA RÁPIDA DE SISTEMA (LO QUE EL ASESOR VE EN ANALYTICS / BANNER) -->
+            <div class="bg-slate-800 text-slate-100 p-2.5 rounded-xl border border-slate-700">
+              <span class="text-[10px] text-poli-sky uppercase font-bold tracking-wider flex items-center gap-1 mb-1">
+                <i class="fa-solid fa-desktop"></i> Consulta Previa en Sistema (Analytics / Banner)
+              </span>
+              <p id="system-context" class="text-[11px] text-slate-200 leading-relaxed font-mono"></p>
+            </div>
+
+            <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+              <span class="text-[10px] text-slate-400 uppercase font-bold block mb-0.5">Situación del Estudiante</span>
+              <p id="student-reason" class="text-slate-700 font-medium leading-relaxed"></p>
+            </div>
+            <div class="bg-blue-50/60 p-2.5 rounded-xl border border-blue-100">
+              <span class="text-[10px] text-poli-blue uppercase font-bold block mb-0.5">Objetivo Pedagógico / Calidad</span>
+              <p id="case-objective" class="text-slate-700 font-medium leading-relaxed"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- REGLAS DE ORO DEL EVALUADOR NIVEL 2 -->
+        <div class="mt-4 pt-3 border-t border-slate-200">
+          <div class="flex items-center justify-between text-[11px] text-slate-500 mb-2">
+            <span class="font-semibold text-slate-700"><i class="fa-solid fa-scale-balanced mr-1 text-poli-berry"></i> Matriz Calidad 2.1 (Nivel 2)</span>
+            <span class="text-poli-berry font-bold">Meta: ≥ 90 pts</span>
+          </div>
+          <div class="grid grid-cols-2 gap-1.5 text-[10px]">
+            <div class="bg-white p-1.5 rounded-lg border border-slate-200 text-slate-600">
+              <span class="font-bold text-poli-berry block">Solución Integral</span> 11 pts (Alto Impacto)
+            </div>
+            <div class="bg-white p-1.5 rounded-lg border border-slate-200 text-slate-600">
+              <span class="font-bold text-poli-blue block">Indagación</span> 11 pts (Alto Impacto)
+            </div>
+            <div class="bg-white p-1.5 rounded-lg border border-slate-200 text-slate-600">
+              <span class="font-bold text-poli-blue block">Objeciones</span> 11 pts (Alto Impacto)
+            </div>
+            <div class="bg-white p-1.5 rounded-lg border border-slate-200 text-slate-600">
+              <span class="font-bold text-poli-blue block">Cierre Afirmativo</span> 11 pts (Alto Impacto)
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- PANEL CENTRAL / DERECHO: CONSOLA DE LLAMADA INTERACTIVA (8 COLS) -->
+    <section class="lg:col-span-8 flex flex-col space-y-4">
+      
+      <div class="glass-card rounded-2xl p-4 shadow-sm border border-slate-200 flex-1 flex flex-col min-h-[470px] max-h-[560px]">
+        
+        <!-- ESTADO DE LA LLAMADA -->
+        <div class="flex items-center justify-between pb-3 border-b border-slate-200">
+          <div class="flex items-center space-x-2">
+            <span class="w-3 h-3 rounded-full bg-emerald-500 animate-ping"></span>
+            <span class="text-xs font-bold text-slate-700 tracking-wide uppercase">Llamada en Curso</span>
+          </div>
+          <div class="flex items-center space-x-2">
+            <button id="btn-toggle-voice" class="text-xs px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition flex items-center gap-1 font-medium" title="Activar/Desactivar Voz del Estudiante">
+              <i class="fa-solid fa-volume-high text-poli-sky" id="voice-icon"></i>
+              <span id="voice-label" class="text-[11px]">Audio Activado</span>
+            </button>
+            <button id="btn-restart" class="text-xs px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-red-50 text-slate-600 hover:text-red-600 transition flex items-center gap-1 font-medium" title="Reiniciar Escenario">
+              <i class="fa-solid fa-rotate-right text-[10px]"></i>
+              <span class="text-[11px]">Reiniciar</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- HISTORIAL DE CONVERSACIÓN -->
+        <div id="dialog-container" class="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-4 text-xs mt-2"></div>
+
+        <!-- INDICADOR DE ESCUCHA -->
+        <div id="typing-indicator" class="hidden py-1 px-3 text-[11px] text-slate-400 italic flex items-center gap-2">
+          <span class="flex space-x-1">
+            <span class="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce"></span>
+            <span class="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></span>
+            <span class="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style="animation-delay: 0.4s"></span>
+          </span>
+          <span id="typing-text">El estudiante está respondiendo...</span>
+        </div>
+
+        <!-- INPUT LIMPIO Y SEPARADO -->
+        <div class="mt-3 pt-3 border-t border-slate-200">
+          <div class="flex items-end gap-2">
+            
+            <!-- MICRÓFONO CONTINUO EXTERNO -->
+            <button id="btn-mic" type="button" class="w-11 h-11 rounded-xl bg-slate-100 hover:bg-poli-berry/10 border border-slate-300 text-slate-600 hover:text-poli-berry flex items-center justify-center shrink-0 transition" title="Hablar por Micrófono (Modo Continuo)">
+              <i class="fa-solid fa-microphone text-base" id="mic-icon"></i>
+            </button>
+
+            <!-- TEXTAREA LIMPIO -->
+            <textarea id="advisor-input" rows="2" placeholder="Escribe o dicta por micrófono tu respuesta completa y clara..." 
+                      class="flex-1 p-2.5 text-xs bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-poli-sky text-slate-800 placeholder-slate-400 resize-none custom-scrollbar leading-relaxed"></textarea>
+
+            <!-- BOTÓN RESPONDER EXTERNO -->
+            <button id="btn-send" type="button" class="h-11 px-5 bg-poli-blue hover:bg-poli-sky text-white rounded-xl text-xs font-bold transition flex items-center gap-2 shrink-0 shadow-sm">
+              <span>Responder</span>
+              <i class="fa-solid fa-paper-plane text-[11px]"></i>
+            </button>
+
+          </div>
+          <div class="flex items-center justify-between text-[10px] text-slate-400 mt-1.5 px-1">
+            <span id="mic-status-hint">Micrófono continuo: haz clic para iniciar tu intervención y vuelve a hacer clic al terminar de hablar.</span>
+            <span id="turn-counter" class="font-semibold text-slate-600">Turno 1 de 3</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- BANNER FORMATIVO: SOLUCIÓN INTEGRAL Y PROPÓSITO -->
+      <div class="bg-gradient-to-r from-poli-blue to-poli-dark rounded-2xl p-3.5 text-white shadow-sm flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="w-9 h-9 rounded-xl bg-poli-sky/20 flex items-center justify-center text-poli-sky border border-poli-sky/30 font-bold text-base shrink-0">
+            <i class="fa-solid fa-bullseye"></i>
+          </div>
+          <div>
+            <h4 class="text-xs font-bold uppercase tracking-wide text-poli-sky">Información Clara y Completa (Sin Saturar)</h4>
+            <p class="text-[11px] text-slate-200">
+              No recites todo el manual: identifica la necesidad exacta del estudiante, entrega la solución precisa y adelántate a su siguiente duda con un cierre afirmativo.
+            </p>
+          </div>
+        </div>
+        <a href="https://anvacu2418.github.io/formacion-poli/REMA/playbookcierres.html" target="_blank" class="hidden sm:flex items-center space-x-1.5 text-xs font-bold text-white bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg border border-white/20 transition shrink-0">
+          <i class="fa-solid fa-book-open text-poli-yellow"></i>
+          <span>Playbook Cierres</span>
+        </a>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- MODAL DE AUDITORÍA Y FEEDBACK FINAL -->
+  <div id="modal-feedback" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-2xl w-full shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh]">
+      
+      <div class="bg-poli-blue p-5 text-white relative border-b-4 border-poli-berry">
+        <div class="flex items-center justify-between">
+          <div>
+            <span class="text-[10px] uppercase tracking-wider text-poli-sky font-extrabold block">Informe Oficial de Auditoría • Matriz 2.1</span>
+            <h3 class="text-lg font-extrabold text-white">Resultado de tu Simulación (Nivel 2)</h3>
+          </div>
+          <div class="text-right">
+            <span class="text-xs text-slate-300 block font-medium">Índice IKQ Obtenido</span>
+            <span id="modal-final-ikq" class="text-2xl font-black text-poli-lime">100 / 100</span>
+          </div>
+        </div>
+        <div id="modal-badge-status" class="mt-2 inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+          <i class="fa-solid fa-circle-check"></i>
+          <span>APROBADO (Superó el estándar de 90 pts)</span>
+        </div>
+      </div>
+
+      <div class="p-6 overflow-y-auto custom-scrollbar space-y-4 text-xs">
+        <div>
+          <h4 class="font-bold text-slate-800 uppercase tracking-wide text-[11px] mb-2 flex items-center gap-1.5">
+            <i class="fa-solid fa-chart-pie text-poli-sky"></i> Desglose de Atributos Auditados
+          </h4>
+          <div id="modal-attributes-list" class="space-y-1.5"></div>
+        </div>
+
+        <div class="bg-blue-50 p-3.5 rounded-2xl border border-blue-200">
+          <div class="flex items-center gap-2 text-poli-blue font-bold text-xs mb-1">
+            <i class="fa-solid fa-lightbulb text-poli-yellow"></i>
+            <span>Discurso Esperado (Solución Integral y Cierre Afirmativo)</span>
+          </div>
+          <p id="modal-expected-speech" class="text-slate-700 italic leading-relaxed"></p>
+        </div>
+
+        <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200">
+          <div class="flex items-center gap-2 text-slate-800 font-bold text-xs mb-1">
+            <i class="fa-solid fa-bullseye text-poli-berry"></i>
+            <span>Recomendación del Coach de Formación</span>
+          </div>
+          <p id="modal-pedagogical-feedback" class="text-slate-600 leading-relaxed"></p>
+        </div>
+      </div>
+
+      <div class="bg-slate-50 px-6 py-4 border-t border-slate-200 flex items-center justify-between">
+        <button id="modal-btn-retry" class="px-4 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold transition flex items-center gap-2">
+          <i class="fa-solid fa-rotate-left"></i>
+          <span>Repetir Caso</span>
+        </button>
+        <button id="modal-btn-next" class="px-5 py-2 rounded-xl bg-poli-blue hover:bg-poli-sky text-white font-bold transition flex items-center gap-2 shadow-sm">
+          <span>Siguiente Escenario</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SCRIPT CON LOS 21 CASOS Y MOTOR HEURÍSTICO CALIBRADO -->
+  <script>
+    const CASOS_NIVEL_2 = [
+      // ==================== 1. FINANCIERO ====================
+      {
+        id: "FIN-01",
+        tema: "Financiero",
+        titulo: "Caso 1: Presupuesto limitado (Abono 20% vs. Pago 50/50)",
+        nombre: "Daniela Ríos",
+        programa: "Administración de Empresas • Virtual • 3.er Semestre",
+        avatar: "DR",
+        tag: "Financiero",
+        tagClass: "bg-emerald-100 text-emerald-800",
+        sistema: "Matrícula: $2.400.000 | Estado: Pendiente de pago | Modalidad: Virtual (Ahorro hasta 10% pronto pago con Abono 20%).",
+        motivo: "Solo cuenta con $600.000 (25%) hoy; no alcanza al 50/50 y teme pagar recargo extraordinario.",
+        objetivo: "Validar presupuesto, presentar Abono del 20% para congelar valor ordinario (ahorrando hasta 10%), aclarar que inscribe materias al completar el 100% y cerrar en afirmativo.",
+        discursoModelo: "Daniela, comprendo tu interés por cuidar ese ahorro. Como cuentas con el 25% hoy, tienes disponible el Abono del 20%: con este abono congelas el valor ordinario hasta la última fecha y te ahorras hasta un 10% de incremento en modalidad virtual. Ten presente que podrás inscribir tus asignaturas apenas completes el saldo total de la matrícula. ¿Procedemos a generarte de una vez la orden por el 20% para asegurar tu tarifa ordinaria hoy mismo?",
+        dialogos: [
+          {
+            turno: 1,
+            estudianteDice: "Hola, buenas tardes. Llamo porque tengo solo $600.000 ahorrados y mi matrícula vale dos millones cuatrocientos. No alcanzo ni para el 50/50 y si espero a reunirlo me van a cobrar recargo extraordinario. ¿Qué opción tengo?",
+            reglas: {
+              empatia: ["comprendo", "entiendo", "ahorro", "tranquila", "excelente", "cuidar"],
+              indagacion: ["cuando", "completar", "saldo", "cuentame", "fecha", "presupuesto", "disponible"],
+              penalizadores: ["no se puede", "pague el 50", "extraordinario", "pierde cupo"],
+              reaccionCorrecta: "El resto del dinero me entra en quince días con la prima. ¿Si abono ese 20% hoy entonces no me sube el valor de la matrícula?",
+              reaccionDebil: "Pero ya le dije que no me alcanza para la mitad, ¿entonces me toca esperar y pagar más caro?"
+            }
+          },
+          {
+            turno: 2,
+            estudianteDice: "El resto del dinero me entra en quince días con la prima. ¿Si abono ese 20% hoy entonces no me sube el valor de la matrícula?",
+            reglas: {
+              solucion: ["20%", "abono", "ordinario", "10%", "ahorra", "inscribir", "completo", "total", "100%"],
+              penalizadores: ["inscribe de una vez con el 20", "bloque"],
+              reaccionCorrecta: "Súper claro lo del ahorro del 10% y que inscribo materias apenas pague el saldo completo. ¿Cómo hacemos para generar esa orden del 20%?",
+              reaccionDebil: "No me queda claro cuándo puedo inscribir mis materias ni cuánto me ahorro."
+            }
+          },
+          {
+            turno: 3,
+            estudianteDice: "Súper claro lo del ahorro del 10% y que inscribo materias apenas pague el saldo completo. ¿Cómo hacemos para generar esa orden del 20%?",
+            reglas: {
+              cierre: ["genero", "orden", "smart campus", "hoy", "asegurar", "tarifa", "correo", "envio"],
+              penalizadores: ["no prefieres", "mire usted", "busque"],
+              reaccionCorrecta: "Sí por favor, genérala de una vez para pagarla hoy mismo por PSE. ¡Muchas gracias!",
+              reaccionDebil: "Bueno, luego reviso cómo sacarla."
+            }
+          }
+        ]
+      },
+      {
+        id: "FIN-02",
+        tema: "Financiero",
+        titulo: "Caso 2: Financiación Credipoli (Línea Largo Plazo 40/60)",
+        nombre: "Sebastián Pardo",
+        programa: "Ingeniería Industrial • Pregrado • 24 años",
+        avatar: "SP",
+        tag: "Financiero",
+        tagClass: "bg-emerald-100 text-emerald-800",
+        sistema: "Programa: Pregrado | Edad: 24 años | Historial: Sin mora interna | Elegible Credipoli Largo Plazo 40/60.",
+        motivo: "Su salario actual no le permite cuotas altas; busca pagar poco durante el semestre y el resto al graduarse.",
+        objetivo: "Indagar antigüedad laboral (>6 meses) y codeudor; explicar Credipoli Línea Largo Plazo 40/60 (40% en semestre a 6 meses, 60% al graduarse hasta 60 meses) y cerrar compartiendo enlace e instructivo para que realice el registro hoy mismo (sin quedarse esperando los 30 min en llamada).",
+        discursoModelo: "¡Claro que sí, Sebastián! Contamos con Credipoli en nuestra Línea Largo Plazo 40/60: pagas únicamente el 40% de tu matrícula durante el semestre a 6 meses, y el 60% restante lo financias hasta en 60 meses al finalizar tu carrera. Como tienes 24 años, requieres estabilidad laboral superior a 6 meses, buen historial crediticio y un codeudor. La solicitud es 100% virtual y da respuesta en 30 minutos. Te comparto el enlace directo y el instructivo paso a paso para que inicies tu solicitud hoy mismo, ¿te parece bien gestionarlo de una vez?",
+        dialogos: [
+          {
+            turno: 1,
+            estudianteDice: "Buenas tardes. Me gustaría estudiar este semestre pero mi sueldo actual no me da para pagar cuotas altas mensualmente. ¿Ustedes tienen algún crédito donde pague poquito mientras estudio y el resto cuando me gradúe?",
+            reglas: {
+              empatia: ["claro", "gusto", "excelente", "apoyo", "flujo", "tranquilo"],
+              indagacion: ["antiguedad", "laboral", "trabajando", "codeudor", "meses", "historial", "cuentame"],
+              penalizadores: ["no tenemos", "busque un banco", "icetex solamente"],
+              reaccionCorrecta: "Llevo un año fijo en mi empresa, no tengo reportes negativos y mi hermano me sirve de codeudor. ¿Cómo funciona ese crédito?",
+              reaccionDebil: "No me preguntaste si cumplo requisitos, dime primero qué opciones hay."
+            }
+          },
+          {
+            turno: 2,
+            estudianteDice: "Llevo un año fijo en mi empresa, no tengo reportes negativos y mi hermano me sirve de codeudor. ¿Cómo funciona ese crédito?",
+            reglas: {
+              solucion: ["40/60", "40%", "60%", "6 meses", "60 meses", "graduarte", "finalizar", "30 minutos", "virtual"],
+              penalizadores: ["sin codeudor", "quedemonos en linea 30 minutos"],
+              reaccionCorrecta: "¡Me sirve muchísimo pagar solo el 40% ahora y el 60% al graduarme! ¿Cómo arranco la solicitud?",
+              reaccionDebil: "No entendí bien qué porcentaje pago ahora y qué porcentaje después."
+            }
+          },
+          {
+            turno: 3,
+            estudianteDice: "¡Me sirve muchísimo pagar solo el 40% ahora y el 60% al graduarme! ¿Cómo arranco la solicitud?",
+            reglas: {
+              cierre: ["enlace", "link", "instructivo", "hoy mismo", "solicitud", "comparto", "paso a paso"],
+              penalizadores: ["espero en llamada 30 minutos", "vaya a la sede"],
+              reaccionCorrecta: "Perfecto, ya me llegó el enlace con el instructivo. Hoy mismo hago el registro con mi hermano. ¡Gracias!",
+              reaccionDebil: "Bueno, después lo busco en la página."
+            }
+          }
+        ]
+      },
+      {
+        id: "FIN-03",
+        tema: "Financiero",
+        titulo: "Caso 3: Pago con Cesantías (Propias o de Familiar)",
+        nombre: "Paola Andrea Gómez",
+        programa: "Contaduría Pública • 4.° Semestre",
+        avatar: "PG",
+        tag: "Financiero",
+        tagClass: "bg-emerald-100 text-emerald-800",
+        sistema: "Orden de pago generada | Medio alterno: Cesantías (Aplica propias, padres o cónyuge).",
+        motivo: "No tiene efectivo, pero su padre tiene cesantías acumuladas y duda si se pueden usar y qué documentos pide el fondo.",
+        objetivo: "Confirmar que sirven cesantías propias, de padres o cónyuge; explicar el paso a paso completo (Orden de pago + Cheque de gerencia o Certificación Bancaria Bancolombia) y cerrar enviando los soportes.",
+        discursoModelo: "¡Excelente noticia, Paola! Sí puedes pagar el total o una parte de tu matrícula con las cesantías de tu papá, tuyas o de tu cónyuge. El paso a paso es muy claro: descargas tu orden de pago en Smart Campus y la entregas en el fondo solicitando cheque de gerencia a nombre del Politécnico Grancolombiano para pagar en Banco de Bogotá o Davivienda; o si el fondo gira por transferencia electrónica, te enviamos nuestra Certificación Bancaria de Bancolombia. ¿Te envío de una vez tu orden de pago y la certificación bancaria al correo para que tu papá radique el retiro hoy?",
+        dialogos: [
+          {
+            turno: 1,
+            estudianteDice: "Hola. Me quedé corta de efectivo para este semestre, pero mi papá tiene unas cesantías en el fondo. ¿Eso se puede usar para pagar mi matrícula o solo sirven las mías?",
+            reglas: {
+              empatia: ["excelente", "claro", "gusto", "tranquila", "noticia", "apoyo"],
+              indagacion: ["fondo", "transferencia", "cheque", "cubre", "total", "parcial", "cuentame"],
+              penalizadores: ["solo las tuyas", "no se puede con familiares"],
+              reaccionCorrecta: "El fondo de mi papá es Porvenir y cubre todo el semestre. ¿Qué documentos debemos llevar allá?",
+              reaccionDebil: "Ajá, sí sirven, pero ¿qué papeles pide el fondo para girar eso?"
+            }
+          },
+          {
+            turno: 2,
+            estudianteDice: "El fondo de mi papá es Porvenir y cubre todo el semestre. ¿Qué documentos debemos llevar allá?",
+            reglas: {
+              solucion: ["orden de pago", "smart campus", "cheque de gerencia", "certificacion bancaria", "bancolombia", "bogota", "davivienda"],
+              penalizadores: ["carta del ministerio", "vaya a tesoreria"],
+              reaccionCorrecta: "Ah, súper completo saber lo del cheque de gerencia y la certificación de Bancolombia por si hacen transferencia. ¿Me puedes mandar esos documentos?",
+              reaccionDebil: "Me falta saber a nombre de quién sale el cheque o dónde se transfiere."
+            }
+          },
+          {
+            turno: 3,
+            estudianteDice: "Ah, súper completo saber lo del cheque de gerencia y la certificación de Bancolombia por si hacen transferencia. ¿Me puedes mandar esos documentos?",
+            reglas: {
+              cierre: ["envio", "correo", "orden", "certificacion", "hoy", "radicar", "confirmas"],
+              penalizadores: ["descarguelos usted", "no enviamos certificaciones"],
+              reaccionCorrecta: "Listo, ya me llegaron al correo. Hoy mismo vamos con mi papá al fondo. ¡Mil gracias!",
+              reaccionDebil: "Bueno, luego los busco."
+            }
+          }
+        ]
+      },
+
+      // ==================== 2. REINTEGRO ====================
+      {
+        id: "REI-01",
+        tema: "Reintegro",
+        titulo: "Caso 1: Beneficio 5% de Reintegro + Convenio Empresarial",
+        nombre: "Andrés Felipe Mora",
+        programa: "Administración de Empresas • Inactivo hace 2 semestres",
+        avatar: "AM",
+        tag: "Reintegro",
+        tagClass: "bg-purple-100 text-purple-800",
+        sistema: "Estado: Inactivo 2 periodos | Sin sanciones | Aplica Beneficio Base 5% Reintegro + Convenio acumulable.",
+        motivo: "Quiere volver a estudiar pero siente que el valor de matrícula subió respecto a lo que pagaba hace un año.",
+        objetivo: "Conectar emocionalmente, resaltar el nuevo beneficio base del 5% por reintegro (acumulable con convenios), indagar empresa/caja de compensación y radicar reintegro.",
+        discursoModelo: "¡Qué alegría saludarte y saber que quieres retomar tu carrera, Andrés! Para hacer tu regreso mucho más accesible, hoy cuentas con un beneficio base del 5% de descuento por tu reintegro, y lo mejor es que es acumulable con convenios empresariales o cajas de compensación. Cuéntame: ¿en qué empresa trabajas actualmente o a qué caja de compensación estás afiliado para sumar más beneficios y armar tu plan de regreso hoy mismo?",
+        dialogos: [
+          {
+            turno: 1,
+            estudianteDice: "Hola, buenas tardes. Estoy pensando en volver a estudiar después de un año por fuera, pero vi los valores actuales y me parece que subió mucho respecto a lo que yo pagaba antes.",
+            reglas: {
+              empatia: ["alegria", "bienvenido", "excelente", "retomar", "gusto", "futuro"],
+              indagacion: ["empresa", "trabajas", "caja", "compensacion", "convenio", "afiliado", "cuentame"],
+              penalizadores: ["no hay descuentos", "eso es lo que vale", "el ipc"],
+              reaccionCorrecta: "Actualmente trabajo en Bancolombia y estoy afiliado a Colsubsidio. ¿Eso me da algún descuento adicional?",
+              reaccionDebil: "Sí, quiero volver, pero sigue pareciéndome muy costoso sin ninguna ayuda."
+            }
+          },
+          {
+            turno: 2,
+            estudianteDice: "Actualmente trabajo en Bancolombia y estoy afiliado a Colsubsidio. ¿Eso me da algún descuento adicional?",
+            reglas: {
+              solucion: ["5%", "reintegro", "acumulable", "convenio", "colsubsidio", "descuento", "certificado"],
+              penalizadores: ["no se acumulan", "solo uno"],
+              reaccionCorrecta: "¡Qué buena noticia que se sume el 5% de reintegro con el convenio! ¿Qué hacemos para iniciar el proceso ya?",
+              reaccionDebil: "No me quedó claro si me dan el 5% o el convenio."
+            }
+          },
+          {
+            turno: 3,
+            estudianteDice: "¡Qué buena noticia que se sume el 5% de reintegro con el convenio! ¿Qué hacemos para iniciar el proceso ya?",
+            reglas: {
+              cierre: ["radicamos", "solicitud", "documento", "hoy mismo", "5 dias", "acompaño", "certificado"],
+              penalizadores: ["hagalo solo", "espere a agosto"],
+              reaccionCorrecta: "Mi documento es 1030548792. Dejemos radicada la solicitud de reintegro de una vez. ¡Gracias!",
+              reaccionDebil: "Bueno, después me meto a mirar."
+            }
+          }
+        ]
+      },
+      {
+        id: "REI-02",
+        tema: "Reintegro",
+        titulo: "Caso 2: Reintegro con Cambio de Modalidad y Plan de Estudios",
+        nombre: "Natalia Vélez",
+        programa: "Negocios Internacionales • Exestudiante Presencial Bogotá",
+        avatar: "NV",
+        tag: "Reintegro",
+        tagClass: "bg-purple-100 text-purple-800",
+        sistema: "Programa origen: Presencial Bogotá | Solicita: Virtual | Aplica resolución rectoral vigente y plan de estudios actual.",
+        motivo: "Se mudó a otra ciudad por trabajo y quiere regresar en modalidad virtual; pregunta si le valen todas sus materias.",
+        objetivo: "Confirmar viabilidad de reintegro con cambio de modalidad, aclarar acogida a resolución rectoral vigente (valores actuales) y plan de estudios vigente (homologación interna), y radicar solicitud (respuesta en máx. 5 días hábiles).",
+        discursoModelo: "¡Bienvenida de vuelta, Natalia! Puedes solicitar tu reintegro con cambio a modalidad virtual sin inconveniente. Es importante aclararte que al regresar te acoges a la resolución rectoral vigente (valores pecuniarios actuales) y al plan de estudios vigente del programa, por lo que el área académica validará tu historial para homologar tus materias aprobadas. La respuesta toma máximo 5 días hábiles en Smart Campus. ¿Dejamos radicada tu solicitud de reintegro con cambio de modalidad ahora mismo?",
+        dialogos: [
+          {
+            turno: 1,
+            estudianteDice: "Buenas tardes. Yo estudiaba presencial en Bogotá hace un año pero me trasladaron de ciudad por trabajo. Quiero regresar pero en modalidad virtual, ¿cómo hago y me valen todas mis materias?",
+            reglas: {
+              empatia: ["bienvenida", "felicitaciones", "traslado", "gusto", "retomar", "apoyo"],
+              indagacion: ["mismo programa", "carrera", "semestre", "cuentame", "negocios"],
+              penalizadores: ["no se puede cambiar", "pierde materias", "inscripcion nueva"],
+              reaccionCorrecta: "Sí, en el mismo programa de Negocios Internacionales, iba en cuarto semestre. ¿Cambian los costos o las materias al pasarme a virtual?",
+              reaccionDebil: "Pero no me dijiste si mis materias aprobadas me sirven o si cambia el pensum."
+            }
+          },
+          {
+            turno: 2,
+            estudianteDice: "Sí, en el mismo programa de Negocios Internacionales, iba en cuarto semestre. ¿Cambian los costos o las materias al pasarme a virtual?",
+            reglas: {
+              solucion: ["resolucion", "vigente", "valores", "actuales", "plan de estudios", "5 dias", "academica", "homolog"],
+              penalizadores: ["mismo precio anterior", "15 dias"],
+              reaccionCorrecta: "Entiendo perfectamente lo del plan de estudios vigente y los valores actuales. ¿Cuánto se demora esa aprobación?",
+              reaccionDebil: "No me queda claro qué pasa con el pensum ni con el valor del semestre."
+            }
+          },
+          {
+            turno: 3,
+            estudianteDice: "Entiendo perfectamente lo del plan de estudios vigente y los valores actuales. ¿Cuánto se demora esa aprobación?",
+            reglas: {
+              cierre: ["5 dias", "habiles", "smart campus", "radicamos", "hoy", "documento", "orden de pago"],
+              penalizadores: ["espere un mes", "llame despues"],
+              reaccionCorrecta: "Mi cédula es 52987412. Radiquemos el reintegro de una vez para estar pendiente en Smart Campus.",
+              reaccionDebil: "Listo, luego hago la solicitud."
+            }
+          }
+        ]
+      },
+      {
+        id: "REI-03",
+        tema: "Reintegro",
+        titulo: "Caso 3: Seguimiento de Solicitud de Reintegro y Cohortes",
+        nombre: "Carlos Eduardo Ruiz",
+        programa: "Derecho • Solicitud de Reintegro en Proceso",
+        avatar: "CR",
+        tag: "Reintegro",
+        tagClass: "bg-purple-100 text-purple-800",
+        sistema: "Banner: Solicitud de Reintegro en estado 'En Revisión' (Día 2 de 5 hábiles) | Cohorte Pregrado: Marzo / Agosto.",
+        motivo: "Radicó reintegro hace dos días y llama impaciente porque aún no ve su orden de pago en Smart Campus.",
+        objetivo: "Validar estado en sistema (En Revisión), explicar el flujo de estados (Activa -> En Revisión -> Aprobada en máx. 5 días hábiles), recordar cohortes de pregrado (marzo/agosto) y comprometer seguimiento.",
+        discursoModelo: "Con gusto reviso tu solicitud, Carlos. Veo en sistema que tu reintegro está en estado 'En Revisión' dentro del plazo oficial de máximo 5 días hábiles. Apenas el área académica finalice la validación, pasará a 'Aprobada' y se habilitará tu orden de pago en Smart Campus > Pagos bajo la cohorte vigente. Como llevas apenas 2 días hábiles, estás dentro de los tiempos normales. ¿Confirmamos tu correo institucional para notificarte apenas quede aprobada tu orden?",
+        dialogos: [
+          {
+            turno: 1,
+            estudianteDice: "Hola. Hace dos días radiqué mi solicitud de reintegro en Smart Campus pero entro a mirar y todavía no me sale el recibo de pago. ¿Será que quedó mal hecho o ya me lo rechazaron?",
+            reglas: {
+              empatia: ["tranquilo", "gusto", "reviso", "validar", "bienvenido"],
+              indagacion: ["numero", "servicio", "documento", "cedula", "estado", "cuentame"],
+              penalizadores: ["no sabria decirle", "vuelva a radicarlo"],
+              reaccionCorrecta: "Mi cédula es 79456123 y en Smart Campus me aparece 'En Revisión'. ¿Cuánto más se demora en salir la orden?",
+              reaccionDebil: "Pero dime cuánto tiempo se demora eso para que me salga el boleto de pago."
+            }
+          },
+          {
+            turno: 2,
+            estudianteDice: "Mi cédula es 79456123 y en Smart Campus me aparece 'En Revisión'. ¿Cuánto más se demora en salir la orden?",
+            reglas: {
+              solucion: ["5 dias", "habiles", "aprobada", "pagos", "smart campus", "cohorte", "marzo", "agosto"],
+              penalizadores: ["20 dias", "ya deberia estar"],
+              reaccionCorrecta: "Ah, son 5 días hábiles en total y apenas voy en el segundo. Apenas salga aprobada, ¿dónde descargo el recibo?",
+              reaccionDebil: "No me queda claro dónde consultar la respuesta ni cuánto falta."
+            }
+          },
+          {
+            turno: 3,
+            estudianteDice: "Ah, son 5 días hábiles en total y apenas voy en el segundo. Apenas salga aprobada, ¿dónde descargo el recibo?",
+            reglas: {
+              cierre: ["smart campus", "pagos", "numero de servicio", "beneficio", "5%", "listo", "confirmas"],
+              penalizadores: ["no prefieres", "mire despues"],
+              reaccionCorrecta: "Todo súper claro: Smart Campus > Pagos y validar el número de servicio. ¡Muchas gracias por la tranquilidad!",
+              reaccionDebil: "Bueno, ahí estaré mirando."
+            }
+          }
+        ]
+      },
+
+      // ==================== 3. INSCRIPCIÓN DE ASIGNATURAS ====================
+      {
+        id: "INS-01",
+        tema: "Inscripcion",
+        titulo: "Caso 1: Fechas Actualizadas (4 Enero Presencial / 18 Enero Virtual)",
+        nombre: "Valentina Castro",
+        programa: "Mercadeo y Publicidad • Virtual • 4.° Semestre",
+        avatar: "VC",
+        tag: "Inscripción",
+        tagClass: "bg-sky-100 text-poli-blue",
+        sistema: "Estado: Matriculada 2027-1 | Modalidad: Virtual | Semestre: 4.° (Autogestión obligatoria desde 2.° semestre).",
+        motivo: "Acaba de pagar su matrícula y pregunta desde cuándo puede inscribir materias y si la universidad se las inscribe.",
+        objetivo: "Informar fechas actualizadas (4 de enero Presencial / 18 de enero Virtual), aclarar que desde 2.° semestre es autogestión en Smart Campus y recomendar validar prerrequisitos en Malla.",
+        discursoModelo: "¡Felicitaciones por asegurar tu matrícula, Valentina! Como eres estudiante antigua de modalidad virtual, a partir de segundo semestre realizas tu inscripción directamente por autogestión en Smart Campus. Las fechas habilitadas son a partir del 18 de enero para Virtual (y 4 de enero para Presencial). Te recomiendo ingresar previamente a Smart Campus > Malla para verificar tus prerrequisitos cumplidos. ¿Dejamos agendado en tu calendario el 18 de enero para que realices tu inscripción a primera hora?",
+        dialogos: [
+          {
+            turno: 1,
+            estudianteDice: "Buenos días. Acabo de pagar mi matrícula de cuarto semestre virtual, pero entro a Smart Campus y todavía no me deja inscribir materias. ¿Desde qué fecha se habilita y ustedes me las inscriben?",
+            reglas: {
+              empatia: ["felicitaciones", "gusto", "buenos dias", "excelente", "tranquila"],
+              indagacion: ["modalidad", "semestre", "malla", "prerrequisitos", "cuantas"],
+              penalizadores: ["27 de julio", "14 de julio", "nosotros las inscribimos"],
+              reaccionCorrecta: "Soy de modalidad virtual y voy para cuarto semestre. ¿Entonces qué día exacto me toca inscribirlas a mí?",
+              reaccionDebil: "Pero dime qué fecha exacta arranca virtual y si me toca a mí o al sistema."
+            }
+          },
+          {
+            turno: 2,
+            estudianteDice: "Soy de modalidad virtual y voy para cuarto semestre. ¿Entonces qué día exacto me toca inscribirlas a mí?",
+            reglas: {
+              solucion: ["18 de enero", "virtual", "4 de enero", "presencial", "autogestion", "segundo semestre", "malla", "prerrequisitos"],
+              penalizadores: ["julio", "agosto", "primer semestre"],
+              reaccionCorrecta: "¡Perfecto! 18 de enero para Virtual y por autogestión revisando antes la Malla. ¿Debo revisar algo más en la malla?",
+              reaccionDebil: "Esas fechas no me coinciden con lo que me dijeron."
+            }
+          },
+          {
+            turno: 3,
+            estudianteDice: "¡Perfecto! 18 de enero para Virtual y por autogestión revisando antes la Malla. ¿Debo revisar algo más en la malla?",
+            reglas: {
+              cierre: ["prerrequisitos", "creditos", "smart campus", "18 de enero", "primera hora", "listo", "confirmas"],
+              penalizadores: ["no prefieres", "mire a ver"],
+              reaccionCorrecta: "Listo, ya anoté el 18 de enero y voy a revisar hoy mismo los prerrequisitos en mi malla. ¡Muchas gracias!",
+              reaccionDebil: "Bueno, ahí miro luego."
+            }
+          }
+        ]
+      },
+      {
+        id: "INS-02",
+        tema: "Inscripcion",
+        titulo: "Caso 2: Pago por Bloques (Inscripción Primer y Segundo Bloque)",
+        nombre: "Mateo Londoño",
+        programa: "Ingeniería de Sistemas • Virtual • Pago por Bloques",
+        avatar: "ML",
+        tag: "Inscripción",
+        tagClass: "bg-sky-100 text-poli-blue",
+        sistema: "Pago: Media Matrícula (Bloques) | Analytics Proyecciones: 3 materias Primer Bloque inscritas correctamente | Faltan 3 de Segundo Bloque.",
+        motivo: "Pagó media matrícula por bloques y cree que el sistema tiene error porque solo le dejó inscribir 3 materias de 6.",
+        objetivo: "Validar en sistema que sus 3 materias inscritas corresponden a Primer Bloque (no pasarle esa carga al estudiante), explicarle que los créditos restantes se habilitan al pagar el segundo 50% y confirmar tranquilidad.",
+        discursoModelo: "Tranquilo, Mateo, no es un error del sistema. Ya validé directamente en tu proyección y confirmo que las 3 asignaturas que inscribiste corresponden correctamente a tu Primer Bloque. Como pagaste media matrícula por bloques, el sistema habilita exactamente los créditos de este primer periodo; una vez canceles el 50% restante antes de iniciar el segundo bloque, se habilitará la ventana para inscribir las otras 3 materias. ¿Te queda total tranquilidad sabiendo que tus materias de primer bloque ya quedaron aseguradas?",
+        dialogos: [
+          {
+            turno: 1,
+            estudianteDice: "Hola. Yo pagué por bloques la mitad de mi matrícula, pero el sistema solo me deja meter 3 materias y me bloquea las otras tres. ¿Por qué me sale ese error?",
+            reglas: {
+              empatia: ["tranquilo", "gusto", "reviso", "entiendo", "no es un error"],
+              indagacion: ["documento", "cedula", "materias", "bloque", "validar"],
+              penalizadores: ["si es un error", "ponga ticket", "revise usted si son de primer bloque"],
+              reaccionCorrecta: "Mi cédula es 1015478963. ¿Me puedes confirmar si esas 3 que metí sí son de primer bloque y cuándo meto las otras?",
+              reaccionDebil: "¿Y cómo sé yo cuáles son de primer bloque y cuándo puedo meter las otras?"
+            }
+          },
+          {
+            turno: 2,
+            estudianteDice: "Mi cédula es 1015478963. ¿Me puedes confirmar si esas 3 que metí sí son de primer bloque y cuándo meto las otras?",
+            reglas: {
+              solucion: ["primer bloque", "valide", "sistema", "correctamente", "segundo bloque", "50%", "saldo", "creditos"],
+              penalizadores: ["revise usted", "busque en la malla usted"],
+              reaccionCorrecta: "¡Qué alivio saber que ya validaste en sistema que mis 3 materias son de primer bloque! Entonces antes del segundo bloque pago la otra mitad.",
+              reaccionDebil: "No me confirmaste si las materias que metí quedaron bien."
+            }
+          },
+          {
+            turno: 3,
+            estudianteDice: "¡Qué alivio saber que ya validaste en sistema que mis 3 materias son de primer bloque! Entonces antes del segundo bloque pago la otra mitad.",
+            reglas: {
+              cierre: ["asi es", "aseguradas", "segundo bloque", "ventana", "saldo", "tranquilidad", "confirmas"],
+              penalizadores: ["no prefieres", "mire despues"],
+              reaccionCorrecta: "Totalmente tranquilo y claro. Apenas pague el segundo bloque inscribo las otras tres. ¡Muchas gracias!",
+              reaccionDebil: "Bueno, gracias."
+            }
+          }
+        ]
+      },
+      {
+        id: "INS-03",
+        tema: "Inscripcion",
+        titulo: "Caso 3: Restricción Académica en Smart Campus (Ticket Mesa de Ayuda)",
+        nombre: "Camila Andrea Ortiz",
+        programa: "Psicología • 5.° Semestre",
+        avatar: "CO",
+        tag: "Inscripción",
+        tagClass: "bg-sky-100 text-poli-blue",
+        sistema: "Banner Historial: Prerrequisito 'Psicología Evolutiva' Aprobado (4.2) | Smart Campus bloquea materia siguiente por error de parametrización.",
+        motivo: "Tiene el prerrequisito aprobado pero Smart Campus no le permite inscribir la materia y pide que se la inscriban por teléfono.",
+        objetivo: "Confirmar en sistema que sí tiene aprobado el prerrequisito, explicar que por teléfono no se inscriben materias pero orientar/radicar ticket a Mesa de Ayuda / Inscripción de Asignaturas con captura y nombre exacto de la materia.",
+        discursoModelo: "Camila, ya validé en tu historial académico y efectivamente tienes aprobado el prerrequisito con 4.2, así que cumples con todo para cursarla. Desde nuestro canal telefónico no podemos hacer la inscripción directa, pero vamos a radicar de inmediato un ticket por Inscripción de Asignaturas a Mesa de Ayuda especificando el nombre exacto de la materia y adjuntando la captura del bloqueo para que te habiliten el cupo. ¿Me confirmas el nombre exacto de la asignatura para dejar el caso gestionado ya mismo?",
+        dialogos: [
+          {
+            turno: 1,
+            estudianteDice: "Buenas tardes. Estoy intentando inscribir mis materias en Smart Campus, pero una de las asignaturas de quinto semestre me sale con restricción y no me deja agregarla. ¿Me la pueden inscribir ustedes por teléfono?",
+            reglas: {
+              empatia: ["entiendo", "gusto", "ayudo", "revisemos", "tranquila"],
+              indagacion: ["nombre", "materia", "asignatura", "prerrequisito", "captura", "cual"],
+              penalizadores: ["no se puede", "esperese al otro semestre", "ya se la inscribi"],
+              reaccionCorrecta: "La materia se llama Psicología Clínica y ya aprobé el prerrequisito el semestre pasado. ¿Entonces cómo hago para no quedarme sin cupo?",
+              reaccionDebil: "No me estás dando solución si no me la puedes inscribir por acá."
+            }
+          },
+          {
+            turno: 2,
+            estudianteDice: "La materia se llama Psicología Clínica y ya aprobé el prerrequisito el semestre pasado. ¿Entonces cómo hago para no quedarme sin cupo?",
+            reglas: {
+              solucion: ["ticket", "mesa de ayuda", "inscripcion de asignaturas", "captura", "nombre exacto", "habiliten"],
+              penalizadores: ["vaya a decanatura", "llame mañana"],
+              reaccionCorrecta: "Tengo la captura del error en el computador. ¿Radicamos ese ticket de una vez?",
+              reaccionDebil: "No me queda claro a qué área se envía el caso."
+            }
+          },
+          {
+            turno: 3,
+            estudianteDice: "Tengo la captura del error en el computador. ¿Radicamos ese ticket de una vez?",
+            reglas: {
+              cierre: ["radicamos", "de una vez", "ticket", "adjunta", "seguimiento", "hoy", "cupo"],
+              penalizadores: ["busquelo usted", "no prefieres"],
+              reaccionCorrecta: "Listo, ya adjunté la captura y quedó radicado el ticket con el nombre exacto de la materia. ¡Mil gracias!",
+              reaccionDebil: "Bueno, luego miro cómo ponerlo."
+            }
+          }
+        ]
+      },
+
+      // ==================== 4. CAMPAÑAS PARA ADELANTAR ====================
+      {
+        id: "CAM-01",
+        tema: "Campanas",
+        titulo: "Caso 1: Módulo Adicional (Validación en sistema y IPC 2027-1)",
+        nombre: "Sofía Vergara",
+        programa: "Administración Financiera • Promedio 4.1 • Periodo 2027-1",
+        avatar: "SV",
+        tag: "Campañas",
+        tagClass: "bg-amber-100 text-amber-800",
+        sistema: "Promedio acumulado: 4.1 (Cumple >= 3.8) | Estado: Matriculada completa 2027-1 | Valor 2027-1: Pendiente actualización IPC (fin de noviembre).",
+        motivo: "Quiere adelantar una materia extra en el semestre y pregunta requisitos, valor y cuándo se cursa.",
+        objetivo: "Validar en sistema que ya cumple promedio (>=3.8) y matrícula completa; explicar que aplica 1 módulo en Segundo Bloque, aclarar que el valor 2027-1 aún no sale (pendiente IPC a fin de noviembre) e indicarle dejar pendiente 1 materia de segundo bloque para inscribirla al abrir campaña (hacia mayo si inicia en marzo).",
+        discursoModelo: "¡Excelente iniciativa, Sofía! Ya validé en el sistema y tienes un promedio de 4.1 (superando el mínimo de 3.8) y tu matrícula completa activa, así que cumples todos los requisitos para cursar 1 Módulo Adicional en Segundo Bloque. Ten presente que el valor exacto para 2027-1 se actualizará a finales de noviembre con el ajuste anual del IPC. Te recomiendo inscribir tus materias regulares dejando libre 1 materia de segundo bloque (que arrancará hacia mayo si inicias en marzo) para que apenas abra la campaña nos llames y te generemos la orden. ¿Dejamos lista esa proyección de materias hoy?",
+        dialogos: [
+          {
+            turno: 1,
+            estudianteDice: "Hola. Quiero terminar mi carrera más rápido y me dijeron que puedo meter una materia extra dentro del mismo semestre. ¿Eso cómo funciona, cuánto cuesta para el próximo periodo y qué requisitos piden?",
+            reglas: {
+              empatia: ["excelente", "iniciativa", "felicitaciones", "gusto", "adelantar"],
+              indagacion: ["materia", "bloque", "prerrequisitos", "malla", "cual"],
+              penalizadores: ["cuesta 512300", "cuesta 512.300", "no tienes promedio"],
+              reaccionCorrecta: "Ya revisé en mi sistema y ya pagué matrícula completa. ¿Sí me alcanza mi promedio y cuánto me va a costar para 2027-1?",
+              reaccionDebil: "Pero dime si cumplo el promedio y cuánto cuesta exactamente para 2027-1."
+            }
+          },
+          {
+            turno: 2,
+            estudianteDice: "Ya revisé en mi sistema y ya pagué matrícula completa. ¿Sí me alcanza mi promedio y cuánto me va a costar para 2027-1?",
+            reglas: {
+              solucion: ["4.1", "3.8", "cumples", "segundo bloque", "1 modulo", "ipc", "noviembre", "derechos pecuniarios"],
+              penalizadores: ["512.300", "512300", "primer bloque", "dos modulos"],
+              reaccionCorrecta: "¡Qué bueno que ya validaste que mi promedio de 4.1 me alcanza y que el valor sale a fin de noviembre con el IPC! ¿Cómo organizo mis materias entonces?",
+              reaccionDebil: "No me aclaraste por qué no tienes el valor exacto ni en qué bloque se ve."
+            }
+          },
+          {
+            turno: 3,
+            estudianteDice: "¡Qué bueno que ya validaste que mi promedio de 4.1 me alcanza y que el valor sale a fin de noviembre con el IPC! ¿Cómo organizo mis materias entonces?",
+            reglas: {
+              cierre: ["deja pendiente", "segundo bloque", "mayo", "marzo", "campana", "orden", "llamas", "listo"],
+              penalizadores: ["no prefieres", "inscriba todas ya"],
+              reaccionCorrecta: "Súper estratégico: dejo pendiente esa materia de segundo bloque y apenas habiliten campaña me comunico para pagarla. ¡Gracias!",
+              reaccionDebil: "Bueno, después miro cómo hago."
+            }
+          }
+        ]
+      },
+      {
+        id: "CAM-02",
+        tema: "Campanas",
+        titulo: "Caso 2: Vacacionales Virtuales (Restricción Inglés/Prácticas)",
+        nombre: "Felipe Restrepo",
+        programa: "Contaduría Pública • Virtual • 6.° Semestre",
+        avatar: "FR",
+        tag: "Campañas",
+        tagClass: "bg-amber-100 text-amber-800",
+        sistema: "Modalidad: Virtual | Consulta: Vacacionales (Máx. 2 cursos, 8 semanas, cupo mín. 15 | NO oferta Inglés, Prácticas, Transversales ni Opción de Grado).",
+        motivo: "Quiere adelantar Inglés y Prácticas en vacaciones y pregunta cuántos cursos puede tomar.",
+        objetivo: "Aclarar reglas de Vacacionales (máx. 2 cursos de 8 semanas, cupo mín. 15 estudiantes) y la excepción crítica: NO se ofertan inglés, prácticas, transversales ni opción de grado; reconducir hacia asignaturas disciplinares.",
+        discursoModelo: "Los Cursos Vacacionales en modalidad virtual te permiten inscribir y pagar hasta 2 cursos disciplinares (duran 8 semanas y abren con cupo mínimo de 15 estudiantes). Sin embargo, es muy importante aclararte que en vacacionales NO se ofertan inglés, prácticas, módulos transversales ni opciones de grado. Podemos revisar qué asignaturas disciplinares de tu malla sí aplican para que avances en vacaciones. ¿Revisamos qué materias disciplinares tienes pendientes en tu plan?",
+        dialogos: [
+          {
+            turno: 1,
+            estudianteDice: "Buenas tardes. Estudio virtual y en vacaciones quiero adelantar materias, específicamente Inglés y Prácticas. ¿Cuántas materias puedo inscribir en vacacionales y cuánto duran?",
+            reglas: {
+              empatia: ["buenas tardes", "gusto", "excelente", "adelantar", "claridad"],
+              indagacion: ["materias", "disciplinares", "malla", "prerrequisitos", "otras"],
+              penalizadores: ["si puedes meter ingles", "si puedes meter practicas", "3 cursos"],
+              reaccionCorrecta: "¿O sea que ni Inglés ni Prácticas se pueden ver en vacacionales? ¿Cuántas materias normales sí puedo meter y cuánto duran?",
+              reaccionDebil: "No me dijiste si Inglés y Prácticas están permitidas en vacacionales."
+            }
+          },
+          {
+            turno: 2,
+            estudianteDice: "¿O sea que ni Inglés ni Prácticas se pueden ver en vacacionales? ¿Cuántas materias normales sí puedo meter y cuánto duran?",
+            reglas: {
+              solucion: ["no se ofertan", "ingles", "practicas", "2 cursos", "8 semanas", "15 estudiantes", "transversales"],
+              penalizadores: ["4 semanas", "1 curso maximo"],
+              reaccionCorrecta: "Entendido: máximo 2 cursos disciplinares, 8 semanas y cupo mínimo de 15 estudiantes. Revisemos qué materias de mi carrera sí puedo adelantar.",
+              reaccionDebil: "Todavía tengo duda de cuánto duran y qué materias sí entran."
+            }
+          },
+          {
+            turno: 3,
+            estudianteDice: "Entendido: máximo 2 cursos disciplinares, 8 semanas y cupo mínimo de 15 estudiantes. Revisemos qué materias de mi carrera sí puedo adelantar.",
+            reglas: {
+              cierre: ["malla", "disciplinares", "revisamos", "prerrequisitos", "cronograma", "listo", "confirmas"],
+              penalizadores: ["no prefieres", "mire despues"],
+              reaccionCorrecta: "Sí, revisemos mi malla de una vez para tener listas esas dos materias disciplinares. ¡Muchas gracias!",
+              reaccionDebil: "Bueno, luego reviso."
+            }
+          }
+        ]
+      },
+      {
+        id: "CAM-03",
+        tema: "Campanas",
+        titulo: "Caso 3: Pide Intersemestral en Virtual (Aclaración Vacacional cerrado -> Módulo Adicional)",
+        nombre: "Miguel Ángel Torres",
+        programa: "Ingeniería de Software • Virtual • Promedio 4.0",
+        avatar: "MT",
+        tag: "Campañas",
+        tagClass: "bg-amber-100 text-amber-800",
+        sistema: "Modalidad: Virtual | Promedio: 4.0 | Consulta: Pide 'Intersemestral' para diciembre (Inscripción vacacional cerró en octubre).",
+        motivo: "Pregunta por cursos 'intersemestrales' en virtual para cursar en diciembre.",
+        objetivo: "Aclarar con tacto que en Virtual no se llaman intersemestrales sino Vacacionales, que su inscripción cerró en octubre (es una vez al año y para diciembre ya no hay fecha), y ofrecer como alternativa real el Módulo Adicional para el próximo semestre.",
+        discursoModelo: "Miguel, con gusto te aclaro cómo funciona en modalidad virtual: aquí no manejamos intersemestrales sino Cursos Vacacionales, los cuales se habilitan una vez al año en octubre; por esa razón, para diciembre ya cerraron inscripciones y tocaría esperar hasta el próximo año. Sin embargo, como tienes un promedio de 4.0, tienes una excelente alternativa vigente: inscribir un Módulo Adicional en el Segundo Bloque de tu próximo semestre para adelantar esa materia sin esperar un año. ¿Te parece si proyectamos ese Módulo Adicional para tu siguiente periodo?",
+        dialogos: [
+          {
+            turno: 1,
+            estudianteDice: "Hola. Quiero inscribir un curso intersemestral ahorita para diciembre porque estudio virtual y quiero adelantar una materia. ¿Cuándo abren inscripciones?",
+            reglas: {
+              empatia: ["hola", "gusto", "aclaro", "adelantar", "excelente"],
+              indagacion: ["materia", "malla", "promedio", "proximo semestre", "cuentame"],
+              penalizadores: ["inscribete hoy", "abren en noviembre para virtual"],
+              reaccionCorrecta: "¿Cómo así que en virtual no son intersemestrales y ya cerraron? ¿Entonces qué otra opción tengo para adelantar?",
+              reaccionDebil: "Pero dime si hay fecha abierta en diciembre para virtual o no."
+            }
+          },
+          {
+            turno: 2,
+            estudianteDice: "¿Cómo así que en virtual no son intersemestrales y ya cerraron? ¿Entonces qué otra opción tengo para adelantar?",
+            reglas: {
+              solucion: ["vacacionales", "octubre", "año", "cerraron", "modulo adicional", "segundo bloque", "4.0", "alternativa"],
+              penalizadores: ["ninguna opcion", "espere hasta diciembre del otro año solamente"],
+              reaccionCorrecta: "¡Ah, qué buena alternativa la del Módulo Adicional en segundo bloque! Así no pierdo tiempo esperando hasta el otro octubre.",
+              reaccionDebil: "No me queda claro qué alternativa puedo tomar en el siguiente semestre."
+            }
+          },
+          {
+            turno: 3,
+            estudianteDice: "¡Ah, qué buena alternativa la del Módulo Adicional en segundo bloque! Así no pierdo tiempo esperando hasta el otro octubre.",
+            reglas: {
+              cierre: ["modulo adicional", "segundo bloque", "proyectamos", "matricula completa", "listo", "confirmas"],
+              penalizadores: ["no prefieres", "mire a ver"],
+              reaccionCorrecta: "Totalmente de acuerdo, lo proyectamos como Módulo Adicional en segundo bloque. ¡Gracias por la solución!",
+              reaccionDebil: "Bueno, ahí miro."
+            }
+          }
+        ]
+      },
+
+      // ==================== 5. APLAZAMIENTOS ====================
+      {
+        id: "APL-01",
+        tema: "Aplazamientos",
+        titulo: "Caso 1: Ya pagó y quiere aplazar por Viaje (Retención Virtual 24/7 + Norma 70%)",
+        nombre: "Alejandro Vargas",
+        programa: "Mercadeo • Virtual • Ya pagó matrícula completa",
+        avatar: "AV",
+        tag: "Aplazamientos",
+        tagClass: "bg-rose-100 text-rose-800",
+        sistema: "Estado: Pagado 100% | Modalidad: Virtual | Motivo: Viaje de 6 meses (No aplica como fuerza mayor).",
+        motivo: "Ya pagó matrícula completa y quiere aplazar por un viaje al exterior pidiendo congelar el 100%.",
+        objetivo: "Perfilar país/modalidad, impulsar la continuidad destacando ventajas de virtualidad 24/7 (entregas sábado a martes, acceso desde cualquier país o vía VPN), aclarar que viaje no es fuerza mayor (devolución 70% en primeros 15 días) y cerrar con pregunta afirmativa.",
+        discursoModelo: "¡Qué gran experiencia ese viaje, Alejandro! Como estás en modalidad virtual, puedes conectarte a nuestra plataforma 24/7 desde cualquier país (e incluso usar una VPN si llegaras a tener restricción regional) y organizar tus entregas de sábado a martes sin pausar tu carrera. Además, es clave que sepas que el congelamiento del 100% aplica solo por fuerza mayor comprobada, mientras que un retiro voluntario por viaje dentro de los primeros 15 días calendario implica devolución del 70%. Aprovechando que puedes estudiar desde el exterior sin perder un peso, ¿continuamos con tu semestre activo mientras viajas?",
+        dialogos: [
+          {
+            turno: 1,
+            estudianteDice: "Buenos días. Ya pagué mi matrícula completa pero me salió un viaje de turismo por seis meses fuera del país. Quiero aplazar para que me congelen el 100% de mi plata o me devuelvan todo.",
+            reglas: {
+              empatia: ["buenos dias", "gran experiencia", "viaje", "felicitaciones", "entiendo"],
+              indagacion: ["pais", "modalidad", "internet", "tiempos", "cuentame", "donde"],
+              penalizadores: ["no prefieres", "si le congelamos el 100% por viaje", "devolucion del 100%"],
+              reaccionCorrecta: "Voy para España y estudio virtual. Pero allá voy a estar paseando y trabajando, ¿no se me cruza con horarios de clase ni pierdo la plata si aplazo?",
+              reaccionDebil: "No me preguntaste a dónde voy ni me explicaste si pierdo dinero al aplazar por viaje."
+            }
+          },
+          {
+            turno: 2,
+            estudianteDice: "Voy para España y estudio virtual. Pero allá voy a estar paseando y trabajando, ¿no se me cruza con horarios de clase ni pierdo la plata si aplazo?",
+            reglas: {
+              solucion: ["24/7", "sabado a martes", "vpn", "fuerza mayor", "70%", "15 dias", "horario", "cualquier pais"],
+              penalizadores: ["no prefieres continuar", "congelamos el 100%"],
+              reaccionCorrecta: "No sabía que las entregas se habilitan de sábado a martes ni que un viaje no aplica para congelar el 100%. ¡Mejor sigo estudiando desde España!",
+              reaccionDebil: "No me quedó claro cómo funcionan los horarios virtuales ni qué pasa con el dinero."
+            }
+          },
+          {
+            turno: 3,
+            estudianteDice: "No sabía que las entregas se habilitan de sábado a martes ni que un viaje no aplica para congelar el 100%. ¡Mejor sigo estudiando desde España!",
+            reglas: {
+              cierre: ["continuamos", "activo", "inscribir", "materias", "espana", "aseguramos", "listo", "confirmas"],
+              penalizadores: ["no prefieres", "no quieres"],
+              reaccionCorrecta: "¡Sí, continuamos activo! Me sale mucho mejor aprovechar mi matrícula completa desde España. ¡Gracias por abrirme los ojos!",
+              reaccionDebil: "Bueno, lo voy a pensar."
+            }
+          }
+        ]
+      },
+      {
+        id: "APL-02",
+        tema: "Aplazamientos",
+        titulo: "Caso 2: Ya pagó y aplaza por Salud (Fuerza Mayor - 100% Congelamiento)",
+        nombre: "Diana Carolina Gil",
+        programa: "Psicología • 4.° Semestre • Ya pagó matrícula",
+        avatar: "DG",
+        tag: "Aplazamientos",
+        tagClass: "bg-rose-100 text-rose-800",
+        sistema: "Estado: Pagado 100% | Motivo: Hospitalización / Incapacidad médica (Fuerza Mayor comprobada).",
+        motivo: "Pagó su matrícula pero sufrió una emergencia médica con incapacidad de 3 meses y necesita congelar su dinero.",
+        objetivo: "Empatía genuina, confirmar congelamiento del 100% por fuerza mayor (vigencia 1 periodo prorrogable por 1 más), detallar ruta en Portal de Casos Web (carta al Consejo Académico + historia clínica/incapacidad) y cerrar en afirmativo.",
+        discursoModelo: "Lamento mucho tu quebranto de salud, Diana; en este momento tu recuperación es lo más importante. Al tratarse de un motivo de fuerza mayor por enfermedad, el reglamento sí te permite congelar el 100% del dinero pagado con vigencia de un periodo académico (prorrogable por uno adicional). Para gestionarlo debes radicar la solicitud en el Portal de Casos Web adjuntando carta dirigida al Consejo Académico y tu incapacidad o historia clínica. ¿Te envío de una vez el enlace del Portal de Casos Web para que tú o un familiar lo radiquen hoy mismo?",
+        dialogos: [
+          {
+            turno: 1,
+            estudianteDice: "Buenas tardes. Ya cancelé mi matrícula, pero hace tres días me diagnosticaron una condición médica compleja con hospitalización e incapacidad de tres meses. Necesito aplazar el semestre sin perder mi dinero.",
+            reglas: {
+              empatia: ["lamento", "recuperacion", "salud", "primero", "tranquila", "entiendo"],
+              indagacion: ["incapacidad", "historia clinica", "soportes", "familiar", "cuando", "cuentame"],
+              penalizadores: ["pierde el 30%", "devolucion del 70%", "no se congela"],
+              reaccionCorrecta: "Sí, tengo la incapacidad médica oficial y la historia clínica de la hospitalización. ¿Me congelan el 100% de lo que pagué y por cuánto tiempo?",
+              reaccionDebil: "Pero dime si por salud me congelan el 100% del dinero y qué documentos debo radicar."
+            }
+          },
+          {
+            turno: 2,
+            estudianteDice: "Sí, tengo la incapacidad médica oficial y la historia clínica de la hospitalización. ¿Me congelan el 100% de lo que pagué y por cuánto tiempo?",
+            reglas: {
+              solucion: ["100%", "fuerza mayor", "un periodo", "prorrogable", "portal de casos", "consejo academico", "carta", "soportes"],
+              penalizadores: ["70%", "perdio la plata"],
+              reaccionCorrecta: "Qué tranquilidad saber que por fuerza mayor médica se congela el 100% hasta por dos periodos. ¿Dónde exactamente lo radica mi esposo?",
+              reaccionDebil: "No me indicaste por dónde se radica ni cuánto dura la vigencia del congelamiento."
+            }
+          },
+          {
+            turno: 3,
+            estudianteDice: "Qué tranquilidad saber que por fuerza mayor médica se congela el 100% hasta por dos periodos. ¿Dónde exactamente lo radica mi esposo?",
+            reglas: {
+              cierre: ["portal de casos", "enlace", "envio", "hoy mismo", "radicar", "listo", "confirmas"],
+              penalizadores: ["no prefieres", "busque en internet"],
+              reaccionCorrecta: "Sí por favor, envíame el enlace y hoy mismo mi esposo radica la carta con la incapacidad. ¡Muchas gracias por la calidez!",
+              reaccionDebil: "Bueno, después miramos."
+            }
+          }
+        ]
+      },
+      {
+        id: "APL-03",
+        tema: "Aplazamientos",
+        titulo: "Caso 3: No ha pagado y pide Aplazamiento (Perfilamiento Comercial + Norma)",
+        nombre: "Ricardo Mendoza",
+        programa: "Ingeniería Industrial • 3.er Semestre • Sin pago registrado",
+        avatar: "RM",
+        tag: "Aplazamientos",
+        tagClass: "bg-rose-100 text-rose-800",
+        sistema: "Estado: Orden generada sin pago | No requiere trámite formal de aplazamiento si no paga | Opciones comerciales: Abono 20%, 50/50 o Media Matrícula.",
+        motivo: "No ha pagado el recibo y llama pidiendo radicar carta de aplazamiento por falta de liquidez.",
+        objetivo: "Perfilar primero presupuesto y forma de pago previa para retenerlo (ofreciendo Abono 20%, 50/50 o media matrícula); si decide no cursar, aclarar que sin pago no requiere solicitud formal ni tiene multas, cerrando en afirmativo.",
+        discursoModelo: "Entiendo tu situación financiera, Ricardo. Antes de pausar tu carrera, cuéntame: ¿cómo venías pagando tus semestres anteriores y con qué presupuesto cuentas hoy? Recuerda que podemos activar el Abono del 20% para congelar tarifa o pagar media matrícula para cursar la mitad de créditos. Ahora bien, si definitivamente decides no cursar este periodo, puedes estar tranquilo: como no has pagado, no requieres radicar carta ni tendrás multas. ¿Revisamos una alternativa de abono o media matrícula para que no frenes tu avance este semestre?",
+        dialogos: [
+          {
+            turno: 1,
+            estudianteDice: "Hola. Este semestre no voy a poder estudiar porque se me cruzaron unos gastos. Como todavía no he pagado el recibo, llamo a preguntar dónde radico la carta de aplazamiento para no quedar reportado ni multado.",
+            reglas: {
+              empatia: ["entiendo", "tranquilo", "situacion", "comprendo", "gusto"],
+              indagacion: ["como venias pagando", "presupuesto", "cuanto", "disponible", "cuentame", "gastos"],
+              penalizadores: ["radique carta ya", "tiene multa", "queda reportado"],
+              reaccionCorrecta: "Siempre pagaba de contado, pero ahorita solo tengo disponible como el 30% de la matrícula y no me alcanza para todo.",
+              reaccionDebil: "Sí, pero primero dime si me multan si no pago y si hay alguna forma de no parar."
+            }
+          },
+          {
+            turno: 2,
+            estudianteDice: "Siempre pagaba de contado, pero ahorita solo tengo disponible como el 30% de la matrícula y no me alcanza para todo.",
+            reglas: {
+              solucion: ["abono", "20%", "media matricula", "mitad", "no requiere", "solicitud", "sin multas", "congelar"],
+              penalizadores: ["debe radicar carta obligatoria", "no hay opciones"],
+              reaccionCorrecta: "¡Con ese 30% sí me alcanza perfecto para hacer el Abono del 20% y congelar el valor ordinario sin perder el semestre!",
+              reaccionDebil: "No me quedó claro qué puedo hacer con ese 30% ni si me multan."
+            }
+          },
+          {
+            turno: 3,
+            estudianteDice: "¡Con ese 30% sí me alcanza perfecto para hacer el Abono del 20% y congelar el valor ordinario sin perder el semestre!",
+            reglas: {
+              cierre: ["generamos", "abono", "20%", "hoy", "continuar", "aseguramos", "listo", "confirmas"],
+              penalizadores: ["no prefieres", "no quieres"],
+              reaccionCorrecta: "¡Sí, hagámoslo de una vez! Prefiero abonar el 20% hoy y seguir con mi ingeniería. ¡Gracias por asesorarme!",
+              reaccionDebil: "Bueno, lo pensaré."
+            }
+          }
+        ]
+      },
+
+      // ==================== 6. CERTIFICADOS ====================
+      {
+        id: "CER-01",
+        tema: "Certificados",
+        titulo: "Caso 1: Certificado de Matriculado (Condición de Materias Inscritas)",
+        nombre: "Estefanía Rojas",
+        programa: "Derecho • 2.° Semestre • Pagó hace 2 horas, sin materias inscritas",
+        avatar: "ER",
+        tag: "Certificados",
+        tagClass: "bg-indigo-100 text-indigo-800",
+        sistema: "Banner: Pago registrado hace 2h | Inscripción de asignaturas: 0 créditos inscritos | Ventana inscripción: Habilitada hoy.",
+        motivo: "Ya pagó su matrícula y llama porque Smart Campus no le habilita el Certificado de Matriculado (o pide uno de semestre pasado).",
+        objetivo: "Validar en sistema que ya tiene ventana habilitada pero 0 materias inscritas; explicar que el Certificado de Matriculado incluye materias inscritas y pago (solo periodo actual) y guiarla a inscribir materias hoy para descargarlo.",
+        discursoModelo: "Con gusto te aclaro el motivo, Estefanía: el Certificado de Matriculado refleja tanto tu pago como tus asignaturas inscritas, y revisando en sistema veo que ya tienes tu ventana habilitada pero aún no has inscrito materias. Por eso no te aparece activo todavía en Smart Campus (además recuerda que solo se emite para el periodo actual). Apenas inscribas tus clases hoy mismo, ingresas a Smart Campus > Certificados y lo descargas al instante. ¿Ingresamos juntos a inscribir tus materias ahora para que lo descargues de una vez?",
+        dialogos: [
+          {
+            turno: 1,
+            estudianteDice: "Buenos días. Ya pagué mi matrícula hace dos horas y necesito descargar urgente el Certificado de Matriculado para mi empresa, pero entro a Smart Campus y no me deja generarlo. ¿Por qué?",
+            reglas: {
+              empatia: ["buenos dias", "gusto", "entiendo", "urgencia", "tranquila", "reviso"],
+              indagacion: ["documento", "cedula", "inscribiste", "materias", "periodo"],
+              penalizadores: ["ya deberia salir", "ponga ticket", "ya tienes ventana habilitada?"],
+              reaccionCorrecta: "Mi cédula es 1019087654. Aún no he inscrito materias porque pensé que solo con pagar ya salía el certificado.",
+              reaccionDebil: "¿Y por qué no me sale si ya pagué el recibo completo?"
+            }
+          },
+          {
+            turno: 2,
+            estudianteDice: "Mi cédula es 1019087654. Aún no he inscrito materias porque pensé que solo con pagar ya salía el certificado.",
+            reglas: {
+              solucion: ["materias inscritas", "asignaturas", "habilita", "ventana", "periodo actual", "primer nivel", "smart campus"],
+              penalizadores: ["semestres anteriores", "certificado manual"],
+              reaccionCorrecta: "¡Ah, claro! Como lleva las materias inscritas, hasta que no las agregue no se habilita. ¿Ya puedo inscribirlas hoy?",
+              reaccionDebil: "No me quedó claro por qué exige tener materias inscritas."
+            }
+          },
+          {
+            turno: 3,
+            estudianteDice: "¡Ah, claro! Como lleva las materias inscritas, hasta que no las agregue no se habilita. ¿Ya puedo inscribirlas hoy?",
+            reglas: {
+              cierre: ["habilitada", "hoy mismo", "inscribir", "descargas", "smart campus", "certificados", "confirmas"],
+              penalizadores: ["no prefieres", "mire a ver si tiene ventana"],
+              reaccionCorrecta: "Listo, entro de una vez a inscribir mis materias para descargarlo hoy mismo. ¡Muchas gracias!",
+              reaccionDebil: "Bueno, luego miro."
+            }
+          }
+        ]
+      },
+      {
+        id: "CER-02",
+        tema: "Certificados",
+        titulo: "Caso 2: Certificado de Idiomas / Inglés (3 Tipos, $15.200, No Nivel)",
+        nombre: "Juan Pablo Silva",
+        programa: "Negocios Internacionales • 7.° Semestre",
+        avatar: "JS",
+        tag: "Certificados",
+        tagClass: "bg-indigo-100 text-indigo-800",
+        sistema: "Requisito Inglés: Aprobado en sistema | Costo certificado: $15.200 | Restricción: NO certifica nivel MCER (B1/B2).",
+        motivo: "Necesita un certificado de inglés para un auxilio en su empresa y pregunta tipos, costo y si certifica nivel B1.",
+        objetivo: "Explicar los 3 tipos disponibles (uso de licencia, cumplimiento del requisito u obligatoriedad), costo de $15.200, advertir que NO se certifica nivel B1/B2, y cerrar preguntando si alguno de los tres le es viable para generarle la orden de pago.",
+        discursoModelo: "Te brindo la información completa, Juan Pablo: el Departamento de Idiomas emite tres tipos de certificados: de uso de licencia de inglés, de cumplimiento del requisito o de obligatoriedad, cada uno con un costo de $15.200. Es muy importante aclararte que el Poli NO certifica nivel de inglés (como B1 o B2), solo el cumplimiento o uso de licencia. Una vez pagues la orden, creas un ticket indicando cuál de los tres necesitas. De estas tres posibilidades que te explico, ¿consideras que alguna te es viable para proceder a generarte la orden de pago de una vez?",
+        dialogos: [
+          {
+            turno: 1,
+            estudianteDice: "Buenas tardes. Necesito un certificado de inglés para presentar en mi empresa porque me van a dar un auxilio económico. ¿Cuánto cuesta, qué tipos existen y me certifica mi nivel B1?",
+            reglas: {
+              empatia: ["buenas tardes", "gusto", "claro", "informacion", "auxilio"],
+              indagacion: ["empresa", "tramite", "requisito", "licencia", "cual"],
+              penalizadores: ["si certifica b1", "cual de ellos te exige tu empresa"],
+              reaccionCorrecta: "Mi empresa solo me pide comprobar que el inglés es requisito obligatorio o que cumplí con la licencia para darme el auxilio. ¿Cuánto cuesta y cómo se pide?",
+              reaccionDebil: "Pero dime si certifican el nivel B1 o qué tipos exactamente emiten ustedes."
+            }
+          },
+          {
+            turno: 2,
+            estudianteDice: "Mi empresa solo me pide comprobar que el inglés es requisito obligatorio o que cumplí con la licencia para darme el auxilio. ¿Cuánto cuesta y cómo se pide?",
+            reglas: {
+              solucion: ["15.200", "15200", "no certifica nivel", "uso de licencia", "cumplimiento", "obligatoriedad", "orden de pago", "ticket"],
+              penalizadores: ["gratis", "certifica nivel"],
+              reaccionCorrecta: "¡Ah, el de obligatoriedad o uso de licencia me sirve perfectamente para el auxilio y cuesta solo $15.200!",
+              reaccionDebil: "No me quedó claro el valor ni qué debo hacer después de pagar."
+            }
+          },
+          {
+            turno: 3,
+            estudianteDice: "¡Ah, el de obligatoriedad o uso de licencia me sirve perfectamente para el auxilio y cuesta solo $15.200!",
+            reglas: {
+              cierre: ["viable", "procedemos", "generar", "orden de pago", "ticket", "id", "confirmas"],
+              penalizadores: ["cual de ellos te exige", "no prefieres"],
+              reaccionCorrecta: "Sí, me es totalmente viable. Procedamos a generarme la orden de pago con mi ID 10203040. ¡Gracias!",
+              reaccionDebil: "Bueno, luego miro."
+            }
+          }
+        ]
+      },
+      {
+        id: "CER-03",
+        tema: "Certificados",
+        titulo: "Caso 3: Certificado Especial (ICETEX / Sapiencia - Pago Créditos + Ticket)",
+        nombre: "Mariana Salazar",
+        programa: "Contaduría Pública • Beneficiaria ICETEX",
+        avatar: "MS",
+        tag: "Certificados",
+        tagClass: "bg-indigo-100 text-indigo-800",
+        sistema: "Trámite: Certificado Especial (Condonación ICETEX) | Ruta: Pagar Certificado de Créditos Aprobados en Smart Campus + Ticket a certificados_Back_Front.",
+        motivo: "Necesita un certificado especial para condonación ICETEX que no aparece en el menú estándar de Smart Campus.",
+        objetivo: "Explicar el flujo oficial de Certificados Especiales (pagar el Certificado de Créditos Aprobados en Smart Campus y luego crear ticket adjuntando soporte de pago y requerimiento para derivar a RYC / certificados_Back_Front) y cerrar en afirmativo.",
+        discursoModelo: "Como ese documento requiere una estructura especial para condonación de ICETEX que no está parametrizada en primer nivel, el procedimiento oficial es muy sencillo: ingresas a Smart Campus > Certificados y pagas el Certificado de Créditos Aprobados. Una vez realizado el pago, creas un ticket adjuntando el soporte de pago y especificando los datos que requiere ICETEX para derivarlo a Registro y Control (entrega en 2 a 5 días hábiles). ¿Ingresamos a Smart Campus para que realices el pago del Certificado de Créditos Aprobados y dejar el caso listo hoy?",
+        dialogos: [
+          {
+            turno: 1,
+            estudianteDice: "Hola. Necesito un certificado especial para condonación de crédito con ICETEX donde especifiquen mi avance y promedio, pero ese formato no me aparece en la lista de Smart Campus. ¿Cómo lo pido?",
+            reglas: {
+              empatia: ["hola", "gusto", "entiendo", "condonacion", "icetex", "ayudo"],
+              indagacion: ["datos", "promedio", "avance", "requiere", "cuentame"],
+              penalizadores: ["no hacemos certificados especiales", "vaya a registro y control presencial"],
+              reaccionCorrecta: "ICETEX me pide que diga el semestre cursado, créditos aprobados y promedio acumulado. ¿Qué opción debo pagar en Smart Campus entonces?",
+              reaccionDebil: "Pero dime qué certificado debo pagar en Smart Campus si el de ICETEX no sale."
+            }
+          },
+          {
+            turno: 2,
+            estudianteDice: "ICETEX me pide que diga el semestre cursado, créditos aprobados y promedio acumulado. ¿Qué opción debo pagar en Smart Campus entonces?",
+            reglas: {
+              solucion: ["creditos aprobados", "pagar", "ticket", "soporte", "registro y control", "ryc", "2 a 5 dias", "especiales"],
+              penalizadores: ["certificado de matriculado", "gratis"],
+              reaccionCorrecta: "¡Súper claro! Pago primero el de Créditos Aprobados y con ese soporte abro el ticket pidiendo la redacción especial para ICETEX.",
+              reaccionDebil: "No me quedó claro cuál pagar ni cómo pedir la redacción especial."
+            }
+          },
+          {
+            turno: 3,
+            estudianteDice: "¡Súper claro! Pago primero el de Créditos Aprobados y con ese soporte abro el ticket pidiendo la redacción especial para ICETEX.",
+            reglas: {
+              cierre: ["smart campus", "pago", "ticket", "hoy", "2 a 5 dias", "listo", "confirmas"],
+              penalizadores: ["no prefieres", "mire despues"],
+              reaccionCorrecta: "Sí, voy a hacer el pago de una vez en Smart Campus para montar el ticket hoy mismo. ¡Muchas gracias!",
+              reaccionDebil: "Bueno, gracias."
+            }
+          }
+        ]
+      },
+
+      // ==================== 7. PROCESO DE GRADO ====================
+      {
+        id: "GRA-01",
+        tema: "Grados",
+        titulo: "Caso 1: Ruta Completa de Grados (Validación 'Y', Estado 'TM' y Saber Pro)",
+        nombre: "Luisa Fernanda Gómez",
+        programa: "Administración de Empresas • Último Semestre",
+        avatar: "LG",
+        tag: "Grados",
+        tagClass: "bg-poli-blue text-white",
+        sistema: "Analytics Grados: Cumplimiento en 'Y' | Estado Académico: 'TM' (Terminación de Materias) | Financiero: Paz y Salvo ($0) | Falta validar Saber Pro.",
+        motivo: "Terminó materias y pregunta qué requisitos debe cumplir y cómo se inscribe a ceremonia de grado.",
+        objetivo: "Confirmar que ya validó en sistema su cumplimiento en 'Y', estado 'TM' y paz y salvo financiero; preguntar si ya descargó sus resultados de Saber Pro y detallar la carga de documentos en Smart Campus > Paz y Salvos > Registro y Control (cédula, diploma colegio, ICFES, Saber Pro) + encuestas + pago derechos de grado.",
+        discursoModelo: "¡Felicitaciones por llegar a esta meta, Luisa! Ya validé en el sistema y confirmé que tienes tu cumplimiento académico en 'Y', tu estado en 'TM' (Terminación de Materias) y estás a paz y salvo financieramente. Cuéntame: ¿ya descargaste los resultados de tu prueba Saber Pro? Recuerda que debes cargarlos en Smart Campus, en la sección Paz y Salvos > Registro y Control, junto con tu cédula, título de bachiller y resultados Saber 11 (ICFES), además de diligenciar las dos encuestas para generar la orden de Derechos de Grado. ¿Ingresamos a Smart Campus para iniciar tu cargue de documentos hoy?",
+        dialogos: [
+          {
+            turno: 1,
+            estudianteDice: "Buenas tardes. Ya aprobé todas mis materias de último semestre y quiero graduarme en la próxima ceremonia. ¿Qué requisitos debo tener listos y cómo me inscribo?",
+            reglas: {
+              empatia: ["felicitaciones", "meta", "graduacion", "buenas tardes", "alegria"],
+              indagacion: ["saber pro", "resultados", "descargaste", "documentos", "tyt"],
+              penalizadores: ["revise usted si esta en y", "vaya a registro y control"],
+              reaccionCorrecta: "¡Qué emoción que ya confirmaste mi cumplimiento en 'Y' y estado 'TM'! Sí, ya presenté el Saber Pro y tengo el certificado PDF. ¿Dónde lo subo?",
+              reaccionDebil: "Pero dime si en el sistema ya me aparece todo aprobado y dónde subo mis papeles."
+            }
+          },
+          {
+            turno: 2,
+            estudianteDice: "¡Qué emoción que ya confirmaste mi cumplimiento en 'Y' y estado 'TM'! Sí, ya presenté el Saber Pro y tengo el certificado PDF. ¿Dónde lo subo?",
+            reglas: {
+              solucion: ["smart campus", "paz y salvos", "registro y control", "cedula", "colegio", "bachiller", "icfes", "saber pro", "encuestas", "derechos de grado"],
+              penalizadores: ["envielos por correo", "entreguelos fisicos"],
+              reaccionCorrecta: "Todo clarísimo: Smart Campus > Paz y Salvos > Registro y Control para subir cédula, diploma del colegio, ICFES y Saber Pro, luego encuestas y pago de derechos.",
+              reaccionDebil: "Me faltaron los documentos exactos o la ruta dentro de Smart Campus."
+            }
+          },
+          {
+            turno: 3,
+            estudianteDice: "Todo clarísimo: Smart Campus > Paz y Salvos > Registro y Control para subir cédula, diploma del colegio, ICFES y Saber Pro, luego encuestas y pago de derechos.",
+            reglas: {
+              cierre: ["smart campus", "cargue", "hoy", "cronograma", "listo", "confirmas", "acompaño"],
+              penalizadores: ["no prefieres", "mire despues"],
+              reaccionCorrecta: "¡Sí, entro ahora mismo a Smart Campus a cargar los cuatro documentos y las encuestas! ¡Mil gracias!",
+              reaccionDebil: "Bueno, después lo hago."
+            }
+          }
+        ]
+      },
+      {
+        id: "GRA-02",
+        tema: "Grados",
+        titulo: "Caso 2: Grados con Requisito de Idiomas (Perfilamiento: Materia vs. Requisito / Saber Pro)",
+        nombre: "Santiago Morales",
+        programa: "Contaduría Pública • Candidato a Grado",
+        avatar: "SM",
+        tag: "Grados",
+        tagClass: "bg-poli-blue text-white",
+        sistema: "Analytics Grados: Cumple materias | Pendiente: Requisito de Inglés (No Cursos) | Saber Pro presentado.",
+        motivo: "Quiere inscribirse a grado pero tiene pendiente el requisito de inglés y pide que le creen un ticket para subir un certificado.",
+        objetivo: "Perfilar primero si tiene dominio del inglés, certificado internacional o cómo le fue en el componente de inglés de Saber Pro (si obtuvo B1/B2 puede homologar); explicar que la homologación es 100% autogestión en Smart Campus (prohibido ticket al Centro de Idiomas) y que si debe cursarlo desde cero existe la Licencia English Discoveries (ED).",
+        discursoModelo: "¡Qué bueno que quieras dejar listo tu requisito de inglés para grado, Santiago! Antes de indicarte la ruta, cuéntame: ¿tienes dominio del inglés o algún certificado internacional, o cómo te fue en el componente de inglés de tu prueba Saber Pro (ya que si obtuviste nivel B1 o B2 puedes homologarlo)? Ten presente que si tienes soporte válido, la homologación es 100% por autogestión en Smart Campus (no se crean tickets al Centro de Idiomas); y si necesitas cursarlo desde cero, puedes adquirir la Licencia English Discoveries. ¿Cuentas con soporte para homologar o iniciamos con la licencia?",
+        dialogos: [
+          {
+            turno: 1,
+            estudianteDice: "Hola. Me voy a inscribir a grados pero me falta aprobar el requisito de inglés. ¿Me pueden crear un ticket al Centro de Idiomas para que me ayuden a resolver eso rápido?",
+            reglas: {
+              empatia: ["hola", "gusto", "graduacion", "ayudo", "importante"],
+              indagacion: ["dominio", "certificado", "saber pro", "b1", "b2", "cero", "cuentame"],
+              penalizadores: ["ya te creo el ticket al centro de idiomas", "mande el certificado por correo"],
+              reaccionCorrecta: "¡Uy, no sabía lo del Saber Pro! Saqué nivel B1 en el componente de inglés del Saber Pro. ¿Con eso puedo homologar y cómo lo hago?",
+              reaccionDebil: "No me preguntaste si tengo certificado, cómo me fue en Saber Pro o si parto de cero."
+            }
+          },
+          {
+            turno: 2,
+            estudianteDice: "¡Uy, no sabía lo del Saber Pro! Saqué nivel B1 en el componente de inglés del Saber Pro. ¿Con eso puedo homologar y cómo lo hago?",
+            reglas: {
+              solucion: ["homologar", "autogestion", "smart campus", "no ticket", "centro de idiomas", "b1", "saber pro"],
+              penalizadores: ["creamos ticket", "licencia obligatoria"],
+              reaccionCorrecta: "¡Qué gran noticia que mi B1 de Saber Pro me sirva y que lo pueda cargar directamente por autogestión en Smart Campus sin esperar tickets!",
+              reaccionDebil: "No me quedó claro si puedo homologar con Saber Pro ni por dónde se carga."
+            }
+          },
+          {
+            turno: 3,
+            estudianteDice: "¡Qué gran noticia que mi B1 de Saber Pro me sirva y que lo pueda cargar directamente por autogestión en Smart Campus sin esperar tickets!",
+            reglas: {
+              cierre: ["smart campus", "autogestion", "hoy mismo", "cargues", "paz y salvo", "listo", "confirmas"],
+              penalizadores: ["no prefieres", "mire despues"],
+              reaccionCorrecta: "Sí, entro de una vez a Smart Campus a radicar mi homologación con el certificado de Saber Pro. ¡Muchas gracias!",
+              reaccionDebil: "Bueno, después lo miro."
+            }
+          }
+        ]
+      },
+      {
+        id: "GRA-03",
+        tema: "Grados",
+        titulo: "Caso 3: Ingeniería Industrial (Ciclos Propedéuticos - Créditos Informática)",
+        nombre: "Héctor Fabio Gómez",
+        programa: "Ingeniería Industrial • Ciclos Propedéuticos • Candidato a Grado",
+        avatar: "HG",
+        tag: "Grados",
+        tagClass: "bg-poli-blue text-white",
+        sistema: "Programa: Ingeniería Industrial (Ciclos Propedéuticos) | Tecnología: Emprendimiento aprobado | Profesional: Faltan créditos de Informática.",
+        motivo: "El paz y salvo de grado le sale detenido porque en su sistema el reconocimiento de créditos aparecía aprobado desde la tecnología, pero en el ciclo profesional le faltan los créditos de informática.",
+        objetivo: "Explicar con tacto (sin usar la palabra 'engañoso') que al finalizar la tecnología y aprobar emprendimientos, el sistema marcó aprobados ambos requisitos, pero al auditar individualmente el ciclo profesional exige los créditos de informática faltantes; indagar cómo/dónde los realizó o orientar consulta en apps2.poligran.edu.co/rcreditos/app/ y cursos Cisco.",
+        discursoModelo: "Te explico con total claridad qué ocurre en tu programa de Ingeniería Industrial, Héctor: al ser una carrera por ciclos propedéuticos, cuando culminaste tu etapa tecnológica y te aprobaron los créditos de emprendimiento, el sistema marcó automáticamente aprobados ambos requisitos; sin embargo, al hacer la auditoría individual para el grado profesional se valida que aún tienes pendientes los créditos de informática exigidos en esta etapa. Cuéntame: ¿ya realizaste algún curso de informática (como Cisco) que falte por cargar, o revisamos en apps2.poligran.edu.co/rcreditos/app/ cuántas horas te faltan para completarlos?",
+        dialogos: [
+          {
+            turno: 1,
+            estudianteDice: "Buenas tardes. No entiendo por qué me detienen el paz y salvo académico de grado en Ingeniería Industrial si en mi sistema el reconocimiento de créditos me sale aprobado desde que me gradué de la tecnología. ¿Por qué me frenan el grado?",
+            reglas: {
+              empatia: ["buenas tardes", "entiendo", "claridad", "gusto", "tranquilo", "revisamos"],
+              indagacion: ["informatica", "cisco", "realizaste", "curso", "horas", "cuentame"],
+              penalizadores: ["aprobado engañoso", "ingenieria de software", "error suyo"],
+              reaccionCorrecta: "En la tecnología hice los de emprendimiento, pero en la profesional no he hecho cursos de informática porque pensé que ya estaban listos. ¿Dónde reviso cuántas horas me faltan?",
+              reaccionDebil: "Pero explícame por qué el sistema me decía aprobado en la tecnología y ahora me exige otros créditos."
+            }
+          },
+          {
+            turno: 2,
+            estudianteDice: "En la tecnología hice los de emprendimiento, pero en la profesional no he hecho cursos de informática porque pensé que ya estaban listos. ¿Dónde reviso cuántas horas me faltan?",
+            reglas: {
+              solucion: ["ciclos propedeuticos", "tecnologia", "emprendimiento", "profesional", "informatica", "cisco", "rcreditos", "apps2.poligran"],
+              penalizadores: ["aprobado engañoso", "no tiene arreglo"],
+              reaccionCorrecta: "Ya entendí perfectamente: en la auditoría individual del ciclo profesional me exigen los de informática y los puedo validar en el aplicativo de rcreditos y hacerlos con Cisco.",
+              reaccionDebil: "No me diste el enlace para revisar mis horas ni cómo cumplir los créditos de informática."
+            }
+          },
+          {
+            turno: 3,
+            estudianteDice: "Ya entendí perfectamente: en la auditoría individual del ciclo profesional me exigen los de informática y los puedo validar en el aplicativo de rcreditos y hacerlos con Cisco.",
+            reglas: {
+              cierre: ["rcreditos", "cisco", "revisamos", "hoy", "completar", "paz y salvo", "confirmas"],
+              penalizadores: ["no prefieres", "mire despues"],
+              reaccionCorrecta: "Sí, ingreso ahora mismo al enlace de rcreditos para ver las horas exactas e inscribirme en Cisco. ¡Mil gracias por explicarme tan bien!",
+              reaccionDebil: "Bueno, luego miro."
+            }
+          }
+        ]
+      }
+    ];
+
+    // ESTADO GLOBAL DE LA SIMULACIÓN
+    let currentTopic = "Financiero";
+    let filteredCases = [];
+    let currentCase = null;
+    let currentTurnIndex = 0;
+    let currentIKQ = 100;
+    let voiceEnabled = true;
+    let callTimerInterval = null;
+    let callSeconds = 0;
+    let recognition = null;
+    let isRecording = false;
+    let accumulatedTranscript = "";
+
+    let auditDeductions = {
+      empatia: 0,
+      indagacion: 0,
+      solucion: 0,
+      cierre: 0
+    };
+    let auditFeedbacks = [];
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initSpeechRecognition();
+      setupTopicTabs();
+      setupEventListeners();
+      filterByTopic("Financiero");
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.getVoices();
+      }
+    });
+
+    function setupTopicTabs() {
+      const tabs = document.querySelectorAll('.tab-btn');
+      tabs.forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabs.forEach(t => {
+            t.classList.remove('active');
+            t.classList.add('text-slate-600', 'hover:bg-slate-50');
+          });
+          btn.classList.add('active');
+          btn.classList.remove('text-slate-600', 'hover:bg-slate-50');
+          filterByTopic(btn.dataset.topic);
+        });
+      });
+    }
+
+    function filterByTopic(topic) {
+      currentTopic = topic;
+      filteredCases = CASOS_NIVEL_2.filter(c => c.tema === topic);
+      
+      const topicNames = {
+        Financiero: "Escenarios: Financiero",
+        Reintegro: "Escenarios: Reintegro",
+        Inscripcion: "Escenarios: Inscripción Asignaturas",
+        Campanas: "Escenarios: Campañas Adelantar",
+        Aplazamientos: "Escenarios: Aplazamientos",
+        Certificados: "Escenarios: Certificados",
+        Grados: "Escenarios: Proceso de Grado"
+      };
+      document.getElementById('topic-label-title').textContent = topicNames[topic] || topic;
+
+      const selector = document.getElementById('case-selector');
+      selector.innerHTML = '';
+      filteredCases.forEach((c, idx) => {
+        const opt = document.createElement('option');
+        opt.value = idx;
+        opt.textContent = c.titulo;
+        selector.appendChild(opt);
+      });
+
+      loadCase(0);
+    }
+
+    function setupEventListeners() {
+      document.getElementById('case-selector').addEventListener('change', (e) => {
+        loadCase(parseInt(e.target.value));
+      });
+
+      document.getElementById('btn-send').addEventListener('click', handleAdvisorSubmit);
+      document.getElementById('advisor-input').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          handleAdvisorSubmit();
+        }
+      });
+
+      document.getElementById('btn-restart').addEventListener('click', () => {
+        const idx = parseInt(document.getElementById('case-selector').value) || 0;
+        loadCase(idx);
+      });
+
+      document.getElementById('btn-toggle-voice').addEventListener('click', () => {
+        voiceEnabled = !voiceEnabled;
+        const icon = document.getElementById('voice-icon');
+        const label = document.getElementById('voice-label');
+        if (voiceEnabled) {
+          icon.className = 'fa-solid fa-volume-high text-poli-sky';
+          label.textContent = 'Audio Activado';
+        } else {
+          icon.className = 'fa-solid fa-volume-xmark text-slate-400';
+          label.textContent = 'Audio Silenciado';
+          window.speechSynthesis.cancel();
+        }
+      });
+
+      document.getElementById('modal-btn-retry').addEventListener('click', () => {
+        document.getElementById('modal-feedback').classList.add('hidden');
+        const idx = parseInt(document.getElementById('case-selector').value) || 0;
+        loadCase(idx);
+      });
+
+      document.getElementById('modal-btn-next').addEventListener('click', () => {
+        document.getElementById('modal-feedback').classList.add('hidden');
+        const currentIdx = parseInt(document.getElementById('case-selector').value) || 0;
+        if (currentIdx + 1 < filteredCases.length) {
+          document.getElementById('case-selector').value = currentIdx + 1;
+          loadCase(currentIdx + 1);
+        } else {
+          // Pasar al siguiente tema
+          const topics = ["Financiero", "Reintegro", "Inscripcion", "Campanas", "Aplazamientos", "Certificados", "Grados"];
+          const nextTopicIdx = (topics.indexOf(currentTopic) + 1) % topics.length;
+          const nextTab = document.querySelector(`.tab-btn[data-topic="${topics[nextTopicIdx]}"]`);
+          if (nextTab) nextTab.click();
+        }
+      });
+    }
+
+    function loadCase(localIndex) {
+      if (isRecording && recognition) recognition.stop();
+      
+      currentCase = filteredCases[localIndex];
+      currentTurnIndex = 0;
+      currentIKQ = 100;
+      callSeconds = 0;
+      auditDeductions = { empatia: 0, indagacion: 0, solucion: 0, cierre: 0 };
+      auditFeedbacks = [];
+
+      updateIKQDisplay();
+      startCallTimer();
+
+      document.getElementById('student-avatar').textContent = currentCase.avatar;
+      document.getElementById('student-name').textContent = currentCase.nombre;
+      document.getElementById('student-program').textContent = currentCase.programa;
+      document.getElementById('student-tag').textContent = currentCase.tag;
+      document.getElementById('student-tag').className = `text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide ${currentCase.tagClass}`;
+      document.getElementById('system-context').textContent = currentCase.sistema;
+      document.getElementById('student-reason').textContent = currentCase.motivo;
+      document.getElementById('case-objective').textContent = currentCase.objetivo;
+
+      document.getElementById('dialog-container').innerHTML = '';
+      document.getElementById('advisor-input').value = '';
+      document.getElementById('advisor-input').disabled = false;
+      document.getElementById('btn-send').disabled = false;
+      document.getElementById('turn-counter').textContent = `Turno 1 de ${currentCase.dialogos.length}`;
+
+      setTimeout(() => {
+        appendStudentMessage(currentCase.dialogos[0].estudianteDice);
+      }, 400);
+    }
+
+    function startCallTimer() {
+      if (callTimerInterval) clearInterval(callTimerInterval);
+      callTimerInterval = setInterval(() => {
+        callSeconds++;
+        const mins = String(Math.floor(callSeconds / 60)).padStart(2, '0');
+        const secs = String(callSeconds % 60).padStart(2, '0');
+        document.getElementById('call-timer').textContent = `${mins}:${secs}`;
+      }, 1000);
+    }
+
+    function appendStudentMessage(text) {
+      const container = document.getElementById('dialog-container');
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'flex items-start space-x-2.5';
+      msgDiv.innerHTML = `
+        <div class="w-8 h-8 rounded-full bg-slate-300 text-slate-700 flex items-center justify-center font-bold text-xs shrink-0 shadow-sm border border-slate-400">
+          ${currentCase.avatar}
+        </div>
+        <div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm border border-slate-200 text-slate-800 max-w-[85%] leading-relaxed">
+          <span class="text-[10px] font-bold text-slate-500 uppercase block mb-0.5">${currentCase.nombre}</span>
+          ${text}
+        </div>
+      `;
+      container.appendChild(msgDiv);
+      container.scrollTop = container.scrollHeight;
+
+      if (voiceEnabled) speakText(text);
+    }
+
+    function appendAdvisorMessage(text) {
+      const container = document.getElementById('dialog-container');
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'flex items-start justify-end space-x-2.5';
+      msgDiv.innerHTML = `
+        <div class="bg-poli-blue text-white p-3 rounded-2xl rounded-tr-none shadow-sm text-left max-w-[85%] leading-relaxed">
+          <span class="text-[10px] font-bold text-poli-sky uppercase block mb-0.5 text-right">Tú (Experto Poli)</span>
+          ${text}
+        </div>
+        <div class="w-8 h-8 rounded-full bg-poli-sky text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-sm">
+          <i class="fa-solid fa-headset text-xs"></i>
+        </div>
+      `;
+      container.appendChild(msgDiv);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function speakText(text) {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      const voices = window.speechSynthesis.getVoices();
+      const preferredVoice = voices.find(v => 
+        (v.lang.includes('es-CO') || v.lang.includes('es-MX') || v.lang.includes('es-US') || v.lang.includes('es')) &&
+        (v.name.includes('Natural') || v.name.includes('Online') || v.name.includes('Google') || v.name.includes('Salome') || v.name.includes('Gonzalo'))
+      ) || voices.find(v => v.lang.includes('es'));
+
+      if (preferredVoice) utterance.voice = preferredVoice;
+      utterance.lang = 'es-CO';
+      utterance.rate = 1.02;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function initSpeechRecognition() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        document.getElementById('btn-mic').classList.add('hidden');
+        document.getElementById('mic-status-hint').textContent = "Escribe tu respuesta y presiona Enter o haz clic en Responder.";
+        return;
+      }
+
+      recognition = new SpeechRecognition();
+      recognition.lang = 'es-CO';
+      recognition.continuous = true;
+      recognition.interimResults = true;
+
+      recognition.onstart = () => {
+        isRecording = true;
+        accumulatedTranscript = document.getElementById('advisor-input').value;
+        if (accumulatedTranscript && !accumulatedTranscript.endsWith(' ')) accumulatedTranscript += ' ';
+        const btn = document.getElementById('btn-mic');
+        btn.classList.add('pulse-mic', 'bg-poli-berry', 'text-white', 'border-poli-berry');
+        btn.classList.remove('bg-slate-100', 'text-slate-600');
+        document.getElementById('mic-icon').className = 'fa-solid fa-stop text-sm';
+        document.getElementById('mic-status-hint').innerHTML = '<strong class="text-poli-berry">Grabando voz en vivo...</strong> Habla con claridad y presiona el botón rojo al finalizar.';
+      };
+
+      recognition.onresult = (event) => {
+        let interimTranscript = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          if (event.results[i].isFinal) {
+            accumulatedTranscript += event.results[i][0].transcript + ' ';
+          } else {
+            interimTranscript += event.results[i][0].transcript;
+          }
+        }
+        const inputEl = document.getElementById('advisor-input');
+        inputEl.value = accumulatedTranscript + interimTranscript;
+        inputEl.scrollTop = inputEl.scrollHeight;
+      };
+
+      recognition.onerror = (event) => {
+        if (event.error !== 'no-speech') stopRecording();
+      };
+
+      recognition.onend = () => {
+        if (isRecording) {
+          try { recognition.start(); } catch (e) { stopRecording(); }
+        }
+      };
+
+      document.getElementById('btn-mic').addEventListener('click', () => {
+        if (!isRecording) {
+          window.speechSynthesis.cancel();
+          try { recognition.start(); } catch (e) {}
+        } else {
+          stopRecording();
+        }
+      });
+    }
+
+    function stopRecording() {
+      isRecording = false;
+      if (recognition) {
+        try { recognition.stop(); } catch (e) {}
+      }
+      const btn = document.getElementById('btn-mic');
+      btn.classList.remove('pulse-mic', 'bg-poli-berry', 'text-white', 'border-poli-berry');
+      btn.classList.add('bg-slate-100', 'text-slate-600');
+      document.getElementById('mic-icon').className = 'fa-solid fa-microphone text-base';
+      document.getElementById('mic-status-hint').textContent = "Micrófono continuo: haz clic para iniciar tu intervención y vuelve a hacer clic al terminar de hablar.";
+    }
+
+    function handleAdvisorSubmit() {
+      if (isRecording) stopRecording();
+      const input = document.getElementById('advisor-input');
+      const text = input.value.trim();
+      if (!text) return;
+
+      appendAdvisorMessage(text);
+      input.value = '';
+      accumulatedTranscript = '';
+      input.disabled = true;
+      document.getElementById('btn-send').disabled = true;
+
+      evaluateAdvisorTurn(text);
+    }
+
+    function evaluateAdvisorTurn(text) {
+      const turnoActual = currentCase.dialogos[currentTurnIndex];
+      const reglas = turnoActual.reglas;
+      const txt = text.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+
+      let isCorrect = true;
+      let reasons = [];
+
+      // 1. Penalizadores Críticos (Errores de proceso, preguntas negativas o trasladar consulta interna)
+      if (reglas.penalizadores) {
+        for (const badPhrase of reglas.penalizadores) {
+          const normBad = badPhrase.normalize("NFD").replace(/[̀-ͯ]/g, "");
+          if (txt.includes(normBad)) {
+            isCorrect = false;
+            currentIKQ -= 20;
+            reasons.push(`Alerta Operativa / Calidad: "${badPhrase}" (Información imprecisa, pregunta negativa o desvío indebido).`);
+            break;
+          }
+        }
+      }
+
+      // 2. Empatía y Conexión en Turno 1 (6 pts)
+      if (turnoActual.turno === 1 && reglas.empatia) {
+        const hasEmpatia = reglas.empatia.some(w => txt.includes(w.normalize("NFD").replace(/[̀-ͯ]/g, "")));
+        if (!hasEmpatia) {
+          isCorrect = false;
+          currentIKQ -= 6;
+          auditDeductions.empatia += 6;
+          reasons.push("Faltó validación empática inicial frente al requerimiento del estudiante (-6 pts).");
+        }
+      }
+
+      // 3. Indagación / Perfilamiento en Turno 1 (Alto Impacto: 11 pts)
+      if (turnoActual.turno === 1 && reglas.indagacion) {
+        const hasIndagacion = reglas.indagacion.some(w => txt.includes(w.normalize("NFD").replace(/[̀-ͯ]/g, ""))) || txt.includes("?");
+        if (!hasIndagacion) {
+          isCorrect = false;
+          currentIKQ -= 11;
+          auditDeductions.indagacion += 11;
+          reasons.push("Afectación Alto Impacto: Faltó perfilamiento o indagación clave antes de responder (-11 pts).");
+        }
+      }
+
+      // 4. Solución Integral Clara y Completa en Turno 2 (Alto Impacto: 11 pts)
+      if (turnoActual.turno === 2 && reglas.solucion) {
+        const matches = reglas.solucion.filter(w => txt.includes(w.normalize("NFD").replace(/[̀-ͯ]/g, "")));
+        if (matches.length < 2) {
+          isCorrect = false;
+          currentIKQ -= 11;
+          auditDeductions.solucion += 11;
+          reasons.push("Afectación Alto Impacto en Solución Integral: Faltaron condiciones, plazos o precisión técnica del Soporte Poli (-11 pts).");
+        }
+      }
+
+      // 5. Cierre Afirmativo Orientado a la Acción en Turno 3 (Alto Impacto: 11 pts)
+      if (turnoActual.turno === 3 && reglas.cierre) {
+        const hasCierre = reglas.cierre.some(w => txt.includes(w.normalize("NFD").replace(/[̀-ͯ]/g, "")));
+        if (!hasCierre) {
+          isCorrect = false;
+          currentIKQ -= 11;
+          auditDeductions.cierre += 11;
+          reasons.push("Afectación Alto Impacto en Cierre: Faltó compromiso claro o pregunta cerrada en afirmativo (-11 pts).");
+        }
+      }
+
+      if (reasons.length > 0) {
+        auditFeedbacks.push(`Turno ${currentTurnIndex + 1}: ${reasons.join(" ")}`);
+      }
+
+      currentIKQ = Math.max(0, currentIKQ);
+      updateIKQDisplay();
+
+      document.getElementById('typing-indicator').classList.remove('hidden');
+
+      setTimeout(() => {
+        document.getElementById('typing-indicator').classList.add('hidden');
+        const siguienteRespuesta = isCorrect ? reglas.reaccionCorrecta : reglas.reaccionDebil;
+        appendStudentMessage(siguienteRespuesta);
+
+        currentTurnIndex++;
+
+        if (currentTurnIndex >= currentCase.dialogos.length) {
+          setTimeout(finalizeCall, 1200);
+        } else {
+          document.getElementById('advisor-input').disabled = false;
+          document.getElementById('btn-send').disabled = false;
+          document.getElementById('turn-counter').textContent = `Turno ${currentTurnIndex + 1} de ${currentCase.dialogos.length}`;
+          document.getElementById('advisor-input').focus();
+        }
+      }, 1100);
+    }
+
+    function updateIKQDisplay() {
+      const el = document.getElementById('header-ikq');
+      const ind = document.getElementById('ikq-indicator');
+      el.textContent = `${currentIKQ} / 100`;
+
+      if (currentIKQ >= 90) {
+        el.className = 'text-base font-extrabold text-poli-lime';
+        ind.className = 'w-2.5 h-2.5 rounded-full bg-poli-lime animate-pulse';
+      } else if (currentIKQ >= 75) {
+        el.className = 'text-base font-extrabold text-poli-yellow';
+        ind.className = 'w-2.5 h-2.5 rounded-full bg-poli-yellow animate-pulse';
+      } else {
+        el.className = 'text-base font-extrabold text-poli-berry';
+        ind.className = 'w-2.5 h-2.5 rounded-full bg-poli-berry animate-pulse';
+      }
+    }
+
+    function finalizeCall() {
+      if (callTimerInterval) clearInterval(callTimerInterval);
+      document.getElementById('advisor-input').disabled = true;
+      document.getElementById('btn-send').disabled = true;
+
+      const isApproved = currentIKQ >= 90;
+      document.getElementById('modal-final-ikq').textContent = `${currentIKQ} / 100`;
+      
+      const badge = document.getElementById('modal-badge-status');
+      if (isApproved) {
+        badge.className = 'mt-2 inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30';
+        badge.innerHTML = '<i class="fa-solid fa-circle-check"></i> <span>APROBADO (Superó el estándar de 90 pts)</span>';
+      } else {
+        badge.className = 'mt-2 inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-400/30';
+        badge.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> <span>NO APROBADO (Índice por debajo de 90 pts)</span>';
+      }
+
+      const attrList = document.getElementById('modal-attributes-list');
+      attrList.innerHTML = `
+        <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-200">
+          <span class="text-slate-700 font-medium">Escucha Activa y Empatía (LEAR)</span>
+          <span class="font-bold ${auditDeductions.empatia === 0 ? 'text-emerald-600' : 'text-rose-600'}">${6 - auditDeductions.empatia} / 6 pts</span>
+        </div>
+        <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-200">
+          <span class="text-slate-700 font-medium">Identificación de Necesidades / Perfilamiento</span>
+          <span class="font-bold ${auditDeductions.indagacion === 0 ? 'text-emerald-600' : 'text-rose-600'}">${11 - auditDeductions.indagacion} / 11 pts</span>
+        </div>
+        <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-200">
+          <span class="text-slate-700 font-medium">Solución Integral al Requerimiento (Soporte Real Poli)</span>
+          <span class="font-bold ${auditDeductions.solucion === 0 ? 'text-emerald-600' : 'text-rose-600'}">${11 - auditDeductions.solucion} / 11 pts</span>
+        </div>
+        <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-200">
+          <span class="text-slate-700 font-medium">Cierre Orientado a la Acción (Afirmativo)</span>
+          <span class="font-bold ${auditDeductions.cierre === 0 ? 'text-emerald-600' : 'text-rose-600'}">${11 - auditDeductions.cierre} / 11 pts</span>
+        </div>
+      `;
+
+      document.getElementById('modal-expected-speech').textContent = `"${currentCase.discursoModelo}"`;
+
+      const pedFeedback = document.getElementById('modal-pedagogical-feedback');
+      if (auditFeedbacks.length === 0) {
+        pedFeedback.textContent = "¡Excelente dominio de producto y venta consultiva! Perfilaste correctamente sin trasladar consultas internas al estudiante, entregaste la información exacta del soporte sin saturar y cerraste en afirmativo.";
+      } else {
+        pedFeedback.innerHTML = `Oportunidades de mejora identificadas en este escenario:<br>• ${auditFeedbacks.join("<br>• ")}<br><br><strong>Recuerda:</strong> Dar información clara y completa es anticiparse a la duda del estudiante con precisión operativa y cerrar con preguntas afirmativas.`;
+      }
+
+      document.getElementById('modal-feedback').classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
