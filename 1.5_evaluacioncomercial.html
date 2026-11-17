@@ -12,13 +12,13 @@
         .radio-custom:checked + div .letter-circle { background-color: #0b224e; color: white; border-color: #0b224e; }
     </style>
 </head>
-<body class="bg-gray-50 font-sans text-gray-800 pb-20">
+<body class="bg-gray-50 font-sans text-gray-800 pb-24">
 
     <div class="max-w-4xl mx-auto pt-8 px-6">
         
         <!-- Header Evaluativo -->
-        <div class="poli-bg rounded-2xl p-8 text-white mb-8 shadow-md flex justify-between items-center relative overflow-hidden">
-            <div class="relative z-10 w-3/4">
+        <div class="poli-bg rounded-2xl p-8 text-white mb-6 shadow-md flex flex-col md:flex-row justify-between items-center gap-4 relative overflow-hidden">
+            <div class="relative z-10 md:w-3/4">
                 <div class="flex items-center gap-3 mb-2">
                     <span class="bg-yellow-400 text-gray-900 text-xs font-bold px-2 py-1 rounded">EVALUACIÓN 360</span>
                     <span class="text-sm font-medium text-blue-200">Experto Operaciones</span>
@@ -27,83 +27,49 @@
                 <p class="text-sm text-blue-100">De acuerdo con lo visto durante la formación comercial, responde para garantizar lo aprendido. Tus respuestas se calificarán automáticamente.</p>
             </div>
             
-            <div class="relative z-10 bg-white/10 border border-white/20 rounded-xl p-4 text-center backdrop-blur-sm">
+            <div class="relative z-10 bg-white/10 border border-white/20 rounded-xl p-4 text-center backdrop-blur-sm min-w-[130px]">
                 <p class="text-xs font-bold text-blue-200 mb-1">NOTA MÍNIMA</p>
                 <p class="text-3xl font-bold text-yellow-400">90%</p>
                 <p class="text-xs text-green-300 font-medium">Aprobación</p>
             </div>
         </div>
 
-        <!-- Indicador de Preguntas (Visual Estilo Poli) -->
-        <div class="bg-white rounded-xl shadow-sm border p-4 mb-6 flex justify-center flex-wrap gap-2">
-            <span class="w-8 h-8 rounded bg-[#0b224e] text-white flex items-center justify-center font-bold text-sm cursor-pointer shadow">1</span>
-            <span class="w-8 h-8 rounded bg-gray-100 text-gray-400 border flex items-center justify-center font-bold text-sm cursor-pointer hover:bg-gray-200">2</span>
-            <span class="w-8 h-8 rounded bg-gray-100 text-gray-400 border flex items-center justify-center font-bold text-sm cursor-pointer hover:bg-gray-200">3</span>
-            <span class="w-8 h-8 rounded bg-gray-100 text-gray-400 border flex items-center justify-center font-bold text-sm cursor-pointer hover:bg-gray-200">4</span>
-            <span class="w-8 h-8 rounded bg-gray-100 text-gray-400 border flex items-center justify-center font-bold text-sm cursor-pointer hover:bg-gray-200">5</span>
-            <span class="w-8 h-8 rounded bg-gray-100 text-gray-400 border flex items-center justify-center font-bold text-sm cursor-pointer hover:bg-gray-200">...</span>
-            <span class="w-8 h-8 rounded bg-gray-100 text-gray-400 border flex items-center justify-center font-bold text-sm cursor-pointer hover:bg-gray-200">12</span>
-        </div>
+        <!-- Indicador de Preguntas Dinámico -->
+        <div id="paginacion-preguntas" class="bg-white rounded-xl shadow-sm border p-4 mb-6 flex justify-center flex-wrap gap-2"></div>
 
         <!-- Contenedor del Formulario -->
-        <div class="bg-white rounded-2xl shadow-sm border p-8">
-            <form onsubmit="event.preventDefault(); alert('Evaluación enviada con éxito');">
+        <div id="contenedor-examen" class="bg-white rounded-2xl shadow-sm border p-8">
+            <form id="form-evaluacion">
                 
                 <!-- Datos Iniciales -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 border-b pb-6 mb-6">
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-1">Nombre completo:</label>
-                        <input type="text" required class="w-full border rounded-lg p-2.5 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+                        <label for="nombre" class="block text-sm font-bold text-gray-700 mb-1">Nombre completo: <span class="text-red-500">*</span></label>
+                        <input id="nombre" type="text" required placeholder="Ej. Laura Camila Gómez" class="w-full border rounded-lg p-2.5 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-1">Número de cédula:</label>
-                        <input type="text" required class="w-full border rounded-lg p-2.5 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+                        <label for="cedula" class="block text-sm font-bold text-gray-700 mb-1">Número de cédula: <span class="text-red-500">*</span></label>
+                        <input id="cedula" type="text" required placeholder="Sin puntos ni espacios" class="w-full border rounded-lg p-2.5 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
                     </div>
                 </div>
 
-                <!-- Ejemplo Pregunta Estilo Poli -->
-                <div class="mb-8">
-                    <div class="flex justify-between items-center mb-4">
-                        <span class="bg-blue-50 text-blue-800 text-xs font-bold px-3 py-1 rounded-full">PREGUNTA 3 DE 12</span>
-                        <span class="text-xs text-gray-400 font-bold uppercase">Formación</span>
-                    </div>
-                    
-                    <h3 class="text-lg font-bold text-gray-800 mb-5">En el diálogo, ¿Qué preguntas son más importantes para el desarrollo de la gestión comercial?</h3>
-                    
-                    <div class="space-y-3">
-                        <label class="cursor-pointer block relative">
-                            <input type="radio" name="q3" class="radio-custom absolute opacity-0 w-0 h-0" required>
-                            <div class="border rounded-xl p-4 flex items-center gap-4 transition hover:border-blue-300">
-                                <span class="letter-circle w-8 h-8 rounded-full border border-gray-300 text-gray-500 flex items-center justify-center text-sm font-bold transition">A</span>
-                                <span class="text-gray-700 font-medium">Preguntas abiertas.</span>
-                            </div>
-                        </label>
-                        
-                        <label class="cursor-pointer block relative">
-                            <input type="radio" name="q3" class="radio-custom absolute opacity-0 w-0 h-0">
-                            <div class="border rounded-xl p-4 flex items-center gap-4 transition hover:border-blue-300">
-                                <span class="letter-circle w-8 h-8 rounded-full border border-gray-300 text-gray-500 flex items-center justify-center text-sm font-bold transition">B</span>
-                                <span class="text-gray-700 font-medium">Preguntas cerradas.</span>
-                            </div>
-                        </label>
+                <!-- Contenedor Dinámico de Pregunta Actual -->
+                <div id="pregunta-activa" class="mb-8"></div>
 
-                        <label class="cursor-pointer block relative">
-                            <input type="radio" name="q3" class="radio-custom absolute opacity-0 w-0 h-0">
-                            <div class="border rounded-xl p-4 flex items-center gap-4 transition hover:border-blue-300">
-                                <span class="letter-circle w-8 h-8 rounded-full border border-gray-300 text-gray-500 flex items-center justify-center text-sm font-bold transition">C</span>
-                                <span class="text-gray-700 font-medium">Preguntas directas.</span>
-                            </div>
-                        </label>
-                    </div>
-                </div>
+                <!-- Mensaje de validación -->
+                <p id="alerta-validacion" class="hidden text-sm text-red-600 font-medium mb-4 bg-red-50 border border-red-200 rounded-lg px-4 py-2"></p>
 
                 <!-- Botones de Acción -->
                 <div class="flex justify-between items-center border-t pt-6">
-                    <button type="button" class="text-gray-500 font-medium hover:text-gray-800 transition">&larr; Anterior</button>
-                    <button type="submit" class="bg-[#0b224e] text-white font-bold py-2.5 px-6 rounded-lg hover:bg-blue-800 transition shadow">Siguiente &rarr;</button>
+                    <button id="btn-anterior" type="button" class="text-gray-500 font-medium hover:text-gray-800 transition disabled:opacity-40 disabled:cursor-not-allowed">&larr; Anterior</button>
+                    <button id="btn-siguiente" type="button" class="bg-[#0b224e] text-white font-bold py-2.5 px-6 rounded-lg hover:bg-blue-800 transition shadow">Siguiente &rarr;</button>
                 </div>
             </form>
         </div>
+
+        <!-- Pantalla de Resultados -->
+        <div id="pantalla-resultado" class="hidden bg-white rounded-2xl shadow-sm border p-8 text-center"></div>
+
     </div>
 
     <!-- Footer Breadcrumb -->
@@ -112,5 +78,264 @@
             <span>MÓDULO 3: EVALUACIONES 360 • Examen Oficial del Experto Poli</span>
         </div>
     </div>
+
+    <script>
+        const bancoPreguntas = [
+            {
+                categoria: "Venta Consultiva",
+                pregunta: "¿Cuál es el objetivo principal de la venta consultiva en la gestión de rematrícula y servicio?",
+                opciones: [
+                    "Cerrar el pago lo más rápido posible usando un guion rígido.",
+                    "Conectar con el estudiante, indagar su situación real y construir una negociación donde ambas partes ganen.",
+                    "Ofrecer descuentos financieros desde el inicio de la llamada para evitar objeciones."
+                ],
+                correcta: 1
+            },
+            {
+                categoria: "Rapport y Conexión",
+                pregunta: "¿Qué elementos clave componen una apertura efectiva para generar rapport desde los primeros segundos?",
+                opciones: [
+                    "Saludo cálido, uso del nombre del estudiante, tono empático y disposición genuina de ayuda.",
+                    "Lectura rápida de políticas de cartera y fechas límite de pago.",
+                    "Solicitar inmediatamente el número de documento y el medio de pago."
+                ],
+                correcta: 0
+            },
+            {
+                categoria: "Indagación",
+                pregunta: "En el diálogo, ¿qué tipo de preguntas son más importantes para descubrir la necesidad real del estudiante?",
+                opciones: [
+                    "Preguntas abiertas.",
+                    "Preguntas cerradas.",
+                    "Preguntas directas."
+                ],
+                correcta: 0
+            },
+            {
+                categoria: "Escucha Activa",
+                pregunta: "¿Cómo se evidencia la escucha activa durante la conversación con el estudiante?",
+                opciones: [
+                    "Interrumpiendo para darle la solución antes de que termine de explicar.",
+                    "Parafraseando su situación, validando sus emociones y tomando nota de los datos clave.",
+                    "Poniendo la llamada en espera mientras se revisan otros casos."
+                ],
+                correcta: 1
+            },
+            {
+                categoria: "Diagnóstico",
+                pregunta: "Antes de presentar opciones de financiación o alternativas académicas, ¿qué debe hacer el experto?",
+                opciones: [
+                    "Enviar la orden de matrícula por correo sin explicar valores.",
+                    "Diagnosticar la causa raíz del freno (financiera, académica, laboral o de tiempo).",
+                    "Transferir la llamada al área de retención."
+                ],
+                correcta: 1
+            },
+            {
+                categoria: "Propuesta de Valor",
+                pregunta: "Al presentar una solución al estudiante, ¿cuál es la mejor estrategia comercial?",
+                opciones: [
+                    "Mencionar todas las campañas vigentes sin filtrar cuáles aplican a su perfil.",
+                    "Conectar los beneficios de continuar su carrera directamente con el motivo o meta que él expresó.",
+                    "Hablar únicamente del valor monetario de la matrícula."
+                ],
+                correcta: 1
+            },
+            {
+                categoria: "Manejo de Objeciones",
+                pregunta: "Cuando un estudiante dice 'No tengo el dinero completo en este momento', ¿cuál es el paso correcto?",
+                opciones: [
+                    "Dar por terminada la gestión y pedirle que llame cuando tenga el dinero.",
+                    "Explorar con qué monto cuenta hoy, indagar fechas de ingreso y presentar alternativas de pago escalonadas.",
+                    "Decirle que perderá su cupo si no paga ese mismo día."
+                ],
+                correcta: 1
+            },
+            {
+                categoria: "Objeción de Tiempo",
+                pregunta: "Si el estudiante manifiesta falta de tiempo por cruce laboral o personal, ¿qué alternativa consultiva debemos explorar?",
+                opciones: [
+                    "Recomendarle el aplazamiento inmediato del semestre.",
+                    "Evaluar ajuste de carga académica (inscribir menos materias) o flexibilidad de horarios/modalidad.",
+                    "Indicarle que todos los estudiantes trabajan y estudian al tiempo."
+                ],
+                correcta: 1
+            },
+            {
+                categoria: "Cierre Comercial",
+                pregunta: "¿Qué caracteriza a un cierre efectivo dentro del modelo consultivo?",
+                opciones: [
+                    "Dejar la decisión abierta para que el estudiante avise algún día.",
+                    "Generar un compromiso concreto con fecha, hora y acción específica de pago o inscripción.",
+                    "Colgar apenas se envía el enlace de pago."
+                ],
+                correcta: 1
+            },
+            {
+                categoria: "Seguimiento",
+                pregunta: "¿Por qué es crítico agendar un seguimiento preciso cuando el estudiante no paga en línea durante la llamada?",
+                opciones: [
+                    "Para cumplir únicamente con el registro en CRM.",
+                    "Para acompañar el paso a paso del pago, resolver bloqueos técnicos a tiempo y asegurar la conversión.",
+                    "Para llamarlo cada hora hasta que conteste."
+                ],
+                correcta: 1
+            },
+            {
+                categoria: "Autogestión y Servicio",
+                pregunta: "En solicitudes de servicio, ¿cómo aplicamos la resolución en primer contacto con enfoque consultivo?",
+                opciones: [
+                    "Dando la respuesta exacta, guiando la autogestión y anticipando el siguiente paso que necesitará el estudiante.",
+                    "Enviando enlaces genéricos sin verificar si el estudiante tiene acceso.",
+                    "Escalando todos los casos a segundo nivel por precaución."
+                ],
+                correcta: 0
+            },
+            {
+                categoria: "Tipificación y Calidad",
+                pregunta: "¿Qué garantiza una correcta tipificación y documentación en la gestión?",
+                opciones: [
+                    "Trazabilidad clara del acuerdo logrado para que cualquier compañero o líder continúe la gestión sin reprocesos.",
+                    "Evitar que el estudiante vuelva a comunicarse.",
+                    "Aumentar el tiempo promedio de operación."
+                ],
+                correcta: 0
+            }
+        ];
+
+        let indiceActual = 0;
+        const respuestasUsuario = new Array(bancoPreguntas.length).fill(null);
+        const letras = ["A", "B", "C", "D"];
+
+        const paginacionEl = document.getElementById("paginacion-preguntas");
+        const preguntaActivaEl = document.getElementById("pregunta-activa");
+        const btnAnterior = document.getElementById("btn-anterior");
+        const btnSiguiente = document.getElementById("btn-siguiente");
+        const alertaEl = document.getElementById("alerta-validacion");
+
+        function renderPaginacion() {
+            paginacionEl.innerHTML = bancoPreguntas.map((_, idx) => {
+                const esActual = idx === indiceActual;
+                const respondida = respuestasUsuario[idx] !== null;
+                let clases = "w-8 h-8 rounded flex items-center justify-center font-bold text-sm cursor-pointer transition ";
+                if (esActual) {
+                    clases += "bg-[#0b224e] text-white shadow scale-105";
+                } else if (respondida) {
+                    clases += "bg-blue-100 text-[#0b224e] border border-blue-300";
+                } else {
+                    clases += "bg-gray-100 text-gray-500 border hover:bg-gray-200";
+                }
+                return `<button type="button" onclick="irAPregunta(${idx})" class="${clases}">${idx + 1}</button>`;
+            }).join("");
+        }
+
+        function renderPregunta() {
+            alertaEl.classList.add("hidden");
+            const item = bancoPreguntas[indiceActual];
+            const seleccionPrevia = respuestasUsuario[indiceActual];
+
+            const opcionesHTML = item.opciones.map((texto, idx) => `
+                <label class="cursor-pointer block relative">
+                    <input type="radio" name="pregunta_actual" value="${idx}" class="radio-custom absolute opacity-0 w-0 h-0" ${seleccionPrevia === idx ? "checked" : ""} onchange="guardarRespuesta(${idx})">
+                    <div class="border rounded-xl p-4 flex items-center gap-4 transition hover:border-blue-300">
+                        <span class="letter-circle w-8 h-8 shrink-0 rounded-full border border-gray-300 text-gray-500 flex items-center justify-center text-sm font-bold transition">${letras[idx]}</span>
+                        <span class="text-gray-700 font-medium">${texto}</span>
+                    </div>
+                </label>
+            `).join("");
+
+            preguntaActivaEl.innerHTML = `
+                <div class="flex justify-between items-center mb-4">
+                    <span class="bg-blue-50 text-blue-800 text-xs font-bold px-3 py-1 rounded-full">PREGUNTA ${indiceActual + 1} DE ${bancoPreguntas.length}</span>
+                    <span class="text-xs text-gray-400 font-bold uppercase">${item.categoria}</span>
+                </div>
+                <h3 class="text-lg font-bold text-gray-800 mb-5">${item.pregunta}</h3>
+                <div class="space-y-3">${opcionesHTML}</div>
+            `;
+
+            btnAnterior.disabled = indiceActual === 0;
+            btnSiguiente.innerHTML = indiceActual === bancoPreguntas.length - 1 ? "Finalizar y Calificar ✓" : "Siguiente &rarr;";
+            renderPaginacion();
+        }
+
+        window.guardarRespuesta = function(valor) {
+            respuestasUsuario[indiceActual] = valor;
+            alertaEl.classList.add("hidden");
+            renderPaginacion();
+        };
+
+        window.irAPregunta = function(nuevoIndice) {
+            indiceActual = nuevoIndice;
+            renderPregunta();
+        };
+
+        btnAnterior.addEventListener("click", () => {
+            if (indiceActual > 0) {
+                indiceActual--;
+                renderPregunta();
+            }
+        });
+
+        btnSiguiente.addEventListener("click", () => {
+            if (respuestasUsuario[indiceActual] === null) {
+                alertaEl.textContent = "Por favor selecciona una opción antes de continuar.";
+                alertaEl.classList.remove("hidden");
+                return;
+            }
+
+            if (indiceActual < bancoPreguntas.length - 1) {
+                indiceActual++;
+                renderPregunta();
+            } else {
+                finalizarExamen();
+            }
+        });
+
+        function finalizarExamen() {
+            const nombre = document.getElementById("nombre").value.trim();
+            const cedula = document.getElementById("cedula").value.trim();
+
+            if (!nombre || !cedula) {
+                alertaEl.textContent = "Por favor ingresa tu nombre completo y número de cédula en la parte superior para registrar tu nota.";
+                alertaEl.classList.remove("hidden");
+                return;
+            }
+
+            const sinResponder = respuestasUsuario.findIndex(r => r === null);
+            if (sinResponder !== -1) {
+                indiceActual = sinResponder;
+                renderPregunta();
+                alertaEl.textContent = `Aún tienes pendiente responder la pregunta ${sinResponder + 1}.`;
+                alertaEl.classList.remove("hidden");
+                return;
+            }
+
+            let aciertos = 0;
+            bancoPreguntas.forEach((p, idx) => {
+                if (respuestasUsuario[idx] === p.correcta) aciertos++;
+            });
+
+            const porcentaje = Math.round((aciertos / bancoPreguntas.length) * 100);
+            const aprobado = porcentaje >= 90;
+
+            document.getElementById("contenedor-examen").classList.add("hidden");
+            paginacionEl.classList.add("hidden");
+
+            const resultadoEl = document.getElementById("pantalla-resultado");
+            resultadoEl.classList.remove("hidden");
+            resultadoEl.innerHTML = `
+                <div class="inline-flex items-center justify-center w-20 h-20 rounded-full mb-4 ${aprobado ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'} text-3xl font-bold">
+                    ${porcentaje}%
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">${aprobado ? '¡Evaluación Aprobada!' : 'No alcanzaste el 90% requerido'}</h2>
+                <p class="text-gray-600 mb-6"><strong>${nombre}</strong> (C.C. ${cedula}) • Respondiste correctamente <strong>${aciertos} de ${bancoPreguntas.length}</strong> preguntas.</p>
+                <button type="button" onclick="location.reload()" class="bg-[#0b224e] text-white font-bold py-2.5 px-6 rounded-lg hover:bg-blue-800 transition">
+                    Intentar nuevamente
+                </button>
+            `;
+        }
+
+        renderPregunta();
+    </script>
 </body>
 </html>
