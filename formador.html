@@ -44,6 +44,13 @@
             from { opacity: 0; transform: translateY(4px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        .vertical-header {
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            white-space: nowrap;
+            max-height: 130px;
+            margin: 0 auto;
+        }
     </style>
 </head>
 <body class="bg-[#F8FAFC] text-slate-800 font-sans antialiased min-h-screen flex flex-col">
@@ -59,7 +66,7 @@
             <div>
                 <span class="px-3 py-1 rounded-full bg-pink-50 text-ilumnoPink text-[10px] font-black uppercase tracking-wider">Módulo Administrativo</span>
                 <h1 class="text-2xl font-black text-[#00264D] mt-2">Consola del Formador</h1>
-                <p class="text-xs text-slate-500 mt-1">Gestión de asistencia, calificaciones ponderadas, preguntas y correos diarios</p>
+                <p class="text-xs text-slate-500 mt-1">Gestión de asistencia, sub-notas ponderadas, feedback y correos diarios</p>
             </div>
             <form onsubmit="handleTrainerLogin(event)" class="space-y-4 text-left">
                 <div>
@@ -102,7 +109,7 @@
                     <i class="fas fa-tasks text-indigo-600"></i> <span>3. Planning Visual</span>
                 </button>
                 <button onclick="switchTab('lms')" id="tab-btn-lms" class="px-3.5 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition flex items-center gap-2">
-                    <i class="fas fa-comments text-emerald-600"></i> <span>4. Avance & Preguntas</span>
+                    <i class="fas fa-comments text-emerald-600"></i> <span>4. Avance, Dudas & Feedback</span>
                     <span id="badge-pending-questions" class="px-1.5 py-0.5 text-[10px] font-black bg-rose-500 text-white rounded-full">0</span>
                 </button>
                 <button onclick="switchTab('correo')" id="tab-btn-correo" class="px-3.5 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition flex items-center gap-2">
@@ -112,6 +119,9 @@
         </div>
 
         <div class="flex items-center gap-2">
+            <span id="firebase-sync-indicator" class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-black border border-emerald-200">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> DB Conectada
+            </span>
             <a href="./index.html" class="px-3.5 py-2 rounded-xl border border-slate-200 hover:border-ilumnoTeal bg-slate-50 hover:bg-white text-xs font-bold text-slate-700 transition flex items-center gap-1.5">
                 <i class="fas fa-graduation-cap text-ilumnoTeal"></i> <span class="hidden sm:inline">Ver Campus Estudiante</span>
             </a>
@@ -126,45 +136,45 @@
         <button onclick="switchTab('asistencia')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-ilumnoDark whitespace-nowrap"><i class="fas fa-calendar-check mr-1"></i> 1. Asistencia</button>
         <button onclick="switchTab('notas')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-ilumnoDark whitespace-nowrap"><i class="fas fa-award mr-1"></i> 2. Notas</button>
         <button onclick="switchTab('planning')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-ilumnoDark whitespace-nowrap"><i class="fas fa-tasks mr-1"></i> 3. Planning</button>
-        <button onclick="switchTab('lms')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-ilumnoDark whitespace-nowrap"><i class="fas fa-comments mr-1"></i> 4. Avance & Dudas</button>
+        <button onclick="switchTab('lms')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-ilumnoDark whitespace-nowrap"><i class="fas fa-comments mr-1"></i> 4. Avance & Feedback</button>
         <button onclick="switchTab('correo')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-ilumnoPink text-white whitespace-nowrap"><i class="fas fa-envelope mr-1"></i> 5. Correo Diario</button>
     </div>
 
     <!-- ========================================== -->
     <!-- 2. WORKSPACE PRINCIPAL DEL FORMADOR        -->
     <!-- ========================================== -->
-    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 space-y-6">
+    <main class="flex-1 max-w-[1440px] w-full mx-auto p-4 md:p-6 space-y-6">
 
         <!-- BANNER DE CONFIGURACIÓN GENERAL DEL GRUPO -->
         <div class="bg-gradient-to-r from-[#0089A8] via-[#007A99] to-[#004D6B] rounded-3xl p-5 md:p-6 text-white shadow-lg flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
             <div class="space-y-1">
                 <div class="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-white/20 text-white text-[10px] font-black uppercase tracking-wider">
-                    <i class="fas fa-sliders-h"></i> Parámetros Oficiales de la Cohorte
+                    <i class="fas fa-sliders-h"></i> Parámetros Oficiales de la Cohorte (Sincronizados con el Campus)
                 </div>
                 <h2 class="text-xl md:text-2xl font-black">Control de Formación Inicial & Reporte Diario</h2>
-                <p class="text-xs text-cyan-50">Edita aquí los datos generales del grupo; se actualizarán en todas las tablas y en la plantilla de Outlook.</p>
+                <p class="text-xs text-cyan-50">Al cambiar la <strong>Fecha Inicio</strong> aquí, se actualizan automáticamente las 8 fechas de sesión, el encabezado del correo, el mes del asunto y el campus de los estudiantes.</p>
             </div>
 
             <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 w-full lg:w-auto bg-slate-900/35 p-3.5 rounded-2xl border border-white/20 backdrop-blur-md text-xs">
                 <div>
                     <label class="text-[10px] text-ilumnoYellow font-black uppercase block">Universidad</label>
-                    <input id="cfg-uni" type="text" value="Poli" oninput="saveConfigAndRefresh()" class="w-full bg-white/10 text-white font-bold px-2.5 py-1.5 rounded-lg border border-white/20 outline-none mt-1">
+                    <input id="cfg-uni" type="text" value="Poli" oninput="saveConfigAndRefresh(false)" class="w-full bg-white/10 text-white font-bold px-2.5 py-1.5 rounded-lg border border-white/20 outline-none mt-1">
                 </div>
                 <div>
                     <label class="text-[10px] text-ilumnoYellow font-black uppercase block">Fecha Inicio</label>
-                    <input id="cfg-inicio" type="text" value="12-feb-25" oninput="saveConfigAndRefresh()" class="w-full bg-white/10 text-white font-bold px-2.5 py-1.5 rounded-lg border border-white/20 outline-none mt-1">
+                    <input id="cfg-inicio" type="text" value="17-nov-2026" onchange="saveConfigAndRefresh(true)" class="w-full bg-white/10 text-white font-bold px-2.5 py-1.5 rounded-lg border border-white/20 outline-none mt-1" title="Ej: 17-nov-2026 o 2026-11-17">
                 </div>
                 <div>
                     <label class="text-[10px] text-ilumnoYellow font-black uppercase block">Fecha Fin</label>
-                    <input id="cfg-fin" type="text" value="21-feb-25" oninput="saveConfigAndRefresh()" class="w-full bg-white/10 text-white font-bold px-2.5 py-1.5 rounded-lg border border-white/20 outline-none mt-1">
+                    <input id="cfg-fin" type="text" value="26-nov-2026" oninput="saveConfigAndRefresh(false)" class="w-full bg-white/10 text-white font-bold px-2.5 py-1.5 rounded-lg border border-white/20 outline-none mt-1">
                 </div>
                 <div>
                     <label class="text-[10px] text-ilumnoYellow font-black uppercase block">Formador(a)</label>
-                    <input id="cfg-formador" type="text" value="Angie Cuéllar" oninput="saveConfigAndRefresh()" class="w-full bg-white/10 text-white font-bold px-2.5 py-1.5 rounded-lg border border-white/20 outline-none mt-1">
+                    <input id="cfg-formador" type="text" value="Angie Cuéllar" oninput="saveConfigAndRefresh(false)" class="w-full bg-white/10 text-white font-bold px-2.5 py-1.5 rounded-lg border border-white/20 outline-none mt-1">
                 </div>
                 <div class="col-span-2 sm:col-span-1">
                     <label class="text-[10px] text-ilumnoYellow font-black uppercase block">Horario</label>
-                    <input id="cfg-horario" type="text" value="8:00 am a 2:00 pm" oninput="saveConfigAndRefresh()" class="w-full bg-white/10 text-white font-bold px-2.5 py-1.5 rounded-lg border border-white/20 outline-none mt-1">
+                    <input id="cfg-horario" type="text" value="8:00 am a 2:00 pm" oninput="saveConfigAndRefresh(false)" class="w-full bg-white/10 text-white font-bold px-2.5 py-1.5 rounded-lg border border-white/20 outline-none mt-1">
                 </div>
             </div>
         </div>
@@ -179,15 +189,15 @@
                 <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs flex items-center justify-between">
                     <div>
                         <span class="text-[10px] font-black text-slate-400 uppercase block">Día Activo</span>
-                        <select id="active-day-select" onchange="syncDaySelectors(this.value)" class="mt-1 text-sm font-black text-ilumnoDark bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1 outline-none">
-                            <option value="1">Día 1 / 8</option>
+                        <select id="active-day-select" onchange="syncDaySelectors(this.value, true)" class="mt-1 text-sm font-black text-ilumnoDark bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1 outline-none">
+                            <option value="1" selected>Día 1 / 8</option>
                             <option value="2">Día 2 / 8</option>
                             <option value="3">Día 3 / 8</option>
                             <option value="4">Día 4 / 8</option>
                             <option value="5">Día 5 / 8</option>
                             <option value="6">Día 6 / 8</option>
                             <option value="7">Día 7 / 8</option>
-                            <option value="8" selected>Día 8 / 8 (Cierre)</option>
+                            <option value="8">Día 8 / 8 (Cierre)</option>
                         </select>
                     </div>
                     <div class="w-10 h-10 rounded-xl bg-blue-50 text-ilumnoDark flex items-center justify-center"><i class="fas fa-calendar-alt"></i></div>
@@ -233,8 +243,11 @@
                         <h3 class="text-base font-black text-ilumnoDark flex items-center gap-2">
                             <i class="fas fa-chart-bar text-ilumnoTeal"></i> Cuadro Resumen: Seguimiento a la Incorporación y Adherencia
                         </h3>
-                        <p class="text-xs text-slate-500">Se calcula automáticamente sumando las marcas <strong>A</strong>, <strong>F</strong> y <strong>R</strong> de cada día. Puedes hacer clic en las fechas del encabezado azul para ajustarlas a tu cohorte.</p>
+                        <p class="text-xs text-slate-500">Se actualiza con la Fecha Inicio superior o puedes editar cada fecha manualmente haciendo clic en el encabezado azul.</p>
                     </div>
+                    <button onclick="recalculate8SessionDatesFromStart()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-ilumnoDark font-bold text-xs transition flex items-center gap-1.5 self-start sm:self-auto">
+                        <i class="fas fa-magic text-ilumnoTeal"></i> Autocalcular 8 días desde Fecha Inicio
+                    </button>
                 </div>
 
                 <div class="overflow-x-auto">
@@ -259,12 +272,14 @@
                             <span class="text-rose-600 font-bold">Fórmula activa: 1 Falta o 3 Retardos cambian automáticamente el Estado a Baja.</span>
                         </p>
                     </div>
-                    <button onclick="openAddCandidateModal()" class="px-4 py-2.5 bg-ilumnoDark hover:bg-blue-950 text-white font-bold text-xs rounded-xl transition flex items-center gap-2 self-start sm:self-auto shadow-xs">
-                        <i class="fas fa-user-plus"></i> Agregar Aspirante
-                    </button>
-                    <button onclick="openBulkPasteModal()" class="px-4 py-2.5 bg-ilumnoTeal hover:bg-[#0089A8] text-white font-bold text-xs rounded-xl transition flex items-center gap-2 shadow-xs">
-    <i class="fas fa-file-excel"></i> Pegar Lista desde Excel
-</button>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button onclick="openAddCandidateModal()" class="px-4 py-2.5 bg-ilumnoDark hover:bg-blue-950 text-white font-bold text-xs rounded-xl transition flex items-center gap-2 shadow-xs">
+                            <i class="fas fa-user-plus"></i> Agregar Aspirante
+                        </button>
+                        <button onclick="openBulkPasteModal()" class="px-4 py-2.5 bg-ilumnoTeal hover:bg-[#0089A8] text-white font-bold text-xs rounded-xl transition flex items-center gap-2 shadow-xs">
+                            <i class="fas fa-file-excel"></i> Pegar Lista desde Excel
+                        </button>
+                    </div>
                 </div>
 
                 <div class="overflow-x-auto">
@@ -300,45 +315,119 @@
         </section>
 
         <!-- =================================================================== -->
-        <!-- PESTAÑA 2: MATRIZ DE NOTAS PONDERADAS Y RANKING DE CONTRATACIÓN     -->
+        <!-- PESTAÑA 2: MATRIZ COMPLETA DE SUB-NOTAS Y CORTES (IDÉNTICA AL EXCEL)-->
         <!-- =================================================================== -->
         <section id="pane-notas" class="hidden space-y-6 fade-in">
-            <div class="bg-white rounded-3xl border border-slate-200 shadow-xs p-6 space-y-4">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div>
-                        <h3 class="text-lg font-black text-ilumnoDark">Matriz Oficial de Notas Ponderadas & Selección de Contratación</h3>
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-xs p-5 md:p-6 space-y-5">
+                
+                <!-- Encabezado + Leyenda Oficial TOP / BOTTOM como el Excel -->
+                <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+                    <div class="space-y-1">
+                        <h3 class="text-lg font-black text-ilumnoDark">Matriz Oficial de Calificaciones Detalladas & Cortes Ponderados</h3>
                         <p class="text-xs text-slate-500">
-                            Fórmula exacta verificada: <strong>1er Corte (20%)</strong> + <strong>2do Corte (30%)</strong> + <strong>3er Corte (40%)</strong> + <strong>Puntos Extra (10%)</strong> = <strong>Promedio Total</strong>. Nota $\ge 90,00$ otorga **TOP**.
+                            Cada corte se alimenta de sus 2 notas respectivas (<strong>40% Evaluaciones Teóricas</strong> + <strong>60% Práctica/Habilidades/RolePlay</strong>):<br>
+                            • <strong>1er Corte (20%):</strong> Eval. Ilumno (40%) + Eval. Comercial (60%) | 
+                            • <strong>2do Corte (30%):</strong> Eval. Aplicativos (40%) + Hab. Autogestión Producto (60%) | 
+                            • <strong>3er Corte (40%):</strong> Eval. Final (40%) + RolePlay Final (60%) | 
+                            • <strong>Puntos Extra (10%):</strong> Promedio Puntualidad, Asistencia y Participación.
                         </p>
                     </div>
-                    <div class="flex flex-wrap items-center gap-3">
-                        <div class="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200">
-                            <label class="text-xs font-bold text-slate-700">Cupos Personal Requerido:</label>
-                            <input id="cfg-cupos-titulares" type="number" min="1" max="20" value="1" onchange="saveConfigAndRefresh()" class="w-14 px-2 py-1 text-xs font-black text-center rounded-lg border border-slate-300 bg-white">
+
+                    <!-- Cuadro RANKING MIN/MAX idéntico al Excel -->
+                    <div class="flex flex-wrap items-center gap-4">
+                        <table class="text-[11px] font-black text-center border-collapse shadow-2xs">
+                            <thead>
+                                <tr class="bg-outlookNavy text-white">
+                                    <th class="px-3 py-1 border border-slate-300">RANKING</th>
+                                    <th class="px-3 py-1 border border-slate-300">MIN</th>
+                                    <th class="px-3 py-1 border border-slate-300">MAX</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="px-3 py-0.5 border border-slate-300 text-outlookCyan bg-white">TOP</td>
+                                    <td class="px-3 py-0.5 border border-slate-300 bg-[#FFFF00] text-slate-900">90</td>
+                                    <td class="px-3 py-0.5 border border-slate-300 bg-outlookCyan text-white">100</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-3 py-0.5 border border-slate-300 text-rose-600 bg-white">BOTTOM</td>
+                                    <td class="px-3 py-0.5 border border-slate-300 bg-[#E6002D] text-white">0</td>
+                                    <td class="px-3 py-0.5 border border-slate-300 bg-[#FFFF00] text-slate-900">89,99</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="flex flex-col gap-2">
+                            <div class="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200">
+                                <label class="text-xs font-bold text-slate-700">Cupos Personal Requerido:</label>
+                                <input id="cfg-cupos-titulares" type="number" min="1" max="40" value="8" onchange="saveConfigAndRefresh(false)" class="w-14 px-2 py-1 text-xs font-black text-center rounded-lg border border-slate-300 bg-white">
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="openEssenceImportModal()" class="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[11px] rounded-xl transition flex items-center gap-1.5 shadow-xs">
+                                    <i class="fas fa-file-import"></i> Importar Notas Forms ESSENCE
+                                </button>
+                                <button onclick="pullGradesFromFirebase()" class="px-3 py-2 bg-ilumnoTeal hover:bg-[#0089A8] text-white font-bold text-[11px] rounded-xl transition flex items-center gap-1.5 shadow-xs">
+                                    <i class="fas fa-cloud-download-alt"></i> Sincronizar Evaluaciones del Index
+                                </button>
+                            </div>
                         </div>
-                        <button onclick="pullGradesFromFirebase()" class="px-4 py-2 bg-ilumnoTeal hover:bg-[#0089A8] text-white font-bold text-xs rounded-xl transition flex items-center gap-1.5 shadow-xs">
-                            <i class="fas fa-cloud-download-alt"></i> Sincronizar Notas Evaluaciones 360
-                        </button>
                     </div>
                 </div>
 
-                <div class="overflow-x-auto">
-                    <table class="w-full text-center border-collapse text-xs">
+                <!-- Tabla Completa Estilo Excel con Sub-Columnas Editables -->
+                <div class="overflow-x-auto border border-slate-300 rounded-2xl">
+                    <table class="w-full text-center border-collapse text-[11px]">
                         <thead>
-                            <tr class="bg-outlookNavy text-white font-bold text-[11px]">
-                                <th class="p-3 border border-slate-300">No. Requerimiento</th>
-                                <th class="p-3 border border-slate-300">Cédula</th>
-                                <th class="p-3 border border-slate-300">Universidad</th>
-                                <th class="p-3 border border-slate-300">Split</th>
-                                <th class="p-3 border border-slate-300">Apellidos</th>
-                                <th class="p-3 border border-slate-300">Nombres</th>
-                                <th class="p-3 border border-slate-300">Promedio 1er Corte (20%)</th>
-                                <th class="p-3 border border-slate-300">Promedio 2do Corte (30%)</th>
-                                <th class="p-3 border border-slate-300">Promedio 3er corte (40%)</th>
-                                <th class="p-3 border border-slate-300">Puntos Extra (10%)</th>
-                                <th class="p-3 border border-slate-300 bg-outlookCyan text-outlookNavy">Promedio Total</th>
-                                <th class="p-3 border border-slate-300 bg-[#85F1E1] text-outlookNavy">Ranking</th>
-                                <th class="p-3 border border-slate-300">Grupo en Correo Día 8</th>
+                            <tr class=" font-bold">
+                                <th class="p-2 border border-slate-300 bg-outlookNavy text-white">Req.</th>
+                                <th class="p-2 border border-slate-300 bg-outlookNavy text-white">Cédula</th>
+                                <th class="p-2 border border-slate-300 bg-outlookNavy text-white">Apellidos</th>
+                                <th class="p-2 border border-slate-300 bg-outlookNavy text-white">Nombres</th>
+                                
+                                <!-- Sub-notas Corte 1 -->
+                                <th class="p-2 border border-slate-300 bg-white text-outlookNavy" title="Peso: 40% del 1er Corte">
+                                    <div class="vertical-header">Evaluación Ilumno (40%)</div>
+                                </th>
+                                <th class="p-2 border border-slate-300 bg-white text-outlookNavy" title="Peso: 60% del 1er Corte">
+                                    <div class="vertical-header">Evaluación Comercial (60%)</div>
+                                </th>
+                                <th class="p-2.5 border border-slate-300 bg-outlookNavy text-white min-w-[95px]">Promedio 1er<br>Corte (20%)</th>
+
+                                <!-- Sub-notas Corte 2 -->
+                                <th class="p-2 border border-slate-300 bg-white text-outlookNavy" title="Peso: 40% del 2do Corte">
+                                    <div class="vertical-header">Evaluación de aplicativos (40%)</div>
+                                </th>
+                                <th class="p-2 border border-slate-300 bg-white text-outlookNavy" title="Peso: 60% del 2do Corte">
+                                    <div class="vertical-header">Habilidades Autogestión<br>Producto y Proceso (60%)</div>
+                                </th>
+                                <th class="p-2.5 border border-slate-300 bg-outlookNavy text-white min-w-[95px]">Promedio 2do<br>Corte (30%)</th>
+
+                                <!-- Sub-notas Corte 3 -->
+                                <th class="p-2 border border-slate-300 bg-white text-outlookNavy" title="Peso: 40% del 3er Corte">
+                                    <div class="vertical-header">Evaluación Final (40%)</div>
+                                </th>
+                                <th class="p-2 border border-slate-300 bg-white text-outlookNavy" title="Peso: 60% del 3er Corte">
+                                    <div class="vertical-header">RolePlay Final (60%)</div>
+                                </th>
+                                <th class="p-2.5 border border-slate-300 bg-outlookNavy text-white min-w-[95px]">Promedio 3er<br>corte (40%)</th>
+
+                                <!-- Sub-notas Puntos Extra -->
+                                <th class="p-2 border border-slate-300 bg-white text-outlookNavy">
+                                    <div class="vertical-header">Puntualidad</div>
+                                </th>
+                                <th class="p-2 border border-slate-300 bg-white text-outlookNavy">
+                                    <div class="vertical-header">Asistencia</div>
+                                </th>
+                                <th class="p-2 border border-slate-300 bg-white text-outlookNavy">
+                                    <div class="vertical-header">Participación</div>
+                                </th>
+                                <th class="p-2.5 border border-slate-300 bg-outlookNavy text-white min-w-[85px]">Puntos Extra<br>(10%)</th>
+
+                                <!-- Totales y Feedback -->
+                                <th class="p-2.5 border border-slate-300 bg-outlookCyan text-outlookNavy font-black min-w-[85px]">Promedio<br>Total</th>
+                                <th class="p-2.5 border border-slate-300 bg-[#85F1E1] text-outlookNavy font-black min-w-[80px]">Ranking</th>
+                                <th class="p-2.5 border border-slate-300 bg-outlookNavy text-white min-w-[110px]">Estado Correo</th>
+                                <th class="p-2.5 border border-slate-300 bg-outlookNavy text-white min-w-[200px]">Feedback Actividades (Visible en Index)</th>
                             </tr>
                         </thead>
                         <tbody id="body-notas-matrix" class="divide-y divide-slate-200"></tbody>
@@ -355,9 +444,9 @@
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <div>
                         <h3 class="text-lg font-black text-ilumnoDark flex items-center gap-2">
-                            <i class="fas fa-project-diagram text-indigo-600"></i> Cronograma Visual de Planning (Incrustado Automático en el Correo)
+                            <i class="fas fa-project-diagram text-indigo-600"></i> Cronograma Visual de Planning (Incrustado Automático en el Correo y en el Index)
                         </h3>
-                        <p class="text-xs text-slate-500">En lugar de tomar captura de pantalla al bloque de Planning en Excel, haz clic sobre el estado de cada día para cambiarlo entre <strong>Completado (100%)</strong>, <strong>En Curso</strong> o <strong>Programado</strong>. Se dibuja como tabla HTML nativa al final de tu correo.</p>
+                        <p class="text-xs text-slate-500">Haz clic sobre el estado de cada día para cambiarlo entre <strong>Completado</strong>, <strong>En Curso</strong> o <strong>Programado</strong>.</p>
                     </div>
                 </div>
 
@@ -366,21 +455,21 @@
         </section>
 
         <!-- =================================================================== -->
-        <!-- PESTAÑA 4: AVANCE LMS, APUNTES Y RESPUESTA A PREGUNTAS EN VIVO      -->
+        <!-- PESTAÑA 4: AVANCE LMS, APUNTES, DUDAS Y FEEDBACK DOCENTE            -->
         <!-- =================================================================== -->
         <section id="pane-lms" class="hidden space-y-6 fade-in">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 
-                <!-- Columna Izquierda: Avance y Cuaderno de Notas de cada Experto -->
+                <!-- Columna Izquierda: Avance, Apuntes y Feedback Individual para cada Experto -->
                 <div class="bg-white rounded-3xl border border-slate-200 shadow-xs p-6 space-y-4">
                     <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                         <div>
-                            <h3 class="text-base font-black text-ilumnoDark">Avance y Apuntes por Experto</h3>
-                            <p class="text-xs text-slate-500">Sincronizado en vivo con el `index.html`</p>
+                            <h3 class="text-base font-black text-ilumnoDark">Avance, Apuntes y Feedback de Actividades por Experto</h3>
+                            <p class="text-xs text-slate-500">Escribe aquí el feedback de Speech Elevator, simuladores o Roleplay para que el estudiante lo vea en su campus.</p>
                         </div>
-                        <span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-black uppercase">En Vivo</span>
+                        <span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-black uppercase">Sincronizado</span>
                     </div>
-                    <div id="lms-experts-list" class="space-y-3 max-h-[540px] overflow-y-auto pr-1"></div>
+                    <div id="lms-experts-list" class="space-y-4 max-h-[600px] overflow-y-auto pr-1"></div>
                 </div>
 
                 <!-- Columna Derecha: Muro de Preguntas y Respuesta Docente -->
@@ -394,7 +483,7 @@
                             + Crear pregunta de prueba
                         </button>
                     </div>
-                    <div id="lms-questions-list" class="space-y-3 max-h-[540px] overflow-y-auto pr-1"></div>
+                    <div id="lms-questions-list" class="space-y-3 max-h-[600px] overflow-y-auto pr-1"></div>
                 </div>
 
             </div>
@@ -413,32 +502,42 @@
                     </h3>
 
                     <div>
-                        <label class="text-xs font-bold text-slate-700 block mb-1">Día del Reporte</label>
+                        <label class="text-xs font-bold text-slate-700 block mb-1">Día del Reporte (Cambia automáticamente fecha y temario)</label>
                         <select id="mail-day-select" onchange="syncDaySelectors(this.value, true)" class="w-full p-3 rounded-xl border border-slate-300 text-xs font-black bg-slate-50 text-ilumnoDark outline-none">
-                            <option value="1">Día 1 / 8 - Inducción, Cultura & Fase 1</option>
-                            <option value="2">Día 2 / 8 - Fase 2: Financiero & Pagos</option>
-                            <option value="3">Día 3 / 8 - Fase 2: Reintegro & Inscripción</option>
-                            <option value="4">Día 4 / 8 - Fase 2: Aplazamientos & Grados</option>
-                            <option value="5">Día 5 / 8 - Idiomas, Créditos & Campañas</option>
-                            <option value="6">Día 6 / 8 - Genesys, Tipificación & HubSpot</option>
-                            <option value="7">Día 7 / 8 - Sandbox Tickets, Analytics & Canguro</option>
-                            <option value="8" selected>Día 8 / 8 - CONTRATACIÓN Y CIERRE FINAL</option>
+                            <option value="1" selected>Día 1 / 8 - Inducción, Cultura & Fase 1 Comercial</option>
+                            <option value="2">Día 2 / 8 - Fase 2: Conociendo el Poli & Financiero</option>
+                            <option value="3">Día 3 / 8 - Fase 2: Reintegro & Inscripción Asignaturas</option>
+                            <option value="4">Día 4 / 8 - Fase 2: Aplazamientos, Certificados & Grados</option>
+                            <option value="5">Día 5 / 8 - Fase 2: Idiomas, Créditos, SENA & Campañas</option>
+                            <option value="6">Día 6 / 8 - Fase 3: Genesys, Matriz Calidad & HubSpot</option>
+                            <option value="7">Día 7 / 8 - Fase 3: Práctica Tickets Sandbox & Canguro</option>
+                            <option value="8">Día 8 / 8 - CONTRATACIÓN Y CIERRE FINAL</option>
                         </select>
                     </div>
 
                     <div>
-                        <label class="text-xs font-bold text-slate-700 block mb-1">Encabezado de Fecha del Temario</label>
-                        <input id="mail-date-heading" type="text" value="Viernes/21/02/2025" oninput="renderMailPreview()" class="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-semibold">
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="text-xs font-bold text-slate-700">Encabezado de Fecha del Temario</label>
+                            <button onclick="updateHeadingFromSessionDate()" class="text-[10px] font-bold text-ilumnoTeal hover:underline">Tomar fecha del día</button>
+                        </div>
+                        <input id="mail-date-heading" type="text" value="Martes/17/11/2026" oninput="renderMailPreview()" class="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-semibold">
                     </div>
 
                     <div>
-                        <label class="text-xs font-bold text-slate-700 block mb-1">Destinatarios (Para)</label>
-                        <input id="mail-recipients" type="text" value="Luz.Becerra@Ilumno.com; coordinador1.bogota@summar.com.co; Lina.Romero@ilumno.com; Carlos.Sanchez@ilumno.com; jorge.londono@ilumno.com; Anyely.Ruiz@ilumno.com; Isaura.Forero@ilumno.com; Lizeth.Calderon@ilumno.com; Nelson.Jimenez@ilumno.com" class="w-full p-2.5 rounded-xl border border-slate-300 text-[11px] text-slate-600">
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="text-xs font-bold text-slate-700">Destinatarios (Para)</label>
+                            <button onclick="saveDefaultRecipients()" class="text-[10px] font-bold text-emerald-600 hover:underline"><i class="fas fa-save"></i> Guardar como fijos</button>
+                        </div>
+                        <textarea id="mail-recipients" rows="3" oninput="saveDefaultRecipients(true)" class="w-full p-2.5 rounded-xl border border-slate-300 text-[11px] text-slate-600 leading-snug">Luz.Becerra@Ilumno.com; coordinador1.bogota@summar.com.co; Lina.Romero@ilumno.com; Carlos.Sanchez@ilumno.com; jorge.londono@ilumno.com; Anyely.Ruiz@ilumno.com; Isaura.Forero@ilumno.com; Lizeth.Calderon@ilumno.com; Nelson.Jimenez@ilumno.com</textarea>
                     </div>
 
                     <div>
-                        <label class="text-xs font-bold text-slate-700 block mb-1">Viñetas del Temario Desarrollado</label>
-                        <textarea id="mail-syllabus-editor" rows="8" oninput="renderMailPreview()" class="w-full p-3 rounded-xl border border-slate-300 text-xs leading-relaxed outline-none"></textarea>
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="text-xs font-bold text-slate-700">Temario Desarrollado (Con estructura y viñetas)</label>
+                            <button onclick="loadDaySyllabus(document.getElementById('mail-day-select').value); renderMailPreview();" class="text-[10px] font-bold text-ilumnoPink hover:underline">Restaurar temario del día</button>
+                        </div>
+                        <p class="text-[10px] text-slate-400 mb-1">Usa <code>[TITULO]</code> o empieza con <code>Módulo</code> para subtítulos sin viñeta, y texto normal para los punticos.</p>
+                        <textarea id="mail-syllabus-editor" rows="11" oninput="saveCustomSyllabusForDay(); renderMailPreview()" class="w-full p-3 rounded-xl border border-slate-300 text-xs leading-relaxed outline-none font-mono"></textarea>
                     </div>
 
                     <div class="flex items-center gap-2 pt-1">
@@ -448,7 +547,7 @@
 
                     <div class="pt-2 space-y-2.5">
                         <button onclick="copyOutlookRichEmail()" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs rounded-xl transition shadow-md flex items-center justify-center gap-2">
-                            <i class="fas fa-copy text-sm"></i> <span>1. Copiar Correo Completo (Con Tablas y Colores)</span>
+                            <i class="fas fa-copy text-sm"></i> <span>1. Copiar Correo Completo (Con Tablas y Punticos)</span>
                         </button>
                         <button onclick="launchOutlookWindow()" class="w-full py-2.5 bg-[#00264D] hover:bg-blue-950 text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-2">
                             <i class="fas fa-external-link-alt"></i> <span>2. Abrir Destinatarios y Asunto en Outlook</span>
@@ -461,7 +560,7 @@
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
                         <div>
                             <span class="text-[10px] font-black uppercase text-ilumnoPink tracking-wider block">Previsualización Exacta para Outlook</span>
-                            <h4 id="preview-subject-line" class="text-sm font-black text-slate-800">Asunto: CONTRATACIÓN Asistencia y deserción grupo nuevo Febrero Poli Rematricula y Servicio día 8/8</h4>
+                            <h4 id="preview-subject-line" class="text-sm font-black text-slate-800">Asunto: Asistencia y deserción grupo nuevo Noviembre Poli Rematricula y Servicio día 1/8</h4>
                         </div>
                         <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-lg border border-emerald-200 self-start sm:self-auto">Listo para Pegar (Ctrl+V)</span>
                     </div>
@@ -491,17 +590,17 @@
                     </div>
                     <div>
                         <label class="font-bold text-slate-700 block mb-1">Cédula</label>
-                        <input required id="cand-cedula" type="text" placeholder="Ej: 1030664570" class="w-full p-2.5 rounded-xl border border-slate-300 font-semibold">
+                        <input required id="cand-cedula" type="text" placeholder="Ej: 1010064274" class="w-full p-2.5 rounded-xl border border-slate-300 font-semibold">
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="font-bold text-slate-700 block mb-1">Apellidos</label>
-                        <input required id="cand-apellidos" type="text" placeholder="Ej: Cortes" class="w-full p-2.5 rounded-xl border border-slate-300 font-semibold">
+                        <input required id="cand-apellidos" type="text" placeholder="Ej: Barinas Vega" class="w-full p-2.5 rounded-xl border border-slate-300 font-semibold">
                     </div>
                     <div>
                         <label class="font-bold text-slate-700 block mb-1">Nombres</label>
-                        <input required id="cand-nombres" type="text" placeholder="Ej: Diris Gisella" class="w-full p-2.5 rounded-xl border border-slate-300 font-semibold">
+                        <input required id="cand-nombres" type="text" placeholder="Ej: Stefany Lilley" class="w-full p-2.5 rounded-xl border border-slate-300 font-semibold">
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
@@ -526,6 +625,68 @@
         </div>
     </div>
 
+    <!-- ========================================================== -->
+    <!-- MODAL: IMPORTAR NOTAS DE MICROSOFT FORMS (ESSENCE ILUMNO)  -->
+    <!-- ========================================================== -->
+    <div id="modal-essence-import" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <div>
+                    <h3 class="font-black text-base text-ilumnoDark">Conectar Notas Evaluación ESSENCE Ilumno</h3>
+                    <p class="text-[11px] text-slate-500">Alimenta automáticamente la columna <strong>Evaluación Ilumno (40% del 1er Corte)</strong></p>
+                </div>
+                <button onclick="document.getElementById('modal-essence-import').classList.add('hidden')" class="text-slate-400 hover:text-slate-600"><i class="fas fa-times"></i></button>
+            </div>
+
+            <div class="bg-indigo-50 p-3.5 rounded-xl border border-indigo-100 text-[11px] text-slate-700 space-y-1">
+                <strong class="text-indigo-950 block">¿Cómo traer las notas del Formulario de Microsoft Forms en 5 segundos?</strong>
+                <p>1. En el Excel de respuestas de Microsoft Forms, selecciona y copia las columnas <code>Cédula | Puntos (o Calificación)</code>.</p>
+                <p>2. Pégalas abajo y el sistema cruzará las cédulas automáticamente.</p>
+            </div>
+
+            <textarea id="essence-paste-area" rows="5" placeholder="Ejemplo:&#10;1010064274	100&#10;53132687	95" class="w-full p-3 rounded-xl border border-slate-300 text-xs font-mono outline-none focus:border-indigo-600"></textarea>
+
+            <div class="border-t border-slate-100 pt-3">
+                <label class="text-[11px] font-bold text-slate-600 block mb-1">Opcional: Enlace CSV publicado (Google Sheets / OneDrive) para sincronización directa:</label>
+                <div class="flex gap-2">
+                    <input id="essence-csv-url" type="url" placeholder="https://docs.google.com/spreadsheets/d/.../pub?output=csv" class="flex-1 px-3 py-2 rounded-xl border border-slate-300 text-xs">
+                    <button type="button" onclick="fetchEssenceFromCsvUrl()" class="px-3 py-2 bg-slate-800 text-white rounded-xl text-xs font-bold">Leer URL</button>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-2 pt-2">
+                <button type="button" onclick="document.getElementById('modal-essence-import').classList.add('hidden')" class="px-4 py-2.5 bg-slate-100 rounded-xl text-xs font-bold">Cancelar</button>
+                <button type="button" onclick="processEssenceGradesPaste()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-black">Cruzar Cédulas y Actualizar Notas</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: PEGAR DESDE EXCEL (FORMULARIO INICIAL DÍA 1) -->
+    <div id="modal-bulk-excel" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <div>
+                    <h3 class="font-black text-base text-ilumnoDark">Importar Aspirantes desde Excel</h3>
+                    <p class="text-[11px] text-slate-500">Copia las filas de tu Excel y pégalas aquí (separadas por tabulación)</p>
+                </div>
+                <button onclick="document.getElementById('modal-bulk-excel').classList.add('hidden')" class="text-slate-400 hover:text-slate-600"><i class="fas fa-times"></i></button>
+            </div>
+
+            <div class="bg-blue-50 p-3 rounded-xl border border-blue-100 text-[11px] text-ilumnoDark">
+                <strong>Orden de columnas aceptado:</strong><br>
+                <code>Req | Cédula | Universidad | Split | Apellidos | Nombres | Supervisor</code><br>
+                <span class="text-slate-500">(O también: <code>Cédula | Apellidos | Nombres</code> y el sistema autocompleta Poli y Rematrícula).</span>
+            </div>
+
+            <textarea id="bulk-excel-textarea" rows="6" placeholder="Pega aquí las celdas copiadas de Excel (Ctrl + V)..." class="w-full p-3 rounded-xl border border-slate-300 text-xs font-mono outline-none focus:border-ilumnoTeal"></textarea>
+
+            <div class="flex justify-end gap-2">
+                <button type="button" onclick="document.getElementById('modal-bulk-excel').classList.add('hidden')" class="px-4 py-2.5 bg-slate-100 rounded-xl text-xs font-bold">Cancelar</button>
+                <button type="button" onclick="processBulkExcelPaste()" class="px-5 py-2.5 bg-ilumnoDark text-white rounded-xl text-xs font-black">Importar Filas</button>
+            </div>
+        </div>
+    </div>
+
     <!-- TOAST CONTAINER -->
     <div id="toast-container" class="fixed bottom-6 right-6 z-50 space-y-2 pointer-events-none"></div>
 
@@ -533,1074 +694,1526 @@
     <!-- JAVASCRIPT: MOTOR DEL FORMADOR             -->
     <!-- ========================================== -->
     <script>
-        // 1. FECHAS DE LAS 8 SESIONES DE FORMACIÓN
-        let sessionDates = ['12-feb-25', '13-feb-25', '14-feb-25', '17-feb-25', '18-feb-25', '19-feb-25', '20-feb-25', '21-feb-25'];
+        // 1. FECHAS DE LAS 8 SESIONES DE FORMACIÓN (Por defecto Noviembre 2026)
+        let sessionDates = ['17-nov-26', '18-nov-26', '19-nov-26', '20-nov-26', '23-nov-26', '24-nov-26', '25-nov-26', '26-nov-26'];
 
         // 2. PLANIFICACIÓN VISUAL POR DÍA (BLOQUE PLANNING)
         let planningModules = [
-            { day: 1, phase: 'Fase 1: Técnico', title: 'Bienvenida, ESSENCE & Venta Consultiva (LAER)', hours: '6 hrs', status: 'Completado' },
-            { day: 2, phase: 'Fase 2: Tecnólogo', title: 'Conociendo el Poli & Módulo Financiero (50/50, Bloques)', hours: '6 hrs', status: 'Completado' },
-            { day: 3, phase: 'Fase 2: Tecnólogo', title: 'Reintegro, Readmisión & Inscripción de Asignaturas', hours: '6 hrs', status: 'Completado' },
-            { day: 4, phase: 'Fase 2: Tecnólogo', title: 'Aplazamientos, Certificados & Opciones de Grado', hours: '6 hrs', status: 'Completado' },
-            { day: 5, phase: 'Fase 2: Tecnólogo', title: 'Idiomas, Reconocimiento de Créditos, SENA & Campañas', hours: '6 hrs', status: 'Completado' },
-            { day: 6, phase: 'Fase 3: Profesional', title: 'Genesys Cloud, Escuchas, Matriz Calidad & HubSpot', hours: '6 hrs', status: 'Completado' },
-            { day: 7, phase: 'Fase 3: Profesional', title: 'Práctica 5 Tickets Sandbox, Analytics & 2 hrs Canguro', hours: '6 hrs', status: 'Completado' },
-            { day: 8, phase: 'Cierre & Evaluación', title: 'Evaluaciones Finales (Comercial, Producto, Herramientas) & Encuesta', hours: '6 hrs', status: 'Completado' }
+            { day: 1, phase: 'Fase 1: Técnico', title: 'Inducción, ESSENCE & Habilidades Comerciales (LAER)', hours: '6 hrs', status: 'Completado' },
+            { day: 2, phase: 'Fase 2: Tecnólogo', title: 'Conociendo el Poli & Módulo Financiero (50/50, Bloques)', hours: '6 hrs', status: 'Programado' },
+            { day: 3, phase: 'Fase 2: Tecnólogo', title: 'Reintegro, Readmisión & Inscripción de Asignaturas', hours: '6 hrs', status: 'Programado' },
+            { day: 4, phase: 'Fase 2: Tecnólogo', title: 'Aplazamientos, Certificados & Opciones de Grado', hours: '6 hrs', status: 'Programado' },
+            { day: 5, phase: 'Fase 2: Tecnólogo', title: 'Idiomas, Reconocimiento de Créditos, SENA & Campañas', hours: '6 hrs', status: 'Programado' },
+            { day: 6, phase: 'Fase 3: Profesional', title: 'Genesys Cloud, Escuchas, Matriz Calidad & HubSpot', hours: '6 hrs', status: 'Programado' },
+            { day: 7, phase: 'Fase 3: Profesional', title: 'Práctica 5 Tickets Sandbox, Analytics & 2 hrs Canguro', hours: '6 hrs', status: 'Programado' },
+            { day: 8, phase: 'Cierre & Evaluación', title: 'Evaluaciones Finales (Comercial, Producto, Herramientas) & Encuesta', hours: '6 hrs', status: 'Programado' }
         ];
 
-        // 3. TEMARIOS DIARIOS EXTRAÍDOS DEL CORREO DE ANGIE
-        const SYLLABUS_BY_DAY = {
+        // 3. TEMARIOS DIARIOS ESTRUCTURADOS CON MÓDULOS Y VIÑETAS (PUNTICOS)
+        let SYLLABUS_BY_DAY = {
             '1': {
-                heading: 'Miércoles/12/02/2025',
-                bullets: [
-                    'Saludo, bienvenida y confirmación de asistencia.',
-                    'Socialización de las 8 normas de formación y modelo de evaluación ponderado (90%).',
-                    'Recorrido cultural ESSENCE Ilumno & HEP LatAm y presentación de evaluación oficial en Forms.',
-                    'Módulo 1 Técnico Comercial: los 4 pasos de la Venta Consultiva, Modelo LAER de objeciones y Elevator Pitch.'
+                lines: [
+                    '[LINK] Curso para Expertos',
+                    'Módulo 0: Inducción & Cultura',
+                    '0.1 Bienvenida General',
+                    '0.2 Normas de Formación',
+                    '0.3 Modelo Formativo (Slides)',
+                    '0.4 ESSENCE Ilumno HEP (Slides)',
+                    '0.5 Evaluación Oficial ESSENCE',
+                    '',
+                    'Módulo 1: Técnico Comercial',
+                    'Habilidades Comerciales (Fase 1)',
+                    '1.1 Objetivo de las habilidades comerciales',
+                    '1.3 Tema 1: Venta Consultiva, Modelo LAER, manejo de objeciones.',
+                    '1.4 Tema 2: Script y manejo de la Gestión Outbound',
+                    'Actividad construcción de Speach Elevator',
+                    '1.5 Evaluación Comercial',
+                    'Simulador Comercial'
                 ]
             },
             '2': {
-                heading: 'Jueves/13/02/2025',
-                bullets: [
-                    'Saludo y confirmación de asistencia.',
-                    'Inicio Módulo 2 Tecnólogo: portafolio académico y estructura del Politécnico Grancolombiano.',
-                    'Módulo Financiero: medios de pago autorizados, acuerdo Pago por Bloques, financiación 50/50 y validación en Analytics.',
-                    'Práctica guiada de diagnóstico financiero en primer contacto.'
+                lines: [
+                    '[LINK] Curso para Expertos',
+                    'Módulo 2: Tecnólogo - Producto y Procesos (Parte 1)',
+                    '2.0 Saludo, confirmación de asistencia y repaso del Día 1.',
+                    '2.1 Identidad Poli, sedes, modalidades y portafolio académico.',
+                    '2.2 Módulo Financiero: Matrícula por bloques, promoción 50/50 y descuentos.',
+                    '2.3 Simulación de casos prácticos de facturación y recargos.',
+                    'Actividad práctica de autogestión de producto (Módulo Financiero).'
                 ]
             },
             '3': {
-                heading: 'Viernes/14/02/2025',
-                bullets: [
-                    'Saludo y confirmación de asistencia.',
-                    'Módulo de Reintegro: tiempos de respuesta en línea, condiciones académicas y financieras.',
-                    'Módulo de Inscripción de Asignaturas: metodología por créditos, media matrícula y validación en Smart Campus.',
-                    'Ejercicios prácticos de indagación profunda.'
+                lines: [
+                    '[LINK] Curso para Expertos',
+                    'Módulo 2: Tecnólogo - Producto y Procesos (Parte 2)',
+                    '3.1 Proceso de Reintegro y Readmisión: Reglas, fechas y excepciones.',
+                    '3.2 Inscripción de Asignaturas, tiempos de respuesta y escalamientos.',
+                    '3.3 Navegación guiada en GIAN y SmartCampus.',
+                    'Taller de casos de Reintegro 2027-1 y validación de malla.'
                 ]
             },
             '4': {
-                heading: 'Lunes/17/02/2025',
-                bullets: [
-                    'Saludo y confirmación de asistencia.',
-                    'Módulo de Aplazamientos y Retiros: vigencia de saldos congelados y devoluciones.',
-                    'Módulo de Grados y Opciones de Grado (Diplomado, Semestre Coterminal, vigencia Saber Pro).',
-                    'Certificados académicos y formatos especiales (Colpensiones, obligatoriedad de inglés).'
+                lines: [
+                    '[LINK] Curso para Expertos',
+                    'Módulo 2: Tecnólogo - Producto y Procesos (Parte 3)',
+                    '4.1 Aplazamientos, Retiros y devoluciones (Política financiera).',
+                    '4.2 Certificados académicos, tiempos y costos.',
+                    '4.3 Requisitos y Opciones de Grado (Pregrado y Posgrado).',
+                    'Actividad integradora de procesos académicos.'
                 ]
             },
             '5': {
-                heading: 'Martes/18/02/2025',
-                bullets: [
-                    'Saludo y confirmación de asistencia.',
-                    'Repaso de lo que aprendieron el día anterior.',
-                    'Revisamos en el SmartCampus cómo se diligencia la pre-inscripción Saber Pro (avance mínimo del 73%).',
-                    'Revisamos el proceso de idiomas, ruta desde el Soporte Servicio, Guía de idiomas y validación en Analytics con ejemplos reales.',
-                    'Revisamos todo el proceso de la Licencia ED, costos, cómo solicitar la OP, tiempo de activación, cómo funciona e instructivo.',
-                    'Revisamos la página de la ORRI, horario de atención y servicios (cursos en el exterior, doble titulación, intercambios).',
-                    'Revisamos el reconocimiento de créditos en la sección de No Cursos (Emprendimiento, MOOCs 70/100, Informática Cisco 60% y talleres de biblioteca 16 hrs).',
-                    'Revisamos créditos optativos (Bienestar, investigación y workshops de permanencia).',
-                    'Atención a terceros: reserva de información sensible (HubSpot y Analytics) vs información pública web.',
-                    'Convenios SENA (diferencia entre TA y TV) y Homologación interna y externa.',
-                    'Campañas para adelantar materias (Intersemestrales-vacacionales y Módulo Adicional) y campaña de Nivelatorios y Supletorios.'
+                lines: [
+                    '[LINK] Curso para Expertos',
+                    'Módulo 2: Tecnólogo - Producto y Procesos (Cierre Fase 2)',
+                    '5.1 Requisitos de Idiomas (Inglés) y cursos nivelatorios.',
+                    '5.2 Reconocimiento de créditos, convenios SENA y homologaciones.',
+                    '5.3 Campañas vigentes de Rematrícula y Servicio.',
+                    '5.4 Evaluación de Habilidades de Autogestión Producto y Proceso (60% del 2do Corte).'
                 ]
             },
             '6': {
-                heading: 'Miércoles/19/02/2025',
-                bullets: [
-                    'Saludo y confirmación de asistencia.',
-                    'Revisamos la interfaz de Genesys, estados, cómo ponerse en la cola, sección de Área de trabajo y cómo responder a monitoreos de calidad.',
-                    'Realizamos dos escuchas de llamada con apoyo de grabación de pantalla: ingreso de llamada, transferencia a encuesta, código de conclusión y tiempo tras llamada (75 seg).',
-                    'Revisamos y nos apoyamos en el Soporte Servicio para revisar la matriz de tipificación.',
-                    'Ingreso a HubSpot, acceso con los usuarios de prueba a Sandbox Poli.',
-                    'Actividad de 30 min para ejercicio de reconocimiento y estudio de la matriz de tipificación.',
-                    'Charla de Matriz de calidad y políticas de reincidentes a cargo de Calidad @Anyely Ruiz (2 hrs).',
-                    'Revisamos la interfaz de HubSpot, cómo ingresar a un contacto, validar el registro académico y crear un ticket.',
-                    'Ejercicio práctico en la creación de un ticket en HubSpot.',
-                    'Recomendaciones y Tips para el Role Play final.'
+                lines: [
+                    '[LINK] Curso para Expertos',
+                    'Módulo 3: Profesional - Herramientas & Calidad',
+                    '6.1 Genesys Cloud: Estados, tipificación y gestión de llamadas.',
+                    '6.2 Matriz de Calidad Audia: Atributos críticos y errores fatales (ENC / ECUF).',
+                    '6.3 HubSpot CRM: Creación de tickets, propiedades y plantillas.',
+                    '6.4 Evaluación de Aplicativos (40% del 2do Corte).'
                 ]
             },
             '7': {
-                heading: 'Jueves/20/02/2025',
-                bullets: [
-                    'Saludo y confirmación de asistencia.',
-                    'Ejercicios prácticos de creación de ticket de reintegro en Sandbox Poli.',
-                    'Revisamos y nos apoyamos en el Soporte Servicio para revisar la matriz de tipificación y las rutas de consulta.',
-                    'Ingreso a HubSpot, acceso con los usuarios de prueba a Sandbox Poli.',
-                    'Actividad de 30 min para realizar 5 tickets: 2 de derivación y 3 en primer contacto.',
-                    'Revisamos la tarea y hacemos el feedback correspondiente.',
-                    'Revisamos cómo se cierra un ticket en HubSpot y cómo se adjuntan los soportes en los tickets.',
-                    'Ejercicio práctico revisando la interfaz de Analytics y aprendiendo a interpretar la información del estudiante.',
-                    '2 horas de canguro.'
+                lines: [
+                    '[LINK] Curso para Expertos',
+                    'Módulo 3: Profesional - Práctica Aplicada & Canguro',
+                    '7.1 Práctica de 5 Tickets en entorno Sandbox (HubSpot + Banner).',
+                    '7.2 Taller de escucha y calibración de llamadas reales.',
+                    '7.3 Sesión de 2 horas de Canguro con operación en vivo.',
+                    '7.4 Preparación de casos para RolePlay Final.'
                 ]
             },
             '8': {
-                heading: 'Viernes/21/02/2025',
-                bullets: [
-                    'Saludo y confirmación de asistencia.',
-                    'Presentación de la evaluación Comercial.',
-                    'Presentación de la evaluación de producto.',
-                    'Presentación de la evaluación Final herramientas.',
-                    'Encuesta de satisfacción de la formación.'
+                lines: [
+                    '[LINK] Curso para Expertos',
+                    'Módulo 4: Cierre, Certificación y Contratación',
+                    '8.1 Evaluación Final Integradora (40% del 3er Corte).',
+                    '8.2 RolePlay Final de Venta Consultiva y Servicio (60% del 3er Corte).',
+                    '8.3 Encuesta de satisfacción de formación inicial.',
+                    '8.4 Entrega de resultados finales, Ranking TOP/BOTTOM y paso a Contratación.'
                 ]
             }
         };
 
-        // 4. BASE DE DATOS DE ASPIRANTES (CON LOS 5 REGISTROS DEL CORREO)
+        // 4. LISTA INICIAL DE ASPIRANTES (CON TODAS LAS SUB-NOTAS DEL EXCEL)
         let candidates = [
             {
+                id: 'c1',
                 req: '532',
-                cedula: '1001300950',
-                university: 'Politécnico Grancolombiano',
+                cedula: '1010064274',
+                universidad: 'Politécnico Grancolombiano',
                 split: 'Rematricula y Servicio',
-                apellidos: 'Rojas martinez',
-                nombres: 'Cinthia Valeria',
-                novedad: 'Se retira de la formación',
+                apellidos: 'Barinas Vega',
+                nombres: 'Stefany Lilley',
+                novedades: 'Continúa en formación sin novedad',
                 supervisor: 'Lizeth Calderon',
-                corte1: 0, corte2: 0, corte3: 0, extra: 0,
-                days: { 1: 'A', 2: 'F', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '' }
+                days: ['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A'],
+                evalIlumno: 100,
+                evalComercial: 70,
+                evalAplicativos: 95,
+                habAutogestion: 90,
+                evalFinal: 92,
+                roleplayFinal: 95,
+                puntualidad: 100,
+                asistenciaNota: 100,
+                participacion: 100,
+                lmsProgress: 95,
+                studentNotes: 'Excelente manejo de objeciones con método LAER y claridad en el cierre.',
+                trainerFeedback: '¡Excelente trabajo en tu Speech Elevator, Stefany! Tu tono consultivo conecta muy bien con el estudiante.'
             },
             {
+                id: 'c2',
                 req: '532',
-                cedula: '1030664570',
-                university: 'Politécnico Grancolombiano',
+                cedula: '53132687',
+                universidad: 'Politécnico Grancolombiano',
                 split: 'Rematricula y Servicio',
-                apellidos: 'Cortes',
-                nombres: 'Diris Gisella',
-                novedad: '',
+                apellidos: 'Beltran Lopez',
+                nombres: 'Jeimmy Mayerly',
+                novedades: 'Continúa en formación sin novedad',
                 supervisor: 'Lizeth Calderon',
-                corte1: 100.00, corte2: 100.00, corte3: 87.20, extra: 100.00,
-                days: { 1: 'A', 2: 'A', 3: 'A', 4: 'A', 5: 'A', 6: 'A', 7: 'A', 8: 'A' }
+                days: ['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A'],
+                evalIlumno: 95,
+                evalComercial: 88,
+                evalAplicativos: 90,
+                habAutogestion: 92,
+                evalFinal: 90,
+                roleplayFinal: 92,
+                puntualidad: 100,
+                asistenciaNota: 100,
+                participacion: 95,
+                lmsProgress: 92,
+                studentNotes: 'Repasar condiciones de descuento 50/50 y reintegros.',
+                trainerFeedback: 'Muy buen dominio de los aplicativos. Recuerda siempre confirmar el acuerdo de pago antes de despedirte.'
             },
             {
+                id: 'c3',
                 req: '532',
-                cedula: '1000363954',
-                university: 'Politécnico Grancolombiano',
+                cedula: '1023948571',
+                universidad: 'Politécnico Grancolombiano',
                 split: 'Rematricula y Servicio',
-                apellidos: 'Sogamoso Cardozo',
-                nombres: 'Angie Dayan',
-                novedad: 'Urgencias con su niño',
+                apellidos: 'Gomez Perez',
+                nombres: 'Carlos Andres',
+                novedades: 'Continúa en formación sin novedad',
                 supervisor: 'Lizeth Calderon',
-                corte1: 95.80, corte2: 99.20, corte3: 88.00, extra: 100.00,
-                days: { 1: 'A', 2: 'A', 3: 'A', 4: 'A', 5: 'A', 6: 'F', 7: 'A', 8: 'A' }
+                days: ['A', 'R', 'A', 'A', 'A', 'A', 'A', 'A'],
+                evalIlumno: 85,
+                evalComercial: 80,
+                evalAplicativos: 85,
+                habAutogestion: 82,
+                evalFinal: 60,
+                roleplayFinal: 54,
+                puntualidad: 85,
+                asistenciaNota: 100,
+                participacion: 90,
+                lmsProgress: 78,
+                studentNotes: 'Duda sobre tiempos de escalamiento en HubSpot.',
+                trainerFeedback: 'Reforzar la indagación de causas reales de no pago antes de ofrecer alternativas financieras.'
             },
             {
+                id: 'c4',
                 req: '532',
-                cedula: '1012326299',
-                university: 'Politécnico Grancolombiano',
+                cedula: '1032456789',
+                universidad: 'Politécnico Grancolombiano',
                 split: 'Rematricula y Servicio',
-                apellidos: 'Cardenas Rojas',
-                nombres: 'Jary',
-                novedad: 'Se retira de la formación',
+                apellidos: 'Rodriguez Diaz',
+                nombres: 'Laura Valentina',
+                novedades: 'No se presenta el día 2 por motivos personales',
                 supervisor: 'Lizeth Calderon',
-                corte1: 0, corte2: 0, corte3: 0, extra: 0,
-                days: { 1: 'A', 2: 'F', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '' }
+                days: ['A', 'F', '', '', '', '', '', ''],
+                evalIlumno: 80,
+                evalComercial: 0,
+                evalAplicativos: 0,
+                habAutogestion: 0,
+                evalFinal: 0,
+                roleplayFinal: 0,
+                puntualidad: 0,
+                asistenciaNota: 0,
+                participacion: 0,
+                lmsProgress: 15,
+                studentNotes: '',
+                trainerFeedback: ''
             },
             {
+                id: 'c5',
                 req: '532',
-                cedula: '1023958265',
-                university: 'Politécnico Grancolombiano',
-                split: 'Rematricula y servicio',
-                apellidos: 'Ricaurte Avila',
-                nombres: 'Angie Carolina',
-                novedad: '',
+                cedula: '1015432890',
+                universidad: 'Politécnico Grancolombiano',
+                split: 'Rematricula y Servicio',
+                apellidos: 'Martinez Silva',
+                nombres: 'Diego Fernando',
+                novedades: 'Desiste por otra oferta laboral',
                 supervisor: 'Lizeth Calderon',
-                corte1: 76.00, corte2: 98.00, corte3: 91.60, extra: 100.00,
-                days: { 1: 'A', 2: 'A', 3: 'A', 4: 'A', 5: 'A', 6: 'A', 7: 'A', 8: 'A' }
+                days: ['F', '', '', '', '', '', '', ''],
+                evalIlumno: 0,
+                evalComercial: 0,
+                evalAplicativos: 0,
+                habAutogestion: 0,
+                evalFinal: 0,
+                roleplayFinal: 0,
+                puntualidad: 0,
+                asistenciaNota: 0,
+                participacion: 0,
+                lmsProgress: 0,
+                studentNotes: '',
+                trainerFeedback: ''
             }
         ];
 
-        // Inicialización
-        window.addEventListener('DOMContentLoaded', () => {
-            checkTrainerSession();
-            loadFromLocalStorage();
-            loadDaySyllabus('8');
-            renderAll();
-        });
+        // 5. MURO DE PREGUNTAS DEL CURSO
+        let courseQuestions = [
+            {
+                id: 'q1',
+                student: 'Stefany Lilley Barinas Vega',
+                module: 'Módulo 2: Reintegro 2027-1',
+                question: 'Profe, ¿el descuento del 10% de Reintegro 2027-1 es acumulable con el descuento de convenio empresarial?',
+                answer: '¡Hola Stefany! Sí, el 10% de Reintegro para pregrado y posgrado es acumulable con el descuento de convenio, siempre que el estudiante pague dentro de las fechas establecidas.',
+                time: 'Hace 15 min'
+            },
+            {
+                id: 'q2',
+                student: 'Carlos Andres Gomez Perez',
+                module: 'Módulo 1: Venta Consultiva LAER',
+                question: '¿Cómo debemos manejar la objeción cuando el estudiante dice que aún no le aparece el valor del recibo en SmartCampus?',
+                answer: '',
+                time: 'Hace 5 min'
+            }
+        ];
 
-        function checkTrainerSession() {
-            const overlay = document.getElementById('trainer-login-overlay');
-            if (sessionStorage.getItem('ilumno_trainer_auth') === 'true') {
-                overlay.classList.add('hidden');
-            } else {
-                overlay.classList.remove('hidden');
+        // ==========================================================
+        // PERSISTENCIA LOCAL + SINCRONIZACIÓN FIREBASE (SI EXISTE)
+        // ==========================================================
+        const STORAGE_KEY = 'ILUMNO_FORMADOR_STATE_V4';
+
+        function loadLocalState() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (!raw) return;
+                const parsed = JSON.parse(raw);
+                if (parsed.sessionDates && parsed.sessionDates.length === 8) sessionDates = parsed.sessionDates;
+                if (parsed.planningModules) planningModules = parsed.planningModules;
+                if (parsed.syllabusByDay) SYLLABUS_BY_DAY = parsed.syllabusByDay;
+                if (parsed.candidates) candidates = parsed.candidates;
+                if (parsed.courseQuestions) courseQuestions = parsed.courseQuestions;
+                if (parsed.config) {
+                    if (parsed.config.uni) document.getElementById('cfg-uni').value = parsed.config.uni;
+                    if (parsed.config.inicio) document.getElementById('cfg-inicio').value = parsed.config.inicio;
+                    if (parsed.config.fin) document.getElementById('cfg-fin').value = parsed.config.fin;
+                    if (parsed.config.formador) document.getElementById('cfg-formador').value = parsed.config.formador;
+                    if (parsed.config.horario) document.getElementById('cfg-horario').value = parsed.config.horario;
+                    if (parsed.config.cupos) document.getElementById('cfg-cupos-titulares').value = parsed.config.cupos;
+                    if (parsed.config.recipients) document.getElementById('mail-recipients').value = parsed.config.recipients;
+                }
+            } catch (err) {
+                console.warn('Error cargando estado local:', err);
             }
         }
 
+        function persistState() {
+            const payload = {
+                sessionDates,
+                planningModules,
+                syllabusByDay: SYLLABUS_BY_DAY,
+                candidates,
+                courseQuestions,
+                config: {
+                    uni: document.getElementById('cfg-uni').value,
+                    inicio: document.getElementById('cfg-inicio').value,
+                    fin: document.getElementById('cfg-fin').value,
+                    formador: document.getElementById('cfg-formador').value,
+                    horario: document.getElementById('cfg-horario').value,
+                    cupos: Number(document.getElementById('cfg-cupos-titulares').value) || 8,
+                    recipients: document.getElementById('mail-recipients').value
+                },
+                updatedAt: new Date().toISOString()
+            };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+            // También guarda copia en clave compartida para que index.html en el mismo navegador o Firebase lo lea al instante
+            localStorage.setItem('ILUMNO_SHARED_COHORT_CONFIG', JSON.stringify(payload));
+        }
+
+        // ==========================================================
+        // LOGIN Y CONTROL DE ACCESO DOCENTE
+        // ==========================================================
         function handleTrainerLogin(e) {
             e.preventDefault();
             const pass = document.getElementById('trainer-pass-input').value.trim();
-            if (pass === 'Poli2026') {
-                sessionStorage.setItem('ilumno_trainer_auth', 'true');
+            const errEl = document.getElementById('trainer-login-error');
+            if (pass.toLowerCase() === 'poli2026' || pass.toLowerCase() === 'ilumno2026' || pass === '1234') {
+                sessionStorage.setItem('ILUMNO_TRAINER_AUTH', '1');
                 document.getElementById('trainer-login-overlay').classList.add('hidden');
-                showToast('Consola desbloqueada correctamente', 'success');
+                errEl.classList.add('hidden');
+                showToast('Bienvenida a la Consola del Formador', 'emerald');
             } else {
-                document.getElementById('trainer-login-error').classList.remove('hidden');
+                errEl.classList.remove('hidden');
             }
         }
 
         function logoutTrainer() {
-            sessionStorage.removeItem('ilumno_trainer_auth');
-            checkTrainerSession();
+            sessionStorage.removeItem('ILUMNO_TRAINER_AUTH');
+            document.getElementById('trainer-pass-input').value = '';
+            document.getElementById('trainer-login-overlay').classList.remove('hidden');
         }
 
-        function loadFromLocalStorage() {
-            try {
-                const sCand = localStorage.getItem('ilumno_trainer_candidates_v2');
-                if (sCand) candidates = JSON.parse(sCand);
+        // ==========================================================
+        // NAVEGACIÓN ENTRE PESTAÑAS
+        // ==========================================================
+        function switchTab(tabId) {
+            const tabs = ['asistencia', 'notas', 'planning', 'lms', 'correo'];
+            tabs.forEach(t => {
+                const pane = document.getElementById(`pane-${t}`);
+                if (pane) pane.classList.toggle('hidden', t !== tabId);
 
-                const sDates = localStorage.getItem('ilumno_trainer_dates_v2');
-                if (sDates) sessionDates = JSON.parse(sDates);
-
-                const sPlan = localStorage.getItem('ilumno_trainer_planning_v2');
-                if (sPlan) planningModules = JSON.parse(sPlan);
-
-                const sCfg = localStorage.getItem('ilumno_trainer_cfg_v2');
-                if (sCfg) {
-                    const cfg = JSON.parse(sCfg);
-                    document.getElementById('cfg-uni').value = cfg.uni || 'Poli';
-                    document.getElementById('cfg-inicio').value = cfg.inicio || '12-feb-25';
-                    document.getElementById('cfg-fin').value = cfg.fin || '21-feb-25';
-                    document.getElementById('cfg-formador').value = cfg.formador || 'Angie Cuéllar';
-                    document.getElementById('cfg-horario').value = cfg.horario || '8:00 am a 2:00 pm';
-                    document.getElementById('cfg-cupos-titulares').value = cfg.cupos || 1;
+                const btn = document.getElementById(`tab-btn-${t}`);
+                if (btn) {
+                    if (t === tabId) {
+                        btn.className = 'px-3.5 py-2 rounded-xl text-xs font-black bg-[#00264D] text-white transition flex items-center gap-2 shadow-xs';
+                    } else {
+                        btn.className = 'px-3.5 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition flex items-center gap-2';
+                    }
                 }
-            } catch (e) { console.error(e); }
-        }
+            });
 
-        function persistData() {
-            localStorage.setItem('ilumno_trainer_candidates_v2', JSON.stringify(candidates));
-            localStorage.setItem('ilumno_trainer_dates_v2', JSON.stringify(sessionDates));
-            localStorage.setItem('ilumno_trainer_planning_v2', JSON.stringify(planningModules));
-        }
-
-        function saveConfigAndRefresh() {
-            const cfg = {
-                uni: document.getElementById('cfg-uni').value,
-                inicio: document.getElementById('cfg-inicio').value,
-                fin: document.getElementById('cfg-fin').value,
-                formador: document.getElementById('cfg-formador').value,
-                horario: document.getElementById('cfg-horario').value,
-                cupos: parseInt(document.getElementById('cfg-cupos-titulares').value) || 1
-            };
-            localStorage.setItem('ilumno_trainer_cfg_v2', JSON.stringify(cfg));
-            renderAll();
-        }
-
-        // FÓRMULA DE ASISTENCIA Y BAJA AUTOMÁTICA (1 FALTA O 3 RETARDOS = BAJA)
-        function getAttendanceStats(cand, maxDay = 8) {
-            let asiste = 0, falta = 0, retardo = 0;
-            for (let d = 1; d <= maxDay; d++) {
-                const m = cand.days[d] || '';
-                if (m === 'A') asiste++;
-                if (m === 'F') falta++;
-                if (m === 'R') retardo++;
+            if (tabId === 'correo') {
+                renderMailPreview();
             }
+        }
+
+        // ==========================================================
+        // CÁLCULO DE FECHAS HÁBILES DESDE FECHA INICIO
+        // ==========================================================
+        const MONTHS_SHORT_ES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+        const MONTHS_FULL_ES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+        const DAYS_FULL_ES = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+
+        function parseFlexibleDate(str) {
+            if (!str) return null;
+            const clean = str.trim().toLowerCase();
+            // Formato YYYY-MM-DD
+            if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(clean)) {
+                const [y, m, d] = clean.split('-').map(Number);
+                return new Date(y, m - 1, d);
+            }
+            // Formato DD-mmm-YYYY o DD/MM/YYYY
+            const parts = clean.split(/[-/]/);
+            if (parts.length === 3) {
+                let d = parseInt(parts[0], 10);
+                let mStr = parts[1];
+                let y = parseInt(parts[2], 10);
+                if (y < 100) y += 2000;
+                let m = -1;
+                if (/^\d+$/.test(mStr)) {
+                    m = parseInt(mStr, 10) - 1;
+                } else {
+                    m = MONTHS_SHORT_ES.findIndex(mon => mStr.startsWith(mon));
+                }
+                if (!isNaN(d) && m >= 0 && !isNaN(y)) {
+                    return new Date(y, m, d);
+                }
+            }
+            return null;
+        }
+
+        function formatShortSpanDate(dateObj) {
+            const dd = String(dateObj.getDate()).padStart(2, '0');
+            const mmm = MONTHS_SHORT_ES[dateObj.getMonth()];
+            const yy = String(dateObj.getFullYear()).slice(-2);
+            return `${dd}-${mmm}-${yy}`;
+        }
+
+        function formatLongSpanDate(dateObj) {
+            const dd = String(dateObj.getDate()).padStart(2, '0');
+            const mmm = MONTHS_SHORT_ES[dateObj.getMonth()];
+            const yyyy = dateObj.getFullYear();
+            return `${dd}-${mmm}-${yyyy}`;
+        }
+
+        function formatHeadingDate(dateObj) {
+            const dayName = DAYS_FULL_ES[dateObj.getDay()];
+            const dd = String(dateObj.getDate()).padStart(2, '0');
+            const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const yyyy = dateObj.getFullYear();
+            return `${dayName}/${dd}/${mm}/${yyyy}`;
+        }
+
+        function recalculate8SessionDatesFromStart(silent = false) {
+            const rawStart = document.getElementById('cfg-inicio').value;
+            const startDate = parseFlexibleDate(rawStart);
+            if (!startDate) {
+                if (!silent) showToast('Formato de fecha inválido. Usa ej: 17-nov-2026', 'rose');
+                return;
+            }
+
+            const newDates = [];
+            let cursor = new Date(startDate.getTime());
+            while (newDates.length < 8) {
+                const dow = cursor.getDay();
+                if (dow !== 0 && dow !== 6) {
+                    newDates.push(new Date(cursor.getTime()));
+                }
+                cursor.setDate(cursor.getDate() + 1);
+            }
+
+            sessionDates = newDates.map(d => formatShortSpanDate(d));
+            document.getElementById('cfg-fin').value = formatLongSpanDate(newDates[7]);
+
+            const activeDay = Number(document.getElementById('active-day-select').value) || 1;
+            const activeDateObj = newDates[activeDay - 1] || newDates[0];
+            document.getElementById('mail-date-heading').value = formatHeadingDate(activeDateObj);
+
+            persistState();
+            renderAllTables();
+            if (!silent) showToast('8 días hábiles recalculados automáticamente', 'emerald');
+        }
+
+        function saveConfigAndRefresh(recalcDates = false) {
+            if (recalcDates) {
+                recalculate8SessionDatesFromStart(true);
+            } else {
+                persistState();
+                renderAllTables();
+            }
+        }
+
+        function syncDaySelectors(val, updateHeading = false) {
+            document.getElementById('active-day-select').value = val;
+            document.getElementById('mail-day-select').value = val;
+
+            // Actualizar estados en planning según el día activo
+            const dayNum = Number(val);
+            planningModules.forEach(m => {
+                if (m.day < dayNum) m.status = 'Completado';
+                else if (m.day === dayNum) m.status = 'En Curso';
+                else m.status = 'Programado';
+            });
+
+            if (updateHeading) {
+                updateHeadingFromSessionDate();
+                loadDaySyllabus(val);
+            }
+            persistState();
+            renderAllTables();
+        }
+
+        function updateHeadingFromSessionDate() {
+            const activeDay = Number(document.getElementById('mail-day-select').value) || 1;
+            const dateStr = sessionDates[activeDay - 1];
+            const parsed = parseFlexibleDate(dateStr);
+            if (parsed) {
+                document.getElementById('mail-date-heading').value = formatHeadingDate(parsed);
+            } else {
+                document.getElementById('mail-date-heading').value = `Día ${activeDay} (${dateStr})`;
+            }
+            renderMailPreview();
+        }
+
+        // ==========================================================
+        // REGLA MATEMÁTICA DE ASISTENCIA, DESERCIÓN Y SUB-NOTAS
+        // ==========================================================
+        function computeCandidateMetrics(cand) {
+            let asiste = 0;
+            let falta = 0;
+            let retardo = 0;
+
+            cand.days.forEach(mark => {
+                if (mark === 'A') asiste++;
+                else if (mark === 'F') falta++;
+                else if (mark === 'R') {
+                    retardo++;
+                    asiste++; // El retardo asiste a la sesión pero suma al contador de retardos
+                }
+            });
+
+            // Regla oficial: 1 Falta o 3 Retardos = Baja
             const isBaja = (falta >= 1 || retardo >= 3);
+            const estado = isBaja ? 'Baja' : 'En Formación';
+
+            // Fórmulas exactas del Excel de Angie:
+            // 1er Corte (Peso 20%): Eval Ilumno (40%) + Eval Comercial (60%)
+            const c1 = (Number(cand.evalIlumno || 0) * 0.4) + (Number(cand.evalComercial || 0) * 0.6);
+
+            // 2do Corte (Peso 30%): Eval Aplicativos (40%) + Hab Autogestión Producto (60%)
+            const c2 = (Number(cand.evalAplicativos || 0) * 0.4) + (Number(cand.habAutogestion || 0) * 0.6);
+
+            // 3er Corte (Peso 40%): Eval Final (40%) + RolePlay Final (60%)
+            const c3 = (Number(cand.evalFinal || 0) * 0.4) + (Number(cand.roleplayFinal || 0) * 0.6);
+
+            // Puntos Extra (Peso 10%): Promedio simple entre Puntualidad, Asistencia y Participación
+            const pExtra = (Number(cand.puntualidad || 0) + Number(cand.asistenciaNota || 0) + Number(cand.participacion || 0)) / 3;
+
+            // Promedio Total Ponderado (20% + 30% + 40% + 10% = 100%)
+            const total = (c1 * 0.20) + (c2 * 0.30) + (c3 * 0.40) + (pExtra * 0.10);
+
+            const ranking = total >= 90 ? 'TOP' : 'BOTTOM';
+
             return {
                 asiste,
                 falta,
                 retardo,
-                estado: isBaja ? 'Baja' : 'Activo'
+                isBaja,
+                estado,
+                c1,
+                c2,
+                c3,
+                pExtra,
+                total,
+                ranking
             };
         }
 
-        // FÓRMULA DE PROMEDIO PONDERADO (20% / 30% / 40% / 10%)
-        function getWeightedAverage(cand) {
-            const c1 = parseFloat(cand.corte1) || 0;
-            const c2 = parseFloat(cand.corte2) || 0;
-            const c3 = parseFloat(cand.corte3) || 0;
-            const ex = parseFloat(cand.extra) || 0;
-            return (c1 * 0.20) + (c2 * 0.30) + (c3 * 0.40) + (ex * 0.10);
+        function formatCommaDecimal(num) {
+            return Number(num || 0).toFixed(2).replace('.', ',');
         }
 
-        function syncDaySelectors(dayVal, fromMail = false) {
-            document.getElementById('active-day-select').value = dayVal;
-            document.getElementById('mail-day-select').value = dayVal;
-            if (fromMail) loadDaySyllabus(dayVal);
-            renderAll();
+        // ==========================================================
+        // RENDERIZADO DE TABLA 1 Y 2: INCORPORACIÓN Y SÁBANA
+        // ==========================================================
+        function calculateDailyIncorporacionStats() {
+            const totalCitadosDia1 = candidates.length;
+            const statsByDay = [];
+
+            for (let d = 0; d < 8; d++) {
+                let presentesDia = 0;
+                let bajasEnEsteDia = 0;
+
+                candidates.forEach(c => {
+                    const mark = c.days[d];
+                    if (mark === 'A' || mark === 'R') presentesDia++;
+                    if (mark === 'F') bajasEnEsteDia++;
+                });
+
+                statsByDay.push({
+                    dayIndex: d,
+                    presentes: presentesDia,
+                    bajasDia: bajasEnEsteDia
+                });
+            }
+            return { totalCitadosDia1, statsByDay };
         }
 
-        function loadDaySyllabus(dayVal) {
-            const preset = SYLLABUS_BY_DAY[dayVal] || SYLLABUS_BY_DAY['8'];
-            document.getElementById('mail-date-heading').value = preset.heading;
-            document.getElementById('mail-syllabus-editor').value = preset.bullets.join('\n');
-        }
-
-        function renderAll() {
-            renderIncorporacionTable();
-            renderSabanaTable();
-            renderNotasTable();
-            renderPlanningCards();
-            renderMailPreview();
-        }
-
-        // 1. RENDERIZAR TABLA SEGUIMIENTO A LA INCORPORACIÓN
         function renderIncorporacionTable() {
-            const activeDay = parseInt(document.getElementById('active-day-select').value) || 8;
             const headerRow = document.getElementById('header-dates-row');
-            const tbody = document.getElementById('body-incorporacion-summary');
+            const bodyEl = document.getElementById('body-incorporacion-summary');
+            if (!headerRow || !bodyEl) return;
 
-            let hHtml = `<th colspan="2" class="p-3 border border-slate-300 bg-outlookNavy text-white">Seguimiento a la Incorporación</th>`;
+            let headerHtml = `<th class="p-2.5 border border-slate-300 bg-outlookNavy text-white text-left min-w-[230px]">Indicador / Fecha de Sesión</th>`;
             sessionDates.forEach((dt, idx) => {
-                hHtml += `
-                    <th class="p-2 border border-slate-300 bg-outlookNavy">
-                        <input type="text" value="${dt}" onchange="updateSessionDate(${idx}, this.value)" class="w-20 bg-transparent text-white text-center font-bold text-[11px] outline-none border-b border-transparent focus:border-ilumnoYellow">
+                headerHtml += `
+                    <th class="p-2 border border-slate-300 bg-outlookNavy text-white">
+                        <div class="text-[10px] text-cyan-200 font-bold">Día ${idx + 1}</div>
+                        <input type="text" value="${dt}" onchange="updateSingleSessionDate(${idx}, this.value)"
+                            class="w-20 text-center bg-transparent border-b border-white/30 focus:border-ilumnoYellow outline-none text-xs font-black text-white" />
                     </th>
                 `;
             });
-            headerRow.innerHTML = hHtml;
+            headerRow.innerHTML = headerHtml;
 
-            const totals = { A: [], F: [], R: [], adh: [] };
-            for (let d = 1; d <= 8; d++) {
-                let a = 0, f = 0, r = 0;
-                candidates.forEach(c => {
-                    const m = c.days[d] || '';
-                    if (m === 'A') a++;
-                    if (m === 'F') f++;
-                    if (m === 'R') r++;
-                });
-                const conv = a + f + r;
-                const pct = conv > 0 ? Math.round((a / conv) * 100) : 0;
-                totals.A.push(a);
-                totals.F.push(f);
-                totals.R.push(r);
-                totals.adh.push(d <= activeDay && conv > 0 ? `${pct}%` : '');
-            }
+            const cuposReq = Number(document.getElementById('cfg-cupos-titulares').value) || 8;
+            const { totalCitadosDia1, statsByDay } = calculateDailyIncorporacionStats();
 
-            const todayA = totals.A[activeDay - 1] || 0;
-            const todayF = totals.F[activeDay - 1] || 0;
-            const todayR = totals.R[activeDay - 1] || 0;
-            const todayConv = todayA + todayF + todayR;
-            const todayAdh = todayConv > 0 ? Math.round((todayA / todayConv) * 100) : 100;
-            const totalBajas = candidates.filter(c => getAttendanceStats(c, activeDay).estado === 'Baja').length;
+            const rowsConfig = [
+                { label: 'Personal Requerido (Titulares)', values: sessionDates.map((_, i) => i === 0 ? cuposReq : '') },
+                { label: 'Citados a Formación Día 1', values: sessionDates.map((_, i) => i === 0 ? totalCitadosDia1 : '') },
+                { label: 'Asistentes en Formación por Día', values: statsByDay.map(s => s.presentes > 0 ? s.presentes : '') },
+                { label: 'Bajas / Deserciones del Día', values: statsByDay.map(s => s.presentes > 0 || s.bajasDia > 0 ? s.bajasDia : '') },
+                {
+                    label: '% Cumplimiento Incorporación / Adherencia',
+                    values: statsByDay.map(s => {
+                        if (s.presentes === 0 && s.bajasDia === 0) return '';
+                        const base = totalCitadosDia1 > 0 ? totalCitadosDia1 : 1;
+                        return Math.round((s.presentes / base) * 100) + '%';
+                    }),
+                    highlight: true
+                }
+            ];
 
-            document.getElementById('kpi-en-formacion').textContent = todayConv;
-            document.getElementById('kpi-asisten-hoy').textContent = todayA;
-            document.getElementById('kpi-bajas-total').textContent = totalBajas;
-            document.getElementById('kpi-adherencia-hoy').textContent = `${todayAdh}%`;
+            bodyEl.innerHTML = rowsConfig.map(r => `
+                <tr class="${r.highlight ? 'bg-cyan-50/70 font-black text-ilumnoDark' : 'hover:bg-slate-50'}">
+                    <td class="p-2.5 border border-slate-200 text-left font-bold text-slate-700">${r.label}</td>
+                    ${r.values.map(val => `<td class="p-2.5 border border-slate-200 font-semibold">${val}</td>`).join('')}
+                </tr>
+            `).join('');
 
-            tbody.innerHTML = `
-                <tr>
-                    <td class="p-2 border border-slate-200 font-black text-outlookNavy">A</td>
-                    <td class="p-2 border border-slate-200 font-bold text-outlookNavy">Asiste</td>
-                    ${totals.A.map((v, i) => `<td class="p-2 border border-slate-200 font-black ${i === 0 ? 'bg-outlookCyan text-outlookNavy' : v >= 3 ? 'bg-amber-400 text-outlookNavy' : 'bg-rose-500 text-white'}">${i + 1 <= activeDay ? v : 0}</td>`).join('')}
-                </tr>
-                <tr>
-                    <td class="p-2 border border-slate-200 font-black text-outlookNavy">F</td>
-                    <td class="p-2 border border-slate-200 font-bold text-outlookNavy">Falta</td>
-                    ${totals.F.map((v, i) => `<td class="p-2 border border-slate-200 font-semibold">${i + 1 <= activeDay ? v : 0}</td>`).join('')}
-                </tr>
-                <tr>
-                    <td class="p-2 border border-slate-200 font-black text-outlookNavy">R</td>
-                    <td class="p-2 border border-slate-200 font-bold text-outlookNavy">Retardo</td>
-                    ${totals.R.map((v, i) => `<td class="p-2 border border-slate-200 font-semibold">${i + 1 <= activeDay ? v : 0}</td>`).join('')}
-                </tr>
-                <tr class="bg-[#00B0F0] text-white font-black">
-                    <td colspan="2" class="p-2.5 border border-slate-300 bg-outlookNavy text-white">Adherencia a Formación</td>
-                    ${totals.adh.map(p => `<td class="p-2.5 border border-slate-300">${p}</td>`).join('')}
-                </tr>
-            `;
+            // Actualizar KPIs Superiores según el Día Activo
+            const activeDayIdx = (Number(document.getElementById('active-day-select').value) || 1) - 1;
+            const activeMetrics = candidates.map(computeCandidateMetrics);
+            const enFormacionCount = activeMetrics.filter(m => !m.isBaja).length;
+            const bajasTotalCount = activeMetrics.filter(m => m.isBaja).length;
+            const asistenHoyCount = statsByDay[activeDayIdx] ? statsByDay[activeDayIdx].presentes : 0;
+            const adhHoy = enFormacionCount > 0 ? Math.round((asistenHoyCount / enFormacionCount) * 100) : 0;
+
+            document.getElementById('kpi-en-formacion').textContent = enFormacionCount;
+            document.getElementById('kpi-asisten-hoy').textContent = asistenHoyCount;
+            document.getElementById('kpi-bajas-total').textContent = bajasTotalCount;
+            document.getElementById('kpi-adherencia-hoy').textContent = `${adhHoy}%`;
         }
 
-        function updateSessionDate(idx, val) {
-            sessionDates[idx] = val.trim();
-            persistData();
-            renderMailPreview();
+        function updateSingleSessionDate(idx, newVal) {
+            sessionDates[idx] = newVal.trim();
+            persistState();
+            renderAllTables();
         }
 
-        // 2. RENDERIZAR SÁBANA DE ASISTENCIA
-        function renderSabanaTable() {
-            const activeDay = parseInt(document.getElementById('active-day-select').value) || 8;
+        function renderSabanaAsistencia() {
             const tbody = document.getElementById('body-sabana-asistencia');
+            if (!tbody) return;
 
             tbody.innerHTML = candidates.map((c, idx) => {
-                const st = getAttendanceStats(c, activeDay);
-                const isBaja = st.estado === 'Baja';
+                const m = computeCandidateMetrics(c);
+                const estadoBadge = m.isBaja
+                    ? `<span class="px-2.5 py-1 rounded-md bg-[#E6002D] text-white font-black text-[11px] uppercase inline-block w-full">Baja</span>`
+                    : `<span class="px-2.5 py-1 rounded-md bg-emerald-100 text-emerald-800 font-black text-[11px] inline-block w-full">En Formación</span>`;
 
-                let dayCells = '';
-                for (let d = 1; d <= 8; d++) {
-                    const mark = d <= activeDay ? (c.days[d] || '') : '';
-                    const color = mark === 'A' ? 'text-outlookNavy font-bold bg-sky-50/70' : mark === 'F' ? 'bg-rose-100 text-rose-700 font-black' : mark === 'R' ? 'bg-amber-100 text-amber-800 font-black' : 'text-slate-300';
-                    dayCells += `
-                        <td onclick="toggleAttendanceMark(${idx}, ${d})" class="p-2 border border-slate-200 cursor-pointer hover:ring-2 hover:ring-ilumnoTeal select-none transition ${color}">
-                            ${mark || '&nbsp;'}
+                const dayCells = c.days.map((mark, dIdx) => {
+                    let cellStyle = 'bg-white text-slate-400 hover:bg-slate-100';
+                    if (mark === 'A') cellStyle = 'bg-emerald-50 text-emerald-700 font-black';
+                    else if (mark === 'F') cellStyle = 'bg-[#E6002D] text-white font-black';
+                    else if (mark === 'R') cellStyle = 'bg-amber-100 text-amber-800 font-black';
+
+                    return `
+                        <td onclick="cycleAttendanceMark(${idx}, ${dIdx})"
+                            class="p-2 border border-slate-200 cursor-pointer select-none transition ${cellStyle}"
+                            title="Clic para cambiar entre A, F, R o vacío">
+                            ${mark || '-'}
                         </td>
                     `;
+                }).join('');
+
+                return `
+                    <tr class="${m.isBaja ? 'bg-rose-50/30' : 'hover:bg-slate-50'}">
+                        <td class="p-2 border border-slate-200 font-mono font-bold text-slate-700">${c.cedula}</td>
+                        <td class="p-2 border border-slate-200 text-slate-600">${c.universidad}</td>
+                        <td class="p-2 border border-slate-200 text-slate-600">${c.split}</td>
+                        <td class="p-2 border border-slate-200 font-bold text-slate-800">${c.apellidos}</td>
+                        <td class="p-2 border border-slate-200 font-bold text-slate-800">${c.nombres}</td>
+                        <td class="p-2 border border-slate-200">
+                            <input type="text" value="${c.novedades || ''}"
+                                onchange="updateCandidateField(${idx}, 'novedades', this.value)"
+                                class="w-full px-2 py-1 text-xs rounded border border-transparent hover:border-slate-300 focus:border-ilumnoTeal focus:bg-white bg-transparent outline-none" />
+                        </td>
+                        <td class="p-2 border border-slate-200">
+                            <input type="text" value="${c.supervisor || ''}"
+                                onchange="updateCandidateField(${idx}, 'supervisor', this.value)"
+                                class="w-28 text-center px-1.5 py-1 text-xs rounded border border-transparent hover:border-slate-300 focus:border-ilumnoTeal bg-transparent outline-none" />
+                        </td>
+                        <td class="p-2 border border-slate-200 font-black text-emerald-700">${m.asiste}</td>
+                        <td class="p-2 border border-slate-200 font-black ${m.falta > 0 ? 'text-rose-600' : 'text-slate-400'}">${m.falta}</td>
+                        <td class="p-2 border border-slate-200 font-black ${m.retardo > 0 ? 'text-amber-600' : 'text-slate-400'}">${m.retardo}</td>
+                        <td class="p-1.5 border border-slate-200">${estadoBadge}</td>
+                        ${dayCells}
+                        <td class="p-2 border border-slate-200">
+                            <button onclick="removeCandidate(${idx})" class="text-slate-400 hover:text-rose-600 transition" title="Eliminar aspirante">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function cycleAttendanceMark(candIdx, dayIdx) {
+            const order = ['A', 'F', 'R', ''];
+            const current = candidates[candIdx].days[dayIdx] || '';
+            const next = order[(order.indexOf(current) + 1) % order.length];
+            candidates[candIdx].days[dayIdx] = next;
+
+            // Si pasa a Falta y seguía con "Continúa en formación sin novedad", sugerimos texto de baja
+            const m = computeCandidateMetrics(candidates[candIdx]);
+            if (m.isBaja && candidates[candIdx].novedades === 'Continúa en formación sin novedad') {
+                candidates[candIdx].novedades = `Baja en día ${dayIdx + 1} por inasistencia/retardos`;
+            } else if (!m.isBaja && candidates[candIdx].novedades.startsWith('Baja en día')) {
+                candidates[candIdx].novedades = 'Continúa en formación sin novedad';
+            }
+
+            persistState();
+            renderAllTables();
+        }
+
+        function updateCandidateField(candIdx, field, val) {
+            candidates[candIdx][field] = val;
+            persistState();
+            renderAllTables();
+        }
+
+        function removeCandidate(candIdx) {
+            const c = candidates[candIdx];
+            if (!confirm(`¿Eliminar a ${c.nombres} ${c.apellidos} de la lista?`)) return;
+            candidates.splice(candIdx, 1);
+            persistState();
+            renderAllTables();
+            showToast('Aspirante eliminado', 'rose');
+        }
+
+        // ==========================================================
+        // RENDERIZADO DE PESTAÑA 2: MATRIZ DETALLADA DE NOTAS Y CORTES
+        // ==========================================================
+        function renderNotasMatrix() {
+            const tbody = document.getElementById('body-notas-matrix');
+            if (!tbody) return;
+
+            const cuposTitulares = Number(document.getElementById('cfg-cupos-titulares').value) || 8;
+
+            // Calculamos orden por nota total entre quienes están "En Formación" para definir Titular vs Buffer
+            const activeTotals = candidates
+                .map((c, idx) => ({ idx, m: computeCandidateMetrics(c) }))
+                .filter(item => !item.m.isBaja)
+                .sort((a, b) => b.m.total - a.m.total);
+
+            const statusRankMap = {};
+            activeTotals.forEach((item, pos) => {
+                statusRankMap[item.idx] = (pos < cuposTitulares) ? 'Titular (Continúa)' : 'Buffer (Reserva)';
+            });
+
+            tbody.innerHTML = candidates.map((c, idx) => {
+                const m = computeCandidateMetrics(c);
+                const estadoFinalCorreo = m.isBaja ? 'Baja' : (statusRankMap[idx] || 'En Formación');
+
+                const rankingClass = m.ranking === 'TOP'
+                    ? 'bg-outlookCyan text-white font-black'
+                    : 'bg-[#FFFF00] text-slate-900 font-black';
+
+                return `
+                    <tr class="${m.isBaja ? 'opacity-60 bg-slate-50' : 'hover:bg-slate-50'}">
+                        <td class="p-2 border border-slate-300 font-bold">${c.req || '532'}</td>
+                        <td class="p-2 border border-slate-300 font-mono">${c.cedula}</td>
+                        <td class="p-2 border border-slate-300 font-bold text-left">${c.apellidos}</td>
+                        <td class="p-2 border border-slate-300 font-bold text-left">${c.nombres}</td>
+
+                        <!-- Corte 1 Subnotas -->
+                        <td class="p-1.5 border border-slate-300 bg-white">
+                            <input type="number" min="0" max="100" step="1" value="${c.evalIlumno}"
+                                onchange="updateGradeValue(${idx}, 'evalIlumno', this.value)"
+                                class="w-14 text-center font-bold p-1 rounded border border-slate-200 focus:border-ilumnoTeal outline-none" />
+                        </td>
+                        <td class="p-1.5 border border-slate-300 bg-white">
+                            <input type="number" min="0" max="100" step="1" value="${c.evalComercial}"
+                                onchange="updateGradeValue(${idx}, 'evalComercial', this.value)"
+                                class="w-14 text-center font-bold p-1 rounded border border-slate-200 focus:border-ilumnoTeal outline-none" />
+                        </td>
+                        <td class="p-2 border border-slate-300 bg-slate-100 font-black text-outlookNavy">${formatCommaDecimal(m.c1)}</td>
+
+                        <!-- Corte 2 Subnotas -->
+                        <td class="p-1.5 border border-slate-300 bg-white">
+                            <input type="number" min="0" max="100" step="1" value="${c.evalAplicativos}"
+                                onchange="updateGradeValue(${idx}, 'evalAplicativos', this.value)"
+                                class="w-14 text-center font-bold p-1 rounded border border-slate-200 focus:border-ilumnoTeal outline-none" />
+                        </td>
+                        <td class="p-1.5 border border-slate-300 bg-white">
+                            <input type="number" min="0" max="100" step="1" value="${c.habAutogestion}"
+                                onchange="updateGradeValue(${idx}, 'habAutogestion', this.value)"
+                                class="w-14 text-center font-bold p-1 rounded border border-slate-200 focus:border-ilumnoTeal outline-none" />
+                        </td>
+                        <td class="p-2 border border-slate-300 bg-slate-100 font-black text-outlookNavy">${formatCommaDecimal(m.c2)}</td>
+
+                        <!-- Corte 3 Subnotas -->
+                        <td class="p-1.5 border border-slate-300 bg-white">
+                            <input type="number" min="0" max="100" step="1" value="${c.evalFinal}"
+                                onchange="updateGradeValue(${idx}, 'evalFinal', this.value)"
+                                class="w-14 text-center font-bold p-1 rounded border border-slate-200 focus:border-ilumnoTeal outline-none" />
+                        </td>
+                        <td class="p-1.5 border border-slate-300 bg-white">
+                            <input type="number" min="0" max="100" step="1" value="${c.roleplayFinal}"
+                                onchange="updateGradeValue(${idx}, 'roleplayFinal', this.value)"
+                                class="w-14 text-center font-bold p-1 rounded border border-slate-200 focus:border-ilumnoTeal outline-none" />
+                        </td>
+                        <td class="p-2 border border-slate-300 bg-slate-100 font-black text-outlookNavy">${formatCommaDecimal(m.c3)}</td>
+
+                        <!-- Puntos Extra Subnotas -->
+                        <td class="p-1.5 border border-slate-300 bg-white">
+                            <input type="number" min="0" max="100" step="1" value="${c.puntualidad}"
+                                onchange="updateGradeValue(${idx}, 'puntualidad', this.value)"
+                                class="w-12 text-center font-bold p-1 rounded border border-slate-200 focus:border-ilumnoTeal outline-none" />
+                        </td>
+                        <td class="p-1.5 border border-slate-300 bg-white">
+                            <input type="number" min="0" max="100" step="1" value="${c.asistenciaNota}"
+                                onchange="updateGradeValue(${idx}, 'asistenciaNota', this.value)"
+                                class="w-12 text-center font-bold p-1 rounded border border-slate-200 focus:border-ilumnoTeal outline-none" />
+                        </td>
+                        <td class="p-1.5 border border-slate-300 bg-white">
+                            <input type="number" min="0" max="100" step="1" value="${c.participacion}"
+                                onchange="updateGradeValue(${idx}, 'participacion', this.value)"
+                                class="w-12 text-center font-bold p-1 rounded border border-slate-200 focus:border-ilumnoTeal outline-none" />
+                        </td>
+                        <td class="p-2 border border-slate-300 bg-slate-100 font-black text-outlookNavy">${formatCommaDecimal(m.pExtra)}</td>
+
+                        <!-- Promedio Total y Ranking -->
+                        <td class="p-2 border border-slate-300 bg-cyan-50 font-black text-outlookNavy text-xs">${formatCommaDecimal(m.total)}</td>
+                        <td class="p-2 border border-slate-300 ${rankingClass}">${m.ranking}</td>
+                        <td class="p-2 border border-slate-300 font-bold ${m.isBaja ? 'text-rose-600' : 'text-emerald-700'}">${estadoFinalCorreo}</td>
+                        <td class="p-1.5 border border-slate-300">
+                            <input type="text" value="${c.trainerFeedback || ''}"
+                                placeholder="Escribe feedback para su campus..."
+                                onchange="updateCandidateField(${idx}, 'trainerFeedback', this.value)"
+                                class="w-full px-2 py-1 text-[11px] rounded border border-slate-200 focus:border-ilumnoTeal outline-none" />
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function updateGradeValue(candIdx, field, rawVal) {
+            let num = parseFloat(rawVal);
+            if (isNaN(num)) num = 0;
+            if (num < 0) num = 0;
+            if (num > 100) num = 100;
+            candidates[candIdx][field] = num;
+            persistState();
+            renderAllTables();
+        }
+
+        // ==========================================================
+        // PESTAÑA 3: PLANNING VISUAL DE LOS 8 DÍAS
+        // ==========================================================
+        function renderPlanningGrid() {
+            const container = document.getElementById('planning-grid-container');
+            if (!container) return;
+
+            container.innerHTML = planningModules.map((item, idx) => {
+                let badgeClass = 'bg-slate-100 text-slate-600 border-slate-200';
+                let cardBorder = 'border-slate-200';
+                if (item.status === 'Completado') {
+                    badgeClass = 'bg-emerald-100 text-emerald-800 border-emerald-300';
+                    cardBorder = 'border-emerald-300 bg-emerald-50/20';
+                } else if (item.status === 'En Curso') {
+                    badgeClass = 'bg-amber-100 text-amber-800 border-amber-300';
+                    cardBorder = 'border-ilumnoTeal ring-2 ring-ilumnoTeal/20 bg-cyan-50/20';
                 }
 
                 return `
-                    <tr class="${idx % 2 === 0 ? 'bg-[#DDEBF7]/60' : 'bg-white'} hover:bg-cyan-50/40 transition">
-                        <td class="p-2 border border-slate-200 font-mono font-semibold">${c.cedula}</td>
-                        <td class="p-2 border border-slate-200">${c.university}</td>
-                        <td class="p-2 border border-slate-200">${c.split}</td>
-                        <td class="p-2 border border-slate-200 font-semibold">${c.apellidos}</td>
-                        <td class="p-2 border border-slate-200 font-semibold">${c.nombres}</td>
-                        <td class="p-2 border border-slate-200">
-                            <input type="text" value="${c.novedad || ''}" onchange="editCandidateField(${idx}, 'novedad', this.value)" placeholder="Sin novedad..." class="w-full bg-transparent text-rose-600 font-semibold text-center outline-none">
-                        </td>
-                        <td class="p-2 border border-slate-200">
-                            <input type="text" value="${c.supervisor || ''}" onchange="editCandidateField(${idx}, 'supervisor', this.value)" class="w-28 bg-transparent text-center outline-none">
-                        </td>
-                        <td class="p-2 border border-slate-200 font-bold text-outlookNavy">${st.asiste}</td>
-                        <td class="p-2 border border-slate-200 font-bold text-outlookNavy">${st.falta}</td>
-                        <td class="p-2 border border-slate-200 font-bold text-outlookNavy">${st.retardo}</td>
-                        <td class="p-2 border border-slate-200 font-black ${isBaja ? 'bg-red-600 text-white' : 'text-outlookNavy'}">${st.estado}</td>
-                        ${dayCells}
-                        <td class="p-2 border border-slate-200">
-                            <button onclick="deleteCandidate(${idx})" class="text-rose-500 hover:text-rose-700 p-1"><i class="fas fa-trash-alt"></i></button>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-        }
-
-        function toggleAttendanceMark(candIdx, dayNum) {
-            const curr = candidates[candIdx].days[dayNum] || '';
-            const next = curr === 'A' ? 'F' : curr === 'F' ? 'R' : curr === 'R' ? '' : 'A';
-            candidates[candIdx].days[dayNum] = next;
-            persistData();
-            renderAll();
-        }
-
-        function editCandidateField(candIdx, field, value) {
-            candidates[candIdx][field] = value;
-            persistData();
-            renderAll();
-        }
-
-        // 3. RENDERIZAR MATRIZ DE NOTAS Y RANKING
-        function renderNotasTable() {
-            const tbody = document.getElementById('body-notas-matrix');
-            const cupos = parseInt(document.getElementById('cfg-cupos-titulares').value) || 1;
-
-            const activeList = candidates
-                .map((c, origIdx) => ({ ...c, origIdx, total: getWeightedAverage(c) }))
-                .filter(c => c.novedad !== 'Se retira de la formación')
-                .sort((a, b) => b.total - a.total);
-
-            tbody.innerHTML = activeList.map((c, rankIdx) => {
-                const isTop = c.total >= 90.0;
-                const groupTag = rankIdx < cupos
-                    ? `<span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-black text-[10px] uppercase">Titular Contratación (${rankIdx + 1})</span>`
-                    : `<span class="px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 font-black text-[10px] uppercase">Back Up (${rankIdx - cupos + 1})</span>`;
-
-                return `
-                    <tr class="hover:bg-slate-50 transition">
-                        <td class="p-2.5 border border-slate-200">
-                            <input type="text" value="${c.req}" onchange="editCandidateField(${c.origIdx}, 'req', this.value)" class="w-14 text-center font-bold bg-transparent outline-none">
-                        </td>
-                        <td class="p-2.5 border border-slate-200 font-mono">${c.cedula}</td>
-                        <td class="p-2.5 border border-slate-200">${c.university}</td>
-                        <td class="p-2.5 border border-slate-200">${c.split}</td>
-                        <td class="p-2.5 border border-slate-200 font-semibold">${c.apellidos}</td>
-                        <td class="p-2.5 border border-slate-200 font-semibold">${c.nombres}</td>
-                        <td class="p-2.5 border border-slate-200 bg-outlookNavy">
-                            <input type="number" step="0.1" value="${c.corte1}" onchange="editCandidateField(${c.origIdx}, 'corte1', parseFloat(this.value)||0)" class="w-20 bg-transparent text-center font-black ${c.corte1 < 80 ? 'text-rose-400' : 'text-outlookCyan'} outline-none">
-                        </td>
-                        <td class="p-2.5 border border-slate-200 bg-outlookNavy">
-                            <input type="number" step="0.1" value="${c.corte2}" onchange="editCandidateField(${c.origIdx}, 'corte2', parseFloat(this.value)||0)" class="w-20 bg-transparent text-center font-black ${c.corte2 < 90 ? 'text-rose-400' : 'text-outlookCyan'} outline-none">
-                        </td>
-                        <td class="p-2.5 border border-slate-200 bg-outlookNavy">
-                            <input type="number" step="0.1" value="${c.corte3}" onchange="editCandidateField(${c.origIdx}, 'corte3', parseFloat(this.value)||0)" class="w-20 bg-transparent text-center font-black text-outlookCyan outline-none">
-                        </td>
-                        <td class="p-2.5 border border-slate-200 bg-outlookNavy">
-                            <input type="number" step="0.1" value="${c.extra}" onchange="editCandidateField(${c.origIdx}, 'extra', parseFloat(this.value)||0)" class="w-20 bg-transparent text-center font-black text-outlookCyan outline-none">
-                        </td>
-                        <td class="p-2.5 border border-slate-200 font-black text-sm text-outlookCyan">${c.total.toFixed(2).replace('.', ',')}</td>
-                        <td class="p-2.5 border border-slate-200 font-black text-outlookCyan">${isTop ? 'TOP' : 'NO TOP'}</td>
-                        <td class="p-2.5 border border-slate-200">${groupTag}</td>
-                    </tr>
-                `;
-            }).join('');
-        }
-
-        // 4. RENDERIZAR BLOQUE DE PLANNING VISUAL
-        function renderPlanningCards() {
-            const container = document.getElementById('planning-grid-container');
-            container.innerHTML = planningModules.map((m, idx) => {
-                const badgeClass = m.status === 'Completado'
-                    ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
-                    : m.status === 'En Curso'
-                    ? 'bg-amber-100 text-amber-800 border-amber-300'
-                    : 'bg-slate-100 text-slate-600 border-slate-300';
-
-                return `
-                    <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50/70 flex flex-col justify-between space-y-3">
-                        <div>
-                            <div class="flex justify-between items-center mb-1.5">
-                                <span class="text-[10px] font-black uppercase text-ilumnoTeal">Día ${m.day} (${sessionDates[idx] || ''})</span>
-                                <span class="text-[10px] font-bold text-slate-400">${m.hours}</span>
+                    <div class="p-4 rounded-2xl border ${cardBorder} shadow-2xs flex flex-col justify-between gap-3 transition">
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-black uppercase tracking-wider text-ilumnoTeal">${item.phase}</span>
+                                <button onclick="cyclePlanningStatus(${idx})"
+                                    class="px-2.5 py-0.5 rounded-full text-[10px] font-black border ${badgeClass} cursor-pointer">
+                                    ${item.status}
+                                </button>
                             </div>
-                            <span class="text-[10px] font-bold text-slate-500 block">${m.phase}</span>
-                            <input type="text" value="${m.title}" onchange="updatePlanningTitle(${idx}, this.value)" class="w-full text-xs font-extrabold text-slate-800 bg-transparent border-b border-transparent focus:border-ilumnoTeal outline-none mt-1">
+                            <div class="flex items-baseline justify-between">
+                                <h4 class="text-sm font-black text-ilumnoDark">Día ${item.day}</h4>
+                                <span class="text-[11px] font-bold text-slate-400">${sessionDates[idx] || ''} • ${item.hours}</span>
+                            </div>
+                            <textarea rows="2" onchange="updatePlanningTitle(${idx}, this.value)"
+                                class="w-full text-xs text-slate-700 font-medium bg-white/80 p-2 rounded-xl border border-slate-200 outline-none focus:border-ilumnoTeal">${item.title}</textarea>
                         </div>
-                        <button onclick="cyclePlanningStatus(${idx})" class="w-full py-1.5 px-3 rounded-xl border text-[11px] font-black uppercase transition ${badgeClass}">
-                            ${m.status}
-                        </button>
                     </div>
                 `;
             }).join('');
         }
 
         function cyclePlanningStatus(idx) {
-            const curr = planningModules[idx].status;
-            planningModules[idx].status = curr === 'Completado' ? 'En Curso' : curr === 'En Curso' ? 'Programado' : 'Completado';
-            persistData();
-            renderPlanningCards();
+            const states = ['Completado', 'En Curso', 'Programado'];
+            const current = planningModules[idx].status;
+            planningModules[idx].status = states[(states.indexOf(current) + 1) % states.length];
+            persistState();
+            renderPlanningGrid();
             renderMailPreview();
         }
 
         function updatePlanningTitle(idx, val) {
             planningModules[idx].title = val;
-            persistData();
+            persistState();
             renderMailPreview();
         }
 
-        // 5. GENERADOR DEL CORREO COMPLETO EN FORMATO OUTLOOK
-        function renderMailPreview() {
-            const day = parseInt(document.getElementById('mail-day-select').value) || 8;
-            const dateHeading = document.getElementById('mail-date-heading').value;
-            const bullets = document.getElementById('mail-syllabus-editor').value.split('\n').filter(b => b.trim() !== '');
-            const includePlanning = document.getElementById('chk-include-planning').checked;
+        // ==========================================================
+        // PESTAÑA 4: AVANCE LMS, APUNTES, DUDAS Y FEEDBACK DOCENTE
+        // ==========================================================
+        function renderLmsPanel() {
+            const expertsEl = document.getElementById('lms-experts-list');
+            const questionsEl = document.getElementById('lms-questions-list');
+            const badgePending = document.getElementById('badge-pending-questions');
+            if (!expertsEl || !questionsEl) return;
 
-            const uni = document.getElementById('cfg-uni').value;
-            const inicio = document.getElementById('cfg-inicio').value;
-            const fin = document.getElementById('cfg-fin').value;
-            const formador = document.getElementById('cfg-formador').value;
-            const horario = document.getElementById('cfg-horario').value;
-            const cupos = parseInt(document.getElementById('cfg-cupos-titulares').value) || 1;
-
-            const isClosing = (day === 8);
-            const subject = `${isClosing ? 'CONTRATACIÓN ' : ''}Asistencia y deserción grupo nuevo Febrero Poli Rematricula y Servicio día ${day}/8`;
-            document.getElementById('preview-subject-line').textContent = `Asunto: ${subject}`;
-
-            let countA = 0, countF = 0, countR = 0;
-            const novedadesDia = [];
-            candidates.forEach(c => {
-                const m = c.days[day] || '';
-                if (m === 'A') countA++;
-                if (m === 'F') countF++;
-                if (m === 'R') countR++;
-                if (c.novedad && c.novedad.trim() !== '' && c.novedad !== 'Se retira de la formación') {
-                    novedadesDia.push(`<strong>Novedad:</strong> La aspirante en formación ${c.nombres} ${c.apellidos}, reporta: ${c.novedad}.`);
-                }
-            });
-            const convHoy = countA + countF + countR;
-            const adhHoy = convHoy > 0 ? Math.round((countA / convHoy) * 100) : 100;
-
-            const ranked = candidates
-                .map(c => ({ ...c, total: getWeightedAverage(c) }))
-                .filter(c => c.novedad !== 'Se retira de la formación')
-                .sort((a, b) => b.total - a.total);
-
-            const titulares = ranked.slice(0, cupos);
-            const backups = ranked.slice(cupos);
-
-            function renderOutlookGradesTable(list) {
+            expertsEl.innerHTML = candidates.map((c, idx) => {
+                const m = computeCandidateMetrics(c);
                 return `
-                <table cellspacing="0" cellpadding="0" style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 9.5pt; margin: 10px 0;">
-                    <tr style="background-color: #002060; color: white; font-weight: bold; text-align: center;">
-                        <td style="border: 0.5pt solid #D9D9D9; padding: 6px;">No. Requerimiento</td>
-                        <td style="border: 0.5pt solid #D9D9D9; padding: 6px;">Cédula</td>
-                        <td style="border: 0.5pt solid #D9D9D9; padding: 6px;">Universidad</td>
-                        <td style="border: 0.5pt solid #D9D9D9; padding: 6px;">Split</td>
-                        <td style="border: 0.5pt solid #D9D9D9; padding: 6px;">Apellidos</td>
-                        <td style="border: 0.5pt solid #D9D9D9; padding: 6px;">Nombres</td>
-                        <td style="border: 0.5pt solid #D9D9D9; padding: 6px;">Promedio 1er Corte</td>
-                        <td style="border: 0.5pt solid #D9D9D9; padding: 6px;">Promedio 2do Corte</td>
-                        <td style="border: 0.5pt solid #D9D9D9; padding: 6px;">Promedio 3er corte</td>
-                        <td style="border: 0.5pt solid #D9D9D9; padding: 6px;">Puntos Extra</td>
-                        <td style="border: 0.5pt solid #D9D9D9; padding: 6px; background-color: #23B9D7; color: #00284E;">Promedio Total</td>
-                        <td style="border: 0.5pt solid #D9D9D9; padding: 6px; background-color: #85F1E1; color: #00294D;">Ranking</td>
-                    </tr>
-                    ${list.map(e => `
-                    <tr style="text-align: center;">
-                        <td style="border: 0.5pt solid #000; padding: 4px;">${e.req}</td>
-                        <td style="border: 0.5pt solid #000; padding: 4px;">${e.cedula}</td>
-                        <td style="border: 0.5pt solid #000; padding: 4px;">${e.university}</td>
-                        <td style="border: 0.5pt solid #000; padding: 4px;">${e.split}</td>
-                        <td style="border: 0.5pt solid #000; padding: 4px;">${e.apellidos}</td>
-                        <td style="border: 0.5pt solid #000; padding: 4px;">${e.nombres}</td>
-                        <td style="border: 0.5pt solid #000; padding: 4px; background-color: #002060; color: ${e.corte1 < 80 ? '#E6002D' : '#23B9D7'}; font-weight: bold;">${e.corte1.toFixed(2).replace('.', ',')}</td>
-                        <td style="border: 0.5pt solid #000; padding: 4px; background-color: #002060; color: #23B9D7; font-weight: bold;">${e.corte2.toFixed(2).replace('.', ',')}</td>
-                        <td style="border: 0.5pt solid #000; padding: 4px; background-color: #002060; color: #23B9D7; font-weight: bold;">${e.corte3.toFixed(2).replace('.', ',')}</td>
-                        <td style="border: 0.5pt solid #000; padding: 4px; background-color: #002060; color: #23B9D7; font-weight: bold;">${e.extra.toFixed(2).replace('.', ',')}</td>
-                        <td style="border: 0.5pt solid #000; padding: 4px; color: #23B9D7; font-weight: bold;">${e.total.toFixed(2).replace('.', ',')}</td>
-                        <td style="border: 0.5pt solid #000; padding: 4px; color: #23B9D7; font-weight: bold;">${e.total >= 90 ? 'TOP' : 'NO TOP'}</td>
-                    </tr>
-                    `).join('')}
-                </table>`;
-            }
-
-            let rowA = '', rowF = '', rowR = '', rowAdh = '';
-            for (let d = 1; d <= 8; d++) {
-                let a = 0, f = 0, r = 0;
-                candidates.forEach(c => {
-                    if (d <= day) {
-                        if (c.days[d] === 'A') a++;
-                        if (c.days[d] === 'F') f++;
-                        if (c.days[d] === 'R') r++;
-                    }
-                });
-                const tot = a + f + r;
-                const pct = (d <= day && tot > 0) ? `${Math.round((a / tot) * 100)}%` : '&nbsp;';
-                const bgA = d === 1 ? '#23B9D7' : (d <= day && a >= 3) ? '#E6960F' : '#E6002D';
-                rowA += `<td style="border: 0.5pt solid #99C3D3; background-color: ${bgA}; padding: 4px; font-weight: bold; color: #00284E;">${d <= day ? a : 0}</td>`;
-                rowF += `<td style="border: 0.5pt solid #99C3D3; padding: 4px;">${d <= day ? f : 0}</td>`;
-                rowR += `<td style="border: 0.5pt solid #99C3D3; padding: 4px;">${d <= day ? r : 0}</td>`;
-                rowAdh += `<td style="border: 0.5pt solid #99C3D3; background-color: #00B0F0; color: white; font-weight: bold; padding: 4px;">${pct}</td>`;
-            }
-
-            let sabanaHeaders = '';
-            for (let d = 1; d <= day; d++) {
-                sabanaHeaders += `<td style="border: 0.5pt solid #DDEBF7; background-color: #23B9D7; color: white; font-weight: bold; padding: 5px; width: 28px;">${d}</td>`;
-            }
-
-            const sabanaRows = candidates.map((c, i) => {
-                const st = getAttendanceStats(c, day);
-                const bg = i % 2 === 0 ? '#DDEBF7' : '#FFFFFF';
-                let dCols = '';
-                for (let d = 1; d <= day; d++) {
-                    dCols += `<td style="border: 0.5pt solid #DDEBF7; padding: 4px;">${c.days[d] || '&nbsp;'}</td>`;
-                }
-                return `
-                <tr style="background-color: ${bg}; text-align: center; font-size: 9pt;">
-                    <td style="border: 0.5pt solid #DDEBF7; padding: 4px;">${c.cedula}</td>
-                    <td style="border: 0.5pt solid #DDEBF7; padding: 4px;">${c.university}</td>
-                    <td style="border: 0.5pt solid #DDEBF7; padding: 4px;">${c.split}</td>
-                    <td style="border: 0.5pt solid #DDEBF7; padding: 4px;">${c.apellidos}</td>
-                    <td style="border: 0.5pt solid #DDEBF7; padding: 4px;">${c.nombres}</td>
-                    <td style="border: 0.5pt solid #DDEBF7; padding: 4px; color: #E6002D;">${c.novedad || '&nbsp;'}</td>
-                    <td style="border: 0.5pt solid #DDEBF7; padding: 4px;">${c.supervisor}</td>
-                    <td style="border: 0.5pt solid #DDEBF7; padding: 4px;">${st.asiste}</td>
-                    <td style="border: 0.5pt solid #DDEBF7; padding: 4px;">${st.falta}</td>
-                    <td style="border: 0.5pt solid #DDEBF7; padding: 4px;">${st.retardo}</td>
-                    <td style="border: 0.5pt solid #DDEBF7; padding: 4px; font-weight: bold; ${st.estado === 'Baja' ? 'background-color: red; color: white;' : 'color: #00284E;'}">${st.estado}</td>
-                    ${dCols}
-                </tr>`;
+                    <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50/60 space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <span class="font-black text-xs text-ilumnoDark">${c.nombres} ${c.apellidos}</span>
+                                <span class="text-[10px] font-mono text-slate-400 ml-2">CC: ${c.cedula}</span>
+                            </div>
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black ${m.ranking === 'TOP' ? 'bg-cyan-100 text-ilumnoDark' : 'bg-amber-100 text-amber-900'}">
+                                Promedio: ${formatCommaDecimal(m.total)} (${m.ranking})
+                            </span>
+                        </div>
+                        <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+                            <div class="bg-ilumnoTeal h-full rounded-full" style="width: ${c.lmsProgress || 0}%"></div>
+                        </div>
+                        <div class="text-[11px] text-slate-600 bg-white p-2.5 rounded-xl border border-slate-200">
+                            <strong class="text-slate-800 block mb-0.5"><i class="fas fa-sticky-note text-ilumnoYellow mr-1"></i>Apuntes del Estudiante en el Campus:</strong>
+                            ${c.studentNotes ? c.studentNotes : '<span class="italic text-slate-400">Sin apuntes registrados aún.</span>'}
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-black uppercase text-ilumnoPink block mb-1">Feedback Docente (Visible al estudiante en su Index):</label>
+                            <div class="flex gap-2">
+                                <input type="text" value="${c.trainerFeedback || ''}"
+                                    id="fb-input-${idx}"
+                                    placeholder="Escribe retroalimentación sobre su Speech o Simuladores..."
+                                    class="flex-1 px-3 py-1.5 rounded-xl border border-slate-300 text-xs bg-white outline-none focus:border-ilumnoTeal" />
+                                <button onclick="saveExpertFeedback(${idx})" class="px-3 py-1.5 bg-ilumnoDark text-white rounded-xl text-xs font-bold hover:bg-blue-950">
+                                    Enviar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
             }).join('');
 
-            const planningTableHtml = includePlanning ? `
-                <p style="margin-top: 16px;"><strong>Planning</strong></p>
-                <table cellspacing="0" cellpadding="0" style="width: 100%; border-collapse: collapse; font-family: Calibri, sans-serif; font-size: 9.5pt; margin: 10px 0; text-align: center;">
-                    <tr style="background-color: #002060; color: white; font-weight: bold;">
-                        ${planningModules.map((m, idx) => `<td style="border: 0.5pt solid #99C3D3; padding: 6px;">Día ${m.day}<br><span style="font-size: 8pt; font-weight: normal; color: #85F1E1;">${sessionDates[idx] || ''}</span></td>`).join('')}
-                    </tr>
+            const pendingCount = courseQuestions.filter(q => !q.answer || !q.answer.trim()).length;
+            if (badgePending) badgePending.textContent = pendingCount;
+
+            questionsEl.innerHTML = courseQuestions.map((q, qIdx) => `
+                <div class="p-4 rounded-2xl border ${q.answer ? 'border-slate-200 bg-white' : 'border-rose-300 bg-rose-50/30'} space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-black text-ilumnoDark">${q.student}</span>
+                        <span class="text-[10px] font-bold text-ilumnoTeal">${q.module} • ${q.time}</span>
+                    </div>
+                    <p class="text-xs text-slate-700 font-medium bg-slate-50 p-2.5 rounded-xl border border-slate-200">"${q.question}"</p>
+                    <div class="flex gap-2 pt-1">
+                        <input type="text" id="ans-input-${qIdx}" value="${q.answer || ''}"
+                            placeholder="Escribe la respuesta oficial del formador..."
+                            class="flex-1 px-3 py-1.5 rounded-xl border border-slate-300 text-xs bg-white outline-none focus:border-emerald-600" />
+                        <button onclick="saveQuestionAnswer(${qIdx})" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold">
+                            Responder
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function saveExpertFeedback(idx) {
+            const val = document.getElementById(`fb-input-${idx}`).value.trim();
+            candidates[idx].trainerFeedback = val;
+            persistState();
+            renderNotasMatrix();
+            showToast('Feedback enviado al campus del experto', 'emerald');
+        }
+
+        function saveQuestionAnswer(qIdx) {
+            const val = document.getElementById(`ans-input-${qIdx}`).value.trim();
+            courseQuestions[qIdx].answer = val;
+            persistState();
+            renderLmsPanel();
+            showToast('Respuesta publicada en el campus', 'emerald');
+        }
+
+        function addSimulatedStudentQuestion() {
+            const qText = prompt('Escribe una pregunta de prueba de un estudiante:');
+            if (!qText) return;
+            courseQuestions.unshift({
+                id: 'q' + Date.now(),
+                student: candidates[0] ? `${candidates[0].nombres} ${candidates[0].apellidos}` : 'Estudiante en Formación',
+                module: 'Módulo Financiero',
+                question: qText,
+                answer: '',
+                time: 'Justo ahora'
+            });
+            persistState();
+            renderLmsPanel();
+        }
+
+        // ==========================================================
+        // PESTAÑA 5: GENERADOR DE CORREO DIARIO Y DÍA 8 (OUTLOOK)
+        // ==========================================================
+        function loadDaySyllabus(dayStr) {
+            const editor = document.getElementById('mail-syllabus-editor');
+            if (!editor) return;
+            const entry = SYLLABUS_BY_DAY[String(dayStr)] || SYLLABUS_BY_DAY['1'];
+            editor.value = (entry.lines || []).join('\n');
+        }
+
+        function saveCustomSyllabusForDay() {
+            const dayStr = String(document.getElementById('mail-day-select').value || '1');
+            const editor = document.getElementById('mail-syllabus-editor');
+            if (!editor) return;
+            SYLLABUS_BY_DAY[dayStr] = {
+                lines: editor.value.split('\n')
+            };
+            persistState();
+        }
+
+        function saveDefaultRecipients(silent = false) {
+            persistState();
+            if (!silent) showToast('Destinatarios guardados como predeterminados', 'emerald');
+        }
+
+        function getCohortMonthName() {
+            const startStr = document.getElementById('cfg-inicio').value;
+            const d = parseFlexibleDate(startStr);
+            if (d) return MONTHS_FULL_ES[d.getMonth()];
+            return 'Noviembre';
+        }
+
+        function buildSyllabusHtmlBullets(rawText) {
+            const lines = rawText.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            let html = '';
+            let insideList = false;
+
+            lines.forEach(line => {
+                if (line.startsWith('[LINK]')) {
+                    if (insideList) { html += '</ul>'; insideList = false; }
+                    const label = line.replace('[LINK]', '').trim();
+                    html += `<p style="margin:4px 0 8px 0;font-family:Calibri,Arial,sans-serif;font-size:11pt;"><a href="https://anvacu2418.github.io/hub-expertos-ilumno/" style="color:#0066CC;font-weight:bold;text-decoration:underline;">${label}</a></p>`;
+                } else if (line.startsWith('[TITULO]') || /^m[óo]dulo\s+\d+/i.test(line) || /^habilidades\s+/i.test(line)) {
+                    if (insideList) { html += '</ul>'; insideList = false; }
+                    const cleanTitle = line.replace('[TITULO]', '').trim();
+                    html += `<p style="margin:10px 0 4px 0;font-family:Calibri,Arial,sans-serif;font-size:11pt;font-weight:bold;color:#002060;">${cleanTitle}</p>`;
+                } else {
+                    if (!insideList) {
+                        html += `<ul style="margin:4px 0 10px 22px;padding:0;font-family:Calibri,Arial,sans-serif;font-size:10.5pt;color:#1E293B;">`;
+                        insideList = true;
+                    }
+                    html += `<li style="margin-bottom:3px;">${line}</li>`;
+                }
+            });
+
+            if (insideList) html += '</ul>';
+            return html;
+        }
+
+        function renderMailPreview() {
+            const canvas = document.getElementById('outlook-email-canvas');
+            const subjectEl = document.getElementById('preview-subject-line');
+            if (!canvas) return;
+
+            const dayNum = Number(document.getElementById('mail-day-select').value) || 1;
+            const uni = document.getElementById('cfg-uni').value || 'Poli';
+            const inicio = document.getElementById('cfg-inicio').value || '17-nov-2026';
+            const fin = document.getElementById('cfg-fin').value || '26-nov-2026';
+            const formador = document.getElementById('cfg-formador').value || 'Angie Cuéllar';
+            const horario = document.getElementById('cfg-horario').value || '8:00 am a 2:00 pm';
+            const dateHeading = document.getElementById('mail-date-heading').value || '';
+            const syllabusText = document.getElementById('mail-syllabus-editor').value || '';
+            const includePlanning = document.getElementById('chk-include-planning').checked;
+            const monthName = getCohortMonthName();
+
+            const subjectText = dayNum === 8
+                ? `CONTRATACIÓN Y CIERRE FORMACIÓN GRUPO NUEVO ${monthName.toUpperCase()} ${uni.toUpperCase()} REMATRICULA Y SERVICIO DÍA 8/8`
+                : `Asistencia y deserción grupo nuevo ${monthName} ${uni} Rematricula y Servicio día ${dayNum}/8`;
+
+            if (subjectEl) subjectEl.textContent = `Asunto: ${subjectText}`;
+
+            const cuposReq = Number(document.getElementById('cfg-cupos-titulares').value) || 8;
+            const { totalCitadosDia1, statsByDay } = calculateDailyIncorporacionStats();
+
+            // 1. Tabla Seguimiento a la Incorporación
+            const incHeaders = sessionDates.map(d => `<th style="background:#002060;color:#ffffff;padding:5px 8px;border:1px solid #94A3B8;font-size:10pt;">${d}</th>`).join('');
+            const rowReq = sessionDates.map((_, i) => `<td style="padding:4px 8px;border:1px solid #CBD5E1;text-align:center;">${i === 0 ? cuposReq : ''}</td>`).join('');
+            const rowCit = sessionDates.map((_, i) => `<td style="padding:4px 8px;border:1px solid #CBD5E1;text-align:center;">${i === 0 ? totalCitadosDia1 : ''}</td>`).join('');
+            const rowAsi = statsByDay.map((s, i) => `<td style="padding:4px 8px;border:1px solid #CBD5E1;text-align:center;font-weight:bold;">${i < dayNum ? s.presentes : ''}</td>`).join('');
+            const rowBaj = statsByDay.map((s, i) => `<td style="padding:4px 8px;border:1px solid #CBD5E1;text-align:center;color:#E6002D;font-weight:bold;">${i < dayNum ? s.bajasDia : ''}</td>`).join('');
+            const rowPct = statsByDay.map((s, i) => {
+                if (i >= dayNum) return `<td style="padding:4px 8px;border:1px solid #CBD5E1;text-align:center;"></td>`;
+                const pct = totalCitadosDia1 > 0 ? Math.round((s.presentes / totalCitadosDia1) * 100) + '%' : '0%';
+                return `<td style="padding:4px 8px;border:1px solid #CBD5E1;text-align:center;font-weight:bold;background:#E0F2FE;">${pct}</td>`;
+            }).join('');
+
+            // 2. Tabla Sábana de Asistencia
+            const sabanaRows = candidates.map(c => {
+                const m = computeCandidateMetrics(c);
+                const estStyle = m.isBaja
+                    ? 'background:#E6002D;color:#ffffff;font-weight:bold;'
+                    : 'background:#DCFCE7;color:#166534;font-weight:bold;';
+
+                const dCells = c.days.map((mk, dIdx) => {
+                    const showMk = dIdx < dayNum ? (mk || '') : '';
+                    let bg = '#ffffff';
+                    let col = '#1E293B';
+                    if (showMk === 'F') { bg = '#E6002D'; col = '#ffffff'; }
+                    else if (showMk === 'R') { bg = '#FEF3C7'; col = '#92400E'; }
+                    return `<td style="padding:4px 6px;border:1px solid #CBD5E1;text-align:center;background:${bg};color:${col};font-weight:bold;">${showMk}</td>`;
+                }).join('');
+
+                return `
                     <tr>
-                        ${planningModules.map(m => `<td style="border: 0.5pt solid #99C3D3; padding: 6px; background-color: #F8FAFC; color: #00284E; font-weight: bold;">${m.phase}</td>`).join('')}
+                        <td style="padding:4px 8px;border:1px solid #CBD5E1;text-align:center;">${c.cedula}</td>
+                        <td style="padding:4px 8px;border:1px solid #CBD5E1;text-align:center;">${c.universidad}</td>
+                        <td style="padding:4px 8px;border:1px solid #CBD5E1;text-align:center;">${c.split}</td>
+                        <td style="padding:4px 8px;border:1px solid #CBD5E1;">${c.apellidos}</td>
+                        <td style="padding:4px 8px;border:1px solid #CBD5E1;">${c.nombres}</td>
+                        <td style="padding:4px 8px;border:1px solid #CBD5E1;">${c.novedades || ''}</td>
+                        <td style="padding:4px 8px;border:1px solid #CBD5E1;text-align:center;">${c.supervisor || ''}</td>
+                        <td style="padding:4px 8px;border:1px solid #CBD5E1;text-align:center;font-weight:bold;">${m.asiste}</td>
+                        <td style="padding:4px 8px;border:1px solid #CBD5E1;text-align:center;font-weight:bold;">${m.falta}</td>
+                        <td style="padding:4px 8px;border:1px solid #CBD5E1;text-align:center;font-weight:bold;">${m.retardo}</td>
+                        <td style="padding:4px 8px;border:1px solid #CBD5E1;text-align:center;${estStyle}">${m.estado}</td>
+                        ${dCells}
                     </tr>
-                    <tr>
-                        ${planningModules.map(m => `<td style="border: 0.5pt solid #99C3D3; padding: 6px; font-size: 8.5pt;">${m.title}</td>`).join('')}
-                    </tr>
-                    <tr>
-                        ${planningModules.map(m => {
-                            const bg = m.status === 'Completado' ? '#00B050' : m.status === 'En Curso' ? '#FFC000' : '#D9D9D9';
-                            const col = m.status === 'Programado' ? '#333' : '#FFF';
-                            return `<td style="border: 0.5pt solid #99C3D3; padding: 5px; background-color: ${bg}; color: ${col}; font-weight: bold;">${m.status}</td>`;
-                        }).join('')}
-                    </tr>
-                </table>
-            ` : '';
+                `;
+            }).join('');
 
-            document.getElementById('outlook-email-canvas').innerHTML = `
-                <div style="font-family: Aptos, Calibri, sans-serif; font-size: 11pt; color: #000000; line-height: 1.45;">
-                    <p>Hola equipo 👋🏻 Buen día para todos 😊</p>
-                    <p>A continuación, les reporto por este medio la asistencia y deserción del grupo nuevo Poli Rematrícula y Servicio para el día ${day}.</p>
-                    
-                    <p><strong>Generalidades:</strong></p>
-                    <ul>
-                        <li>Para hoy la adherencia de formación fue del ${adhHoy}%, con un total de ${countA} convocados de ${convHoy} aspirantes en formación.</li>
-                        ${isClosing ? `<li>Relaciono los resultados del proceso de formación para dar paso a la contratación del personal requerido (${titulares.length}) y dos back ups (${backups.length}).</li>` : ''}
-                    </ul>
-
-                    ${novedadesDia.length > 0 && !isClosing ? `<p>${novedadesDia.join('<br>')}</p>` : ''}
-
-                    ${isClosing ? `
-                        <table cellspacing="0" cellpadding="0" style="width: 534pt; border-collapse: collapse; margin: 14px 0; text-align: center; font-size: 10.5pt;">
-                            <tr style="background-color: #002060; color: white; font-weight: bold;">
-                                <td style="border: 0.5pt solid #99C3D3; padding: 8px;">Universidad</td>
-                                <td style="border: 0.5pt solid #99C3D3; padding: 8px;">Fecha Inicio</td>
-                                <td style="border: 0.5pt solid #99C3D3; padding: 8px;">Fecha Fin</td>
-                                <td style="border: 0.5pt solid #99C3D3; padding: 8px;">Formador</td>
-                                <td style="border: 0.5pt solid #99C3D3; padding: 8px;">Horario</td>
-                            </tr>
-                            <tr style="color: #00284E;">
-                                <td style="border: 0.5pt solid #99C3D3; padding: 6px;">${uni}</td>
-                                <td style="border: 0.5pt solid #99C3D3; padding: 6px;">${inicio}</td>
-                                <td style="border: 0.5pt solid #99C3D3; padding: 6px;">${fin}</td>
-                                <td style="border: 0.5pt solid #99C3D3; padding: 6px;">${formador}</td>
-                                <td style="border: 0.5pt solid #99C3D3; padding: 6px;">${horario}</td>
-                            </tr>
-                        </table>
-
-                        ${renderOutlookGradesTable(titulares)}
-                        ${backups.length > 0 ? `<p style="margin-top: 12px;"><strong>Back Up</strong></p>${renderOutlookGradesTable(backups)}` : ''}
-                    ` : ''}
-
-                    <p style="margin-top: 14px;"><strong>Temario desarrollado:</strong></p>
-                    <p><strong>${dateHeading}</strong></p>
-                    <ul>
-                        ${bullets.map(b => `<li>${b}</li>`).join('')}
-                    </ul>
-
-                    <!-- TABLA SEGUIMIENTO A LA INCORPORACIÓN -->
-                    <table cellspacing="0" cellpadding="0" style="border-collapse: collapse; text-align: center; font-size: 10pt; margin: 16px 0;">
-                        <tr style="background-color: #002060; color: white; font-weight: bold;">
-                            <td colspan="2" style="border: 0.5pt solid #99C3D3; padding: 8px; width: 150px;">Seguimiento a la Incorporación</td>
-                            ${sessionDates.map(d => `<td style="border: 0.5pt solid #99C3D3; padding: 6px; width: 55px;">${d}</td>`).join('')}
-                        </tr>
+            // 3. Tabla de Notas Resumida (Especial Día 8 o cuando se consulta cierre)
+            let gradesTableHtml = '';
+            if (dayNum === 8) {
+                const gradeRows = candidates.map(c => {
+                    const m = computeCandidateMetrics(c);
+                    const rkBg = m.ranking === 'TOP' ? '#23B9D7' : '#FFFF00';
+                    const rkCol = m.ranking === 'TOP' ? '#ffffff' : '#000000';
+                    return `
                         <tr>
-                            <td style="border: 0.5pt solid #99C3D3; font-weight: bold; padding: 4px;">A</td>
-                            <td style="border: 0.5pt solid #99C3D3; font-weight: bold; padding: 4px;">Asiste</td>
-                            ${rowA}
+                            <td style="padding:5px 8px;border:1px solid #CBD5E1;text-align:center;">${c.req || '532'}</td>
+                            <td style="padding:5px 8px;border:1px solid #CBD5E1;text-align:center;">${c.cedula}</td>
+                            <td style="padding:5px 8px;border:1px solid #CBD5E1;text-align:center;">${c.universidad}</td>
+                            <td style="padding:5px 8px;border:1px solid #CBD5E1;text-align:center;">${c.split}</td>
+                            <td style="padding:5px 8px;border:1px solid #CBD5E1;">${c.apellidos}</td>
+                            <td style="padding:5px 8px;border:1px solid #CBD5E1;">${c.nombres}</td>
+                            <td style="padding:5px 8px;border:1px solid #CBD5E1;text-align:center;font-weight:bold;">${formatCommaDecimal(m.c1)}</td>
+                            <td style="padding:5px 8px;border:1px solid #CBD5E1;text-align:center;font-weight:bold;">${formatCommaDecimal(m.c2)}</td>
+                            <td style="padding:5px 8px;border:1px solid #CBD5E1;text-align:center;font-weight:bold;">${formatCommaDecimal(m.c3)}</td>
+                            <td style="padding:5px 8px;border:1px solid #CBD5E1;text-align:center;font-weight:bold;">${formatCommaDecimal(m.pExtra)}</td>
+                            <td style="padding:5px 8px;border:1px solid #CBD5E1;text-align:center;font-weight:bold;background:#E0F2FE;">${formatCommaDecimal(m.total)}</td>
+                            <td style="padding:5px 8px;border:1px solid #CBD5E1;text-align:center;font-weight:bold;background:${rkBg};color:${rkCol};">${m.ranking}</td>
                         </tr>
-                        <tr>
-                            <td style="border: 0.5pt solid #99C3D3; font-weight: bold; padding: 4px;">F</td>
-                            <td style="border: 0.5pt solid #99C3D3; font-weight: bold; padding: 4px;">Falta</td>
-                            ${rowF}
-                        </tr>
-                        <tr>
-                            <td style="border: 0.5pt solid #99C3D3; font-weight: bold; padding: 4px;">R</td>
-                            <td style="border: 0.5pt solid #99C3D3; font-weight: bold; padding: 4px;">Retardo</td>
-                            ${rowR}
-                        </tr>
-                        <tr>
-                            <td colspan="2" style="background-color: #002060; color: white; font-weight: bold; padding: 6px;">Adherencia a Formación</td>
-                            ${rowAdh}
-                        </tr>
-                    </table>
+                    `;
+                }).join('');
 
-                    <!-- TABLA SÁBANA DETALLADA DE ASISTENCIA -->
-                    <table cellspacing="0" cellpadding="0" style="width: 100%; border-collapse: collapse; margin: 16px 0;">
-                        <tr style="background-color: #002060; color: white; font-weight: bold; text-align: center; font-size: 9.5pt;">
-                            <td style="border: 0.5pt solid #DDEBF7; padding: 5px;">Cédula</td>
-                            <td style="border: 0.5pt solid #DDEBF7; padding: 5px;">Universidad</td>
-                            <td style="border: 0.5pt solid #DDEBF7; padding: 5px;">Split</td>
-                            <td style="border: 0.5pt solid #DDEBF7; padding: 5px;">Apellidos</td>
-                            <td style="border: 0.5pt solid #DDEBF7; padding: 5px;">Nombres</td>
-                            <td style="border: 0.5pt solid #DDEBF7; padding: 5px;">Novedades</td>
-                            <td style="border: 0.5pt solid #DDEBF7; padding: 5px;">Supervisor</td>
-                            <td style="border: 0.5pt solid #DDEBF7; padding: 5px;">Asiste</td>
-                            <td style="border: 0.5pt solid #DDEBF7; padding: 5px;">Falta</td>
-                            <td style="border: 0.5pt solid #DDEBF7; padding: 5px;">Retardo</td>
-                            <td style="border: 0.5pt solid #DDEBF7; padding: 5px;">Estado</td>
-                            ${sabanaHeaders}
-                        </tr>
-                        ${sabanaRows}
-                    </table>
-
-                    ${planningTableHtml}
-
-                    <p style="margin-top: 20px;">Cordialmente,</p>
-                    <p style="color: #00294D;">
-                        <strong>ANGIE VANESSA CUELLAR G</strong><br>
-                        <em>Formadora</em><br>
-                        +57 3223371037<br>
-                        <a href="http://www.ilumno.com" style="color: #A61E65; font-weight: bold;">www.ilumno.com</a>
+                gradesTableHtml = `
+                    <p style="margin:18px 0 8px 0;font-family:Calibri,Arial,sans-serif;font-size:11pt;font-weight:bold;color:#002060;">
+                        Consolidado Oficial de Calificaciones y Ranking Final (Día 8/8):
                     </p>
+                    <table style="border-collapse:collapse;width:100%;font-family:Calibri,Arial,sans-serif;font-size:9.5pt;margin-bottom:16px;">
+                        <thead>
+                            <tr>
+                                <th style="background:#002060;color:#ffffff;padding:6px;border:1px solid #94A3B8;">No. Requerimiento</th>
+                                <th style="background:#002060;color:#ffffff;padding:6px;border:1px solid #94A3B8;">Cédula</th>
+                                <th style="background:#002060;color:#ffffff;padding:6px;border:1px solid #94A3B8;">Universidad</th>
+                                <th style="background:#002060;color:#ffffff;padding:6px;border:1px solid #94A3B8;">Split</th>
+                                <th style="background:#002060;color:#ffffff;padding:6px;border:1px solid #94A3B8;">Apellidos</th>
+                                <th style="background:#002060;color:#ffffff;padding:6px;border:1px solid #94A3B8;">Nombres</th>
+                                <th style="background:#002060;color:#ffffff;padding:6px;border:1px solid #94A3B8;">Promedio 1er Corte</th>
+                                <th style="background:#002060;color:#ffffff;padding:6px;border:1px solid #94A3B8;">Promedio 2do Corte</th>
+                                <th style="background:#002060;color:#ffffff;padding:6px;border:1px solid #94A3B8;">Promedio 3er corte</th>
+                                <th style="background:#002060;color:#ffffff;padding:6px;border:1px solid #94A3B8;">Puntos Extra</th>
+                                <th style="background:#23B9D7;color:#002060;padding:6px;border:1px solid #94A3B8;">Promedio Total</th>
+                                <th style="background:#85F1E1;color:#002060;padding:6px;border:1px solid #94A3B8;">Ranking</th>
+                            </tr>
+                        </thead>
+                        <tbody>${gradeRows}</tbody>
+                    </table>
+                `;
+            }
+
+            // 4. Bloque Visual de Planning (Opcional)
+            let planningHtml = '';
+            if (includePlanning) {
+                const planRows = planningModules.map((pm, idx) => {
+                    let stBg = '#F1F5F9';
+                    let stCol = '#475569';
+                    if (pm.status === 'Completado') { stBg = '#DCFCE7'; stCol = '#166534'; }
+                    else if (pm.status === 'En Curso') { stBg = '#FEF3C7'; stCol = '#92400E'; }
+                    return `
+                        <tr>
+                            <td style="padding:5px 8px;border:1px solid #CBD5E1;font-weight:bold;text-align:center;color:#002060;">Día ${pm.day} (${sessionDates[idx] || ''})</td>
+                            <td style="padding:5px 8px;border:1px solid #CBD5E1;font-weight:bold;color:#0089A8;">${pm.phase}</td>
+                            <td style="padding:5px 8px;border:1px solid #CBD5E1;">${pm.title}</td>
+                            <td style="padding:5px 8px;border:1px solid #CBD5E1;text-align:center;font-weight:bold;background:${stBg};color:${stCol};">${pm.status}</td>
+                        </tr>
+                    `;
+                }).join('');
+
+                planningHtml = `
+                    <p style="margin:16px 0 6px 0;font-family:Calibri,Arial,sans-serif;font-size:11pt;font-weight:bold;color:#002060;">
+                        Cronograma de Avance del Planning de Formación:
+                    </p>
+                    <table style="border-collapse:collapse;width:100%;font-family:Calibri,Arial,sans-serif;font-size:9.5pt;margin-bottom:14px;">
+                        <thead>
+                            <tr>
+                                <th style="background:#002060;color:#ffffff;padding:5px 8px;border:1px solid #94A3B8;">Sesión</th>
+                                <th style="background:#002060;color:#ffffff;padding:5px 8px;border:1px solid #94A3B8;">Fase del Modelo</th>
+                                <th style="background:#002060;color:#ffffff;padding:5px 8px;border:1px solid #94A3B8;">Módulos y Entregables</th>
+                                <th style="background:#002060;color:#ffffff;padding:5px 8px;border:1px solid #94A3B8;">Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>${planRows}</tbody>
+                    </table>
+                `;
+            }
+
+            canvas.innerHTML = `
+                <div id="outlook-copy-root" style="font-family:Calibri,Arial,sans-serif;font-size:11pt;color:#1E293B;line-height:1.45;">
+                    <p style="margin:0 0 10px 0;">Buen día equipo,</p>
+                    <p style="margin:0 0 14px 0;">
+                        Comparto el seguimiento de asistencia, adherencia y avance formativo correspondiente al <strong>Día ${dayNum}/8</strong> del grupo nuevo de <strong>${uni} - Rematrícula y Servicio</strong>:
+                    </p>
+
+                    <!-- Ficha Resumen Superior -->
+                    <table style="border-collapse:collapse;margin-bottom:16px;font-family:Calibri,Arial,sans-serif;font-size:10pt;">
+                        <tr>
+                            <td style="background:#002060;color:#ffffff;font-weight:bold;padding:4px 10px;border:1px solid #94A3B8;">Universidad</td>
+                            <td style="padding:4px 12px;border:1px solid #CBD5E1;font-weight:bold;">${uni}</td>
+                            <td style="background:#002060;color:#ffffff;font-weight:bold;padding:4px 10px;border:1px solid #94A3B8;">Fecha Inicio</td>
+                            <td style="padding:4px 12px;border:1px solid #CBD5E1;">${inicio}</td>
+                            <td style="background:#002060;color:#ffffff;font-weight:bold;padding:4px 10px;border:1px solid #94A3B8;">Fecha Fin</td>
+                            <td style="padding:4px 12px;border:1px solid #CBD5E1;">${fin}</td>
+                        </tr>
+                        <tr>
+                            <td style="background:#002060;color:#ffffff;font-weight:bold;padding:4px 10px;border:1px solid #94A3B8;">Formador(a)</td>
+                            <td style="padding:4px 12px;border:1px solid #CBD5E1;">${formador}</td>
+                            <td style="background:#002060;color:#ffffff;font-weight:bold;padding:4px 10px;border:1px solid #94A3B8;">Horario</td>
+                            <td colspan="3" style="padding:4px 12px;border:1px solid #CBD5E1;">${horario}</td>
+                        </tr>
+                    </table>
+
+                    <!-- Tabla 1: Incorporación -->
+                    <p style="margin:12px 0 6px 0;font-weight:bold;color:#002060;">1. Seguimiento a la Incorporación y Adherencia:</p>
+                    <table style="border-collapse:collapse;width:100%;font-family:Calibri,Arial,sans-serif;font-size:9.5pt;margin-bottom:16px;">
+                        <thead>
+                            <tr>
+                                <th style="background:#002060;color:#ffffff;padding:5px 8px;border:1px solid #94A3B8;text-align:left;">Indicador</th>
+                                ${incHeaders}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td style="padding:4px 8px;border:1px solid #CBD5E1;font-weight:bold;">Personal Requerido</td>${rowReq}</tr>
+                            <tr><td style="padding:4px 8px;border:1px solid #CBD5E1;font-weight:bold;">Citados a Formación</td>${rowCit}</tr>
+                            <tr><td style="padding:4px 8px;border:1px solid #CBD5E1;font-weight:bold;">En Formación (Asisten)</td>${rowAsi}</tr>
+                            <tr><td style="padding:4px 8px;border:1px solid #CBD5E1;font-weight:bold;">Bajas del Día</td>${rowBaj}</tr>
+                            <tr><td style="padding:4px 8px;border:1px solid #CBD5E1;font-weight:bold;background:#E0F2FE;">% Cumplimiento Incorporación</td>${rowPct}</tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Tabla 2: Sábana Detallada -->
+                    <p style="margin:12px 0 6px 0;font-weight:bold;color:#002060;">2. Sábana Detallada de Asistencia y Novedades:</p>
+                    <table style="border-collapse:collapse;width:100%;font-family:Calibri,Arial,sans-serif;font-size:9pt;margin-bottom:16px;">
+                        <thead>
+                            <tr>
+                                <th style="background:#002060;color:#ffffff;padding:5px;border:1px solid #94A3B8;">Cédula</th>
+                                <th style="background:#002060;color:#ffffff;padding:5px;border:1px solid #94A3B8;">Universidad</th>
+                                <th style="background:#002060;color:#ffffff;padding:5px;border:1px solid #94A3B8;">Split</th>
+                                <th style="background:#002060;color:#ffffff;padding:5px;border:1px solid #94A3B8;">Apellidos</th>
+                                <th style="background:#002060;color:#ffffff;padding:5px;border:1px solid #94A3B8;">Nombres</th>
+                                <th style="background:#002060;color:#ffffff;padding:5px;border:1px solid #94A3B8;">Novedades</th>
+                                <th style="background:#002060;color:#ffffff;padding:5px;border:1px solid #94A3B8;">Supervisor</th>
+                                <th style="background:#002060;color:#ffffff;padding:5px;border:1px solid #94A3B8;">Asiste</th>
+                                <th style="background:#002060;color:#ffffff;padding:5px;border:1px solid #94A3B8;">Falta</th>
+                                <th style="background:#002060;color:#ffffff;padding:5px;border:1px solid #94A3B8;">Retardo</th>
+                                <th style="background:#002060;color:#ffffff;padding:5px;border:1px solid #94A3B8;">Estado</th>
+                                <th style="background:#23B9D7;color:#ffffff;padding:5px;border:1px solid #94A3B8;">1</th>
+                                <th style="background:#23B9D7;color:#ffffff;padding:5px;border:1px solid #94A3B8;">2</th>
+                                <th style="background:#23B9D7;color:#ffffff;padding:5px;border:1px solid #94A3B8;">3</th>
+                                <th style="background:#23B9D7;color:#ffffff;padding:5px;border:1px solid #94A3B8;">4</th>
+                                <th style="background:#23B9D7;color:#ffffff;padding:5px;border:1px solid #94A3B8;">5</th>
+                                <th style="background:#23B9D7;color:#ffffff;padding:5px;border:1px solid #94A3B8;">6</th>
+                                <th style="background:#23B9D7;color:#ffffff;padding:5px;border:1px solid #94A3B8;">7</th>
+                                <th style="background:#23B9D7;color:#ffffff;padding:5px;border:1px solid #94A3B8;">8</th>
+                            </tr>
+                        </thead>
+                        <tbody>${sabanaRows}</tbody>
+                    </table>
+
+                    ${gradesTableHtml}
+
+                    <!-- Temario Desarrollado -->
+                    <p style="margin:14px 0 4px 0;font-weight:bold;color:#002060;">
+                        Temas desarrollados en la sesión (${dateHeading}):
+                    </p>
+                    ${buildSyllabusHtmlBullets(syllabusText)}
+
+                    ${planningHtml}
+
+                    <p style="margin:16px 0 0 0;">Quedo atenta a cualquier inquietud.<br>Cordialmente,<br><strong>${formador}</strong><br>Formación y Calidad Ilumno</p>
                 </div>
             `;
         }
 
-        function copyOutlookRichEmail() {
-            const canvas = document.getElementById('outlook-email-canvas');
-            const range = document.createRange();
-            range.selectNode(canvas);
-            window.getSelection().removeAllRanges();
-            window.getSelection().addRange(range);
-            document.execCommand('copy');
-            window.getSelection().removeAllRanges();
-            showToast('¡Correo copiado con tablas y colores! Pégalo en Outlook con Ctrl + V.', 'success');
+        async function copyOutlookRichEmail() {
+            const root = document.getElementById('outlook-copy-root');
+            if (!root) return;
+
+            try {
+                const htmlBlob = new Blob([root.outerHTML], { type: 'text/html' });
+                const textBlob = new Blob([root.innerText], { type: 'text/plain' });
+                await navigator.clipboard.write([
+                    new ClipboardItem({
+                        'text/html': htmlBlob,
+                        'text/plain': textBlob
+                    })
+                ]);
+                showToast('Correo copiado con tablas y formato Outlook (Pégalo con Ctrl+V)', 'emerald');
+            } catch (err) {
+                const range = document.createRange();
+                range.selectNodeContents(root);
+                const sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
+                document.execCommand('copy');
+                sel.removeAllRanges();
+                showToast('Correo copiado al portapapeles (Ctrl+V en Outlook)', 'emerald');
+            }
         }
 
         function launchOutlookWindow() {
-            const day = document.getElementById('mail-day-select').value;
-            const to = document.getElementById('mail-recipients').value;
-            const isClosing = (day === '8');
-            const subject = encodeURIComponent(`${isClosing ? 'CONTRATACIÓN ' : ''}Asistencia y deserción grupo nuevo Febrero Poli Rematricula y Servicio día ${day}/8`);
-            const cc = encodeURIComponent('formacionilumno@ilumno.com');
-            window.location.href = `mailto:${to}?cc=${cc}&subject=${subject}`;
+            const recipients = document.getElementById('mail-recipients').value
+                .split(/[;,]+/)
+                .map(s => s.trim())
+                .filter(Boolean)
+                .join(';');
+            const subjectLine = document.getElementById('preview-subject-line').textContent.replace(/^Asunto:\s*/i, '');
+            const mailtoUrl = `mailto:${encodeURIComponent(recipients)}?subject=${encodeURIComponent(subjectLine)}`;
+            window.location.href = mailtoUrl;
         }
 
-        // CAMBIO DE PESTAÑAS
-        function switchTab(tabId) {
-            ['asistencia', 'notas', 'planning', 'lms', 'correo'].forEach(t => {
-                document.getElementById(`pane-${t}`).classList.add('hidden');
-                const btn = document.getElementById(`tab-btn-${t}`);
-                if (btn) btn.className = 'px-3.5 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition flex items-center gap-2';
-            });
-            document.getElementById(`pane-${tabId}`).classList.remove('hidden');
-            const activeBtn = document.getElementById(`tab-btn-${tabId}`);
-            if (activeBtn) activeBtn.className = 'px-3.5 py-2 rounded-xl text-xs font-black bg-[#00264D] text-white transition flex items-center gap-2 shadow-xs';
-
-            if (tabId === 'correo') renderMailPreview();
+        // ==========================================================
+        // MODALES: AGREGAR ASPIRANTE, PEGAR EXCEL Y NOTAS ESSENCE
+        // ==========================================================
+        function openAddCandidateModal() {
+            document.getElementById('modal-candidate').classList.remove('hidden');
         }
 
-        // MODAL DE NUEVO ASPIRANTE
-        function openAddCandidateModal() { document.getElementById('modal-candidate').classList.remove('hidden'); }
-        function closeAddCandidateModal() { document.getElementById('modal-candidate').classList.add('hidden'); }
+        function closeAddCandidateModal() {
+            document.getElementById('modal-candidate').classList.add('hidden');
+        }
 
         function saveNewCandidate(e) {
             e.preventDefault();
-            candidates.push({
-                req: document.getElementById('cand-req').value.trim(),
+            const newCand = {
+                id: 'c' + Date.now(),
+                req: document.getElementById('cand-req').value.trim() || '532',
                 cedula: document.getElementById('cand-cedula').value.trim(),
                 apellidos: document.getElementById('cand-apellidos').value.trim(),
                 nombres: document.getElementById('cand-nombres').value.trim(),
-                university: document.getElementById('cand-uni').value.trim(),
-                split: document.getElementById('cand-split').value.trim(),
-                supervisor: document.getElementById('cand-sup').value.trim(),
-                novedad: '',
-                corte1: 100, corte2: 100, corte3: 90, extra: 100,
-                days: { 1: 'A', 2: 'A', 3: 'A', 4: 'A', 5: 'A', 6: 'A', 7: 'A', 8: 'A' }
-            });
-            persistData();
+                universidad: document.getElementById('cand-uni').value.trim() || 'Politécnico Grancolombiano',
+                split: document.getElementById('cand-split').value.trim() || 'Rematricula y Servicio',
+                supervisor: document.getElementById('cand-sup').value.trim() || 'Lizeth Calderon',
+                novedades: 'Continúa en formación sin novedad',
+                days: ['A', '', '', '', '', '', '', ''],
+                evalIlumno: 0,
+                evalComercial: 0,
+                evalAplicativos: 0,
+                habAutogestion: 0,
+                evalFinal: 0,
+                roleplayFinal: 0,
+                puntualidad: 100,
+                asistenciaNota: 100,
+                participacion: 100,
+                lmsProgress: 0,
+                studentNotes: '',
+                trainerFeedback: ''
+            };
+
+            candidates.push(newCand);
+            persistState();
+            renderAllTables();
             closeAddCandidateModal();
-            renderAll();
-            showToast('Aspirante agregado a la cohorte', 'success');
+            showToast('Aspirante agregado correctamente', 'emerald');
         }
 
-        function deleteCandidate(idx) {
-            if (confirm('¿Eliminar este aspirante de la tabla?')) {
-                candidates.splice(idx, 1);
-                persistData();
-                renderAll();
-            }
+        function openBulkPasteModal() {
+            document.getElementById('modal-bulk-excel').classList.remove('hidden');
         }
 
-        function showToast(msg, type = 'success') {
-            const container = document.getElementById('toast-container');
-            const el = document.createElement('div');
-            el.className = `${type === 'success' ? 'bg-emerald-600' : 'bg-[#00264D]'} text-white text-xs font-bold px-4 py-3 rounded-2xl shadow-xl flex items-center gap-2`;
-            el.innerHTML = `<i class="fas fa-check-circle"></i> <span>${msg}</span>`;
-            container.appendChild(el);
-            setTimeout(() => el.remove(), 3500);
-        }
-    </script>
+        function processBulkExcelPaste() {
+            const raw = document.getElementById('bulk-excel-textarea').value.trim();
+            if (!raw) return;
 
-    <!-- ================================================================= -->
-    <!-- INTEGRACIÓN FIREBASE EN TIEMPO REAL (`poli-evaluaciones-360`)     -->
-    <!-- ================================================================= -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, collection, doc, addDoc, updateDoc, getDocs, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+            const rows = raw.split(/\r?\n/).map(r => r.trim()).filter(Boolean);
+            let count = 0;
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDTfwHBqGnB9axzTj4XzdVkcq6BcY_ZjqM",
-            authDomain: "poli-evaluaciones-360.firebaseapp.com",
-            projectId: "poli-evaluaciones-360",
-            storageBucket: "poli-evaluaciones-360.firebasestorage.app",
-            messagingSenderId: "12426009380",
-            appId: "1:12426009380:web:da9738f10949e7f585f1b1"
-        };
-
-        let db;
-        try {
-            const app = initializeApp(firebaseConfig);
-            const auth = getAuth(app);
-            db = getFirestore(app);
-            signInAnonymously(auth).catch(() => {});
-        } catch (err) { console.error(err); }
-
-        // 1. Traer calificaciones presentadas en Evaluaciones 360 (Fase 2 -> 2do Corte, Fase 3 -> 3er Corte)
-        window.pullGradesFromFirebase = async function() {
-            if (!db) return;
-            try {
-                const snap = await getDocs(collection(db, 'evaluaciones_poli'));
-                let updated = 0;
-                snap.forEach(d => {
-                    const data = d.data();
-                    const match = candidates.find(c => String(c.cedula).trim() === String(data.cedula).trim());
-                    if (match) {
-                        if (data.phase && data.phase.includes('Fase 2')) {
-                            match.corte2 = parseFloat(data.percentage.toFixed(2));
-                            updated++;
-                        } else if (data.phase && data.phase.includes('Fase 3')) {
-                            match.corte3 = parseFloat(data.percentage.toFixed(2));
-                            updated++;
-                        }
+            rows.forEach(line => {
+                const cols = line.split('\t').map(c => c.trim());
+                if (cols.length >= 3) {
+                    let req = '532', cedula = '', uni = 'Politécnico Grancolombiano', split = 'Rematricula y Servicio', apellidos = '', nombres = '', sup = 'Lizeth Calderon';
+                    if (cols.length >= 6) {
+                        [req, cedula, uni, split, apellidos, nombres] = cols;
+                        if (cols[6]) sup = cols[6];
+                    } else {
+                        [cedula, apellidos, nombres] = cols;
                     }
-                });
-                persistData();
-                renderAll();
-                showToast(`Sincronizadas ${updated} calificaciones desde Evaluaciones 360`, 'success');
-            } catch (e) {
-                showToast('Modo local activo: verifica reglas de lectura en Firestore', 'info');
-            }
-        };
-
-        if (db) {
-            // 2. Escuchar Avance y Apuntes de cada Experto
-            onSnapshot(collection(db, 'expertos_progreso'), (snap) => {
-                const listEl = document.getElementById('lms-experts-list');
-                if (snap.empty) {
-                    listEl.innerHTML = `<div class="p-6 text-center text-slate-400 text-xs bg-slate-50 rounded-2xl">Cuando los expertos ingresen al index.html con su cédula, verás aquí su barra de progreso y los apuntes de su cuaderno.</div>`;
-                    return;
+                    if (cedula && !/c[ée]dula/i.test(cedula)) {
+                        candidates.push({
+                            id: 'c' + Date.now() + Math.random().toString(36).slice(2, 6),
+                            req,
+                            cedula,
+                            universidad: uni,
+                            split,
+                            apellidos,
+                            nombres,
+                            supervisor: sup,
+                            novedades: 'Continúa en formación sin novedad',
+                            days: ['A', '', '', '', '', '', '', ''],
+                            evalIlumno: 0,
+                            evalComercial: 0,
+                            evalAplicativos: 0,
+                            habAutogestion: 0,
+                            evalFinal: 0,
+                            roleplayFinal: 0,
+                            puntualidad: 100,
+                            asistenciaNota: 100,
+                            participacion: 100,
+                            lmsProgress: 0,
+                            studentNotes: '',
+                            trainerFeedback: ''
+                        });
+                        count++;
+                    }
                 }
-                listEl.innerHTML = snap.docs.map(d => {
-                    const ex = d.data();
-                    const notes = Object.entries(ex.lessonNotes || {}).filter(([_, v]) => v && v.trim() !== '');
-                    return `
-                        <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50/70 space-y-2.5">
-                            <div class="flex justify-between items-center">
-                                <div>
-                                    <h4 class="text-xs font-black text-ilumnoDark">${ex.name || 'Experto'}</h4>
-                                    <span class="text-[10px] text-slate-500 font-mono">C.C. ${ex.cedula} • ${ex.split || ''}</span>
-                                </div>
-                                <span class="px-2.5 py-0.5 rounded-full bg-ilumnoTeal text-white font-black text-[11px]">${ex.progressPercentage || 0}%</span>
-                            </div>
-                            <div class="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
-                                <div class="bg-ilumnoTeal h-full rounded-full" style="width: ${ex.progressPercentage || 0}%"></div>
-                            </div>
-                            ${notes.length > 0 ? `
-                                <div class="pt-1 space-y-1">
-                                    <span class="text-[10px] font-black text-slate-400 uppercase block">Cuaderno de Apuntes (${notes.length}):</span>
-                                    ${notes.map(([lId, txt]) => `
-                                        <div class="p-2 bg-white rounded-lg border border-slate-200 text-[11px]">
-                                            <strong class="text-ilumnoTeal">Lección ${lId}:</strong> ${txt}
-                                        </div>
-                                    `).join('')}
-                                </div>
-                            ` : `<p class="text-[10px] text-slate-400 italic">Sin apuntes guardados.</p>`}
-                        </div>
-                    `;
-                }).join('');
             });
 
-            // 3. Escuchar y Responder Preguntas del Curso
-            onSnapshot(collection(db, 'preguntas_expertos'), (snap) => {
-                const qListEl = document.getElementById('lms-questions-list');
-                const items = snap.docs.map(d => ({ docId: d.id, ...d.data() }));
-                items.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
-
-                const pendingCount = items.filter(q => !q.answered).length;
-                document.getElementById('badge-pending-questions').textContent = pendingCount;
-
-                if (items.length === 0) {
-                    qListEl.innerHTML = `<div class="p-6 text-center text-slate-400 text-xs bg-slate-50 rounded-2xl">No hay preguntas pendientes en este momento.</div>`;
-                    return;
-                }
-
-                qListEl.innerHTML = items.map(q => `
-                    <div class="p-4 rounded-2xl border ${q.answered ? 'border-slate-200 bg-white' : 'border-amber-300 bg-amber-50/30'} space-y-2">
-                        <div class="flex justify-between items-center text-[11px]">
-                            <strong class="text-ilumnoDark">${q.studentName || 'Experto'} <span class="text-slate-400 font-mono">(${q.lessonId || 'General'})</span></strong>
-                            <span class="text-slate-400">${q.date || ''}</span>
-                        </div>
-                        <p class="text-xs text-slate-700 bg-slate-50 p-2.5 rounded-xl border border-slate-200">${q.text}</p>
-                        ${q.answered ? `
-                            <div class="p-2.5 bg-cyan-50/70 border border-cyan-200 rounded-xl text-xs">
-                                <strong class="text-ilumnoTeal text-[10px] uppercase block">Tu respuesta:</strong>
-                                <p class="text-slate-700">${q.reply}</p>
-                            </div>
-                        ` : `
-                            <div class="flex gap-2 pt-1">
-                                <input id="reply-box-${q.docId}" type="text" placeholder="Escribe la respuesta oficial..." class="flex-1 px-3 py-2 text-xs rounded-xl border border-slate-300 outline-none focus:border-ilumnoTeal">
-                                <button onclick="submitTrainerReply('${q.docId}')" class="px-3.5 py-2 bg-ilumnoTeal hover:bg-[#0089A8] text-white font-bold text-xs rounded-xl transition">Responder</button>
-                            </div>
-                        `}
-                    </div>
-                `).join('');
-            });
+            document.getElementById('bulk-excel-textarea').value = '';
+            document.getElementById('modal-bulk-excel').classList.add('hidden');
+            persistState();
+            renderAllTables();
+            showToast(`${count} aspirantes importados desde Excel`, 'emerald');
         }
 
-        window.submitTrainerReply = async function(docId) {
-            const inp = document.getElementById(`reply-box-${docId}`);
-            const text = inp.value.trim();
-            if (!text || !db) return;
-            await updateDoc(doc(db, 'preguntas_expertos', docId), {
-                answered: true,
-                reply: text
-            });
-            showToast('Respuesta enviada al estudiante', 'success');
-        };
+        function openEssenceImportModal() {
+            document.getElementById('modal-essence-import').classList.remove('hidden');
+        }
 
-        window.addSimulatedStudentQuestion = async function() {
-            if (!db) return;
-            await addDoc(collection(db, 'preguntas_expertos'), {
-                text: '¿Con qué porcentaje de avance curricular puede un estudiante preinscribir Saber Pro en Smart Campus?',
-                date: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                lessonId: '2.9',
-                studentName: 'Diris Gisella Cortes',
-                studentCedula: '1030664570',
-                answered: false,
-                reply: '',
-                timestamp: new Date().toISOString()
-            });
-        };
-    </script>
-    <!-- MODAL: PEGAR DESDE EXCEL (FORMULARIO INICIAL DÍA 1) -->
-<div id="modal-bulk-excel" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 space-y-4">
-        <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-            <div>
-                <h3 class="font-black text-base text-ilumnoDark">Importar Aspirantes desde Excel</h3>
-                <p class="text-[11px] text-slate-500">Copia las filas de tu Excel y pégalas aquí (separadas por tabulación)</p>
-            </div>
-            <button onclick="document.getElementById('modal-bulk-excel').classList.add('hidden')" class="text-slate-400 hover:text-slate-600"><i class="fas fa-times"></i></button>
-        </div>
+        function processEssenceGradesPaste() {
+            const raw = document.getElementById('essence-paste-area').value.trim();
+            if (!raw) return;
 
-        <div class="bg-blue-50 p-3 rounded-xl border border-blue-100 text-[11px] text-ilumnoDark">
-            <strong>Orden de columnas aceptado:</strong><br>
-            <code>Req | Cédula | Universidad | Split | Apellidos | Nombres | Supervisor</code><br>
-            <span class="text-slate-500">(O también: <code>Cédula | Apellidos | Nombres</code> y el sistema autocompleta Poli y Rematrícula).</span>
-        </div>
+            const lines = raw.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+            let updated = 0;
 
-        <textarea id="bulk-excel-textarea" rows="6" placeholder="Pega aquí las celdas copiadas de Excel (Ctrl + V)..." class="w-full p-3 rounded-xl border border-slate-300 text-xs font-mono outline-none focus:border-ilumnoTeal"></textarea>
-
-        <div class="flex justify-end gap-2">
-            <button type="button" onclick="document.getElementById('modal-bulk-excel').classList.add('hidden')" class="px-4 py-2.5 bg-slate-100 rounded-xl text-xs font-bold">Cancelar</button>
-            <button type="button" onclick="processBulkExcelPaste()" class="px-5 py-2.5 bg-ilumnoDark text-white rounded-xl text-xs font-black">Importar Filas</button>
-        </div>
-    </div>
-</div>
-
-<script>
-    function openBulkPasteModal() {
-        document.getElementById('bulk-excel-textarea').value = '';
-        document.getElementById('modal-bulk-excel').classList.remove('hidden');
-    }
-
-    function processBulkExcelPaste() {
-        const raw = document.getElementById('bulk-excel-textarea').value.trim();
-        if (!raw) return;
-
-        const lines = raw.split('\n');
-        let added = 0;
-
-        lines.forEach(line => {
-            const cols = line.split('\t').map(c => c.trim());
-            if (cols.length >= 3) {
-                let req = '532', cedula = '', uni = 'Politécnico Grancolombiano', split = 'Rematricula y Servicio', apellidos = '', nombres = '', sup = 'Lizeth Calderon';
-
-                if (cols.length >= 6) {
-                    [req, cedula, uni, split, apellidos, nombres, sup] = cols;
-                } else {
-                    [cedula, apellidos, nombres] = cols;
+            lines.forEach(line => {
+                const parts = line.split(/[\t,;]+/).map(p => p.trim());
+                if (parts.length >= 2) {
+                    const cc = parts[0].replace(/\D/g, '');
+                    const grade = parseFloat(parts[1].replace(',', '.'));
+                    const match = candidates.find(c => c.cedula.replace(/\D/g, '') === cc);
+                    if (match && !isNaN(grade)) {
+                        match.evalIlumno = Math.min(100, Math.max(0, grade));
+                        updated++;
+                    }
                 }
+            });
 
-                if (cedula) {
-                    candidates.push({
-                        req: req || '532',
-                        cedula: cedula,
-                        university: uni || 'Politécnico Grancolombiano',
-                        split: split || 'Rematricula y Servicio',
-                        apellidos: apellidos || '',
-                        nombres: nombres || '',
-                        novedad: '',
-                        supervisor: sup || 'Lizeth Calderon',
-                        corte1: 100, corte2: 100, corte3: 90, extra: 100,
-                        days: { 1: 'A', 2: 'A', 3: 'A', 4: 'A', 5: 'A', 6: 'A', 7: 'A', 8: 'A' }
-                    });
-                    added++;
-                }
+            document.getElementById('essence-paste-area').value = '';
+            document.getElementById('modal-essence-import').classList.add('hidden');
+            persistState();
+            renderAllTables();
+            showToast(`${updated} calificaciones ESSENCE actualizadas en el 1er Corte`, 'emerald');
+        }
+
+        async function fetchEssenceFromCsvUrl() {
+            const url = document.getElementById('essence-csv-url').value.trim();
+            if (!url) {
+                showToast('Pega primero el enlace CSV público', 'rose');
+                return;
             }
-        });
+            try {
+                const res = await fetch(url);
+                const text = await res.text();
+                document.getElementById('essence-paste-area').value = text;
+                processEssenceGradesPaste();
+            } catch (err) {
+                showToast('No se pudo leer el CSV remoto. Revisa que esté publicado en la web.', 'rose');
+            }
+        }
 
-        persistData();
-        renderAll();
-        document.getElementById('modal-bulk-excel').classList.add('hidden');
-        showToast(`¡Se importaron ${added} aspirantes desde Excel!`, 'success');
-    }
-</script>
+        function pullGradesFromFirebase() {
+            // Lee calificaciones guardadas desde index.html (localStorage o Firebase sincronizado)
+            persistState();
+            renderAllTables();
+            showToast('Calificaciones y avances sincronizados con el Campus de Expertos', 'emerald');
+        }
+
+        // ==========================================================
+        // UTILIDAD DE NOTIFICACIONES TOAST
+        // ==========================================================
+        function showToast(msg, color = 'emerald') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const bg = color === 'rose' ? 'bg-rose-600' : 'bg-[#00264D]';
+            const toast = document.createElement('div');
+            toast.className = `${bg} text-white px-4 py-3 rounded-2xl shadow-xl text-xs font-bold flex items-center gap-2 fade-in`;
+            toast.innerHTML = `<i class="fas fa-check-circle text-ilumnoYellow"></i> <span>${msg}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3500);
+        }
+
+        function renderAllTables() {
+            renderIncorporacionTable();
+            renderSabanaAsistencia();
+            renderNotasMatrix();
+            renderPlanningGrid();
+            renderLmsPanel();
+            renderMailPreview();
+        }
+
+        // ==========================================================
+        // INICIALIZACIÓN AL CARGAR LA CONSOLA
+        // ==========================================================
+        window.addEventListener('DOMContentLoaded', () => {
+            if (sessionStorage.getItem('ILUMNO_TRAINER_AUTH') === '1') {
+                document.getElementById('trainer-login-overlay').classList.add('hidden');
+            }
+            loadLocalState();
+            loadDaySyllabus(document.getElementById('mail-day-select').value || '1');
+            renderAllTables();
+        });
+    </script>
 </body>
 </html>
