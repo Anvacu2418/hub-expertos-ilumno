@@ -4,996 +4,246 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Simulador de Llamadas - Nivel 1: Venta Consultiva | Politécnico Grancolombiano</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            poli: {
-              blue: '#10385b',
-              sky: '#44aed8',
-              lime: '#a3cb36',
-              yellow: '#fbb017',
-              berry: '#d8066b',
-              dark: '#0a233a'
-            }
-          },
-          fontFamily: {
-            sans: ['Inter', 'sans-serif']
-          }
-        }
-      }
-    }
-  </script>
-
   <style>
+    :root {
+      --poli-blue: #10385b;
+      --poli-sky: #44aed8;
+      --poli-lime: #a3cb36;
+      --poli-yellow: #fbb017;
+      --poli-berry: #d8066b;
+      --poli-dark: #0a233a;
+      --slate-50: #f8fafc;
+      --slate-100: #f1f5f9;
+      --slate-200: #e2e8f0;
+      --slate-300: #cbd5e1;
+      --slate-400: #94a3b8;
+      --slate-500: #64748b;
+      --slate-600: #475569;
+      --slate-700: #334155;
+      --slate-800: #1e293b;
+      --slate-900: #0f172a;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--slate-100);
+      color: var(--slate-800);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Utilidades de Layout & Componentes */
     .glass-card {
-      background: rgba(255, 255, 255, 0.88);
+      background: rgba(255, 255, 255, 0.92);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.5);
-    }
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 6px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: #f1f5f9;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
-      border-radius: 4px;
-    }
-    .pulse-mic {
-      animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
-    }
-    @keyframes pulse-ring {
-      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(216, 6, 107, 0.7); }
-      70% { transform: scale(1.05); box-shadow: 0 0 0 14px rgba(216, 6, 107, 0); }
-      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(216, 6, 107, 0); }
-    }
-  </style>
-</head>
-<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col font-sans">
-
-  <!-- TOP HEADER INSTITUCIONAL -->
-  <header class="bg-poli-blue text-white shadow-lg sticky top-0 z-50 border-b-4 border-poli-sky">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-      <div class="flex items-center space-x-3">
-        <a href="../index.html" class="flex items-center space-x-2 text-slate-200 hover:text-white transition group" title="Regresar al Entorno">
-          <i class="fa-solid fa-arrow-left text-sm group-hover:-translate-x-1 transition-transform"></i>
-          <span class="text-xs font-semibold uppercase tracking-wider hidden sm:inline">Entorno General</span>
-        </a>
-        <span class="text-slate-500">|</span>
-        <div class="flex items-center space-x-2">
-          <div class="w-8 h-8 rounded-lg bg-poli-sky/20 flex items-center justify-center text-poli-sky border border-poli-sky/40 font-bold">
-            <i class="fa-solid fa-headset text-sm"></i>
-          </div>
-          <div>
-            <h1 class="text-sm font-bold tracking-tight text-white flex items-center gap-2">
-              SIMULADOR DE ATENCIÓN REAL <span class="bg-poli-berry text-[10px] uppercase font-extrabold px-2 py-0.5 rounded-full text-white">Nivel 1</span>
-            </h1>
-            <p class="text-[11px] text-slate-300">Venta Consultiva • Modelo LEAR • Playbook de Cierres</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- MÉTRICAS DE AUDITORÍA EN TIEMPO REAL -->
-      <div class="flex items-center space-x-6">
-        <div class="flex items-center space-x-2 bg-poli-dark/60 px-3 py-1.5 rounded-xl border border-white/10">
-          <div class="text-right">
-            <span class="text-[10px] text-slate-400 uppercase font-semibold block leading-none">Índice IKQ Actual</span>
-            <span id="header-ikq" class="text-base font-extrabold text-poli-lime">100 / 100</span>
-          </div>
-          <div class="w-2.5 h-2.5 rounded-full bg-poli-lime animate-pulse" id="ikq-indicator"></div>
-        </div>
-        <div class="hidden md:flex items-center space-x-2 text-xs text-slate-300">
-          <i class="fa-regular fa-clock text-poli-yellow"></i>
-          <span id="call-timer" class="font-mono font-bold text-white">00:00</span>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <!-- CONTENIDO PRINCIPAL: GRID LAYOUT -->
-  <main class="max-w-7xl w-full mx-auto p-4 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-5">
-
-    <!-- PANEL IZQUIERDO: SELECTOR DE CASOS & FICHA DEL ESTUDIANTE (4 COLS) -->
-    <aside class="lg:col-span-4 flex flex-col space-y-4">
-      
-      <!-- SELECTOR DE CASOS -->
-      <div class="glass-card rounded-2xl p-4 shadow-sm border border-slate-200">
-        <label class="text-xs font-bold text-poli-blue uppercase tracking-wide flex items-center justify-between mb-2">
-          <span>Selecciona el Escenario</span>
-          <span class="text-[10px] bg-slate-200 text-slate-600 px-2 py-0.5 rounded-md font-medium">5 Llamadas</span>
-        </label>
-        <select id="case-selector" class="w-full text-xs font-semibold bg-white border border-slate-300 rounded-xl px-3 py-2.5 text-slate-700 focus:outline-none focus:ring-2 focus:ring-poli-sky transition">
-          <option value="0">Caso 1: Furioso por Falla en Plataforma y Cobro Extraordinario</option>
-          <option value="1">Caso 2: Agotada y sin recursos - Retiro ("No tengo tiempo ni plata")</option>
-          <option value="2">Caso 3: Pide Descuento por Presupuesto o Aplaza</option>
-          <option value="3">Caso 4: Reintegro con temor de pérdida de materias</option>
-          <option value="4">Caso 5: Solo pide Orden de Pago (Oportunidad Oculta)</option>
-        </select>
-      </div>
-
-      <!-- FICHA CONTEXTUAL DEL ESTUDIANTE -->
-      <div class="glass-card rounded-2xl p-4 shadow-sm border border-slate-200 flex-1 flex flex-col justify-between">
-        <div>
-          <div class="flex items-center justify-between border-b border-slate-200 pb-3 mb-3">
-            <div class="flex items-center space-x-3">
-              <div id="student-avatar" class="w-11 h-11 rounded-full bg-poli-blue text-white flex items-center justify-center font-bold text-base shadow-md">
-                JB
-              </div>
-              <div>
-                <h2 id="student-name" class="text-sm font-bold text-slate-900 leading-tight">Julián Bermúdez</h2>
-                <p id="student-program" class="text-[11px] text-slate-500 font-medium">Ingeniería de Software • 6.° Semestre</p>
-              </div>
-            </div>
-            <span id="student-tag" class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-red-100 text-red-700 uppercase tracking-wide">
-              Furioso
-            </span>
-          </div>
-
-          <div class="space-y-2.5 text-xs">
-            <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
-              <span class="text-[10px] text-slate-400 uppercase font-bold block mb-0.5">Motivo Real de la Llamada</span>
-              <p id="student-reason" class="text-slate-700 font-medium leading-relaxed"></p>
-            </div>
-            <div class="bg-blue-50/60 p-2.5 rounded-xl border border-blue-100">
-              <span class="text-[10px] text-poli-blue uppercase font-bold block mb-0.5">Objetivo Pedagógico / Calidad</span>
-              <p id="case-objective" class="text-slate-700 font-medium leading-relaxed"></p>
-            </div>
-          </div>
-        </div>
-
-        <!-- REGLAS DE ORO DEL EVALUADOR -->
-        <div class="mt-4 pt-3 border-t border-slate-200">
-          <div class="flex items-center justify-between text-[11px] text-slate-500 mb-2">
-            <span class="font-semibold text-slate-700"><i class="fa-solid fa-scale-balanced mr-1 text-poli-sky"></i> Criterios Matriz 2.1</span>
-            <span class="text-poli-berry font-bold">Meta: ≥ 90 pts</span>
-          </div>
-          <div class="grid grid-cols-2 gap-1.5 text-[10px]">
-            <div class="bg-white p-1.5 rounded-lg border border-slate-200 text-slate-600">
-              <span class="font-bold text-poli-blue block">LEAR (Escucha)</span> 12 pts (6 Empatía / 6 Fluidez)
-            </div>
-            <div class="bg-white p-1.5 rounded-lg border border-slate-200 text-slate-600">
-              <span class="font-bold text-poli-blue block">Indagación</span> 11 pts (Alto Impacto)
-            </div>
-            <div class="bg-white p-1.5 rounded-lg border border-slate-200 text-slate-600">
-              <span class="font-bold text-poli-blue block">Objeciones</span> 11 pts (Alto Impacto)
-            </div>
-            <div class="bg-white p-1.5 rounded-lg border border-slate-200 text-slate-600">
-              <span class="font-bold text-poli-blue block">Cierre Playbook</span> 11 pts (Alto Impacto)
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </aside>
-
-    <!-- PANEL CENTRAL / DERECHO: CONSOLA DE LLAMADA INTERACTIVA (8 COLS) -->
-    <section class="lg:col-span-8 flex flex-col space-y-4">
-      
-      <div class="glass-card rounded-2xl p-4 shadow-sm border border-slate-200 flex-1 flex flex-col min-h-[460px] max-h-[540px]">
-        
-        <!-- ESTADO DE LA LLAMADA -->
-        <div class="flex items-center justify-between pb-3 border-b border-slate-200">
-          <div class="flex items-center space-x-2">
-            <span class="w-3 h-3 rounded-full bg-emerald-500 animate-ping"></span>
-            <span class="text-xs font-bold text-slate-700 tracking-wide uppercase">Llamada en Curso</span>
-          </div>
-          <div class="flex items-center space-x-2">
-            <button id="btn-toggle-voice" class="text-xs px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition flex items-center gap-1 font-medium" title="Activar/Desactivar Voz del Estudiante">
-              <i class="fa-solid fa-volume-high text-poli-sky" id="voice-icon"></i>
-              <span id="voice-label" class="text-[11px]">Audio Activado</span>
-            </button>
-            <button id="btn-restart" class="text-xs px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-red-50 text-slate-600 hover:text-red-600 transition flex items-center gap-1 font-medium" title="Reiniciar Escenario">
-              <i class="fa-solid fa-rotate-right text-[10px]"></i>
-              <span class="text-[11px]">Reiniciar</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- HISTORIAL DE CONVERSACIÓN -->
-        <div id="dialog-container" class="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-4 text-xs mt-2"></div>
-
-        <!-- INDICADOR DE ESCUCHA -->
-        <div id="typing-indicator" class="hidden py-1 px-3 text-[11px] text-slate-400 italic flex items-center gap-2">
-          <span class="flex space-x-1">
-            <span class="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce"></span>
-            <span class="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></span>
-            <span class="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style="animation-delay: 0.4s"></span>
-          </span>
-          <span id="typing-text">El estudiante está respondiendo...</span>
-        </div>
-
-        <!-- INPUT LIMPIO Y SEPARADO (SIN BOTONES SUPERPUESTOS) -->
-        <div class="mt-3 pt-3 border-t border-slate-200">
-          <div class="flex items-end gap-2">
-            
-            <!-- BOTÓN DE MICRÓFONO CONTINUO EXTERNO -->
-            <button id="btn-mic" type="button" class="w-11 h-11 rounded-xl bg-slate-100 hover:bg-poli-berry/10 border border-slate-300 text-slate-600 hover:text-poli-berry flex items-center justify-center shrink-0 transition" title="Hablar por Micrófono (Modo Continuo)">
-              <i class="fa-solid fa-microphone text-base" id="mic-icon"></i>
-            </button>
-
-            <!-- TEXTAREA AUTO-EXPANDIBLE LIMPIO -->
-            <textarea id="advisor-input" rows="2" placeholder="Escribe o dicta por micrófono lo que responderías como experto..." 
-                      class="flex-1 p-2.5 text-xs bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-poli-sky text-slate-800 placeholder-slate-400 resize-none custom-scrollbar leading-relaxed"></textarea>
-
-            <!-- BOTÓN DE ENVÍO EXTERNO (NO TAPA EL TEXTO) -->
-            <button id="btn-send" type="button" class="h-11 px-5 bg-poli-blue hover:bg-poli-sky text-white rounded-xl text-xs font-bold transition flex items-center gap-2 shrink-0 shadow-sm">
-              <span>Responder</span>
-              <i class="fa-solid fa-paper-plane text-[11px]"></i>
-            </button>
-
-          </div>
-          <div class="flex items-center justify-between text-[10px] text-slate-400 mt-1.5 px-1">
-            <span id="mic-status-hint">Micrófono continuo: haz clic para iniciar tu intervención y vuelve a hacer clic al terminar de hablar.</span>
-            <span id="turn-counter" class="font-semibold text-slate-600">Turno 1 de 3</span>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- BANNER FORMATIVO: EL VALOR DE TU GESTIÓN -->
-      <div class="bg-gradient-to-r from-poli-blue to-poli-dark rounded-2xl p-3.5 text-white shadow-sm flex items-center justify-between">
-        <div class="flex items-center space-x-3">
-          <div class="w-9 h-9 rounded-xl bg-poli-yellow/20 flex items-center justify-center text-poli-yellow border border-poli-yellow/30 font-bold text-base shrink-0">
-            <i class="fa-solid fa-fire"></i>
-          </div>
-          <div>
-            <h4 class="text-xs font-bold uppercase tracking-wide text-poli-yellow">El Valor de tu Gestión</h4>
-            <p class="text-[11px] text-slate-200">
-              Rematrícula no es despachar un recibo: es el servicio raíz que sostiene la universidad. ¡Cada llamada salva un proyecto de vida!
-            </p>
-          </div>
-        </div>
-        <a href="https://anvacu2418.github.io/formacion-poli/REMA/playbookcierres.html" target="_blank" class="hidden sm:flex items-center space-x-1.5 text-xs font-bold text-white bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg border border-white/20 transition shrink-0">
-          <i class="fa-solid fa-book-open text-poli-sky"></i>
-          <span>Playbook Cierres</span>
-        </a>
-      </div>
-
-    </section>
-
-  </main>
-
-  <!-- MODAL DE AUDITORÍA Y FEEDBACK FINAL -->
-  <div id="modal-feedback" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-2xl w-full shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh]">
-      
-      <!-- CABECERA DE RESULTADOS -->
-      <div class="bg-poli-blue p-5 text-white relative border-b-4 border-poli-sky">
-        <div class="flex items-center justify-between">
-          <div>
-            <span class="text-[10px] uppercase tracking-wider text-poli-sky font-extrabold block">Informe Oficial de Auditoría • Audia IA</span>
-            <h3 class="text-lg font-extrabold text-white">Resultado de tu Simulación</h3>
-          </div>
-          <div class="text-right">
-            <span class="text-xs text-slate-300 block font-medium">Índice IKQ Obtenido</span>
-            <span id="modal-final-ikq" class="text-2xl font-black text-poli-lime">100 / 100</span>
-          </div>
-        </div>
-        <div id="modal-badge-status" class="mt-2 inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
-          <i class="fa-solid fa-circle-check"></i>
-          <span>APROBADO (Superó el estándar de 90 pts)</span>
-        </div>
-      </div>
-
-      <!-- CUERPO DE AUDITORÍA DETALLADA -->
-      <div class="p-6 overflow-y-auto custom-scrollbar space-y-4 text-xs">
-        
-        <div>
-          <h4 class="font-bold text-slate-800 uppercase tracking-wide text-[11px] mb-2 flex items-center gap-1.5">
-            <i class="fa-solid fa-chart-pie text-poli-sky"></i> Desglose de Atributos Auditados
-          </h4>
-          <div id="modal-attributes-list" class="space-y-1.5"></div>
-        </div>
-
-        <div class="bg-blue-50 p-3.5 rounded-2xl border border-blue-200">
-          <div class="flex items-center gap-2 text-poli-blue font-bold text-xs mb-1">
-            <i class="fa-solid fa-lightbulb text-poli-yellow"></i>
-            <span>Discurso Esperado (Modelo Consultivo & Soporte Real Poli)</span>
-          </div>
-          <p id="modal-expected-speech" class="text-slate-700 italic leading-relaxed"></p>
-        </div>
-
-        <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200">
-          <div class="flex items-center gap-2 text-slate-800 font-bold text-xs mb-1">
-            <i class="fa-solid fa-bullseye text-poli-berry"></i>
-            <span>Recomendación del Coach de Formación</span>
-          </div>
-          <p id="modal-pedagogical-feedback" class="text-slate-600 leading-relaxed"></p>
-        </div>
-
-      </div>
-
-      <!-- FOOTER CON BOTONES DE ACCIÓN -->
-      <div class="bg-slate-50 px-6 py-4 border-t border-slate-200 flex items-center justify-between">
-        <button id="modal-btn-retry" class="px-4 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold transition flex items-center gap-2">
-          <i class="fa-solid fa-rotate-left"></i>
-          <span>Repetir Caso</span>
-        </button>
-        <button id="modal-btn-next" class="px-5 py-2 rounded-xl bg-poli-blue hover:bg-poli-sky text-white font-bold transition flex items-center gap-2 shadow-sm">
-          <span>Siguiente Escenario</span>
-          <i class="fa-solid fa-arrow-right"></i>
-        </button>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- SCRIPT CON MOTOR HEURÍSTICO LOCAL Y CASOS AJUSTADOS A REALIDAD OPERATIVA -->
-  <script>
-    const CASOS_SIMULADOR = [
-      {
-        id: "CASO-01",
-        nombre: "Julián Bermúdez",
-        programa: "Ingeniería de Software • 6.° Semestre",
-        avatar: "JB",
-        temperamento: "Furioso",
-        tagClass: "bg-red-100 text-red-700",
-        motivo: "Intentó pagar el viernes dentro de fecha ordinaria pero la pasarela falló; hoy le figura recargo extraordinario de $380.000 y amenaza con irse.",
-        objetivo: "Contención emocional, indagar el error ocurrido sin prometer ajustes inmediatos que no están a su alcance; escalar caso a soporte/financiera (24 a 72h) y dar tranquilidad sobre el plazo de inscripción de materias.",
-        discursoModelo: "Julián, te comprendo totalmente y tienes razón en estar molesto; si la plataforma presentó error cuando intentabas pagar en fecha ordinaria, es comprensible tu frustración. Cuéntame exactamente qué mensaje o falla te arrojó el sistema el viernes y permíteme tu documento para revisar... Como este ajuste depende de validación de la dirección financiera, voy a escalar tu solicitud con los soportes. Te estaremos notificando en un plazo de 24 a 72 horas hábiles. Puedes estar tranquilo porque en el Poli primero realizas el pago y luego inscribes asignaturas, y el plazo de inscripción va hasta el inicio de clases, así que no vas a perder tus materias.",
-        dialogos: [
-          {
-            turno: 1,
-            estudianteDice: "¡Mire, esto es una estafa y una falta de respeto! El viernes intenté pagar por su porquería de página y se me presentó un inconveniente que no me dejó terminar. Entro hoy a revisar y me están cobrando 380.000 pesos de recargo extraordinario. ¡O me quitan ese cobro ya mismo o me cancelan la matrícula y me voy para otra universidad!",
-            reglas: {
-              empatia: ["entiendo", "comprendo", "razon", "molest", "frustracion", "tranquil", "disculpa", "lamento"],
-              indagacion: ["que paso", "error", "inconveniente", "dificultad", "cuentame", "cedula", "documento", "soportes", "pantallazo"],
-              penalizadores: ["calmese", "no grite", "reglamento", "banco", "responsabilidad", "extraordinario", "no se puede", "ya se lo ajusto", "lo corrijo ya"],
-              reaccionCorrecta: "Mi cédula es 80123456. Me salió un error de conexión en la pasarela el viernes en la noche y tengo el pantallazo. ¿Entonces qué van a hacer para quitarme ese recargo?",
-              reaccionDebil: "¡No me venga a decir que me calme ni me justifique las fechas! Pásame con un supervisor porque no me está dando ninguna solución."
-            }
-          },
-          {
-            turno: 2,
-            estudianteDice: "Mi cédula es 80123456. Me salió un error de conexión en la pasarela el viernes en la noche y tengo el pantallazo. ¿Entonces qué van a hacer para quitarme ese recargo?",
-            reglas: {
-              solucion: ["escalar", "solicitud", "financiera", "soporte", "validar", "24 a 72", "horas", "notificando", "estudio"],
-              penalizadores: ["ya quedo listo", "pague ya con descuento", "no tiene arreglo", "pague el excedente"],
-              reaccionCorrecta: "Bueno, si me escalan eso con el pantallazo me quedo más tranquilo. ¿Pero y cómo hacemos para que no se me pasen los días de inscripción de materias mientras responden?",
-              reaccionDebil: "¿Y mientras tanto qué hago? Me van a cerrar los cupos de las materias por culpa de ese error."
-            }
-          },
-          {
-            turno: 3,
-            estudianteDice: "Bueno, si me escalan eso me quedo más tranquilo. ¿Pero y cómo hacemos para que no se me pasen los días de inscripción de materias mientras responden?",
-            reglas: {
-              cierre: ["primero", "pago", "inscribir", "inicio de clases", "plazo", "tranquilo", "notifica", "correo", "seguimiento"],
-              penalizadores: ["se le cierran", "pierde cupo", "mire despues"],
-              reaccionCorrecta: "Ah, excelente saber que la inscripción va hasta el inicio de clases y va después del pago. Quedo pendiente de la respuesta entonces, muchas gracias por la gestión.",
-              reaccionDebil: "Bueno, ojalá no se demoren mucho porque no me quiero quedar por fuera."
-            }
-          }
-        ]
-      },
-      {
-        id: "CASO-02",
-        nombre: "Viviana Salamanca",
-        programa: "Contaduría Pública • 5.° Semestre",
-        avatar: "VS",
-        temperamento: "Agotada / Desiste",
-        tagClass: "bg-amber-100 text-amber-700",
-        motivo: "Trabaja tiempo completo, es madre soltera y está sin recursos. Manifiesta que no tiene tiempo ni plata y pide que no la llamen más.",
-        objetivo: "Validar su esfuerzo familiar, indagar su carga y proponer pago de media matrícula (cursando la mitad de créditos / 2 materias para dedicar ~3 horas semanales) pagándola de contado o buscando financiación.",
-        discursoModelo: "Viviana, admiro profundamente el esfuerzo que haces día a día balanceando trabajo, familia y universidad; es totalmente comprensible que te sientas agotada. Precisamente porque tu esfuerzo vale oro, no queremos que pauses tu carrera. Una excelente alternativa es optar por el pago de media matrícula: pagas la mitad del valor y cursas la mitad de créditos (por ejemplo, 2 materias), dedicándole solo unas 3 horas semanales para no descuidar a tu hijo ni tu trabajo. ¿Cómo sientes esta opción de pagar media matrícula o revisar una financiación para no frenar tu carrera?",
-        dialogos: [
-          {
-            turno: 1,
-            estudianteDice: "Buenas tardes. La verdad me llamaron a insistirme con la rematrícula, pero les agradezco que no me llamen más. Estoy sobrecargada en el trabajo, con mi hijo no me queda tiempo de sentarme a estudiar y para rematar la matrícula subió. No tengo tiempo ni plata, así que no voy a continuar.",
-            reglas: {
-              empatia: ["entiendo", "admiro", "esfuerzo", "hijo", "familia", "comprendo", "agotada", "tranquila", "pausar"],
-              indagacion: ["cuentame", "si pudieras", "cuantas materias", "que te gustaria", "tiempo", "presupuesto", "creditos"],
-              penalizadores: ["plataforma es virtual", "estudie domingos", "la retiro", "aplazamiento", "no insisto"],
-              reaccionCorrecta: "Claro que quiero ser profesional, por mi hijo es que me sacrifico. Pero es que ver todas las materias a la vez con turnos laborales me queda imposible, y pagar el semestre completo ahorita no puedo.",
-              reaccionDebil: "Usted no sabe lo que es llegar a las 10 de la noche a hacer tareas después de trabajar 10 horas. Por favor no me insista."
-            }
-          },
-          {
-            turno: 2,
-            estudianteDice: "Es que no veo cómo podría estudiar así con tanta carga y ese costo tan alto. ¿Qué opción real tendría?",
-            reglas: {
-              solucion: ["media matricula", "mitad", "creditos", "2 materias", "horas", "reducid", "carga"],
-              penalizadores: ["mes a mes por bloques", "pagar mensual sin credito", "aplace semestre"],
-              reaccionCorrecta: "No sabía que se podía pagar media matrícula y ver solo la mitad de créditos... así sí me da el tiempo y me baja a la mitad el costo. ¿Y esa media matrícula cómo se paga?",
-              reaccionDebil: "Igual sigue siendo plata y tiempo que no tengo ahorita."
-            }
-          },
-          {
-            turno: 3,
-            estudianteDice: "No sabía que se podía pagar media matrícula y ver solo la mitad de créditos. ¿Y esa media matrícula cómo se paga?",
-            reglas: {
-              cierre: ["contado", "financiacion", "credipoli", "orden", "liquidar", "revisamos", "hoy", "continuar"],
-              penalizadores: ["mes a mes con el poli", "bloques mensuales"],
-              reaccionCorrecta: "Como es la mitad del valor, ese monto sí lo alcanzo a cubrir de contado. Ayúdame a revisar cómo gestionarlo para no parar.",
-              reaccionDebil: "Bueno, voy a pensarlo y cualquier cosa yo los llamo."
-            }
-          }
-        ]
-      },
-      {
-        id: "CASO-03",
-        nombre: "Laura Restrepo",
-        programa: "Psicología • 6.° Semestre",
-        avatar: "LR",
-        temperamento: "Pide Descuento",
-        tagClass: "bg-blue-100 text-poli-blue",
-        motivo: "Afirma que la matrícula está muy costosa y que si no le dan un descuento no se matricula este semestre.",
-        objetivo: "No dar un 'no' rotundo; indagar convenios con cajas de compensación o empresas aliadas y ofrecer alternativas flexibles como Pago 50/50 o Bloques.",
-        discursoModelo: "Laura, te comprendo perfectamente; buscar un alivio financiero es clave en la planificación del hogar. En el Poli contamos con convenios con cajas de compensación y empresas aliadas. Cuéntame: ¿en qué empresa estás laborando o a qué caja de compensación estás afiliada tú o alguien de tu grupo familiar?",
-        dialogos: [
-          {
-            turno: 1,
-            estudianteDice: "Buenas tardes. Es que llamo a ver si me pueden hacer algún descuento en la matrícula de este semestre. La verdad se me subió mucho el costo y si no hay ningún descuento me toca aplazar.",
-            reglas: {
-              empatia: ["entiendo", "comprendo", "alivio", "presupuesto", "tranquila", "prioridad"],
-              indagacion: ["caja", "compensacion", "empresa", "convenio", "afiliad", "trabajas", "familiar", "cuentame"],
-              penalizadores: ["no hay descuentos", "solo nuevos", "promedio", "el ipc", "reglamento"],
-              reaccionCorrecta: "Trabajo en una empresa de alimentos y estoy afiliada a Compensar, ¿eso tiene convenio?",
-              reaccionDebil: "Ah, o sea que al estudiante antiguo que ya lleva 6 semestres no lo valoran. Entonces no me matriculo."
-            }
-          },
-          {
-            turno: 2,
-            estudianteDice: "Trabajo en una empresa de alimentos y estoy afiliada a Compensar, ¿eso tiene convenio?",
-            reglas: {
-              solucion: ["10%", "descuento", "compensar", "50/50", "bloques", "certificado", "afiliacion", "convenio"],
-              penalizadores: ["busque en google", "no se si tenga"],
-              reaccionCorrecta: "¡Excelente! ¿Y qué tengo que presentar para que me apliquen ese beneficio ya mismo?",
-              reaccionDebil: "Bueno, pero me toca hacer mucho trámite y se me va a vencer la fecha."
-            }
-          },
-          {
-            turno: 3,
-            estudianteDice: "¡Excelente! ¿Y qué tengo que presentar para que me apliquen ese beneficio ya mismo?",
-            reglas: {
-              cierre: ["certificado", "smart campus", "radicar", "te acompaño", "hoy", "actualizamos", "linea"],
-              penalizadores: ["vaya a la sede", "mande carta a ver"],
-              reaccionCorrecta: "Tengo el certificado en PDF descargado en el celular. Hagamos el trámite de una vez.",
-              reaccionDebil: "Listo, luego miro cómo lo mando."
-            }
-          }
-        ]
-      },
-      {
-        id: "CASO-04",
-        nombre: "Jorge Méndez",
-        programa: "Ingeniería Industrial • Retoma estudios",
-        avatar: "JM",
-        temperamento: "Reintegro / Temor",
-        tagClass: "bg-purple-100 text-purple-700",
-        motivo: "Pausó estudios hace 1 año por motivos laborales; teme haber perdido las materias aprobadas o ya no poder retomar su carrera.",
-        objetivo: "Conectar con su meta, indagar si desea regresar en la misma carrera y modalidad o hacer algún cambio, y recordarle las condiciones de reintegro (resolución rectoral vigente, valores actuales y posibles cambios en el plan de estudios).",
-        discursoModelo: "¡Qué excelente noticia que quieras retomar tu ingeniería, Jorge! Bienvenido de vuelta. Puedes estar tranquilo porque tus materias aprobadas no se pierden y sí puedes retomar tu carrera. Para orientarte mejor: ¿tienes pensado regresar en la misma carrera y modalidad, o has pensado en algún cambio? Ten en cuenta que al hacer el reintegro te acoges a la resolución rectoral vigente, es decir, a los valores pecuniarios actuales de este año y a posibles actualizaciones o cambios en el plan de estudios.",
-        dialogos: [
-          {
-            turno: 1,
-            estudianteDice: "Hola, buenas tardes. Yo estuve estudiando Ingeniería hace como un año pero me tocó parar por temas personales. Quería averiguar qué necesito para volver, porque me da temor haber perdido las materias que ya había aprobado o ya no poder retomar mi carrera.",
-            reglas: {
-              empatia: ["bienvenido", "alegria", "excelente", "tranquilo", "gusto", "retomar", "no se pierden"],
-              indagacion: ["misma carrera", "modalidad", "cambio", "semestre", "cuentame", "pensado"],
-              penalizadores: ["compre formulario", "inscripcion de nuevo", "perdio notas", "admision"],
-              reaccionCorrecta: "Iba en 5.° semestre y quiero seguir en la misma ingeniería y en modalidad virtual. ¿Tengo que tener en cuenta algún cambio en el plan o en los costos?",
-              reaccionDebil: "Pero no me dijo si me toca cambiar de carrera o qué condiciones aplican."
-            }
-          },
-          {
-            turno: 2,
-            estudianteDice: "Iba en 5.° semestre y quiero seguir en la misma ingeniería y en modalidad virtual. ¿Tengo que tener en cuenta algún cambio en el plan o en los costos?",
-            reglas: {
-              solucion: ["resolucion", "vigente", "valores", "actuales", "plan de estudios", "cambio", "reintegro"],
-              penalizadores: ["mismo precio de antes", "no cambia nada", "espere 15 dias"],
-              reaccionCorrecta: "Entiendo perfectamente lo de los valores actuales y la revisión del plan de estudios. ¿Podemos dejar radicada la solicitud de reintegro hoy mismo?",
-              reaccionDebil: "Uhm, no me queda claro bajo qué condiciones regreso."
-            }
-          },
-          {
-            turno: 3,
-            estudianteDice: "Entiendo perfectamente lo de los valores actuales y la revisión del plan de estudios. ¿Podemos dejar radicada la solicitud de reintegro hoy mismo?",
-            reglas: {
-              cierre: ["hoy mismo", "radicamos", "documento", "acompaño", "24 a 48", "solicitud"],
-              penalizadores: ["radique usted", "busque el link"],
-              reaccionCorrecta: "Mi cédula es 79845120. Dejémoslo radicado de una vez para retomar mi carrera.",
-              reaccionDebil: "Listo, después me meto a mirar la página."
-            }
-          }
-        ]
-      },
-      {
-        id: "CASO-05",
-        nombre: "Camilo Torres",
-        programa: "Mercadeo • 4.° Semestre",
-        avatar: "CT",
-        temperamento: "Consulta Rápida",
-        tagClass: "bg-emerald-100 text-emerald-800",
-        motivo: "Llama apurado solo a pedir que le envíen la orden de pago al correo electrónico.",
-        objetivo: "Compartir la orden de pago con disposición para que pague esa misma semana, perfilando su medio de pago (efectivo o PSE) para que pueda avanzar con la inscripción de asignaturas.",
-        discursoModelo: "¡Claro que sí, con mucho gusto! Incluso te comparto de una vez tu orden de pago para que puedas realizar el pago en esta misma semana y asegures tu proceso. Cuéntame, Camilo: ¿ya tienes proyectado cómo vas a pagar, vas a realizar tu pago en efectivo o por PSE, para orientarte y que puedas avanzar con tu inscripción de asignaturas?",
-        dialogos: [
-          {
-            turno: 1,
-            estudianteDice: "Hola, buenos días. Por favor me regalas la orden de pago de la matrícula a mi correo que no la encuentro en el portal. Mi cédula es 1024567890.",
-            reglas: {
-              empatia: ["claro", "gusto", "comparto", "buenos dias", "camilo", "semana"],
-              indagacion: ["como vas a pagar", "efectivo", "pse", "proyectado", "medio de pago", "inscripcion", "asignaturas"],
-              penalizadores: ["descarguela usted", "no enviamos recibos"],
-              reaccionCorrecta: "Muchas gracias. La idea es pagarla esta misma semana por PSE, pero no sé si después de pagar las materias se inscriben solas o qué sigue.",
-              reaccionDebil: "Ah bueno, ya me llegó al correo. Gracias, hasta luego."
-            }
-          },
-          {
-            turno: 2,
-            estudianteDice: "Muchas gracias. La idea es pagarla esta misma semana por PSE, pero no sé si después de pagar las materias se inscriben solas o qué sigue.",
-            reglas: {
-              solucion: ["pse", "inscripcion", "asignaturas", "smart campus", "refleja", "paso a paso"],
-              penalizadores: ["se inscriben solas", "vaya a la sede"],
-              reaccionCorrecta: "Ah, qué bueno saber que apenas pague por PSE ya puedo entrar a inscribir mis materias. ¿En cuánto tiempo se refleja el pago por PSE?",
-              reaccionDebil: "Bueno, ahí veré cuándo la pago."
-            }
-          },
-          {
-            turno: 3,
-            estudianteDice: "¿En cuánto tiempo se refleja el pago por PSE para hacer mi inscripción?",
-            reglas: {
-              cierre: ["inmediato", "minutos", "semana", "inscribir", "acompaño", "pendiente", "cupos"],
-              penalizadores: ["se demora 8 dias", "no sabria decirle"],
-              reaccionCorrecta: "Perfecto, hoy mismo en la tarde hago el pago por PSE e inscribo mis asignaturas. ¡Mil gracias por la orientación!",
-              reaccionDebil: "Listo, luego miro."
-            }
-          }
-        ]
-      }
-    ];
-
-    // ESTADO DE LA SIMULACIÓN
-    let currentCaseIndex = 0;
-    let currentTurnIndex = 0;
-    let currentIKQ = 100;
-    let voiceEnabled = true;
-    let callTimerInterval = null;
-    let callSeconds = 0;
-    let recognition = null;
-    let isRecording = false;
-    let accumulatedTranscript = "";
-
-    let auditDeductions = {
-      empatia: 0,
-      indagacion: 0,
-      objeciones: 0,
-      cierre: 0
-    };
-    let auditFeedbacks = [];
-
-    // INICIALIZACIÓN
-    window.addEventListener('DOMContentLoaded', () => {
-      initSpeechRecognition();
-      loadCase(0);
-      setupEventListeners();
-      // Cargar voces del navegador anticipadamente
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.getVoices();
-      }
-    });
-
-    function setupEventListeners() {
-      document.getElementById('case-selector').addEventListener('change', (e) => {
-        loadCase(parseInt(e.target.value));
-      });
-
-      document.getElementById('btn-send').addEventListener('click', handleAdvisorSubmit);
-      
-      // Enviar con Enter (Shift+Enter para salto de línea)
-      document.getElementById('advisor-input').addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-          e.preventDefault();
-          handleAdvisorSubmit();
-        }
-      });
-
-      document.getElementById('btn-restart').addEventListener('click', () => {
-        loadCase(currentCaseIndex);
-      });
-
-      document.getElementById('btn-toggle-voice').addEventListener('click', () => {
-        voiceEnabled = !voiceEnabled;
-        const icon = document.getElementById('voice-icon');
-        const label = document.getElementById('voice-label');
-        if (voiceEnabled) {
-          icon.className = 'fa-solid fa-volume-high text-poli-sky';
-          label.textContent = 'Audio Activado';
-        } else {
-          icon.className = 'fa-solid fa-volume-xmark text-slate-400';
-          label.textContent = 'Audio Silenciado';
-          window.speechSynthesis.cancel();
-        }
-      });
-
-      document.getElementById('modal-btn-retry').addEventListener('click', () => {
-        document.getElementById('modal-feedback').classList.add('hidden');
-        loadCase(currentCaseIndex);
-      });
-
-      document.getElementById('modal-btn-next').addEventListener('click', () => {
-        document.getElementById('modal-feedback').classList.add('hidden');
-        const nextCase = (currentCaseIndex + 1) % CASOS_SIMULADOR.length;
-        document.getElementById('case-selector').value = nextCase;
-        loadCase(nextCase);
-      });
+      border: 1px solid var(--slate-200);
+      border-radius: 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
 
-    function loadCase(index) {
-      if (isRecording && recognition) {
-        recognition.stop();
-      }
-      currentCaseIndex = index;
-      currentTurnIndex = 0;
-      currentIKQ = 100;
-      callSeconds = 0;
-      auditDeductions = { empatia: 0, indagacion: 0, objeciones: 0, cierre: 0 };
-      auditFeedbacks = [];
+    .hidden { display: none !important; }
 
-      updateIKQDisplay();
-      startCallTimer();
-
-      const caso = CASOS_SIMULADOR[index];
-      document.getElementById('student-avatar').textContent = caso.avatar;
-      document.getElementById('student-name').textContent = caso.nombre;
-      document.getElementById('student-program').textContent = caso.programa;
-      document.getElementById('student-tag').textContent = caso.temperamento;
-      document.getElementById('student-tag').className = `text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide ${caso.tagClass}`;
-      document.getElementById('student-reason').textContent = caso.motivo;
-      document.getElementById('case-objective').textContent = caso.objetivo;
-
-      document.getElementById('dialog-container').innerHTML = '';
-      document.getElementById('advisor-input').value = '';
-      document.getElementById('advisor-input').disabled = false;
-      document.getElementById('btn-send').disabled = false;
-      document.getElementById('turn-counter').textContent = `Turno 1 de ${caso.dialogos.length}`;
-
-      setTimeout(() => {
-        const primerTurno = caso.dialogos[0];
-        appendStudentMessage(primerTurno.estudianteDice);
-      }, 400);
+    .svg-icon {
+      width: 1em;
+      height: 1em;
+      display: inline-block;
+      vertical-align: -0.125em;
+      fill: currentColor;
+      flex-shrink: 0;
     }
 
-    function startCallTimer() {
-      if (callTimerInterval) clearInterval(callTimerInterval);
-      callTimerInterval = setInterval(() => {
-        callSeconds++;
-        const mins = String(Math.floor(callSeconds / 60)).padStart(2, '0');
-        const secs = String(callSeconds % 60).padStart(2, '0');
-        document.getElementById('call-timer').textContent = `${mins}:${secs}`;
-      }, 1000);
+    /* Header Institucional */
+    header {
+      background-color: var(--poli-blue);
+      color: #ffffff;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      border-bottom: 4px solid var(--poli-sky);
     }
 
-    function appendStudentMessage(text) {
-      const container = document.getElementById('dialog-container');
-      const msgDiv = document.createElement('div');
-      msgDiv.className = 'flex items-start space-x-2.5';
-      msgDiv.innerHTML = `
-        <div class="w-8 h-8 rounded-full bg-slate-300 text-slate-700 flex items-center justify-center font-bold text-xs shrink-0 shadow-sm border border-slate-400">
-          ${CASOS_SIMULADOR[currentCaseIndex].avatar}
-        </div>
-        <div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm border border-slate-200 text-slate-800 max-w-[85%] leading-relaxed">
-          <span class="text-[10px] font-bold text-slate-500 uppercase block mb-0.5">${CASOS_SIMULADOR[currentCaseIndex].nombre}</span>
-          ${text}
-        </div>
-      `;
-      container.appendChild(msgDiv);
-      container.scrollTop = container.scrollHeight;
-
-      if (voiceEnabled) speakText(text);
+    .header-container {
+      max-width: 80rem;
+      margin: 0 auto;
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
     }
 
-    function appendAdvisorMessage(text) {
-      const container = document.getElementById('dialog-container');
-      const msgDiv = document.createElement('div');
-      msgDiv.className = 'flex items-start justify-end space-x-2.5';
-      msgDiv.innerHTML = `
-        <div class="bg-poli-blue text-white p-3 rounded-2xl rounded-tr-none shadow-sm text-left max-w-[85%] leading-relaxed">
-          <span class="text-[10px] font-bold text-poli-sky uppercase block mb-0.5 text-right">Tú (Experto Poli)</span>
-          ${text}
-        </div>
-        <div class="w-8 h-8 rounded-full bg-poli-sky text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-sm">
-          <i class="fa-solid fa-headset text-xs"></i>
-        </div>
-      `;
-      container.appendChild(msgDiv);
-      container.scrollTop = container.scrollHeight;
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
     }
 
-    // SÍNTESIS DE VOZ NATURAL PRIORIZANDO VOCES NEURALES / ONLINE EN ESPAÑOL
-    function speakText(text) {
-      if (!('speechSynthesis' in window)) return;
-      window.speechSynthesis.cancel();
-      
-      const utterance = new SpeechSynthesisUtterance(text);
-      const voices = window.speechSynthesis.getVoices();
-      
-      // Buscar voces naturales de Edge/Chrome (Salomé, Gonzalo, Paulina, Sabina, Google español)
-      const preferredVoice = voices.find(v => 
-        (v.lang.includes('es-CO') || v.lang.includes('es-MX') || v.lang.includes('es-US') || v.lang.includes('es')) &&
-        (v.name.includes('Natural') || v.name.includes('Online') || v.name.includes('Google') || v.name.includes('Salome') || v.name.includes('Gonzalo'))
-      ) || voices.find(v => v.lang.includes('es'));
-
-      if (preferredVoice) {
-        utterance.voice = preferredVoice;
-      }
-      utterance.lang = 'es-CO';
-      utterance.rate = 1.02;
-      utterance.pitch = 1.0;
-      window.speechSynthesis.speak(utterance);
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--slate-200);
+      text-decoration: none;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: color 0.15s;
     }
 
-    // RECONOCIMIENTO DE VOZ CONTINUO (PERMANECE ABIERTO HASTA QUE EL ASESOR LO DETIENE)
-    function initSpeechRecognition() {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRecognition) {
-        document.getElementById('btn-mic').classList.add('hidden');
-        document.getElementById('mic-status-hint').textContent = "Escribe tu respuesta y presiona Enter o haz clic en Responder.";
-        return;
-      }
+    .back-link:hover { color: #ffffff; }
 
-      recognition = new SpeechRecognition();
-      recognition.lang = 'es-CO';
-      recognition.continuous = true;       // No se apaga al hacer pausas para respirar
-      recognition.interimResults = true;   // Muestra el texto en tiempo real mientras habla
+    .divider-v { color: var(--slate-500); }
 
-      recognition.onstart = () => {
-        isRecording = true;
-        accumulatedTranscript = document.getElementById('advisor-input').value;
-        if (accumulatedTranscript && !accumulatedTranscript.endsWith(' ')) {
-          accumulatedTranscript += ' ';
-        }
-        const btn = document.getElementById('btn-mic');
-        btn.classList.add('pulse-mic', 'bg-poli-berry', 'text-white', 'border-poli-berry');
-        btn.classList.remove('bg-slate-100', 'text-slate-600');
-        document.getElementById('mic-icon').className = 'fa-solid fa-stop text-sm';
-        document.getElementById('mic-status-hint').innerHTML = '<strong class="text-poli-berry">Grabando voz en vivo...</strong> Habla con naturalidad y presiona el botón rojo cuando termines.';
-      };
-
-      recognition.onresult = (event) => {
-        let interimTranscript = '';
-        for (let i = event.resultIndex; i < event.results.length; ++i) {
-          if (event.results[i].isFinal) {
-            accumulatedTranscript += event.results[i][0].transcript + ' ';
-          } else {
-            interimTranscript += event.results[i][0].transcript;
-          }
-        }
-        const inputEl = document.getElementById('advisor-input');
-        inputEl.value = accumulatedTranscript + interimTranscript;
-        inputEl.scrollTop = inputEl.scrollHeight;
-      };
-
-      recognition.onerror = (event) => {
-        if (event.error !== 'no-speech') {
-          stopRecording();
-        }
-      };
-
-      recognition.onend = () => {
-        // Si el usuario no presionó detener manualmente, reiniciar escucha continua
-        if (isRecording) {
-          try {
-            recognition.start();
-          } catch (e) {
-            stopRecording();
-          }
-        }
-      };
-
-      document.getElementById('btn-mic').addEventListener('click', () => {
-        if (!isRecording) {
-          window.speechSynthesis.cancel(); // Silenciar voz del estudiante al hablar
-          try {
-            recognition.start();
-          } catch (e) {}
-        } else {
-          stopRecording();
-        }
-      });
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
     }
 
-    function stopRecording() {
-      isRecording = false;
-      if (recognition) {
-        try { recognition.stop(); } catch (e) {}
-      }
-      const btn = document.getElementById('btn-mic');
-      btn.classList.remove('pulse-mic', 'bg-poli-berry', 'text-white', 'border-poli-berry');
-      btn.classList.add('bg-slate-100', 'text-slate-600');
-      document.getElementById('mic-icon').className = 'fa-solid fa-microphone text-base';
-      document.getElementById('mic-status-hint').textContent = "Micrófono continuo: haz clic para iniciar tu intervención y vuelve a hacer clic al terminar de hablar.";
+    .brand-icon {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 0.5rem;
+      background-color: rgba(68, 174, 216, 0.2);
+      color: var(--poli-sky);
+      border: 1px solid rgba(68, 174, 216, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
     }
 
-    // ENVÍO DE RESPUESTA DEL ASESOR
-    function handleAdvisorSubmit() {
-      if (isRecording) {
-        stopRecording();
-      }
-      const input = document.getElementById('advisor-input');
-      const text = input.value.trim();
-      if (!text) return;
-
-      appendAdvisorMessage(text);
-      input.value = '';
-      accumulatedTranscript = '';
-      input.disabled = true;
-      document.getElementById('btn-send').disabled = true;
-
-      evaluateAdvisorTurn(text);
+    .brand-title {
+      font-size: 0.875rem;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
     }
 
-    // EVALUACIÓN HEURÍSTICA CONTRA MATRIZ 2.1 Y CASUÍSTICA REAL
-    function evaluateAdvisorTurn(text) {
-      const caso = CASOS_SIMULADOR[currentCaseIndex];
-      const turnoActual = caso.dialogos[currentTurnIndex];
-      const reglas = turnoActual.reglas;
-
-      const txt = text.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
-
-      let isCorrect = true;
-      let reasons = [];
-
-      // 1. Verificación de Penalizadores Críticos
-      if (reglas.penalizadores) {
-        for (const badWord of reglas.penalizadores) {
-          if (txt.includes(badWord)) {
-            isCorrect = false;
-            currentIKQ -= 20;
-            reasons.push(`Penalizador Crítico: "${badWord}" (Respuesta imprecisa o cortante).`);
-            break;
-          }
-        }
-      }
-
-      // 2. Verificación de Empatía (LEAR) en Turno 1
-      if (turnoActual.turno === 1 && reglas.empatia) {
-        const hasEmpatia = reglas.empatia.some(w => txt.includes(w));
-        if (!hasEmpatia) {
-          isCorrect = false;
-          currentIKQ -= 6;
-          auditDeductions.empatia += 6;
-          reasons.push("Faltó validación empática inicial (LEAR) frente a la situación del estudiante (-6 pts).");
-        }
-      }
-
-      // 3. Verificación de Indagación Abierta
-      if (reglas.indagacion) {
-        const hasIndagacion = reglas.indagacion.some(w => txt.includes(w)) || txt.includes("?");
-        if (!hasIndagacion) {
-          isCorrect = false;
-          currentIKQ -= 11; // Alto Impacto
-          auditDeductions.indagacion += 11;
-          reasons.push("Afectación en Alto Impacto: Faltó indagación abierta para comprender el caso (-11 pts).");
-        }
-      }
-
-      // 4. Verificación de Solución Oficial Poli en Turno 2
-      if (turnoActual.turno === 2 && reglas.solucion) {
-        const hasSolucion = reglas.solucion.some(w => txt.includes(w));
-        if (!hasSolucion) {
-          isCorrect = false;
-          currentIKQ -= 11; // Alto Impacto
-          auditDeductions.objeciones += 11;
-          reasons.push("Afectación en Alto Impacto: La alternativa ofrecida no se alinea con el proceso institucional (-11 pts).");
-        }
-      }
-
-      // 5. Verificación de Cierre / Orientación a Siguiente Paso en Turno 3
-      if (turnoActual.turno === 3 && reglas.cierre) {
-        const hasCierre = reglas.cierre.some(w => txt.includes(w));
-        if (!hasCierre) {
-          isCorrect = false;
-          currentIKQ -= 11; // Alto Impacto
-          auditDeductions.cierre += 11;
-          reasons.push("Afectación en Alto Impacto: Faltó claridad en los tiempos o cierre orientado al siguiente paso (-11 pts).");
-        }
-      }
-
-      if (reasons.length > 0) {
-        auditFeedbacks.push(`Turno ${currentTurnIndex + 1}: ${reasons.join(" ")}`);
-      }
-
-      currentIKQ = Math.max(0, currentIKQ);
-      updateIKQDisplay();
-
-      document.getElementById('typing-indicator').classList.remove('hidden');
-
-      setTimeout(() => {
-        document.getElementById('typing-indicator').classList.add('hidden');
-
-        const siguienteRespuesta = isCorrect ? reglas.reaccionCorrecta : reglas.reaccionDebil;
-        appendStudentMessage(siguienteRespuesta);
-
-        currentTurnIndex++;
-
-        if (currentTurnIndex >= caso.dialogos.length) {
-          setTimeout(finalizeCall, 1200);
-        } else {
-          document.getElementById('advisor-input').disabled = false;
-          document.getElementById('btn-send').disabled = false;
-          document.getElementById('turn-counter').textContent = `Turno ${currentTurnIndex + 1} de ${caso.dialogos.length}`;
-          document.getElementById('advisor-input').focus();
-        }
-
-      }, 1100);
+    .badge-nivel {
+      background-color: var(--poli-berry);
+      font-size: 0.625rem;
+      text-transform: uppercase;
+      font-weight: 800;
+      padding: 0.125rem 0.5rem;
+      border-radius: 9999px;
+      color: #ffffff;
     }
 
-    function updateIKQDisplay() {
-      const el = document.getElementById('header-ikq');
-      const ind = document.getElementById('ikq-indicator');
-      el.textContent = `${currentIKQ} / 100`;
-
-      if (currentIKQ >= 90) {
-        el.className = 'text-base font-extrabold text-poli-lime';
-        ind.className = 'w-2.5 h-2.5 rounded-full bg-poli-lime animate-pulse';
-      } else if (currentIKQ >= 75) {
-        el.className = 'text-base font-extrabold text-poli-yellow';
-        ind.className = 'w-2.5 h-2.5 rounded-full bg-poli-yellow animate-pulse';
-      } else {
-        el.className = 'text-base font-extrabold text-poli-berry';
-        ind.className = 'w-2.5 h-2.5 rounded-full bg-poli-berry animate-pulse';
-      }
+    .brand-subtitle {
+      font-size: 0.6875rem;
+      color: var(--slate-300);
     }
 
-    function finalizeCall() {
-      if (callTimerInterval) clearInterval(callTimerInterval);
-      document.getElementById('advisor-input').disabled = true;
-      document.getElementById('btn-send').disabled = true;
-
-      const caso = CASOS_SIMULADOR[currentCaseIndex];
-      const isApproved = currentIKQ >= 90;
-
-      document.getElementById('modal-final-ikq').textContent = `${currentIKQ} / 100`;
-      
-      const badge = document.getElementById('modal-badge-status');
-      if (isApproved) {
-        badge.className = 'mt-2 inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30';
-        badge.innerHTML = '<i class="fa-solid fa-circle-check"></i> <span>APROBADO (Superó el estándar de 90 pts)</span>';
-      } else {
-        badge.className = 'mt-2 inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-400/30';
-        badge.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> <span>NO APROBADO (Índice por debajo de 90 pts)</span>';
-      }
-
-      const attrList = document.getElementById('modal-attributes-list');
-      attrList.innerHTML = `
-        <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-200">
-          <span class="text-slate-700 font-medium">Escucha Activa y Empatía (LEAR)</span>
-          <span class="font-bold ${auditDeductions.empatia === 0 ? 'text-emerald-600' : 'text-rose-600'}">${6 - auditDeductions.empatia} / 6 pts</span>
-        </div>
-        <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-200">
-          <span class="text-slate-700 font-medium">Identificación de Necesidades (Indagación Abierta)</span>
-          <span class="font-bold ${auditDeductions.indagacion === 0 ? 'text-emerald-600' : 'text-rose-600'}">${11 - auditDeductions.indagacion} / 11 pts</span>
-        </div>
-        <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-200">
-          <span class="text-slate-700 font-medium">Gestión Consultiva de Objeciones (Proceso Real Poli)</span>
-          <span class="font-bold ${auditDeductions.objeciones === 0 ? 'text-emerald-600' : 'text-rose-600'}">${11 - auditDeductions.objeciones} / 11 pts</span>
-        </div>
-        <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-200">
-          <span class="text-slate-700 font-medium">Cierre Orientado a la Acción (Playbook de Cierres)</span>
-          <span class="font-bold ${auditDeductions.cierre === 0 ? 'text-emerald-600' : 'text-rose-600'}">${11 - auditDeductions.cierre} / 11 pts</span>
-        </div>
-      `;
-
-      document.getElementById('modal-expected-speech').textContent = `"${caso.discursoModelo}"`;
-
-      const pedFeedback = document.getElementById('modal-pedagogical-feedback');
-      if (auditFeedbacks.length === 0) {
-        pedFeedback.textContent = "¡Gestión impecable! Conectaste con la emoción del estudiante, indagaste con precisión, respetaste el alcance real de la operación y guiaste hacia un compromiso verificable. Ese es el estándar de Venta Consultiva del Poli.";
-      } else {
-        pedFeedback.innerHTML = `Identificamos estas oportunidades de mejora en tu llamada:<br>• ${auditFeedbacks.join("<br>• ")}<br><br><strong>Recuerda el propósito:</strong> Rematrícula es el corazón operativo de la universidad; cada estudiante que retienes es un proyecto de vida que sigue adelante. ¡Revisa el discurso esperado y vuelve a intentarlo!`;
-      }
-
-      document.getElementById('modal-feedback').classList.remove('hidden');
+    .header-metrics {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
     }
-  </script>
-</body>
-</html>
+
+    .ikq-box {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: rgba(10, 35, 58, 0.6);
+      padding: 0.375rem 0.75rem;
+      border-radius: 0.75rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .ikq-label {
+      font-size: 0.625rem;
+      color: var(--slate-400);
+      text-transform: uppercase;
+      font-weight: 600;
+      display: block;
+      line-height: 1;
+      text-align: right;
+    }
+
+    .ikq-value {
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .text-poli-lime { color: var(--poli-lime); }
+    .text-poli-yellow { color: var(--poli-yellow); }
+    .text-poli-berry { color: var(--poli-berry); }
+    .text-poli-sky { color: var(--poli-sky); }
+    .text-poli-blue { color: var(--poli-blue); }
+
+    .dot-indicator {
+      width: 0.625rem;
+      height: 0.625rem;
+      border-radius: 9999px;
+      animation: pulse-dot 2s infinite;
+    }
+    .bg-poli-lime { background-color: var(--poli-lime); }
+    .bg-poli-yellow { background-color: var(--poli-yellow); }
+    .bg-poli-berry { background-color: var(--poli-berry); }
+
+    .timer-box {
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--slate-300);
+    }
+
+    .timer-text {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    /* Main Grid */
+    main {
+      max-width: 80rem;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1rem;
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    @media (min-width: 1024px) {
+      main { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+      .col-left { grid-column: span 4 / span 4; }
+      .col-right { grid-column: span 8 / span 8; }
+      .timer-box { display: flex; }
+    }
+
+    /* Panel Izquierdo */
+    .col-left {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .card-padded { padding: 1rem; }
+
+    .selector-header {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--poli-blue);
+      text-transform: uppercase;
+      letter-spacing: 0.025em;
+      display: flex;
+      align-items: center;
