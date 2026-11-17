@@ -2215,5 +2215,132 @@
             renderAllTables();
         });
     </script>
+    <!-- ================================================================= -->
+    <!-- PUENTE FIREBASE EN TIEMPO REAL PARA FORMADOR.HTML                 -->
+    <!-- ================================================================= -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, collection, doc, setDoc, getDocs, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDTfwHBqGnB9axzTj4XzdVkcq6BcY_ZjqM",
+            authDomain: "poli-evaluaciones-360.firebaseapp.com",
+            projectId: "poli-evaluaciones-360",
+            storageBucket: "poli-evaluaciones-360.firebasestorage.app",
+            messagingSenderId: "12426009380",
+            appId: "1:12426009380:web:da9738f10949e7f585f1b1"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        signInAnonymously(auth).catch(() => {});
+
+        // 1. Subir automáticamente a Firestore cada vez que el formador modifique fechas, notas, asistencia o feedback
+        const originalPersistState = window.persistState;
+        window.persistState = function() {
+            if (originalPersistState) originalPersistState();
+            const raw = localStorage.getItem('ILUMNO_FORMADOR_STATE_V4');
+            if (!raw) return;
+            const payload = JSON.parse(raw);
+            setDoc(doc(db, 'configuracion_cohorte', 'actual'), payload, { merge: true }).catch(err => {
+                console.warn('Error guardando en Firestore:', err);
+            });
+        };
+
+        // 2. Escuchar en tiempo real el avance y los apuntes de los estudiantes desde index.html
+        onSnapshot(collection(db, 'expertos_progreso'), (snapshot) => {
+            let changed = false;
+            snapshot.docs.forEach(docSnap => {
+                const data = docSnap.data();
+                const cleanCC = String(data.cedula || docSnap.id).replace(/\D/g, '');
+                if (!cleanCC) return;
+
+                let cand = candidates.find(c => String(c.cedula).replace(/\D/g, '') === cleanCC);
+                if (cand) {
+                    cand.lmsProgress = data.progressPercentage || cand.lmsProgress || 0;
+                    // Unir los apuntes del estudiante para verlos en la pestaña 4
+                    if (data.lessonNotes && typeof data.lessonNotes === 'object') {
+                        const notesSummary = Object.entries(data.lessonNotes)
+                            .filter(([_, txt]) => txt && txt.trim() !== '')
+                            .map(([k, txt]) => `[${k}]: ${txt}`)
+                            .join(' | ');
+                        if (notesSummary) cand.studentNotes = notesSummary;
+                    }
+                    // Si presentó Fase 2 (Producto) o Fase 3 (Aplicativos) en el index, actualiza la sub-nota automáticamente
+                    if (typeof data.scoreFase2 === 'number') cand.habAutogestion = data.scoreFase2;
+                    if (typeof data.scoreFase3 === 'number') cand.evalAplicativos = data.scoreFase3;
+                    changed = true;
+                }
+            });
+            if (changed) {
+                renderNotasMatrix();
+                renderLmsPanel();
+            }
+        });
+
+        // 3. Escuchar en tiempo real las preguntas que los estudiantes publican en index.html
+        onSnapshot(collection(db, 'preguntas_expertos'), (snapshot) => {
+            const remoteList = [];
+            snapshot.docs.forEach(docSnap => {
+                const d = docSnap.data();
+                remoteList.push({
+                    id: docSnap.id,
+                    student: d.studentName || 'Experto',
+                    module: `Lección ${d.lessonId || 'General'}`,
+                    question: d.text || '',
+                    answer: d.reply || '',
+                    time: d.date || 'Reciente',
+                    timestamp: d.timestamp || ''
+                });
+            });
+            if (remoteList.length > 0) {
+                remoteList.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
+                courseQuestions = remoteList;
+                renderLmsPanel();
+            }
+        });
+
+        // 4. Cuando la formadora responde una pregunta en formador.html, enviarla de vuelta al index.html del estudiante
+        const originalSaveQuestionAnswer = window.saveQuestionAnswer;
+        window.saveQuestionAnswer = async function(qIdx) {
+            const val = document.getElementById(`ans-input-${qIdx}`).value.trim();
+            const qObj = courseQuestions[qIdx];
+            if (originalSaveQuestionAnswer) originalSaveQuestionAnswer(qIdx);
+            if (qObj && qObj.id && !String(qObj.id).startsWith('q1') && !String(qObj.id).startsWith('q2')) {
+                try {
+                    await updateDoc(doc(db, 'preguntas_expertos', qObj.id), {
+                        reply: val,
+                        answered: val.length > 0
+                    });
+                } catch (e) {
+                    console.warn('No se pudo actualizar la respuesta en Firestore:', e);
+                }
+            }
+        };
+
+        // 5. Botón "Sincronizar Evaluaciones del Index" lee toda la colección evaluaciones_poli
+        window.pullGradesFromFirebase = async function() {
+            try {
+                const snap = await getDocs(collection(db, 'evaluaciones_poli'));
+                let count = 0;
+                snap.forEach(docSnap => {
+                    const d = docSnap.data();
+                    const cleanCC = String(d.cedula || '').replace(/\D/g, '');
+                    const cand = candidates.find(c => String(c.cedula).replace(/\D/g, '') === cleanCC);
+                    if (cand && typeof d.percentage === 'number') {
+                        if (d.phaseKey === 'fase2') { cand.habAutogestion = d.percentage; count++; }
+                        if (d.phaseKey === 'fase3') { cand.evalAplicativos = d.percentage; count++; }
+                    }
+                });
+                window.persistState();
+                renderAllTables();
+                showToast(`${count} calificaciones sincronizadas desde Firebase`, 'emerald');
+            } catch (e) {
+                showToast('Error al consultar evaluaciones en Firebase', 'rose');
+            }
+        };
+    </script>
 </body>
 </html>
