@@ -274,6 +274,33 @@
                         </div>
                     </div>
                 </div>
+                <!-- PANEL EN VIVO SINCRONIZADO CON LA CONSOLA DEL FORMADOR -->
+                <div id="live-cohort-banner" class="bg-white rounded-3xl p-5 md:p-6 border border-slate-200 shadow-xs space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <h3 class="text-sm md:text-base font-black text-[#00264D]">Cronograma Oficial de tu Cohorte en Vivo</h3>
+                        </div>
+                        <div class="text-xs font-bold text-slate-600 flex flex-wrap gap-3">
+                            <span><i class="fas fa-chalkboard-teacher text-ilumnoTeal mr-1"></i> Formador(a): <strong id="student-view-trainer" class="text-slate-900">Angie Cuéllar</strong></span>
+                            <span><i class="fas fa-calendar-alt text-ilumnoTeal mr-1"></i> Cohorte: <strong id="student-view-dates" class="text-slate-900">17-nov-2026 al 26-nov-2026</strong></span>
+                        </div>
+                    </div>
+
+                    <!-- Caja de Feedback Individual del Formador (Aparece cuando le escribes feedback en formador.html) -->
+                    <div id="student-personal-feedback-box" class="hidden bg-gradient-to-r from-emerald-50 to-cyan-50 border border-emerald-200 rounded-2xl p-4 flex items-start gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center flex-shrink-0 text-sm shadow-xs">
+                            <i class="fas fa-comment-check"></i>
+                        </div>
+                        <div>
+                            <span class="text-[10px] font-black uppercase tracking-wider text-emerald-800 block">Retroalimentación de tu Formador(a) sobre tus actividades:</span>
+                            <p id="student-personal-feedback-text" class="text-xs sm:text-sm font-bold text-slate-800 mt-0.5 leading-relaxed"></p>
+                        </div>
+                    </div>
+
+                    <!-- Grid de los 8 días sincronizado -->
+                    <div id="student-live-planning-grid" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 text-center"></div>
+                </div>
 
                 <!-- BANNER ANARANJADO DE SIMULADORES IA -->
                 <div class="bg-gradient-to-r from-amber-500 to-amber-600 rounded-3xl p-6 md:p-8 text-white shadow-md flex flex-col md:flex-row items-center justify-between gap-6">
@@ -3045,14 +3072,16 @@
             console.error("Error inicializando Firebase:", err);
         }
 
+        // 1. Subir progreso, apuntes y datos del estudiante a Firestore
         window.syncExpertToFirebase = async function() {
             if (!db || !userProfile.cedula) return;
             try {
+                const cleanCedula = String(userProfile.cedula).trim();
                 const count = Object.keys(completedLessons).length;
                 const progressPct = Math.round((count / TRACKABLE_KEYS.length) * 100);
-                await setDoc(doc(db, 'expertos_progreso', String(userProfile.cedula)), {
+                await setDoc(doc(db, 'expertos_progreso', cleanCedula), {
                     name: userProfile.name,
-                    cedula: String(userProfile.cedula),
+                    cedula: cleanCedula,
                     university: userProfile.campaign,
                     split: userProfile.split,
                     completedLessons: completedLessons,
@@ -3065,16 +3094,26 @@
             }
         };
 
+        // 2. Guardar resultados de Evaluaciones Fase 2 y Fase 3 y actualizar progreso del experto
         window.saveEvalToFirebase = async function(resultData) {
             if (!db) return;
             try {
                 await addDoc(collection(db, 'evaluaciones_poli'), resultData);
+                if (userProfile.cedula) {
+                    const cleanCedula = String(userProfile.cedula).trim();
+                    const fieldName = resultData.phaseKey === 'fase2' ? 'scoreFase2' : 'scoreFase3';
+                    await setDoc(doc(db, 'expertos_progreso', cleanCedula), {
+                        [fieldName]: resultData.percentage,
+                        lastEvalDate: new Date().toISOString()
+                    }, { merge: true });
+                }
                 window.syncExpertToFirebase();
             } catch (e) {
                 console.log("Evaluación guardada localmente.");
             }
         };
 
+        // 3. Publicar pregunta en el muro de Firestore
         window.pushQuestionToFirebase = async function(questionObj) {
             if (!db) return;
             try {
@@ -3084,6 +3123,7 @@
             }
         };
 
+        // 4. Escuchar en vivo las respuestas del Formador en el Muro de Preguntas
         if (db) {
             onSnapshot(collection(db, 'preguntas_expertos'), (snapshot) => {
                 const remoteQuestions = {};
@@ -3091,7 +3131,11 @@
                     const data = docSnap.data();
                     const lId = data.lessonId || 'home';
                     if (!remoteQuestions[lId]) remoteQuestions[lId] = [];
-                    remoteQuestions[lId].push({ id: docSnap.id, ...data });
+                    remoteQuestions[lId].push({
+                        id: docSnap.id,
+                        ...data,
+                        answered: Boolean(data.answered || (data.reply && data.reply.trim() !== ''))
+                    });
                 });
                 if (Object.keys(remoteQuestions).length > 0) {
                     Object.keys(remoteQuestions).forEach(k => {
@@ -3099,6 +3143,59 @@
                         lessonQuestions[k] = remoteQuestions[k];
                     });
                     renderQuestionsList();
+                }
+            }, () => {});
+
+            // 5. Escuchar en vivo la Configuración de la Cohorte, Fechas, Planning y Feedback desde formador.html
+            onSnapshot(doc(db, 'configuracion_cohorte', 'actual'), (docSnap) => {
+                if (!docSnap.exists()) return;
+                const data = docSnap.data();
+
+                // Actualizar cabecera de fechas y formador
+                if (data.config) {
+                    const trEl = document.getElementById('student-view-trainer');
+                    const dtEl = document.getElementById('student-view-dates');
+                    if (trEl && data.config.formador) trEl.textContent = data.config.formador;
+                    if (dtEl && data.config.inicio && data.config.fin) {
+                        dtEl.textContent = `${data.config.inicio} al ${data.config.fin}`;
+                    }
+                }
+
+                // Renderizar los 8 días del Planning en el Home del estudiante
+                const gridEl = document.getElementById('student-live-planning-grid');
+                if (gridEl && Array.isArray(data.planningModules)) {
+                    const datesArr = data.sessionDates || [];
+                    gridEl.innerHTML = data.planningModules.map((m, idx) => {
+                        let badge = 'bg-slate-100 text-slate-600 border-slate-200';
+                        if (m.status === 'Completado') badge = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+                        else if (m.status === 'En Curso') badge = 'bg-amber-50 text-amber-800 border-amber-300 ring-1 ring-amber-300';
+                        return `
+                            <div class="p-2.5 rounded-xl border ${badge} flex flex-col justify-between text-left">
+                                <div class="flex items-center justify-between text-[10px] font-black">
+                                    <span>DÍA ${m.day}</span>
+                                    <span>${datesArr[idx] || ''}</span>
+                                </div>
+                                <p class="text-[10px] font-bold mt-1 line-clamp-2 leading-tight">${m.title}</p>
+                                <span class="text-[9px] uppercase font-black mt-1.5 inline-block opacity-80">${m.status}</span>
+                            </div>
+                        `;
+                    }).join('');
+                }
+
+                // Mostrar el Feedback personalizado si el estudiante actual tiene comentario de la formadora
+                if (userProfile.cedula && Array.isArray(data.candidates)) {
+                    const cleanCC = String(userProfile.cedula).replace(/\D/g, '');
+                    const myRecord = data.candidates.find(c => String(c.cedula).replace(/\D/g, '') === cleanCC);
+                    const fbBox = document.getElementById('student-personal-feedback-box');
+                    const fbText = document.getElementById('student-personal-feedback-text');
+                    if (fbBox && fbText) {
+                        if (myRecord && myRecord.trainerFeedback && myRecord.trainerFeedback.trim() !== '') {
+                            fbText.textContent = myRecord.trainerFeedback;
+                            fbBox.classList.remove('hidden');
+                        } else {
+                            fbBox.classList.add('hidden');
+                        }
+                    }
                 }
             }, () => {});
         }
