@@ -1386,7 +1386,9 @@
       initSpeechRecognition();
       setupTopicTabs();
       setupEventListeners();
-      filterByTopic("Financiero");
+      const urlParams = new URLSearchParams(window.location.search);
+const initialTopic = urlParams.get('tema') || "Financiero";
+filterByTopic(initialTopic);
       if ('speechSynthesis' in window) {
         window.speechSynthesis.getVoices();
       }
