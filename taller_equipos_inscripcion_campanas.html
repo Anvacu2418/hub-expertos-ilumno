@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Misión Operativa: Laboratorio de Casos Reales | POLI 360°</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <style>
+        /* ==========================================================================
+           ARQUITECTURA BLINDADA - IDENTIDAD VISUAL POLI 360° (ZERO DEPENDENCY FAILURES)
+           ========================================================================== */
+        :root {
+            --poli-blue: #002E5D;
+            --poli-blue-dark: #001D3D;
+            --poli-blue-mid: #0A4580;
+            --poli-yellow: #FDB913;
+            --poli-yellow-soft: #FEF5D9;
+            --poli-light-blue: #E6F0FA;
+            --poli-green: #10B981;
+            --poli-green-soft: #ECFDF5;
+            --poli-red: #EF4444;
+            --poli-red-soft: #FEF2F2;
+            --poli-orange: #F97316;
+            --poli-orange-soft: #FFF7ED;
+            --poli-purple: #8B5CF6;
+            --poli-purple-soft: #F5F3FF;
+            --bg-page: #F3F6FA;
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --border-color: #E2E8F0;
+            --white: #FFFFFF;
+            --shadow-sm: 0 2px 6px rgba(0, 46, 93, 0.06);
+            --shadow-md: 0 8px 24px rgba(0, 46, 93, 0.09);
+            --shadow-lg: 0 16px 36px rgba(0, 46, 93, 0.14);
+            --radius-md: 12px;
+            --radius-lg: 18px;
+            --radius-xl: 24px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 20px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1120px;
+            margin: 0 auto;
+        }
+
+        /* BARRA SUPERIOR DE CONTROL Y PROGRESO */
+        .top-bar {
+            background: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 14px 22px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 12px;
+            z-index: 100;
+        }
+
+        .brand-pill {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            color: var(--poli-blue);
+            font-size: 0.95rem;
+        }
+
+        .brand-dot {
+            width: 12px;
+            height: 12px;
+            background: var(--poli-yellow);
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px var(--poli-yellow-soft);
+        }
+
+        .progress-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            min-width: 220px;
+            max-width: 380px;
+        }
+
+        .progress-track {
+            flex: 1;
+            height: 10px;
+            background: #E2E8F0;
+            border-radius: 99px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--poli-blue), var(--poli-green));
+            border-radius: 99px;
+            transition: width 0.4s ease;
+        }
+
+        .progress-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--poli-blue);
+            white-space: nowrap;
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-family: inherit;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--poli-blue);
+            color: var(--white);
+            box-shadow: 0 4px 12px rgba(0, 46, 93, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: var(--poli-blue-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-yellow {
+            background: var(--poli-yellow);
+            color: var(--poli-blue-dark);
+            box-shadow: 0 4px 12px rgba(253, 185, 19, 0.3);
+        }
+
+        .btn-yellow:hover {
+            background: #eab308;
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background: var(--white);
+            color: var(--poli-blue);
+            border: 1.5px solid #CBD5E1;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--poli-blue);
+            background: var(--poli-light-blue);
+        }
+
+        .btn-danger-ghost {
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            padding: 8px 12px;
+        }
+
+        .btn-danger-ghost:hover {
+            color: var(--poli-red);
+            background: var(--poli-red-soft);
+        }
+
+        /* HERO BANNER */
+        .hero-card {
+            background: linear-gradient(135deg, var(--poli-blue) 0%, #001B3A 100%);
+            color: var(--white);
+            border-radius: var(--radius-xl);
+            padding: 36px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--poli-yellow);
+            color: var(--poli-blue-dark);
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding: 5px 14px;
+            border-radius: 99px;
+            margin-bottom: 14px;
+        }
+
+        .hero-title {
+            font-size: clamp(1.65rem, 3vw, 2.35rem);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 12px;
+            max-width: 780px;
+        }
+
+        .hero-subtitle {
+            color: #CBD5E1;
+            font-size: 1rem;
+            max-width: 760px;
+            margin-bottom: 22px;
+        }
+
+        .hero-deco {
+            position: absolute;
+            right: -20px;
+            bottom: -30px;
+            font-size: 11rem;
+            color: var(--poli-yellow);
+            opacity: 0.08;
+            pointer-events: none;
+        }
+
+        .mission-pillars {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .pillar-box {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: var(--radius-md);
+            padding: 14px 16px;
+        }
+
+        .pillar-box strong {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--poli-yellow);
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+        }
+
+        .pillar-box p {
+            font-size: 0.8rem;
+            color: #E2E8F0;
+            line-height: 1.45;
+        }
+
+        /* TARJETAS DE SECCIÓN */
+        .section-card {
+            background: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            border-bottom: 2px solid var(--poli-light-blue);
+            padding-bottom: 14px;
+            margin-bottom: 22px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--poli-blue);
+        }
+
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--poli-light-blue);
+            color: var(--poli-blue);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        /* PORTALES Y ENLACES OFICIALES */
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 14px;
+        }
+
+        .portal-link {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 16px;
+            border-radius: var(--radius-md);
+            border: 1.5px solid var(--border-color);
+            background: #FAFCFF;
+            text-decoration: none;
+            color: var(--text-main);
+            transition: all 0.2s ease;
+        }
+
+        .portal-link:hover {
+            border-color: var(--poli-blue);
+            background: var(--poli-light-blue);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .portal-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+            flex-shrink: 0;
+        }
+
+        .portal-link h4 {
+            font-size: 0.92rem;
+            font-weight: 800;
+            color: var(--poli-blue);
+            margin-bottom: 3px;
+        }
+
+        .portal-link p {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* ROLES Y EQUIPO */
+        .team-meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--poli-blue);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1.5px solid #CBD5E1;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            color: var(--text-main);
+            background: var(--white);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--poli-blue);
+            box-shadow: 0 0 0 3px rgba(0, 46, 93, 0.12);
+        }
+
+        textarea.form-control {
+            min-height: 92px;
+            resize: vertical;
+        }
+
+        .roles-table-wrap {
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            margin-bottom: 18px;
+        }
+
+        table.roles-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 680px;
+        }
+
+        .roles-table th {
+            background: var(--poli-blue);
+            color: var(--white);
+            text-align: left;
+            padding: 12px 14px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .roles-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: top;
+            font-size: 0.84rem;
+        }
+
+        .roles-table tr:nth-child(even) td {
+            background: #F8FAFC;
+        }
+
+        .role-tag {
+            display: inline-block;
+            font-weight: 800;
+            font-size: 0.78rem;
+            padding: 4px 10px;
+            border-radius: 8px;
+            background: var(--poli-light-blue);
+            color: var(--poli-blue);
+            margin-bottom: 4px;
+        }
+
+        .role-desc {
+            font-size: 0.76rem;
+            color: var(--text-muted);
+            display: block;
+        }
+
+        /* CASOS DE ESTUDIO */
+        .case-card {
+            border: 1.5px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            margin-bottom: 24px;
+            overflow: hidden;
+            background: var(--white);
+            transition: border-color 0.2s;
+        }
+
+        .case-card.completed {
+            border-color: var(--poli-green);
+        }
+
+        .case-header {
+            background: #F8FAFC;
+            padding: 18px 22px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .case-id-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .case-number {
+            background: var(--poli-blue);
+            color: var(--poli-yellow);
+            font-weight: 800;
+            font-size: 0.82rem;
+            padding: 5px 12px;
+            border-radius: 8px;
+            letter-spacing: 0.04em;
+        }
+
+        .case-tag {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 99px;
+        }
+
+        .tag-virtual { background: var(--poli-yellow-soft); color: #92400E; }
+        .tag-presencial { background: #E0E7FF; color: #3730A3; }
+        .tag-critico { background: var(--poli-red-soft); color: #991B1B; }
+        .tag-campana { background: var(--poli-purple-soft); color: #5B21B6; }
+
+        .case-status-pill {
+            font-size: 0.76rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 99px;
+            background: #E2E8F0;
+            color: #475569;
+        }
+
+        .case-card.completed .case-status-pill {
+            background: var(--poli-green-soft);
+            color: #065F46;
+        }
+
+        .case-body {
+            padding: 22px;
+        }
+
+        .scenario-box {
+            background: linear-gradient(to right, #F8FAFC, #EFF6FF);
+            border-left: 4px solid var(--poli-blue);
+            padding: 16px 18px;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            margin-bottom: 16px;
+        }
+
+        .scenario-label {
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--poli-blue);
+            letter-spacing: 0.04em;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .scenario-text {
+            font-size: 0.93rem;
+            color: #1E293B;
+        }
+
+        .clue-strip {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            background: var(--poli-yellow-soft);
+            border: 1px solid #FDE68A;
+            padding: 10px 14px;
+            border-radius: 10px;
+            margin-bottom: 18px;
+            font-size: 0.8rem;
+            color: #78350F;
+        }
+
+        .clue-strip a {
+            color: var(--poli-blue);
+            font-weight: 700;
+            text-decoration: underline;
+        }
+
+        .questions-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        @media (min-width: 768px) {
+            .questions-grid.two-col {
+                grid-template-columns: 1fr 1fr;
+            }
+            .questions-grid.two-col .full-span {
+                grid-column: 1 / -1;
+            }
+        }
+
+        .q-block {
+            background: #FAFCFF;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 14px;
+        }
+
+        .q-title {
+            font-size: 0.84rem;
+            font-weight: 800;
+            color: var(--poli-blue);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .q-step {
+            background: var(--poli-blue);
+            color: var(--white);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            font-size: 0.72rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        /* SECCIÓN DE DUDAS Y BRECHAS DEL EQUIPO */
+        .doubts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-top: 14px;
+        }
+
+        .doubt-item {
+            background: #FFFBEB;
+            border: 1.5px solid #FDE68A;
+            border-radius: var(--radius-md);
+            padding: 16px;
+        }
+
+        .doubt-item label {
+            color: #92400E;
+            font-size: 0.82rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        /* BANNER DE EXPORTACIÓN FINAL */
+        .export-box {
+            background: linear-gradient(135deg, #002E5D 0%, #0A4580 100%);
+            color: var(--white);
+            border-radius: var(--radius-xl);
+            padding: 30px;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 30px;
+        }
+
+        .export-box h3 {
+            font-size: 1.45rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .export-box p {
+            color: #CBD5E1;
+            font-size: 0.92rem;
+            max-width: 640px;
+            margin: 0 auto 20px auto;
+        }
+
+        .save-toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--poli-blue-dark);
+            color: var(--white);
+            padding: 10px 18px;
+            border-radius: 99px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: var(--shadow-md);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.25s ease;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        .save-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ==========================================================================
+           ESTILOS DE IMPRESIÓN / GENERACIÓN DE PDF LIMPIO Y EVALUABLE
+           ========================================================================== */
+        @media print {
+            body {
+                background: #FFFFFF !important;
+                padding: 0 !important;
+                font-size: 11pt;
+                color: #000000 !important;
+            }
+            .top-bar, .no-print, .save-toast, .links-section {
+                display: none !important;
+            }
+            .container {
+                max-width: 100% !important;
+            }
+            .hero-card {
+                background: #002E5D !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                padding: 20px !important;
+                margin-bottom: 16px !important;
+                box-shadow: none !important;
+            }
+            .section-card, .case-card {
+                box-shadow: none !important;
+                border: 1px solid #94A3B8 !important;
+                page-break-inside: avoid;
+                break-inside: avoid;
+                margin-bottom: 16px !important;
+                padding: 16px !important;
+            }
+            .case-header {
+                background: #F1F5F9 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .roles-table th {
+                background: #002E5D !important;
+                color: #FFFFFF !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            input.form-control, textarea.form-control, select.form-control {
+                border: 1px solid #CBD5E1 !important;
+                background: #FFFFFF !important;
+                color: #000000 !important;
+                height: auto !important;
+                overflow: visible !important;
+            }
+            .print-answer-mirror {
+                display: block !important;
+                white-space: pre-wrap;
+                font-size: 10pt;
+                color: #0F172A;
+                background: #F8FAFC;
+                border: 1px solid #CBD5E1;
+                border-radius: 6px;
+                padding: 8px 10px;
+                margin-top: 4px;
+                min-height: 28px;
+            }
+            textarea.form-control, input.form-control {
+                display: none !important;
+            }
+        }
+
+        .print-answer-mirror {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- BARRA DE CONTROL SUPERIOR -->
+    <div class="top-bar no-print">
+        <div class="brand-pill">
+            <span class="brand-dot"></span>
+            <span>POLI 360° | Taller Operativo en Equipos</span>
+        </div>
+
+        <div class="progress-wrapper">
+            <div class="progress-track">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+            <span class="progress-label" id="progressText">0% completado</span>
+        </div>
+
+        <div class="top-actions">
+            <button type="button" class="btn btn-outline" onclick="manualSave()">
+                <i class="fas fa-save"></i> Guardar avance
+            </button>
+            <button type="button" class="btn btn-yellow" onclick="exportToPDF()">
+                <i class="fas fa-file-pdf"></i> Descargar Entregable PDF
+            </button>
+            <button type="button" class="btn btn-danger-ghost" onclick="resetForm()" title="Borrar todas las respuestas">
+                <i class="fas fa-rotate-left"></i> Reiniciar
+            </button>
+        </div>
+    </div>
+
+    <!-- HERO HEADER -->
+    <header class="hero-card">
+        <span class="hero-badge"><i class="fas fa-headset"></i> Entrenamiento para Llamadas Reales</span>
+        <h1 class="hero-title">Misión: Inscripción de Asignaturas y Campañas de Nivelación</h1>
+        <p class="hero-subtitle">
+            En operación real no basta con repetir un guion: deben <strong>diagnosticar el dolor del estudiante, navegar los portales oficiales, ver los videotutoriales y calcular valores exactos</strong> antes de proponer una solución. Trabajen en equipo, dividan roles y construyan respuestas listas para una auditoría de 100 puntos.
+        </p>
+
+        <div class="mission-pillars">
+            <div class="pillar-box">
+                <strong><i class="fas fa-search"></i> 1. Indagación y Diagnóstico</strong>
+                <p>Identificar modalidad, cohorte, créditos, prerrequisitos y bloqueo real antes de prometer soluciones.</p>
+            </div>
+            <div class="pillar-box">
+                <strong><i class="fas fa-compass"></i> 2. Exploración de Fuentes</strong>
+                <p>Consultar las páginas web, videos tutoriales, base de soporte y Derechos Pecuniarios 2026.</p>
+            </div>
+            <div class="pillar-box">
+                <strong><i class="fas fa-handshake"></i> 3. Venta Consultiva</strong>
+                <p>Transformar restricciones en rutas claras de autogestión, cuidando el tiempo y bolsillo del estudiante.</p>
+            </div>
+            <div class="pillar-box">
+                <strong><i class="fas fa-clipboard-check"></i> 4. Adherencia y Registro</strong>
+                <p>Definir si cierra en 1er contacto o se escala con soportes exactos y tipificación correcta.</p>
+            </div>
+        </div>
+        <i class="fas fa-graduation-cap hero-deco"></i>
+    </header>
+
+    <!-- SECCIÓN 1: CAJA DE HERRAMIENTAS Y PORTALES OFICIALES -->
+    <section class="section-card links-section">
+        <div class="section-header">
+            <div class="section-title">
+                <span class="section-icon"><i class="fas fa-toolbox"></i></span>
+                <div>
+                    <div>1. Centro de Exploración Web y Recursos Oficiales</div>
+                    <div style="font-size: 0.8rem; font-weight: 500; color: var(--text-muted);">Hagan clic, exploren las páginas, miren los videos tutoriales y descarguen los PDFs para resolver los casos.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="links-grid">
+            <a href="https://www.poli.edu.co/inscripcion-de-asignaturas-pregrado-virtual" target="_blank" rel="noopener" class="portal-link">
+                <div class="portal-icon" style="background: var(--poli-yellow-soft); color: #B45309;"><i class="fas fa-laptop"></i></div>
+                <div>
+                    <h4>Inscripción Pregrado Virtual</h4>
+                    <p>Exploren pasos en Smart Campus, bloques, video de horarios, electivas, glosario y FAQ.</p>
+                </div>
+            </a>
+
+            <a href="https://www.poli.edu.co/inscripcion-de-asignaturas-pregrado-presencial" target="_blank" rel="noopener" class="portal-link">
+                <div class="portal-icon" style="background: #E0E7FF; color: #3730A3;"><i class="fas fa-building"></i></div>
+                <div>
+                    <h4>Inscripción Pregrado Presencial</h4>
+                    <p>Revisen beneficio de hasta 2 materias virtuales, listado de restricciones y paso a paso.</p>
+                </div>
+            </a>
+
+            <a href="https://www.poli.edu.co/modulo-adicional" target="_blank" rel="noopener" class="portal-link">
+                <div class="portal-icon" style="background: var(--poli-green-soft); color: #047857;"><i class="fas fa-plus-circle"></i></div>
+                <div>
+                    <h4>Campaña: Módulo Adicional</h4>
+                    <p>Validar promedio mínimo (3.8), segundo bloque, fechas, reglas de matrícula y oferta.</p>
+                </div>
+            </a>
+
+            <a href="https://www.poli.edu.co/cursos-intersemestrales" target="_blank" rel="noopener" class="portal-link">
+                <div class="portal-icon" style="background: #FCE7F3; color: #BE185D;"><i class="fas fa-chalkboard-teacher"></i></div>
+                <div>
+                    <h4>Cursos Intersemestrales (Presencial)</h4>
+                    <p>Revisen cupo mínimo (10), máximo 2 cursos, condiciones Bogotá/Medellín y flujo de recibo.</p>
+                </div>
+            </a>
+
+            <a href="https://www.poli.edu.co/cursos-vacacionales-modalidad-virtual" target="_blank" rel="noopener" class="portal-link">
+                <div class="portal-icon" style="background: #FEF3C7; color: #92400E;"><i class="fas fa-umbrella-beach"></i></div>
+                <div>
+                    <h4>Cursos Vacacionales (Virtual)</h4>
+                    <p>Revisen cupo mínimo (15), exclusiones (transversales, prácticas, inglés) y apertura.</p>
+                </div>
+            </a>
+
+            <a href="https://www.poli.edu.co/sites/default/files/2025-12/derechos-pecuniarios-politecnico-grancolombiano-2026.pdf" target="_blank" rel="noopener" class="portal-link">
+                <div class="portal-icon" style="background: var(--poli-red-soft); color: #B91C1C;"><i class="fas fa-file-invoice-dollar"></i></div>
+                <div>
+                    <h4>Derechos Pecuniarios 2026 (PDF)</h4>
+                    <p>Busquen valores exactos de módulo adicional, vacacionales, intersemestrales, supletorios y última materia.</p>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 2: IDENTIFICACIÓN DEL EQUIPO, ROLES Y ESTRATEGIA -->
+    <section class="section-card">
+        <div class="section-header">
+            <div class="section-title">
+                <span class="section-icon"><i class="fas fa-users-cog"></i></span>
+                <div>
+                    <div>2. Conformación del Equipo, Roles y Estrategia de Trabajo</div>
+                    <div style="font-size: 0.8rem; font-weight: 500; color: var(--text-muted);">Obligatorio: Todo integrante debe tener un rol activo que sume al análisis y al entregable final.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="team-meta-grid">
+            <div class="form-group">
+                <label for="teamName">Nombre del Equipo / Escuadrón *</label>
+                <input type="text" id="teamName" class="form-control track-field" placeholder="Ej: Los Estrategas de Retención">
+            </div>
+            <div class="form-group">
+                <label for="sessionDate">Fecha de Sesión *</label>
+                <input type="date" id="sessionDate" class="form-control track-field">
+            </div>
+            <div class="form-group">
+                <label for="teamCount">Cantidad de Integrantes *</label>
+                <input type="number" id="teamCount" class="form-control track-field" min="2" max="8" placeholder="Ej: 5">
+            </div>
+        </div>
+
+        <div class="roles-table-wrap">
+            <table class="roles-table">
+                <thead>
+                    <tr>
+                        <th style="width: 28%;">Rol Operativo</th>
+                        <th style="width: 30%;">Integrante Asignado (Nombre Completo) *</th>
+                        <th style="width: 42%;">Compromiso Específico en la Actividad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <span class="role-tag"><i class="fas fa-crown"></i> 1. Líder de Diagnóstico y Tiempos</span>
+                            <span class="role-desc">Coordina el debate, verifica que no salten pasos y controla el reloj.</span>
+                        </td>
+                        <td><input type="text" id="role1Name" class="form-control track-field" placeholder="Nombre del integrante 1"></td>
+                        <td><input type="text" id="role1Task" class="form-control track-field" placeholder="¿Cómo garantizará que el equipo analice antes de responder?"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="role-tag"><i class="fas fa-globe"></i> 2. Explorador Web y Videos</span>
+                            <span class="role-desc">Navega los portales Poli, reproduce videos tutoriales y extrae rutas exactas.</span>
+                        </td>
+                        <td><input type="text" id="role2Name" class="form-control track-field" placeholder="Nombre del integrante 2"></td>
+                        <td><input type="text" id="role2Task" class="form-control track-field" placeholder="Portales y videos que revisará a profundidad"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="role-tag"><i class="fas fa-calculator"></i> 3. Analista Financiero y Créditos</span>
+                            <span class="role-desc">Cruza Derechos Pecuniarios 2026, reglas de créditos y fechas límite.</span>
+                        </td>
+                        <td><input type="text" id="role3Name" class="form-control track-field" placeholder="Nombre del integrante 3"></td>
+                        <td><input type="text" id="role3Task" class="form-control track-field" placeholder="Cálculos, tarifas y validaciones normativas a cargo"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="role-tag"><i class="fas fa-shield-alt"></i> 4. Auditor de Calidad y Soporte</span>
+                            <span class="role-desc">Valida matriz de tipificación, SLA, soportes y enfoque consultivo (cero fricción).</span>
+                        </td>
+                        <td><input type="text" id="role4Name" class="form-control track-field" placeholder="Nombre del integrante 4"></td>
+                        <td><input type="text" id="role4Task" class="form-control track-field" placeholder="Criterios Audia y tipificaciones HubSpot/Genesys que auditará"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="role-tag"><i class="fas fa-pen-fancy"></i> 5. Relator y Vocero (Opcional)</span>
+                            <span class="role-desc">Consolida las respuestas, redacta los speech y lidera la sustentación.</span>
+                        </td>
+                        <td><input type="text" id="role5Name" class="form-control track-field" placeholder="Nombre del integrante 5 (si aplica)"></td>
+                        <td><input type="text" id="role5Task" class="form-control track-field" placeholder="Síntesis de casos y consolidación de dudas del equipo"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="form-group">
+            <label for="teamStrategy">Estrategia de Trabajo del Equipo *</label>
+            <textarea id="teamStrategy" class="form-control track-field" placeholder="Expliquen brevemente cómo se organizaron para dividir la exploración de los enlaces, ver los videos tutoriales, cruzar el Excel de Soporte y validar que todos comprendan cada caso (no vale dividirse casos sin socializarlos)."></textarea>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 3: LABORATORIO DE CASOS REALES (BASADOS EN AUDIA Y SOPORTE SERVICIO) -->
+    <section class="section-card">
+        <div class="section-header">
+            <div class="section-title">
+                <span class="section-icon"><i class="fas fa-microscope"></i></span>
+                <div>
+                    <div>3. Laboratorio de Casuísticas Reales (Retos de Análisis y Pensamiento Crítico)</div>
+                    <div style="font-size: 0.8rem; font-weight: 500; color: var(--text-muted);">Cada caso está inspirado en llamadas reales auditadas. Lean cada detalle, busquen las trampas y respondan con precisión.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CASO 1 -->
+        <article class="case-card" id="card-case1">
+            <div class="case-header">
+                <div class="case-id-group">
+                    <span class="case-number">CASO 01</span>
+                    <strong style="color: var(--poli-blue);">El Laberinto de los Créditos y la Media Matrícula</strong>
+                    <span class="case-tag tag-virtual">Pregrado Virtual</span>
+                </div>
+                <span class="case-status-pill" id="status-case1">Pendiente</span>
+            </div>
+            <div class="case-body">
+                <div class="scenario-box">
+                    <div class="scenario-label"><i class="fas fa-phone-volume"></i> Llamada Real #1 — Estudiante Antiguo (4° Semestre Administración de Empresas Virtual)</div>
+                    <p class="scenario-text">
+                        "Hola, pagué media matrícula porque este semestre estoy apretado de plata. Mi semestre completo tiene 15 créditos y cada materia vale 3 créditos. Intenté inscribir 3 materias de primer bloque porque quiero salir rápido de eso, pero el sistema no me deja y además una materia que agregué me sale en estado <strong>'PENDIENTE'</strong>. Para colmo, quiero saber si el 1.5 crédito que me sobra me lo guardan para el otro semestre o me devuelven esa plata."
+                    </p>
+                </div>
+                <div class="clue-strip">
+                    <i class="fas fa-compass"></i>
+                    <span><strong>Ruta de Exploración:</strong> Revisen <a href="https://www.poli.edu.co/inscripcion-de-asignaturas-pregrado-virtual" target="_blank">Inscripción Pregrado Virtual</a> (Videos tutoriales y FAQ), el Módulo 3 (Metodología por créditos) y Soporte Servicio.</span>
+                </div>
+                <div class="questions-grid two-col">
+                    <div class="q-block">
+                        <div class="q-title"><span class="q-step">1</span> Diagnóstico Técnico y Matemático</div>
+                        <textarea id="c1_q1" class="form-control track-field" placeholder="¿Cuántos créditos habilita media matrícula sobre 15? ¿Cuántas materias puede inscribir realmente? ¿Por qué le aparece 'PENDIENTE' y qué botón exacto debe presionar para que quede 'INSCRITO'?"></textarea>
+                    </div>
+                    <div class="q-block">
+                        <div class="q-title"><span class="q-step">2</span> Manejo Consultivo y Financiero</div>
+                        <textarea id="c1_q2" class="form-control track-field" placeholder="¿Qué pasa con el 1.5 crédito sobrante (se acumula o se devuelve dinero)? ¿Cómo le explican con empatía y venta consultiva este impacto y qué alternativa financiera le proponen a futuro?"></textarea>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- CASO 2 -->
+        <article class="case-card" id="card-case2">
+            <div class="case-header">
+                <div class="case-id-group">
+                    <span class="case-number">CASO 02</span>
+                    <strong style="color: var(--poli-blue);">La Trampa Presencial: Virtualidad, Restricciones y Cupo en Tiempo Real</strong>
+                    <span class="case-tag tag-presencial">Pregrado Presencial</span>
+                </div>
+                <span class="case-status-pill" id="status-case2">Pendiente</span>
+            </div>
+            <div class="case-body">
+                <div class="scenario-box">
+                    <div class="scenario-label"><i class="fas fa-phone-volume"></i> Llamada Real #2 — Estudiante Presencial Bogotá (Ingeniería Industrial)</div>
+                    <p class="scenario-text">
+                        "Buenas tardes, trabajo en turnos rotativos y se me cruzan dos materias presenciales (cada una de 4 créditos, total 8 créditos). Un compañero me dijo que yo puedo meter hasta 2 materias virtuales sin pedir permiso. Intenté meter 'Laboratorio de Procesos' y otra materia virtual, pero el sistema me bloquea. Además, ya tenía inscrita una materia presencial en la mañana, la voy a eliminar ya mismo para ver si me deja meterla en la noche."
+                    </p>
+                </div>
+                <div class="clue-strip">
+                    <i class="fas fa-compass"></i>
+                    <span><strong>Ruta de Exploración:</strong> Exploren <a href="https://www.poli.edu.co/inscripcion-de-asignaturas-pregrado-presencial" target="_blank">Inscripción Pregrado Presencial</a> (descarguen/revisen el listado de asignaturas con restricción virtual) y el Soporte Servicio.</span>
+                </div>
+                <div class="questions-grid two-col">
+                    <div class="q-block">
+                        <div class="q-title"><span class="q-step">1</span> Las 2 Razones del Bloqueo</div>
+                        <textarea id="c2_q1" class="form-control track-field" placeholder="Identifiquen los DOS filtros técnicos por los cuales el sistema no le permite inscribir esas 2 materias virtuales (créditos máximos habilitados vs. restricción académica)."></textarea>
+                    </div>
+                    <div class="q-block">
+                        <div class="q-title"><span class="q-step">2</span> Alerta Crítica Antes de Eliminar</div>
+                        <textarea id="c2_q2" class="form-control track-field" placeholder="¿Qué advertencia urgente deben darle antes de que elimine la materia de la mañana? ¿Cómo debe verificar horarios antes de soltar un NRC?"></textarea>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- CASO 3 -->
+        <article class="case-card" id="card-case3">
+            <div class="case-header">
+                <div class="case-id-group">
+                    <span class="case-number">CASO 03</span>
+                    <strong style="color: var(--poli-blue);">Módulo Adicional vs. La Ansiedad por Adelantar Carrera</strong>
+                    <span class="case-tag tag-campana">Campaña Módulo Adicional</span>
+                </div>
+                <span class="case-status-pill" id="status-case3">Pendiente</span>
+            </div>
+            <div class="case-body">
+                <div class="scenario-box">
+                    <div class="scenario-label"><i class="fas fa-phone-volume"></i> Llamada Real #3 — Estudiante Virtual (Contaduría Pública)</div>
+                    <p class="scenario-text">
+                        "Hola, quiero que me generen ya mismo la orden de pago de mi semestre completo INCLUYENDO un Módulo Adicional para adelantar una materia de Primer Bloque porque quiero graduarme rápido. El semestre pasado tuve un promedio de 3.6 porque tuve una calamidad, pero este semestre sí le voy a meter toda la ficha. ¿Cuánto me cuesta ese módulo adicional y por qué no me lo suman de una vez a la matrícula?"
+                    </p>
+                </div>
+                <div class="clue-strip">
+                    <i class="fas fa-compass"></i>
+                    <span><strong>Ruta de Exploración:</strong> Revisen <a href="https://www.poli.edu.co/modulo-adicional" target="_blank">Portal Módulo Adicional</a>, <a href="https://www.poli.edu.co/sites/default/files/2025-12/derechos-pecuniarios-politecnico-grancolombiano-2026.pdf" target="_blank">Derechos Pecuniarios 2026</a> y el Módulo 4.</span>
+                </div>
+                <div class="questions-grid two-col">
+                    <div class="q-block">
+                        <div class="q-title"><span class="q-step">1</span> Auditoría de Requisitos y Valor 2026</div>
+                        <textarea id="c3_q1" class="form-control track-field" placeholder="Evalúen los 3 errores/bloqueos en su solicitud (promedio requerido y ruta en Analytics para verificarlo, bloque permitido, y por qué no se cobra junto con la matrícula). Indiquen el valor exacto del Módulo Adicional en Derechos Pecuniarios 2026."></textarea>
+                    </div>
+                    <div class="q-block">
+                        <div class="q-title"><span class="q-step">2</span> Speech Consultivo (Transformar el "No")</div>
+                        <textarea id="c3_q2" class="form-control track-field" placeholder="Redacte el argumento empático y consultivo explicando el 'porqué' institucional del promedio 3.8 y qué alternativa real tiene para adelantar materias en vacaciones si sube su rendimiento."></textarea>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- CASO 4 -->
+        <article class="case-card" id="card-case4">
+            <div class="case-header">
+                <div class="case-id-group">
+                    <span class="case-number">CASO 04</span>
+                    <strong style="color: var(--poli-blue);">Duelo de Campañas: Vacacionales vs. Intersemestrales y el Cupo Mínimo</strong>
+                    <span class="case-tag tag-campana">Vacacionales e Intersemestrales</span>
+                </div>
+                <span class="case-status-pill" id="status-case4">Pendiente</span>
+            </div>
+            <div class="case-body">
+                <div class="scenario-box">
+                    <div class="scenario-label"><i class="fas fa-phone-volume"></i> Llamada Real #4 — Dos Estudiantes Llamando en Simultáneo</div>
+                    <p class="scenario-text">
+                        <strong>Estudiante A (Virtual):</strong> "Me inscribí ayer a dos cursos vacacionales: uno es <em>Inglés II</em> y el otro es una materia disciplinar de 3 créditos. Hoy entré a Pagos y no me sale el recibo, y además me dicen que mi curso aparece en Canvas pero no ha iniciado. ¿Por qué no me sale factura?"<br>
+                        <strong>Estudiante B (Presencial Medellín - Convenio Policía Nacional):</strong> "Quiero inscribir 3 cursos intersemestrales en Teams para adelantar medio semestre. ¿Cuánto vale cada curso y qué pasa si pago y no se abre el grupo?"
+                    </p>
+                </div>
+                <div class="clue-strip">
+                    <i class="fas fa-compass"></i>
+                    <span><strong>Ruta de Exploración:</strong> Comparen <a href="https://www.poli.edu.co/cursos-vacacionales-modalidad-virtual" target="_blank">Cursos Vacacionales Virtual</a>, <a href="https://www.poli.edu.co/cursos-intersemestrales" target="_blank">Cursos Intersemestrales</a> y <a href="https://www.poli.edu.co/sites/default/files/2025-12/derechos-pecuniarios-politecnico-grancolombiano-2026.pdf" target="_blank">Derechos Pecuniarios 2026</a>.</span>
+                </div>
+                <div class="questions-grid two-col">
+                    <div class="q-block">
+                        <div class="q-title"><span class="q-step">1</span> Resolución Estudiante A (Virtual)</div>
+                        <textarea id="c4_q1" class="form-control track-field" placeholder="¿Puede ver Inglés II en vacacionales? ¿Cuál es el cupo mínimo en virtual (10 o 15)? Expliquen la línea de tiempo (Inscripción -> Cierre -> Validación cupo -> Generación de factura) y por qué ver el curso en Canvas no garantiza apertura."></textarea>
+                    </div>
+                    <div class="q-block">
+                        <div class="q-title"><span class="q-step">2</span> Resolución Estudiante B (Presencial) y Tarifas</div>
+                        <textarea id="c4_q2" class="form-control track-field" placeholder="¿Aplica intersemestral para Policía Nacional? ¿Cuántos cursos máximo puede tomar? ¿Cuál es el cupo mínimo presencial? Indiquen tarifas en Derechos Pecuniarios 2026 y qué ocurre si un curso pagado no abre."></textarea>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- CASO 5 -->
+        <article class="case-card" id="card-case5">
+            <div class="case-header">
+                <div class="case-id-group">
+                    <span class="case-number">CASO 05</span>
+                    <strong style="color: var(--poli-blue);">A un Paso del Grado: Última Materia, Excepciones y "Hack" Virtual</strong>
+                    <span class="case-tag tag-critico">Cierre de Carrera</span>
+                </div>
+                <span class="case-status-pill" id="status-case5">Pendiente</span>
+            </div>
+            <div class="case-body">
+                <div class="scenario-box">
+                    <div class="scenario-label"><i class="fas fa-phone-volume"></i> Llamada Real #5 — Casuísticas de Último Semestre</div>
+                    <p class="scenario-text">
+                        <strong>Escenario 5A:</strong> Un estudiante de Psicología Virtual ya pagó su matrícula completa de 10° semestre, inscribió todas sus materias, pero le queda <strong>1 sola materia pendiente</strong> de 2° bloque para completar el 100% de su malla. No quiere pagar otro semestre completo.<br>
+                        <strong>Escenario 5B:</strong> Otro estudiante ya terminó materias pero debe <strong>2 asignaturas</strong> (una es prerrequisito de la otra) y pregunta si puede pagarlas bajo la figura de "Última Materia". ¿Qué pasa si debiera 3 asignaturas y solo pudiera inscribir 1 por prerrequisitos?
+                    </p>
+                </div>
+                <div class="clue-strip">
+                    <i class="fas fa-compass"></i>
+                    <span><strong>Ruta de Exploración:</strong> Consulten el Soporte Servicio (pestaña <em>Inscripción Asignaturas -> Última materia</em>), Módulo 3 (Asignatura Adicional) y <a href="https://www.poli.edu.co/sites/default/files/2025-12/derechos-pecuniarios-politecnico-grancolombiano-2026.pdf" target="_blank">Derechos Pecuniarios 2026</a>.</span>
+                </div>
+                <div class="questions-grid two-col">
+                    <div class="q-block">
+                        <div class="q-title"><span class="q-step">1</span> Ruta de Solución Escenario 5A ("Hack" Virtual)</div>
+                        <textarea id="c5_q1" class="form-control track-field" placeholder="¿Cuál es la Prioridad 1 y la Prioridad 2 para este estudiante virtual? ¿Qué checklist obligatorio debe cumplir y qué valor tiene la última materia en Derechos Pecuniarios 2026?"></textarea>
+                    </div>
+                    <div class="q-block">
+                        <div class="q-title"><span class="q-step">2</span> Análisis Normativo Escenario 5B (Excepción)</div>
+                        <textarea id="c5_q2" class="form-control track-field" placeholder="¿Cómo aplica la excepción cuando debe 2 materias con prerrequisito (o doble programa)? ¿Y qué debe pagar obligatoriamente si debe 3 materias aunque solo pueda ver 1 por prerrequisito?"></textarea>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- CASO 6 -->
+        <article class="case-card" id="card-case6">
+            <div class="case-header">
+                <div class="case-id-group">
+                    <span class="case-number">CASO 06</span>
+                    <strong style="color: var(--poli-blue);">Emergencia Evaluativa y Prácticas: Supletorios vs. Homologación Laboral</strong>
+                    <span class="case-tag tag-critico">Caso Integral + Tipificación</span>
+                </div>
+                <span class="case-status-pill" id="status-case6">Pendiente</span>
+            </div>
+            <div class="case-body">
+                <div class="scenario-box">
+                    <div class="scenario-label"><i class="fas fa-phone-volume"></i> Llamada Real #6 — Estudiante Frustrado (Basado en Auditoría Audia)</div>
+                    <p class="scenario-text">
+                        "¡Estoy furioso! Ayer no pude presentar un <strong>Quiz</strong> ni el <strong>Examen Final</strong> de mi materia virtual porque me hospitalizaron de urgencia (tengo incapacidad de mi EPS). Quiero pagar supletorio para los dos, o que me exoneren el cobro por la incapacidad. Además, el otro semestre me toca inscribir <strong>Prácticas</strong>, pero yo llevo 3 años trabajando en una empresa en algo parecido, así que quiero homologar esa materia por mi experiencia para no perder tiempo."
+                    </p>
+                </div>
+                <div class="clue-strip">
+                    <i class="fas fa-compass"></i>
+                    <span><strong>Ruta de Exploración:</strong> Revisen Soporte Servicio (pestañas <em>Campañas Adelantar y Nivelar -> Supletorios</em>, <em>Docentes y Notas -> Ampliación</em>, <em>Prácticas</em> y <em>Matriz de Tipificación</em>) + <a href="https://www.poli.edu.co/sites/default/files/2025-12/derechos-pecuniarios-politecnico-grancolombiano-2026.pdf" target="_blank">Derechos Pecuniarios 2026</a>.</span>
+                </div>
+                <div class="questions-grid two-col">
+                    <div class="q-block">
+                        <div class="q-title"><span class="q-step">1</span> Manejo del Quiz, Examen Final y Excusa Médica</div>
+                        <textarea id="c6_q1" class="form-control track-field" placeholder="Diferencien el manejo del Quiz vs. el Examen Final. ¿Qué costo tiene un supletorio en 2026? ¿Cómo se tramita la incapacidad médica de EPS (sin prometer exoneración inmediata)?"></textarea>
+                    </div>
+                    <div class="q-block">
+                        <div class="q-title"><span class="q-step">2</span> Regla de Oro de Prácticas y Tipificación Oficial</div>
+                        <textarea id="c6_q2" class="form-control track-field" placeholder="¿Se puede homologar la práctica por experiencia laboral? ¿Qué modalidad exacta le aplica ('Ya tengo trabajo') y qué debe entregar? Indiquen Clase Genesys, Detalle y Título HubSpot para documentar esta gestión sin errores de auditoría."></textarea>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+    </section>
+
+    <!-- SECCIÓN 4: BITÁCORA DE DUDAS Y BRECHAS DEL EQUIPO -->
+    <section class="section-card">
+        <div class="section-header">
+            <div class="section-title">
+                <span class="section-icon" style="background: var(--poli-yellow-soft); color: #B45309;"><i class="fas fa-question-circle"></i></span>
+                <div>
+                    <div>4. Bitácora de Dudas, Vacíos y Retos del Grupo</div>
+                    <div style="font-size: 0.8rem; font-weight: 500; color: var(--text-muted);">Este espacio es clave para su Formadora: registren aquí todo lo que no quedó 100% claro al explorar las páginas o casos.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="doubts-grid">
+            <div class="doubt-item">
+                <label for="doubtProcess"><i class="fas fa-cogs"></i> 1. Dudas sobre Procesos, Fechas o Campañas</label>
+                <textarea id="doubtProcess" class="form-control track-field" placeholder="¿Qué regla de inscripción, créditos, módulo adicional, intersemestral o vacacional les generó debate o confusión en el equipo?"></textarea>
+            </div>
+            <div class="doubt-item">
+                <label for="doubtSystems"><i class="fas fa-desktop"></i> 2. Dudas sobre Herramientas (Smart Campus, Analytics, Banner, HubSpot)</label>
+                <textarea id="doubtSystems" class="form-control track-field" placeholder="¿Qué ruta de consulta, pantalla de validación o tipificación necesitan practicar en vivo antes de salir a llamadas reales?"></textarea>
+            </div>
+            <div class="doubt-item">
+                <label for="doubtObjections"><i class="fas fa-comments"></i> 3. Objeciones Difíciles que Temen Enfrentar en Llamada</label>
+                <textarea id="doubtObjections" class="form-control track-field" placeholder="¿Qué reclamo o situación de un estudiante sienten que aún les costaría manejar con empatía y firmeza?"></textarea>
+            </div>
+        </div>
+    </section>
+
+    <!-- BANNER FINAL DE ENTREGA -->
+    <div class="export-box no-print">
+        <h3><i class="fas fa-award" style="color: var(--poli-yellow);"></i> ¡Misión Cumplida! Generen su Entregable Evaluable</h3>
+        <p>
+            Antes de descargar el PDF, verifiquen que todos los nombres del equipo, roles y respuestas de los 6 casos estén completos. Al hacer clic abajo, seleccionen <strong>"Guardar como PDF"</strong> y envíen el archivo a su Formadora.
+        </p>
+        <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+            <button type="button" class="btn btn-yellow" style="font-size: 0.95rem; padding: 13px 26px;" onclick="exportToPDF()">
+                <i class="fas fa-file-pdf"></i> Generar y Descargar Entregable en PDF
+            </button>
+        </div>
+    </div>
+
+</div>
+
+<!-- TOAST DE GUARDADO AUTOMÁTICO -->
+<div class="save-toast" id="saveToast">
+    <i class="fas fa-check-circle" style="color: var(--poli-green);"></i>
+    <span>Avance guardado en este navegador</span>
+</div>
+
+<script>
+    const STORAGE_KEY = 'poli_taller_inscripcion_campanas_v1';
+
+    // Inicializar fecha por defecto si está vacía
+    document.addEventListener('DOMContentLoaded', () => {
+        loadSavedData();
+        const dateInput = document.getElementById('sessionDate');
+        if (!dateInput.value) {
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.value = today;
+        }
+        updateProgress();
+
+        // Escuchar cambios en todos los campos para autoguardado
+        document.querySelectorAll('.track-field').forEach(field => {
+            field.addEventListener('input', () => {
+                saveData(false);
+                updateProgress();
+            });
+        });
+    });
+
+    function saveData(showNotification = true) {
+        const data = {};
+        document.querySelectorAll('.track-field').forEach(field => {
+            data[field.id] = field.value;
+        });
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            if (showNotification) {
+                showToast();
+            }
+        } catch (e) {
+            console.warn('No se pudo acceder a localStorage:', e);
+        }
+    }
+
+    function manualSave() {
+        saveData(true);
+    }
+
+    function loadSavedData() {
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return;
+            const data = JSON.parse(raw);
+            Object.keys(data).forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = data[id];
+            });
+        } catch (e) {
+            console.warn('Error cargando datos guardados:', e);
+        }
+    }
+
+    function showToast() {
+        const toast = document.getElementById('saveToast');
+        toast.classList.add('show');
+        clearTimeout(window.toastTimer);
+        window.toastTimer = setTimeout(() => {
+            toast.classList.remove('show');
+        }, 2400);
+    }
+
+    function updateProgress() {
+        // Campos obligatorios clave para medir progreso real
+        const requiredIds = [
+            'teamName', 'role1Name', 'role2Name', 'role3Name', 'teamStrategy',
+            'c1_q1', 'c1_q2',
+            'c2_q1', 'c2_q2',
+            'c3_q1', 'c3_q2',
+            'c4_q1', 'c4_q2',
+            'c5_q1', 'c5_q2',
+            'c6_q1', 'c6_q2',
+            'doubtProcess'
+        ];
+
+        let filled = 0;
+        requiredIds.forEach(id => {
+            const el = document.getElementById(id);
+            if (el && el.value.trim().length >= 5) {
+                filled++;
+            }
+        });
+
+        const pct = Math.round((filled / requiredIds.length) * 100);
+        document.getElementById('progressBar').style.width = pct + '%';
+        document.getElementById('progressText').textContent = pct + '% completado';
+
+        // Actualizar estado individual de cada caso
+        for (let i = 1; i <= 6; i++) {
+            const q1 = document.getElementById(`c${i}_q1`).value.trim();
+            const q2 = document.getElementById(`c${i}_q2`).value.trim();
+            const card = document.getElementById(`card-case${i}`);
+            const pill = document.getElementById(`status-case${i}`);
+            if (q1.length >= 10 && q2.length >= 10) {
+                card.classList.add('completed');
+                pill.innerHTML = '<i class="fas fa-check"></i> Resuelto';
+            } else if (q1.length > 0 || q2.length > 0) {
+                card.classList.remove('completed');
+                pill.textContent = 'En progreso...';
+            } else {
+                card.classList.remove('completed');
+                pill.textContent = 'Pendiente';
+            }
+        }
+    }
+
+    function resetForm() {
+        if (confirm('¿Estás seguro de borrar todas las respuestas del formulario para iniciar un nuevo taller?')) {
+            localStorage.removeItem(STORAGE_KEY);
+            document.querySelectorAll('.track-field').forEach(field => {
+                if (field.id !== 'sessionDate') field.value = '';
+            });
+            updateProgress();
+            showToast();
+        }
+    }
+
+    function buildPrintMirrors() {
+        // Eliminar espejos anteriores
+        document.querySelectorAll('.print-answer-mirror').forEach(el => el.remove());
+
+        // Crear bloques de texto plano con el contenido completo de cada input/textarea para evitar cortes al imprimir PDF
+        document.querySelectorAll('.track-field').forEach(field => {
+            const mirror = document.createElement('div');
+            mirror.className = 'print-answer-mirror';
+            const val = field.value.trim();
+            mirror.textContent = val ? val : '[Sin respuesta registrada por el grupo]';
+            field.parentNode.insertBefore(mirror, field.nextSibling);
+        });
+    }
+
+    function exportToPDF() {
+        const team = document.getElementById('teamName').value.trim();
+        if (!team) {
+            alert('Por favor escriban primero el "Nombre del Equipo" en la Sección 2 antes de descargar el PDF.');
+            document.getElementById('teamName').focus();
+            return;
+        }
+        saveData(false);
+        buildPrintMirrors();
+        const originalTitle = document.title;
+        const cleanTeam = team.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ _-]/g, '').trim().replace(/\s+/g, '_');
+        document.title = `Entregable_Poli360_${cleanTeam}`;
+        window.print();
+        document.title = originalTitle;
+    }
+</script>
+
+</body>
+</html>
