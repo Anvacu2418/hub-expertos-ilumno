@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Resultados y Feedback | POLI 360°</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <style>
+        /* ==========================================================================
+           SISTEMA BLINDADO POLI 360° - PORTAL PRIVADO DE RESULTADOS POR CÉDULA
+           ========================================================================== */
+        :root {
+            --poli-blue: #002E5D;
+            --poli-blue-dark: #001B3A;
+            --poli-blue-mid: #0A4580;
+            --poli-yellow: #FDB913;
+            --poli-yellow-soft: #FEF5D9;
+            --poli-light-blue: #E6F0FA;
+            --poli-green: #10B981;
+            --poli-green-soft: #ECFDF5;
+            --poli-red: #EF4444;
+            --poli-red-soft: #FEF2F2;
+            --poli-orange: #F97316;
+            --poli-orange-soft: #FFF7ED;
+            --poli-purple: #8B5CF6;
+            --poli-purple-soft: #F5F3FF;
+            --bg-page: #F1F5F9;
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --border-color: #E2E8F0;
+            --white: #FFFFFF;
+            --shadow-sm: 0 2px 8px rgba(0, 46, 93, 0.06);
+            --shadow-md: 0 10px 28px rgba(0, 46, 93, 0.10);
+            --shadow-lg: 0 20px 44px rgba(0, 46, 93, 0.16);
+            --radius-md: 12px;
+            --radius-lg: 18px;
+            --radius-xl: 24px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* PANTALLA DE LOGIN POR CÉDULA */
+        .login-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            background: radial-gradient(circle at top right, #E6F0FA 0%, #F1F5F9 55%);
+        }
+
+        .login-card {
+            background: var(--white);
+            width: 100%;
+            max-width: 460px;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            animation: fadeUp 0.4s ease;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(14px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-header {
+            background: linear-gradient(135deg, var(--poli-blue) 0%, var(--poli-blue-dark) 100%);
+            color: var(--white);
+            padding: 32px 28px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--poli-yellow);
+            color: var(--poli-blue-dark);
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding: 4px 12px;
+            border-radius: 99px;
+            margin-bottom: 12px;
+        }
+
+        .login-header h1 {
+            font-size: 1.55rem;
+            font-weight: 800;
+            line-height: 1.25;
+            margin-bottom: 6px;
+        }
+
+        .login-header p {
+            font-size: 0.85rem;
+            color: #CBD5E1;
+        }
+
+        .login-body {
+            padding: 28px;
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--poli-blue);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .input-icon-wrap {
+            position: relative;
+        }
+
+        .input-icon-wrap i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .cedula-input {
+            width: 100%;
+            padding: 14px 16px 14px 44px;
+            border: 2px solid #CBD5E1;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--poli-blue-dark);
+            letter-spacing: 0.04em;
+            transition: all 0.2s;
+        }
+
+        .cedula-input:focus {
+            outline: none;
+            border-color: var(--poli-blue);
+            box-shadow: 0 0 0 4px rgba(0, 46, 93, 0.12);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: var(--poli-blue);
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 6px 16px rgba(0, 46, 93, 0.22);
+            transition: all 0.2s;
+        }
+
+        .btn-login:hover {
+            background: var(--poli-blue-dark);
+            transform: translateY(-1px);
+        }
+
+        .error-alert {
+            display: none;
+            background: var(--poli-red-soft);
+            border: 1px solid #FECACA;
+            color: #991B1B;
+            padding: 12px 14px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            margin-top: 14px;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .error-alert.show {
+            display: flex;
+        }
+
+        .privacy-note {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.76rem;
+            color: var(--text-muted);
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        /* DASHBOARD DEL ASESOR */
+        .dashboard-wrapper {
+            display: none;
+            max-width: 1040px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            animation: fadeUp 0.35s ease;
+        }
+
+        .dashboard-wrapper.active {
+            display: block;
+        }
+
+        .top-nav {
+            background: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 14px 22px;
+            margin-bottom: 22px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .brand-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            color: var(--poli-blue);
+            font-size: 0.95rem;
+        }
+
+        .brand-dot {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            background: var(--poli-yellow);
+            box-shadow: 0 0 0 4px var(--poli-yellow-soft);
+        }
+
+        .btn-logout {
+            background: var(--poli-light-blue);
+            color: var(--poli-blue);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 9px;
+            font-family: inherit;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .btn-logout:hover {
+            background: var(--poli-blue);
+            color: var(--white);
+        }
+
+        /* BANNER PERFIL ASESOR */
+        .profile-hero {
+            background: linear-gradient(135deg, var(--poli-blue) 0%, var(--poli-blue-dark) 100%);
+            color: var(--white);
+            border-radius: var(--radius-xl);
+            padding: 30px 32px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-info h2 {
+            font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .profile-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            font-size: 0.82rem;
+            color: #CBD5E1;
+        }
+
+        .meta-chip {
+            background: rgba(255, 255, 255, 0.12);
+            padding: 4px 12px;
+            border-radius: 99px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .summary-kpis {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .kpi-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: var(--radius-md);
+            padding: 12px 18px;
+            text-align: center;
+            min-width: 130px;
+        }
+
+        .kpi-box span {
+            display: block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--poli-yellow);
+            font-weight: 700;
+        }
+
+        .kpi-box strong {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--white);
+        }
+
+        /* TARJETAS DE ACTIVIDADES */
+        .activity-card {
+            background: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+        }
+
+        .activity-header {
+            padding: 20px 26px;
+            background: #F8FAFC;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .act-title-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .act-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--poli-blue);
+            color: var(--poli-yellow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .act-title-group h3 {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--poli-blue);
+        }
+
+        .act-title-group p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .badge-pill {
+            font-size: 0.82rem;
+            font-weight: 800;
+            padding: 6px 14px;
+            border-radius: 99px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badge-top { background: var(--poli-green-soft); color: #065F46; border: 1px solid #A7F3D0; }
+        .badge-medio-alto { background: #E0F2FE; color: #075985; border: 1px solid #BAE6FD; }
+        .badge-medio { background: var(--poli-yellow-soft); color: #92400E; border: 1px solid #FDE68A; }
+        .badge-desarrollo { background: var(--poli-orange-soft); color: #9A3412; border: 1px solid #FED7AA; }
+        .badge-alerta { background: var(--poli-red-soft); color: #991B1B; border: 1px solid #FECACA; }
+        .badge-formato { background: var(--poli-purple-soft); color: #5B21B6; border: 1px solid #DDD6FE; }
+        .badge-pending { background: #F1F5F9; color: #475569; border: 1px solid #CBD5E1; }
+
+        .activity-body {
+            padding: 26px;
+        }
+
+        .feedback-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 18px;
+        }
+
+        @media (min-width: 768px) {
+            .feedback-grid.two-col {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .fb-box {
+            border-radius: var(--radius-md);
+            padding: 18px 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .fb-strength {
+            background: var(--poli-green-soft);
+            border-color: #A7F3D0;
+        }
+
+        .fb-improve {
+            background: var(--poli-orange-soft);
+            border-color: #FED7AA;
+        }
+
+        .fb-model {
+            background: var(--poli-light-blue);
+            border-color: #BFDBFE;
+            margin-top: 18px;
+        }
+
+        .fb-box h4 {
+            font-size: 0.88rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fb-strength h4 { color: #065F46; }
+        .fb-improve h4 { color: #9A3412; }
+        .fb-model h4 { color: var(--poli-blue); }
+
+        .fb-list {
+            list-style: none;
+            space-y: 8px;
+        }
+
+        .fb-list li {
+            font-size: 0.86rem;
+            color: #1E293B;
+            margin-bottom: 8px;
+            padding-left: 18px;
+            position: relative;
+        }
+
+        .fb-list li::before {
+            content: "•";
+            position: absolute;
+            left: 4px;
+            font-weight: 800;
+            color: inherit;
+        }
+
+        .fb-text {
+            font-size: 0.88rem;
+            color: #1E293B;
+        }
+
+        .model-quote {
+            background: var(--white);
+            border-left: 4px solid var(--poli-yellow);
+            padding: 14px 16px;
+            border-radius: 0 10px 10px 0;
+            font-size: 0.86rem;
+            color: var(--poli-blue-dark);
+            font-style: italic;
+            margin-top: 10px;
+        }
+
+        .no-delivery-box {
+            background: #F8FAFC;
+            border: 1.5px dashed #CBD5E1;
+            border-radius: var(--radius-md);
+            padding: 20px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.88rem;
+        }
+
+        /* PANEL FORMADORA (ADMIN) */
+        .admin-panel {
+            display: none;
+            background: var(--white);
+            border: 2px solid var(--poli-yellow);
+            border-radius: var(--radius-xl);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .admin-panel.active {
+            display: block;
+        }
+
+        .admin-table-wrap {
+            overflow-x: auto;
+            margin-top: 14px;
+        }
+
+        table.admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+        }
+
+        .admin-table th {
+            background: var(--poli-blue);
+            color: var(--white);
+            text-align: left;
+            padding: 10px 12px;
+        }
+
+        .admin-table td {
+            padding: 9px 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .admin-table tr:hover td {
+            background: #F8FAFC;
+        }
+
+        .btn-mini {
+            padding: 4px 10px;
+            font-size: 0.75rem;
+            border-radius: 6px;
+            background: var(--poli-light-blue);
+            color: var(--poli-blue);
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-mini:hover {
+            background: var(--poli-blue);
+            color: var(--white);
+        }
+    </style>
+</head>
+<body>
+
+<!-- 1. PANTALLA DE ACCESO PRIVADO POR CÉDULA -->
+<div class="login-wrapper" id="loginScreen">
+    <div class="login-card">
+        <div class="login-header">
+            <span class="login-badge"><i class="fas fa-lock"></i> Consulta Privada</span>
+            <h1>Portal de Resultados POLI 360°</h1>
+            <p>Ingresa con tu número de documento para consultar tus calificaciones y retroalimentación individual.</p>
+        </div>
+        <div class="login-body">
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="input-group">
+                    <label for="cedulaInput">Número de Cédula (sin puntos ni espacios)</label>
+                    <div class="input-icon-wrap">
+                        <i class="fas fa-id-card"></i>
+                        <input type="text" id="cedulaInput" class="cedula-input" placeholder="Ej: 1002402990" autocomplete="off" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn-login">
+                    <span>Consultar mis Resultados</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+                <div class="error-alert" id="loginError">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="loginErrorText">No encontramos entregas asociadas a este número de cédula. Verifica e intenta de nuevo.</span>
+                </div>
+            </form>
+            <div class="privacy-note">
+                <i class="fas fa-shield-alt" style="color: var(--poli-blue);"></i>
+                <span>Acceso exclusivo para asesores activos en formación POLI.</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 2. DASHBOARD PRIVADO DE RESULTADOS -->
+<div class="dashboard-wrapper" id="dashboardScreen">
+    <nav class="top-nav">
+        <div class="brand-title">
+            <span class="brand-dot"></span>
+            <span>POLI 360° | Historial de Desempeño Individual</span>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <button type="button" class="btn-logout" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Cerrar sesión / Cambiar cédula
+            </button>
+        </div>
+    </nav>
+
+    <!-- PANEL EXCLUSIVO DE FORMADORA (SOLO SI INGRESA CLAVE ADMIN) -->
+    <div class="admin-panel" id="adminPanel">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div>
+                <h3 style="color: var(--poli-blue); font-weight: 800;"><i class="fas fa-chalkboard-teacher"></i> Vista Consolidada Formadora (23 Asesores Activos)</h3>
+                <p style="font-size: 0.82rem; color: var(--text-muted);">Haz clic en "Ver ficha" para auditar cualquier perfil exactamente como lo ve el asesor.</p>
+            </div>
+            <span class="badge-pill badge-top">Base depurada (sin retiros)</span>
+        </div>
+        <div class="admin-table-wrap">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Cédula</th>
+                        <th>Asesor</th>
+                        <th>Act. 1: Taller Inscripción</th>
+                        <th>Act. 2: Elevator Pitch</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="adminTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- PERFIL DEL ASESOR -->
+    <section class="profile-hero" id="profileHero">
+        <div class="profile-info">
+            <span class="login-badge" style="margin-bottom: 8px;"><i class="fas fa-user-check"></i> Asesor en Formación</span>
+            <h2 id="advisorName">Nombre del Asesor</h2>
+            <div class="profile-meta">
+                <span class="meta-chip"><i class="fas fa-id-badge"></i> CC: <strong id="advisorCedula">---</strong></span>
+                <span class="meta-chip"><i class="fas fa-users"></i> Equipo Taller: <strong id="advisorTeam">---</strong></span>
+            </div>
+        </div>
+        <div class="summary-kpis">
+            <div class="kpi-box">
+                <span>Taller Operativo</span>
+                <strong id="kpiAct1">-- / 100</strong>
+            </div>
+            <div class="kpi-box">
+                <span>Elevator Pitch</span>
+                <strong id="kpiAct2">--</strong>
+            </div>
+        </div>
+    </section>
+
+    <!-- ACTIVIDAD 1: TALLER INSCRIPCIÓN Y CAMPAÑAS -->
+    <article class="activity-card" id="cardAct1">
+        <div class="activity-header">
+            <div class="act-title-group">
+                <div class="act-icon"><i class="fas fa-laptop-code"></i></div>
+                <div>
+                    <h3>Actividad 1: Misión Inscripción de Asignaturas y Campañas</h3>
+                    <p id="act1Subtitle">Taller práctico de análisis de casos reales y exploración de portales</p>
+                </div>
+            </div>
+            <div id="act1BadgeWrap"></div>
+        </div>
+        <div class="activity-body" id="act1Body"></div>
+    </article>
+
+    <!-- ACTIVIDAD 2: ELEVATOR PITCH -->
+    <article class="activity-card" id="cardAct2">
+        <div class="activity-header">
+            <div class="act-title-group">
+                <div class="act-icon" style="background: var(--poli-yellow); color: var(--poli-blue-dark);"><i class="fas fa-microphone-alt"></i></div>
+                <div>
+                    <h3>Actividad 2: Reto Elevator Pitch (Rematrícula Consultiva)</h3>
+                    <p>Evaluación individual de gancho comercial, diferencial y micro-compromiso en 30 segundos</p>
+                </div>
+            </div>
+            <div id="act2BadgeWrap"></div>
+        </div>
+        <div class="activity-body" id="act2Body"></div>
+    </article>
+</div>
+
+<script>
+    // ==========================================================================
+    // BASE DE DATOS DE ASESORES ACTIVOS Y RESULTADOS (23 PARTICIPANTES)
+    // ==========================================================================
+    const ADMIN_CODE = "ANGIE360";
+    const ADVISORS_DB = [
+  {
+    "cedula": "1002402990",
+    "nombre": "Sebastián Yecid Páez Tovar",
+    "act1": {
+      "equipo": "Tus Expertos de Confianza",
+      "nota": 78,
+      "nivel": "Bueno / En Consolidación",
+      "fortalezas": [
+        "Calidez y manejo emocional: excelente abordaje en el Caso 3 (validando la calamidad antes del 'no') y en el Caso 6 (conteniendo la molestia por hospitalización sin prometer exoneraciones).",
+        "Claridad en flujos y tarifas 2026: explicaron por qué ver el curso en Canvas no garantiza apertura en vacacionales y acertaron en los valores vigentes ($512.300 Módulo Adicional, $680.600 Vacacional Medellín y $92.300 Supletorios)."
+      ],
+      "mejoras": [
+        "Caso 1 (Diagnóstico completo): respondieron directo con el speech y omitieron la matemática del caso (15 créditos / 2 = 7.5 créditos = máximo 2 materias de 3 créditos) y el botón ENVIAR en RESUMEN para quitar el estado PENDIENTE.",
+        "Caso 2 (Tope de virtualidad en Presencial): el límite máximo habilitado para las 2 materias virtuales de un estudiante presencial es de 7 créditos (no 6 créditos).",
+        "Caso 5 (Última Materia y regla de 3 materias): los $512.300 en pregrado virtual corresponden a la asignatura completa (no por crédito). Si debe 3 materias y solo puede ver 1 por prerrequisitos, paga media matrícula (no matrícula completa)."
+      ]
+    },
+    "act2": {
+      "nivel": "Top",
+      "scoreBadge": "top",
+      "acierto": "El mejor estructurado. Cumples los tiempos ideales de un Elevator Pitch, atacas el dolor real ('sin perder lo que ya avanzaste / sin empezar de cero') y usas un micro-compromiso de baja fricción ('2 minutitos').",
+      "brecha": "Solo te faltó nombrar el apellido institucional completo: Politécnico Grancolombiano.",
+      "tipModelo": "Mantén esa misma estructura en llamada real asegurando siempre decir 'Politécnico Grancolombiano' en el saludo."
+    }
+  },
+  {
+    "cedula": "52999212",
+    "nombre": "Yuri Yazmín González Páez",
+    "act1": {
+      "equipo": "Alfa Buena Maravilla Onda Dinamita Escuadrón Lobo",
+      "nota": 68,
+      "nivel": "En Desarrollo",
+      "fortalezas": [
+        "Capacidad de síntesis e identificación de filtros clave: promedio mínimo de 3.8 para Módulo Adicional, exclusión de inglés en Vacacionales y exclusión de Policía Nacional en Intersemestrales.",
+        "Alerta preventiva clara: advirtieron correctamente el riesgo de eliminar un NRC en tiempo real sin verificar cupos disponibles antes."
+      ],
+      "mejoras": [
+        "Profundidad en respuestas: en Caso 1 faltó explicar cómo pasar de PENDIENTE a INSCRITO (botón ENVIAR en RESUMEN). En Caso 5A faltó el 'Hack Virtual' (Módulo Adicional en 2° bloque) y en 5B faltó responder qué paga si debe 3 materias (media matrícula).",
+        "Enfoque consultivo: acompañar la regla normativa con argumentos empáticos y alternativas concretas para el estudiante.",
+        "Bitácora de dudas: quedó en blanco; es indispensable registrar dudas y retos para fortalecer las sesiones de refuerzo."
+      ]
+    },
+    "act2": {
+      "nivel": "Top",
+      "scoreBadge": "top",
+      "acierto": "Excelente manejo de tono natural (ideal para WhatsApp/llamada) y un segundo bloque impecable aplicando CVB (Característica-Ventaja-Beneficio) frente a objeción de dinero (cuota mensual ajustada a tu presupuesto).",
+      "brecha": "Evita preguntar '¿Charlamos unos minutos?' si ya estás en llamada con el estudiante; ve directo a la propuesta de los 2 minutos.",
+      "tipModelo": "Cierra directo con: 'Sin ningún compromiso, ¿revisamos en 2 minuticos cómo te queda tu proyección para este periodo?'"
+    }
+  },
+  {
+    "cedula": "53113788",
+    "nombre": "Yennifer Paola Cañón Hernández",
+    "act1": {
+      "equipo": "Tus Expertos de Confianza",
+      "nota": 78,
+      "nivel": "Bueno / En Consolidación",
+      "fortalezas": [
+        "Calidez y manejo emocional: excelente abordaje en el Caso 3 (validando la calamidad antes del 'no') y en el Caso 6 (conteniendo la molestia por hospitalización sin prometer exoneraciones).",
+        "Claridad en flujos y tarifas 2026: explicaron por qué ver el curso en Canvas no garantiza apertura en vacacionales y acertaron en los valores vigentes ($512.300 Módulo Adicional, $680.600 Vacacional Medellín y $92.300 Supletorios)."
+      ],
+      "mejoras": [
+        "Caso 1 (Diagnóstico completo): respondieron directo con el speech y omitieron la matemática del caso (15 créditos / 2 = 7.5 créditos = máximo 2 materias de 3 créditos) y el botón ENVIAR en RESUMEN para quitar el estado PENDIENTE.",
+        "Caso 2 (Tope de virtualidad en Presencial): el límite máximo habilitado para las 2 materias virtuales de un estudiante presencial es de 7 créditos (no 6 créditos).",
+        "Caso 5 (Última Materia y regla de 3 materias): los $512.300 en pregrado virtual corresponden a la asignatura completa (no por crédito). Si debe 3 materias y solo puede ver 1 por prerrequisitos, paga media matrícula (no matrícula completa)."
+      ]
+    },
+    "act2": {
+      "nivel": "Top",
+      "scoreBadge": "top",
+      "acierto": "Muy buena estructura de propuesta de valor y diferencial claro ('trato cercano frente a un trámite tradicional').",
+      "brecha": "Suenas ligeramente corporativa al inicio ('Mi propuesta es brindarte...'); suaviza las palabras para que suene más cercano y conversacional.",
+      "tipModelo": "Cambia 'Mi propuesta es brindarte...' por 'Mi propósito hoy es ayudarte a continuar sin perder ni una sola materia de las que ya avanzaste'."
+    }
+  },
+  {
+    "cedula": "1010064274",
+    "nombre": "Stefany Lilley Barinas Vega",
+    "act1": {
+      "equipo": "Los Mejores",
+      "nota": 35,
+      "nivel": "Requiere Nivelación",
+      "fortalezas": [
+        "Excelente desarrollo del Caso 1: cálculo exacto de créditos (7.5 = 2 materias), explicación precisa del botón ENVIAR en RESUMEN y un speech empático y consultivo.",
+        "Buena identificación del 'Hack Virtual' en el Caso 5A (Prioridad 1 Módulo Adicional / Prioridad 2 Última Materia)."
+      ],
+      "mejoras": [
+        "Entregable incompleto: quedaron sin resolver los Casos 2, 3, 4 y 6, los compromisos individuales por rol y la Bitácora de Dudas.",
+        "Caso 5B: faltó responder qué ocurre si el estudiante debe 3 materias y solo puede inscribir 1 por prerrequisitos (debe pagar media matrícula).",
+        "Compromiso de nivelación: completar los casos pendientes (2, 3, 4 y supletorios/incapacidad del 6) y enviar el PDF actualizado."
+      ]
+    },
+    "act2": {
+      "nivel": "Medio-Alto",
+      "scoreBadge": "medio-alto",
+      "acierto": "Muy buena personalización (usas el nombre y la carrera del estudiante) y proyectas empatía genuina.",
+      "brecha": "El cierre ('¿Me permites acompañarte a realizar tu rematrícula?') pide un compromiso muy grande de entrada sin haber indagado aún su situación.",
+      "tipModelo": "En los primeros 30 segundos no pidas el cierre de matrícula; pide solo 2 minutos de exploración para revisar su proyección."
+    }
+  },
+  {
+    "cedula": "1013114884",
+    "nombre": "Sara Valentina Rodríguez Bernal",
+    "act1": null,
+    "act2": {
+      "nivel": "Medio",
+      "scoreBadge": "medio",
+      "acierto": "Buen gancho emocional ('que no te quedes a mitad de camino').",
+      "brecha": "Cierre brusco y presionante ('cuéntame ya estás listo para empezar'), además de detalles de puntuación/ortografía en el texto.",
+      "tipModelo": "Reemplaza la presión por un micro-compromiso suave: '¿Te parece si revisamos en 2 minutos cómo te quedaría la proyección para este periodo?'"
+    }
+  },
+  {
+    "cedula": "1000580456",
+    "nombre": "Sendy Lorena Velandia González",
+    "act1": {
+      "equipo": "Entrega Individual (VEGO)",
+      "nota": 92,
+      "nivel": "Destacado / Top",
+      "fortalezas": [
+        "Rigor técnico y exploración completa: explicaste con precisión cómo pasar de PENDIENTE a INSCRITO (botón ENVIAR en RESUMEN y validación en HORARIO Y OPCIONES).",
+        "Dominio de tarifas y campañas 2026: acertaste en el promedio 3.8 para Módulo Adicional, exclusiones de Vacacionales e Intersemestrales, cupos mínimos (15 virtual / 10 presencial) y todos los valores de Derechos Pecuniarios 2026.",
+        "Pensamiento crítico: bitácora de dudas muy bien estructurada conectando la norma con casos reales."
+      ],
+      "mejoras": [
+        "Caso 5A ('Hack Virtual'): para un estudiante virtual de último semestre con matrícula completa pagada al que le falta 1 materia de 2° bloque, la Prioridad 1 es cursarla como Módulo Adicional ($512.300) para graduarse en el mismo periodo; la Prioridad 2 es ticket por Última Materia.",
+        "Caso 5B (Excepción de 2 vs. 3 materias): si le faltan 2 materias y una es prerrequisito de la otra, sí se autoriza pagar Última Materia en dos periodos; si debe 3 o más materias, paga media matrícula."
+      ]
+    },
+    "act2": {
+      "nivel": "Medio",
+      "scoreBadge": "medio",
+      "acierto": "Excelente storytelling y conexión de pertenencia ('tu historia con el Poli no termina en un semestre').",
+      "brecha": "Te faltó el cierre (Call to Action). Te quedaste en la parte inspiracional pero no invitaste al estudiante a ninguna acción concreta.",
+      "tipModelo": "Acompaña tu gran gancho emocional con una pregunta de avance: 'Sin ningún compromiso, ¿revisamos en 2 minuticos tu proyección?'"
+    }
+  },
+  {
+    "cedula": "1014262459",
+    "nombre": "Ángela Marcela Pimiento Flores",
+    "act1": null,
+    "act2": {
+      "nivel": "Medio",
+      "scoreBadge": "medio",
+      "acierto": "Cordial, respetuosa y personalizada mencionando el programa (Derecho).",
+      "brecha": "Demasiado genérica ('brindarte información y acompañamiento'). No mencionas ningún diferencial frente a un trámite normal ni cierras con pregunta.",
+      "tipModelo": "Agrega el beneficio real (horarios flexibles, financiación a medida, no perder materias vistas) y cierra con una pregunta abierta de exploración."
+    }
+  },
+  {
+    "cedula": "1016092896",
+    "nombre": "Danna Geraldinne Guerrero Rodríguez",
+    "act1": {
+      "equipo": "Alfa Buena Maravilla Onda Dinamita Escuadrón Lobo",
+      "nota": 68,
+      "nivel": "En Desarrollo",
+      "fortalezas": [
+        "Capacidad de síntesis e identificación de filtros clave: promedio mínimo de 3.8 para Módulo Adicional, exclusión de inglés en Vacacionales y exclusión de Policía Nacional en Intersemestrales.",
+        "Alerta preventiva clara: advirtieron correctamente el riesgo de eliminar un NRC en tiempo real sin verificar cupos disponibles antes."
+      ],
+      "mejoras": [
+        "Profundidad en respuestas: en Caso 1 faltó explicar cómo pasar de PENDIENTE a INSCRITO (botón ENVIAR en RESUMEN). En Caso 5A faltó el 'Hack Virtual' (Módulo Adicional en 2° bloque) y en 5B faltó responder qué paga si debe 3 materias (media matrícula).",
+        "Enfoque consultivo: acompañar la regla normativa con argumentos empáticos y alternativas concretas para el estudiante.",
+        "Bitácora de dudas: quedó en blanco; es indispensable registrar dudas y retos para fortalecer las sesiones de refuerzo."
+      ]
+    },
+    "act2": {
+      "nivel": "En desarrollo",
+      "scoreBadge": "desarrollo",
+      "acierto": "Buena energía y estructura ordenada en tu presentación.",
+      "brecha": "Enfoque de ventas/admisiones ('inscripción', 'reconocimiento del MEN'), no de rematrícula. El estudiante antiguo ya conoce el Poli; necesita continuidad, no que le vendan la universidad desde cero.",
+      "tipModelo": "En rematrícula el gancho es proteger lo que ya avanzó y lo que ya invirtió: 'continuar sin perder ni una sola materia'."
+    }
+  },
+  {
+    "cedula": "1019037822",
+    "nombre": "Paola Andrea Velandia Rincón",
+    "act1": {
+      "equipo": "Expertos Poli",
+      "nota": 84,
+      "nivel": "Sobresaliente",
+      "fortalezas": [
+        "Estructura consultiva sólida: los speeches conectan con la necesidad real del estudiante, explican el porqué de la norma sin fricción y cierran con preguntas de compromiso.",
+        "Dominio de campañas y excepciones: aplicaron correctamente el 'Hack Virtual' en el Caso 5A (Prioridad 1 Módulo Adicional / Prioridad 2 Última Materia) y acertaron en la excepción del Caso 5B (2 materias con prerrequisito vs. media matrícula si debe 3).",
+        "Bitácora de dudas estratégica: plantearon preguntas clave sobre matrícula financiera vs. académica y facilidades de pago."
+      ],
+      "mejoras": [
+        "Caso 1 (Estado PENDIENTE en Smart Campus): cuando un estudiante agrega una materia y queda en PENDIENTE, no debe eliminarla; debe ir al cuadro RESUMEN y hacer clic en ENVIAR para que pase a INSCRITO.",
+        "Caso 2 (Tope de virtualidad en Presencial): el sistema permite inscribir hasta 2 materias virtuales sin solicitud siempre que no superen los 7 créditos en total (no 6 créditos).",
+        "Caso 6 (Quiz con incapacidad EPS): el supletorio ($92.300) solo aplica para examen parcial o final; para un Quiz no presentado por incapacidad EPS se radica ticket de Ampliación de Actividades con el soporte."
+      ]
+    },
+    "act2": {
+      "nivel": "En desarrollo",
+      "scoreBadge": "desarrollo",
+      "acierto": "Buen ritmo y cierre orientado al avance.",
+      "brecha": "Usaste discurso de aspirante nuevo ('separa tu cupo de inscripción') y soltaste un listado de características sin indagar primero la necesidad del estudiante.",
+      "tipModelo": "Evita términos de admisiones ('inscripción') y prioriza escuchar antes de enumerar beneficios."
+    }
+  },
+  {
+    "cedula": "1016041402",
+    "nombre": "Yenny Alejandra Bejarano Arias",
+    "act1": {
+      "equipo": "Expertos Poli",
+      "nota": 84,
+      "nivel": "Sobresaliente",
+      "fortalezas": [
+        "Estructura consultiva sólida: los speeches conectan con la necesidad real del estudiante, explican el porqué de la norma sin fricción y cierran con preguntas de compromiso.",
+        "Dominio de campañas y excepciones: aplicaron correctamente el 'Hack Virtual' en el Caso 5A (Prioridad 1 Módulo Adicional / Prioridad 2 Última Materia) y acertaron en la excepción del Caso 5B (2 materias con prerrequisito vs. media matrícula si debe 3).",
+        "Bitácora de dudas estratégica: plantearon preguntas clave sobre matrícula financiera vs. académica y facilidades de pago."
+      ],
+      "mejoras": [
+        "Caso 1 (Estado PENDIENTE en Smart Campus): cuando un estudiante agrega una materia y queda en PENDIENTE, no debe eliminarla; debe ir al cuadro RESUMEN y hacer clic en ENVIAR para que pase a INSCRITO.",
+        "Caso 2 (Tope de virtualidad en Presencial): el sistema permite inscribir hasta 2 materias virtuales sin solicitud siempre que no superen los 7 créditos en total (no 6 créditos).",
+        "Caso 6 (Quiz con incapacidad EPS): el supletorio ($92.300) solo aplica para examen parcial o final; para un Quiz no presentado por incapacidad EPS se radica ticket de Ampliación de Actividades con el soporte."
+      ]
+    },
+    "act2": {
+      "nivel": "En desarrollo",
+      "scoreBadge": "desarrollo",
+      "acierto": "Muy amable y con excelente disposición de ayuda.",
+      "brecha": "Es un párrafo único sin pausas, enfocado en discurso reactivo ('gracias por comunicarte') y lleno de generalidades ('mucha variedad de programas').",
+      "tipModelo": "Recuerda que en rematrícula outbound tú lideras la conversación con propósito claro y pausas estratégicas."
+    }
+  },
+  {
+    "cedula": "53045814",
+    "nombre": "Edith Patricia Beltrán Amaya",
+    "act1": {
+      "equipo": "Los Mejores",
+      "nota": 35,
+      "nivel": "Requiere Nivelación",
+      "fortalezas": [
+        "Excelente desarrollo del Caso 1: cálculo exacto de créditos (7.5 = 2 materias), explicación precisa del botón ENVIAR en RESUMEN y un speech empático y consultivo.",
+        "Buena identificación del 'Hack Virtual' en el Caso 5A (Prioridad 1 Módulo Adicional / Prioridad 2 Última Materia)."
+      ],
+      "mejoras": [
+        "Entregable incompleto: quedaron sin resolver los Casos 2, 3, 4 y 6, los compromisos individuales por rol y la Bitácora de Dudas.",
+        "Caso 5B: faltó responder qué ocurre si el estudiante debe 3 materias y solo puede inscribir 1 por prerrequisitos (debe pagar media matrícula).",
+        "Compromiso de nivelación: completar los casos pendientes (2, 3, 4 y supletorios/incapacidad del 6) y enviar el PDF actualizado."
+      ]
+    },
+    "act2": {
+      "nivel": "En desarrollo",
+      "scoreBadge": "desarrollo",
+      "acierto": "Muestras disposición genuina de servicio.",
+      "brecha": "Discurso totalmente reactivo/pasivo ('me indicas qué inquietud tienes'). En rematrícula outbound, el asesor lidera la conversación, no espera a que el estudiante pregunte.",
+      "tipModelo": "Toma la iniciativa proponiendo valor desde el segundo 1: ayudarle a revisar su proyección y opciones de financiación."
+    }
+  },
+  {
+    "cedula": "53132687",
+    "nombre": "Jackeline Gómez Ávila",
+    "act1": {
+      "equipo": "Tus Expertos de Confianza",
+      "nota": 78,
+      "nivel": "Bueno / En Consolidación",
+      "fortalezas": [
+        "Calidez y manejo emocional: excelente abordaje en el Caso 3 (validando la calamidad antes del 'no') y en el Caso 6 (conteniendo la molestia por hospitalización sin prometer exoneraciones).",
+        "Claridad en flujos y tarifas 2026: explicaron por qué ver el curso en Canvas no garantiza apertura en vacacionales y acertaron en los valores vigentes ($512.300 Módulo Adicional, $680.600 Vacacional Medellín y $92.300 Supletorios)."
+      ],
+      "mejoras": [
+        "Caso 1 (Diagnóstico completo): respondieron directo con el speech y omitieron la matemática del caso (15 créditos / 2 = 7.5 créditos = máximo 2 materias de 3 créditos) y el botón ENVIAR en RESUMEN para quitar el estado PENDIENTE.",
+        "Caso 2 (Tope de virtualidad en Presencial): el límite máximo habilitado para las 2 materias virtuales de un estudiante presencial es de 7 créditos (no 6 créditos).",
+        "Caso 5 (Última Materia y regla de 3 materias): los $512.300 en pregrado virtual corresponden a la asignatura completa (no por crédito). Si debe 3 materias y solo puede ver 1 por prerrequisitos, paga media matrícula (no matrícula completa)."
+      ]
+    },
+    "act2": {
+      "nivel": "En desarrollo",
+      "scoreBadge": "desarrollo",
+      "acierto": "Buen posicionamiento institucional.",
+      "brecha": "Es un texto descriptivo tipo folleto (en tercera persona: 'las personas pueden...'), no un pitch dirigido directamente al estudiante, y carece de cierre.",
+      "tipModelo": "Habla siempre de 'tú' (segunda persona) conectando con su meta profesional y cierra pidiendo 2 minutos para revisar su caso."
+    }
+  },
+  {
+    "cedula": "1023164145",
+    "nombre": "Juan José Aponte Rodríguez",
+    "act1": {
+      "equipo": "Expertos Poli",
+      "nota": 84,
+      "nivel": "Sobresaliente",
+      "fortalezas": [
+        "Estructura consultiva sólida: los speeches conectan con la necesidad real del estudiante, explican el porqué de la norma sin fricción y cierran con preguntas de compromiso.",
+        "Dominio de campañas y excepciones: aplicaron correctamente el 'Hack Virtual' en el Caso 5A (Prioridad 1 Módulo Adicional / Prioridad 2 Última Materia) y acertaron en la excepción del Caso 5B (2 materias con prerrequisito vs. media matrícula si debe 3).",
+        "Bitácora de dudas estratégica: plantearon preguntas clave sobre matrícula financiera vs. académica y facilidades de pago."
+      ],
+      "mejoras": [
+        "Caso 1 (Estado PENDIENTE en Smart Campus): cuando un estudiante agrega una materia y queda en PENDIENTE, no debe eliminarla; debe ir al cuadro RESUMEN y hacer clic en ENVIAR para que pase a INSCRITO.",
+        "Caso 2 (Tope de virtualidad en Presencial): el sistema permite inscribir hasta 2 materias virtuales sin solicitud siempre que no superen los 7 créditos en total (no 6 créditos).",
+        "Caso 6 (Quiz con incapacidad EPS): el supletorio ($92.300) solo aplica para examen parcial o final; para un Quiz no presentado por incapacidad EPS se radica ticket de Ampliación de Actividades con el soporte."
+      ]
+    },
+    "act2": {
+      "nivel": "Alerta",
+      "scoreBadge": "alerta",
+      "acierto": "Intención clara de asegurar la continuidad del estudiante.",
+      "brecha": "Error crítico de marca: dijiste 'Politécnico Colombiano' en lugar de Politécnico Grancolombiano. Además, cerraste con pregunta cerrada ('¿Estás interesado en que te brinde más información?'), que mata la gestión.",
+      "tipModelo": "Cuida siempre el nombre oficial ('Politécnico Grancolombiano') y cambia preguntas cerradas de 'sí/no' por micro-compromisos de exploración."
+    }
+  },
+  {
+    "cedula": "1023931962",
+    "nombre": "Nelson Esteban Trujillo Gama",
+    "act1": {
+      "equipo": "Alfa Buena Maravilla Onda Dinamita Escuadrón Lobo",
+      "nota": 68,
+      "nivel": "En Desarrollo",
+      "fortalezas": [
+        "Capacidad de síntesis e identificación de filtros clave: promedio mínimo de 3.8 para Módulo Adicional, exclusión de inglés en Vacacionales y exclusión de Policía Nacional en Intersemestrales.",
+        "Alerta preventiva clara: advirtieron correctamente el riesgo de eliminar un NRC en tiempo real sin verificar cupos disponibles antes."
+      ],
+      "mejoras": [
+        "Profundidad en respuestas: en Caso 1 faltó explicar cómo pasar de PENDIENTE a INSCRITO (botón ENVIAR en RESUMEN). En Caso 5A faltó el 'Hack Virtual' (Módulo Adicional en 2° bloque) y en 5B faltó responder qué paga si debe 3 materias (media matrícula).",
+        "Enfoque consultivo: acompañar la regla normativa con argumentos empáticos y alternativas concretas para el estudiante.",
+        "Bitácora de dudas: quedó en blanco; es indispensable registrar dudas y retos para fortalecer las sesiones de refuerzo."
+      ]
+    },
+    "act2": {
+      "nivel": "Fuera de formato",
+      "scoreBadge": "formato",
+      "acierto": "Tienes muy claras las fases completas de una llamada comercial (perfilamiento, motivación, técnica de los 3 sí).",
+      "brecha": "Entregaste el guion completo de toda la gestión, no un Elevator Pitch de 30 segundos.",
+      "tipModelo": "En los primeros 30 segundos el único objetivo es ganar 2 minutos de atención del estudiante, no desarrollar toda la llamada."
+    }
+  },
+  {
+    "cedula": "1022355105",
+    "nombre": "Yubeli Natalia Bojacá Riveros",
+    "act1": {
+      "equipo": "Expertos Poli",
+      "nota": 84,
+      "nivel": "Sobresaliente",
+      "fortalezas": [
+        "Estructura consultiva sólida: los speeches conectan con la necesidad real del estudiante, explican el porqué de la norma sin fricción y cierran con preguntas de compromiso.",
+        "Dominio de campañas y excepciones: aplicaron correctamente el 'Hack Virtual' en el Caso 5A (Prioridad 1 Módulo Adicional / Prioridad 2 Última Materia) y acertaron en la excepción del Caso 5B (2 materias con prerrequisito vs. media matrícula si debe 3).",
+        "Bitácora de dudas estratégica: plantearon preguntas clave sobre matrícula financiera vs. académica y facilidades de pago."
+      ],
+      "mejoras": [
+        "Caso 1 (Estado PENDIENTE en Smart Campus): cuando un estudiante agrega una materia y queda en PENDIENTE, no debe eliminarla; debe ir al cuadro RESUMEN y hacer clic en ENVIAR para que pase a INSCRITO.",
+        "Caso 2 (Tope de virtualidad en Presencial): el sistema permite inscribir hasta 2 materias virtuales sin solicitud siempre que no superen los 7 créditos en total (no 6 créditos).",
+        "Caso 6 (Quiz con incapacidad EPS): el supletorio ($92.300) solo aplica para examen parcial o final; para un Quiz no presentado por incapacidad EPS se radica ticket de Ampliación de Actividades con el soporte."
+      ]
+    },
+    "act2": {
+      "nivel": "Fuera de formato",
+      "scoreBadge": "formato",
+      "acierto": "Dominio total del portafolio institucional (Bienestar, Calma Online, medios de pago, convenios).",
+      "brecha": "Saturación de información (monólogo): metiste todo el catálogo, precios y cuentas bancarias en el saludo inicial antes de escuchar al estudiante.",
+      "tipModelo": "Evita el 'vómito de información': guarda esos argumentos para usarlos solo después de indagar qué necesita realmente el estudiante."
+    }
+  },
+  {
+    "cedula": "1019982533",
+    "nombre": "Nicol Viviana Méndez Castillo",
+    "act1": {
+      "equipo": "Los Mejores",
+      "nota": 35,
+      "nivel": "Requiere Nivelación",
+      "fortalezas": [
+        "Excelente desarrollo del Caso 1: cálculo exacto de créditos (7.5 = 2 materias), explicación precisa del botón ENVIAR en RESUMEN y un speech empático y consultivo.",
+        "Buena identificación del 'Hack Virtual' en el Caso 5A (Prioridad 1 Módulo Adicional / Prioridad 2 Última Materia)."
+      ],
+      "mejoras": [
+        "Entregable incompleto: quedaron sin resolver los Casos 2, 3, 4 y 6, los compromisos individuales por rol y la Bitácora de Dudas.",
+        "Caso 5B: faltó responder qué ocurre si el estudiante debe 3 materias y solo puede inscribir 1 por prerrequisitos (debe pagar media matrícula).",
+        "Compromiso de nivelación: completar los casos pendientes (2, 3, 4 y supletorios/incapacidad del 6) y enviar el PDF actualizado."
+      ]
+    },
+    "act2": null
+  },
+  {
+    "cedula": "1001089553",
+    "nombre": "Lina Yiseit Benavides Contreras",
+    "act1": {
+      "equipo": "Tus Expertos de Confianza",
+      "nota": 78,
+      "nivel": "Bueno / En Consolidación",
+      "fortalezas": [
+        "Calidez y manejo emocional: excelente abordaje en el Caso 3 (validando la calamidad antes del 'no') y en el Caso 6 (conteniendo la molestia por hospitalización sin prometer exoneraciones).",
+        "Claridad en flujos y tarifas 2026: explicaron por qué ver el curso en Canvas no garantiza apertura en vacacionales y acertaron en los valores vigentes ($512.300 Módulo Adicional, $680.600 Vacacional Medellín y $92.300 Supletorios)."
+      ],
+      "mejoras": [
+        "Caso 1 (Diagnóstico completo): respondieron directo con el speech y omitieron la matemática del caso (15 créditos / 2 = 7.5 créditos = máximo 2 materias de 3 créditos) y el botón ENVIAR en RESUMEN para quitar el estado PENDIENTE.",
+        "Caso 2 (Tope de virtualidad en Presencial): el límite máximo habilitado para las 2 materias virtuales de un estudiante presencial es de 7 créditos (no 6 créditos).",
+        "Caso 5 (Última Materia y regla de 3 materias): los $512.300 en pregrado virtual corresponden a la asignatura completa (no por crédito). Si debe 3 materias y solo puede ver 1 por prerrequisitos, paga media matrícula (no matrícula completa)."
+      ]
+    },
+    "act2": null
+  },
+  {
+    "cedula": "1000004451",
+    "nombre": "Brandon Alexis Sánchez Hernández",
+    "act1": {
+      "equipo": "Los Mejores",
+      "nota": 35,
+      "nivel": "Requiere Nivelación",
+      "fortalezas": [
+        "Excelente desarrollo del Caso 1: cálculo exacto de créditos (7.5 = 2 materias), explicación precisa del botón ENVIAR en RESUMEN y un speech empático y consultivo.",
+        "Buena identificación del 'Hack Virtual' en el Caso 5A (Prioridad 1 Módulo Adicional / Prioridad 2 Última Materia)."
+      ],
+      "mejoras": [
+        "Entregable incompleto: quedaron sin resolver los Casos 2, 3, 4 y 6, los compromisos individuales por rol y la Bitácora de Dudas.",
+        "Caso 5B: faltó responder qué ocurre si el estudiante debe 3 materias y solo puede inscribir 1 por prerrequisitos (debe pagar media matrícula).",
+        "Compromiso de nivelación: completar los casos pendientes (2, 3, 4 y supletorios/incapacidad del 6) y enviar el PDF actualizado."
+      ]
+    },
+    "act2": null
+  },
+  {
+    "cedula": "1024497081",
+    "nombre": "Yeraldy García Martínez",
+    "act1": {
+      "equipo": "Expertos Poli",
+      "nota": 84,
+      "nivel": "Sobresaliente",
+      "fortalezas": [
+        "Estructura consultiva sólida: los speeches conectan con la necesidad real del estudiante, explican el porqué de la norma sin fricción y cierran con preguntas de compromiso.",
+        "Dominio de campañas y excepciones: aplicaron correctamente el 'Hack Virtual' en el Caso 5A (Prioridad 1 Módulo Adicional / Prioridad 2 Última Materia) y acertaron en la excepción del Caso 5B (2 materias con prerrequisito vs. media matrícula si debe 3).",
+        "Bitácora de dudas estratégica: plantearon preguntas clave sobre matrícula financiera vs. académica y facilidades de pago."
+      ],
+      "mejoras": [
+        "Caso 1 (Estado PENDIENTE en Smart Campus): cuando un estudiante agrega una materia y queda en PENDIENTE, no debe eliminarla; debe ir al cuadro RESUMEN y hacer clic en ENVIAR para que pase a INSCRITO.",
+        "Caso 2 (Tope de virtualidad en Presencial): el sistema permite inscribir hasta 2 materias virtuales sin solicitud siempre que no superen los 7 créditos en total (no 6 créditos).",
+        "Caso 6 (Quiz con incapacidad EPS): el supletorio ($92.300) solo aplica para examen parcial o final; para un Quiz no presentado por incapacidad EPS se radica ticket de Ampliación de Actividades con el soporte."
+      ]
+    },
+    "act2": null
+  },
+  {
+    "cedula": "1025521031",
+    "nombre": "Alisson Valeria Nieto Chacón",
+    "act1": {
+      "equipo": "Alfa Buena Maravilla Onda Dinamita Escuadrón Lobo",
+      "nota": 68,
+      "nivel": "En Desarrollo",
+      "fortalezas": [
+        "Capacidad de síntesis e identificación de filtros clave: promedio mínimo de 3.8 para Módulo Adicional, exclusión de inglés en Vacacionales y exclusión de Policía Nacional en Intersemestrales.",
+        "Alerta preventiva clara: advirtieron correctamente el riesgo de eliminar un NRC en tiempo real sin verificar cupos disponibles antes."
+      ],
+      "mejoras": [
+        "Profundidad en respuestas: en Caso 1 faltó explicar cómo pasar de PENDIENTE a INSCRITO (botón ENVIAR en RESUMEN). En Caso 5A faltó el 'Hack Virtual' (Módulo Adicional en 2° bloque) y en 5B faltó responder qué paga si debe 3 materias (media matrícula).",
+        "Enfoque consultivo: acompañar la regla normativa con argumentos empáticos y alternativas concretas para el estudiante.",
+        "Bitácora de dudas: quedó en blanco; es indispensable registrar dudas y retos para fortalecer las sesiones de refuerzo."
+      ]
+    },
+    "act2": null
+  },
+  {
+    "cedula": "1010220002",
+    "nombre": "Jenifer Andrea Sanabria Garay",
+    "act1": {
+      "equipo": "Los Mejores",
+      "nota": 35,
+      "nivel": "Requiere Nivelación",
+      "fortalezas": [
+        "Excelente desarrollo del Caso 1: cálculo exacto de créditos (7.5 = 2 materias), explicación precisa del botón ENVIAR en RESUMEN y un speech empático y consultivo.",
+        "Buena identificación del 'Hack Virtual' en el Caso 5A (Prioridad 1 Módulo Adicional / Prioridad 2 Última Materia)."
+      ],
+      "mejoras": [
+        "Entregable incompleto: quedaron sin resolver los Casos 2, 3, 4 y 6, los compromisos individuales por rol y la Bitácora de Dudas.",
+        "Caso 5B: faltó responder qué ocurre si el estudiante debe 3 materias y solo puede inscribir 1 por prerrequisitos (debe pagar media matrícula).",
+        "Compromiso de nivelación: completar los casos pendientes (2, 3, 4 y supletorios/incapacidad del 6) y enviar el PDF actualizado."
+      ]
+    },
+    "act2": null
+  },
+  {
+    "cedula": "1006895851",
+    "nombre": "Nerisa Rodríguez Acosta",
+    "act1": {
+      "equipo": "Tus Expertos de Confianza",
+      "nota": 78,
+      "nivel": "Bueno / En Consolidación",
+      "fortalezas": [
+        "Calidez y manejo emocional: excelente abordaje en el Caso 3 (validando la calamidad antes del 'no') y en el Caso 6 (conteniendo la molestia por hospitalización sin prometer exoneraciones).",
+        "Claridad en flujos y tarifas 2026: explicaron por qué ver el curso en Canvas no garantiza apertura en vacacionales y acertaron en los valores vigentes ($512.300 Módulo Adicional, $680.600 Vacacional Medellín y $92.300 Supletorios)."
+      ],
+      "mejoras": [
+        "Caso 1 (Diagnóstico completo): respondieron directo con el speech y omitieron la matemática del caso (15 créditos / 2 = 7.5 créditos = máximo 2 materias de 3 créditos) y el botón ENVIAR en RESUMEN para quitar el estado PENDIENTE.",
+        "Caso 2 (Tope de virtualidad en Presencial): el límite máximo habilitado para las 2 materias virtuales de un estudiante presencial es de 7 créditos (no 6 créditos).",
+        "Caso 5 (Última Materia y regla de 3 materias): los $512.300 en pregrado virtual corresponden a la asignatura completa (no por crédito). Si debe 3 materias y solo puede ver 1 por prerrequisitos, paga media matrícula (no matrícula completa)."
+      ]
+    },
+    "act2": null
+  },
+  {
+    "cedula": "1023380483",
+    "nombre": "Chelsea Toro Salguero",
+    "act1": {
+      "equipo": "Alfa Buena Maravilla Onda Dinamita Escuadrón Lobo",
+      "nota": 68,
+      "nivel": "En Desarrollo",
+      "fortalezas": [
+        "Capacidad de síntesis e identificación de filtros clave: promedio mínimo de 3.8 para Módulo Adicional, exclusión de inglés en Vacacionales y exclusión de Policía Nacional en Intersemestrales.",
+        "Alerta preventiva clara: advirtieron correctamente el riesgo de eliminar un NRC en tiempo real sin verificar cupos disponibles antes."
+      ],
+      "mejoras": [
+        "Profundidad en respuestas: en Caso 1 faltó explicar cómo pasar de PENDIENTE a INSCRITO (botón ENVIAR en RESUMEN). En Caso 5A faltó el 'Hack Virtual' (Módulo Adicional en 2° bloque) y en 5B faltó responder qué paga si debe 3 materias (media matrícula).",
+        "Enfoque consultivo: acompañar la regla normativa con argumentos empáticos y alternativas concretas para el estudiante.",
+        "Bitácora de dudas: quedó en blanco; es indispensable registrar dudas y retos para fortalecer las sesiones de refuerzo."
+      ]
+    },
+    "act2": null
+  }
+];
+
+    function cleanDoc(val) {
+        return String(val || "").replace(/[^0-9a-zA-Z]/g, "").trim().toUpperCase();
+    }
+
+    function handleLogin(e) {
+        e.preventDefault();
+        const raw = document.getElementById("cedulaInput").value;
+        const doc = cleanDoc(raw);
+        const errorBox = document.getElementById("loginError");
+
+        if (doc === ADMIN_CODE) {
+            errorBox.classList.remove("show");
+            openAdminView();
+            return;
+        }
+
+        const advisor = ADVISORS_DB.find(a => cleanDoc(a.cedula) === doc);
+        if (!advisor) {
+            errorBox.classList.add("show");
+            return;
+        }
+
+        errorBox.classList.remove("show");
+        renderAdvisorDashboard(advisor, false);
+    }
+
+    function openAdminView() {
+        document.getElementById("loginScreen").style.display = "none";
+        document.getElementById("dashboardScreen").classList.add("active");
+        document.getElementById("adminPanel").classList.add("active");
+
+        const tbody = document.getElementById("adminTableBody");
+        tbody.innerHTML = "";
+        ADVISORS_DB.forEach(a => {
+            const n1 = a.act1 ? `${a.act1.nota}/100 (${a.act1.equipo})` : "Sin entrega";
+            const n2 = a.act2 ? a.act2.nivel : "Sin entrega";
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td><strong>${a.cedula}</strong></td>
+                <td>${a.nombre}</td>
+                <td>${n1}</td>
+                <td>${n2}</td>
+                <td><button class="btn-mini" onclick="previewAdvisor('${a.cedula}')">Ver ficha</button></td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        // Cargar por defecto el primer perfil debajo del panel admin
+        renderAdvisorDashboard(ADVISORS_DB[0], true);
+    }
+
+    function previewAdvisor(cedula) {
+        const advisor = ADVISORS_DB.find(a => a.cedula === cedula);
+        if (advisor) {
+            renderAdvisorDashboard(advisor, true);
+            document.getElementById("profileHero").scrollIntoView({ behavior: "smooth" });
+        }
+    }
+
+    function getBadgeClass(scoreBadge) {
+        const map = {
+            "top": "badge-top",
+            "medio-alto": "badge-medio-alto",
+            "medio": "badge-medio",
+            "desarrollo": "badge-desarrollo",
+            "alerta": "badge-alerta",
+            "formato": "badge-formato"
+        };
+        return map[scoreBadge] || "badge-pending";
+    }
+
+    function renderAdvisorDashboard(advisor, keepAdmin) {
+        document.getElementById("loginScreen").style.display = "none";
+        document.getElementById("dashboardScreen").classList.add("active");
+        if (!keepAdmin) {
+            document.getElementById("adminPanel").classList.remove("active");
+        }
+
+        document.getElementById("advisorName").textContent = advisor.nombre;
+        document.getElementById("advisorCedula").textContent = advisor.cedula;
+        document.getElementById("advisorTeam").textContent = advisor.act1 ? advisor.act1.equipo : "Sin registro en taller";
+
+        // KPIs
+        document.getElementById("kpiAct1").textContent = advisor.act1 ? `${advisor.act1.nota} / 100` : "Pendiente";
+        document.getElementById("kpiAct2").textContent = advisor.act2 ? advisor.act2.nivel : "Pendiente";
+
+        // Render Actividad 1
+        const act1BadgeWrap = document.getElementById("act1BadgeWrap");
+        const act1Body = document.getElementById("act1Body");
+        if (advisor.act1) {
+            const bClass = advisor.act1.nota >= 80 ? "badge-top" : (advisor.act1.nota >= 65 ? "badge-medio" : "badge-alerta");
+            act1BadgeWrap.innerHTML = `<span class="badge-pill ${bClass}"><i class="fas fa-star"></i> Nota: ${advisor.act1.nota} / 100 · ${advisor.act1.nivel}</span>`;
+            document.getElementById("act1Subtitle").textContent = `Modalidad: ${advisor.act1.equipo}`;
+
+            const fList = advisor.act1.fortalezas.map(item => `<li>${item}</li>`).join("");
+            const mList = advisor.act1.mejoras.map(item => `<li>${item}</li>`).join("");
+
+            act1Body.innerHTML = `
+                <div class="feedback-grid two-col">
+                    <div class="fb-box fb-strength">
+                        <h4><i class="fas fa-check-circle"></i> Fortalezas Destacadas</h4>
+                        <ul class="fb-list">${fList}</ul>
+                    </div>
+                    <div class="fb-box fb-improve">
+                        <h4><i class="fas fa-wrench"></i> Ajustes Operativos Clave</h4>
+                        <ul class="fb-list">${mList}</ul>
+                    </div>
+                </div>
+            `;
+        } else {
+            act1BadgeWrap.innerHTML = `<span class="badge-pill badge-pending"><i class="fas fa-clock"></i> Sin entrega registrada</span>`;
+            document.getElementById("act1Subtitle").textContent = "Taller práctico de análisis de casos reales";
+            act1Body.innerHTML = `
+                <div class="no-delivery-box">
+                    <i class="fas fa-folder-open" style="font-size: 1.5rem; margin-bottom: 8px; display: block;"></i>
+                    No se registró entregable asociado a tu nombre en esta actividad. Si participaste en algún equipo, infórmalo a tu Formadora para actualizar tu ficha.
+                </div>
+            `;
+        }
+
+        // Render Actividad 2
+        const act2BadgeWrap = document.getElementById("act2BadgeWrap");
+        const act2Body = document.getElementById("act2Body");
+        if (advisor.act2) {
+            const bClass2 = getBadgeClass(advisor.act2.scoreBadge);
+            act2BadgeWrap.innerHTML = `<span class="badge-pill ${bClass2}"><i class="fas fa-award"></i> Nivel: ${advisor.act2.nivel}</span>`;
+
+            act2Body.innerHTML = `
+                <div class="feedback-grid two-col">
+                    <div class="fb-box fb-strength">
+                        <h4><i class="fas fa-thumbs-up"></i> Lo que hiciste bien (Acierto)</h4>
+                        <p class="fb-text">${advisor.act2.acierto}</p>
+                    </div>
+                    <div class="fb-box fb-improve">
+                        <h4><i class="fas fa-bullseye"></i> Brecha Detectada (A corregir)</h4>
+                        <p class="fb-text">${advisor.act2.brecha}</p>
+                    </div>
+                </div>
+                <div class="fb-box fb-model">
+                    <h4><i class="fas fa-lightbulb"></i> Recomendación de Mejora & Plantilla Modelo POLI</h4>
+                    <p class="fb-text"><strong>Tu foco de ajuste:</strong> ${advisor.act2.tipModelo}</p>
+                    <div class="model-quote">
+                        "¡Hola [Nombre]! Te habla [Asesor] del <strong>Politécnico Grancolombiano</strong>. Qué gusto saludarte. Te contacto porque tu historia en [Programa] no tiene por qué quedarse pausada; sabemos que el trabajo o el presupuesto a veces complican el camino, pero mi propósito hoy es ayudarte a continuar sin perder ni una sola materia de las que ya avanzaste. A diferencia de un trámite tradicional, aquí ajustamos horarios flexibles y opciones de financiación a tu medida para que tu cuota mensual no descuadre tu bolsillo. Sin ningún compromiso, <strong>¿revisamos en 2 minuticos cómo te queda tu proyección para este periodo?</strong>"
+                    </div>
+                </div>
+            `;
+        } else {
+            act2BadgeWrap.innerHTML = `<span class="badge-pill badge-pending"><i class="fas fa-clock"></i> Sin entrega registrada</span>`;
+            act2Body.innerHTML = `
+                <div class="no-delivery-box">
+                    <i class="fas fa-microphone-slash" style="font-size: 1.5rem; margin-bottom: 8px; display: block;"></i>
+                    No se registró entrega individual en el reto de Elevator Pitch. Repasa la plantilla modelo en clase y prepárate para el simulador de llamadas.
+                </div>
+            `;
+        }
+    }
+
+    function logout() {
+        document.getElementById("cedulaInput").value = "";
+        document.getElementById("loginError").classList.remove("show");
+        document.getElementById("dashboardScreen").classList.remove("active");
+        document.getElementById("adminPanel").classList.remove("active");
+        document.getElementById("loginScreen").style.display = "flex";
+    }
+</script>
+
+</body>
+</html>
