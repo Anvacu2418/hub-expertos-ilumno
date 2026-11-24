@@ -340,14 +340,14 @@
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.18);
             border-radius: var(--radius-md);
-            padding: 12px 18px;
+            padding: 12px 16px;
             text-align: center;
-            min-width: 145px;
+            min-width: 135px;
         }
 
         .kpi-box span {
             display: block;
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             text-transform: uppercase;
             letter-spacing: 0.04em;
             color: var(--poli-yellow);
@@ -355,7 +355,7 @@
         }
 
         .kpi-box strong {
-            font-size: 1.25rem;
+            font-size: 1.15rem;
             font-weight: 800;
             color: var(--white);
         }
@@ -542,7 +542,7 @@
         }
 
         /* ==========================================================================
-           STUDIO FORMADORA 360° (EDICIÓN VISUAL + CARGA DE NUEVAS ACTIVIDADES)
+           STUDIO FORMADORA 360° (EDICIÓN VISUAL + IMPORTACIÓN MASIVA EN UN BLOQUE)
            ========================================================================== */
         .admin-panel {
             display: none;
@@ -591,6 +591,8 @@
         .btn-studio-yellow:hover { background: #eab308; }
         .btn-studio-green { background: var(--poli-green); color: var(--white); }
         .btn-studio-green:hover { background: #059669; }
+        .btn-studio-purple { background: var(--poli-purple); color: var(--white); }
+        .btn-studio-purple:hover { background: #7C3AED; }
         .btn-studio-outline { background: var(--white); color: var(--poli-blue); border: 1.5px solid #CBD5E1; }
         .btn-studio-outline:hover { border-color: var(--poli-blue); background: var(--poli-light-blue); }
 
@@ -671,7 +673,7 @@
         .modal-box {
             background: var(--white);
             width: 100%;
-            max-width: 720px;
+            max-width: 740px;
             border-radius: var(--radius-xl);
             box-shadow: var(--shadow-lg);
             overflow: hidden;
@@ -712,7 +714,6 @@
         .modal-body {
             padding: 22px 24px;
             overflow-y: auto;
-            space-y: 14px;
         }
 
         .m-field {
@@ -866,8 +867,8 @@
                 <h3 style="color: var(--poli-blue); font-weight: 800; font-size: 1.2rem;">
                     <i class="fas fa-sliders-h" style="color: var(--poli-yellow);"></i> Estudio de Gestión POLI 360° (Modo Formadora)
                 </h3>
-                <p style="font-size: 0.82rem; color: var(--text-muted); max-width: 680px;">
-                    Edita cualquier mensaje o nota en tiempo real, carga nuevas actividades para uno o varios integrantes y descarga el HTML actualizado con 1 clic para subirlo a GitHub Pages.
+                <p style="font-size: 0.82rem; color: var(--text-muted); max-width: 720px;">
+                    Carga bloques completos de nuevas actividades en 1 solo paso, edita cualquier ficha individual y descarga el HTML listo para GitHub Pages.
                 </p>
             </div>
             <span class="badge-pill badge-top" id="adminCountBadge">25 Asesores Activos</span>
@@ -875,8 +876,11 @@
 
         <div class="admin-toolbar">
             <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                <button type="button" class="btn-studio btn-studio-purple" onclick="openBulkImportModal()">
+                    <i class="fas fa-file-import"></i> Importar Bloque Masivo (JSON)
+                </button>
                 <button type="button" class="btn-studio btn-studio-blue" onclick="openNewActivityModal()">
-                    <i class="fas fa-plus-circle"></i> + Cargar Nueva Actividad
+                    <i class="fas fa-plus-circle"></i> + Nueva Actividad Manual
                 </button>
                 <button type="button" class="btn-studio btn-studio-outline" onclick="openNewAdvisorModal()">
                     <i class="fas fa-user-plus"></i> + Agregar Asesor
@@ -898,9 +902,9 @@
                     <tr>
                         <th>Cédula</th>
                         <th>Asesor</th>
-                        <th>Act. 1: Elevator Pitch</th>
-                        <th>Act. 2: Taller Grupal</th>
-                        <th>Extras</th>
+                        <th>Act. 1: Pitch</th>
+                        <th>Act. 2: Taller</th>
+                        <th>Act. 3 / Extras</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -928,23 +932,15 @@
                 <span>Act. 2 · Taller Grupal</span>
                 <strong id="kpiAct2">-- / 100</strong>
             </div>
+            <div class="kpi-box">
+                <span>Act. 3 · Tipificación</span>
+                <strong id="kpiAct3">-- / 100</strong>
+            </div>
         </div>
     </section>
 
-    <!-- ACTIVIDAD 1: ELEVATOR PITCH (INDIVIDUAL) -->
-    <article class="activity-card" id="cardAct1">
-        <div class="activity-header">
-            <div class="act-title-group">
-                <div class="act-icon" style="background: var(--poli-yellow); color: var(--poli-blue-dark);"><i class="fas fa-microphone-alt"></i></div>
-                <div>
-                    <h3>Actividad 1: Reto Elevator Pitch (Rematrícula Consultiva)</h3>
-                    <p>Evaluación individual de gancho comercial, diferencial y micro-compromiso en 30 segundos</p>
-                </div>
-            </div>
-            <div id="act1BadgeWrap"></div>
-        </div>
-        <div class="activity-body" id="act1Body"></div>
-    </article>
+    <!-- CONTENEDOR DINÁMICO PARA ACTIVIDADES RECIENTES (ACT 3, ACT 4, ETC.) -->
+    <div id="extraActivitiesContainer"></div>
 
     <!-- ACTIVIDAD 2: TALLER GRUPAL INSCRIPCIÓN Y CAMPAÑAS -->
     <article class="activity-card" id="cardAct2">
@@ -961,8 +957,51 @@
         <div class="activity-body" id="act2Body"></div>
     </article>
 
-    <!-- CONTENEDOR DINÁMICO PARA ACTIVIDADES ADICIONALES (ACT 3, ACT 4, ETC.) -->
-    <div id="extraActivitiesContainer"></div>
+    <!-- ACTIVIDAD 1: ELEVATOR PITCH (INDIVIDUAL) -->
+    <article class="activity-card" id="cardAct1">
+        <div class="activity-header">
+            <div class="act-title-group">
+                <div class="act-icon" style="background: var(--poli-yellow); color: var(--poli-blue-dark);"><i class="fas fa-microphone-alt"></i></div>
+                <div>
+                    <h3>Actividad 1: Reto Elevator Pitch (Rematrícula Consultiva)</h3>
+                    <p>Evaluación individual de gancho comercial, diferencial y micro-compromiso en 30 segundos</p>
+                </div>
+            </div>
+            <div id="act1BadgeWrap"></div>
+        </div>
+        <div class="activity-body" id="act1Body"></div>
+    </article>
+</div>
+
+<!-- MODAL 0: IMPORTAR BLOQUE MASIVO (JSON) -->
+<div class="modal-backdrop" id="bulkImportModal">
+    <div class="modal-box">
+        <div class="modal-head" style="background: var(--poli-purple);">
+            <h4><i class="fas fa-file-import"></i> Importar Bloque Masivo de Resultados</h4>
+            <button type="button" class="modal-close" onclick="closeModal('bulkImportModal')">×</button>
+        </div>
+        <div class="modal-body">
+            <p style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 12px;">
+                Pega aquí el bloque JSON completo generado por tu asistente para cargar o actualizar las calificaciones y retroalimentación de todo el equipo en un solo clic:
+            </p>
+            <div class="m-field">
+                <label>Bloque de Datos (JSON)</label>
+                <textarea id="bulkJsonInput" class="m-textarea" style="min-height: 210px; font-family: monospace; font-size: 0.8rem;" placeholder='{"titulo": "Actividad 4: ...", "modalidad": "Individual", "resultados": { "1002402990": { "resultado": "95 / 100 · Sobresaliente", "fortalezas": "...", "mejoras": "..." } }}'></textarea>
+            </div>
+            <div class="m-field">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; text-transform: none;">
+                    <input type="checkbox" id="bulkReplaceSameTitle" checked>
+                    <span>Si ya existe una actividad con el mismo título en el asesor, <strong>reemplazarla</strong> en lugar de duplicarla</span>
+                </label>
+            </div>
+        </div>
+        <div class="modal-foot">
+            <button type="button" class="btn-studio btn-studio-outline" onclick="closeModal('bulkImportModal')">Cancelar</button>
+            <button type="button" class="btn-studio btn-studio-purple" onclick="processBulkImport()">
+                <i class="fas fa-bolt"></i> Cargar Todo el Bloque
+            </button>
+        </div>
+    </div>
 </div>
 
 <!-- MODAL 1: EDITAR RESULTADOS Y FEEDBACK DE UN ASESOR -->
@@ -974,6 +1013,34 @@
         </div>
         <div class="modal-body">
             <input type="hidden" id="editCedula">
+
+            <div id="editExtraActivitiesWrap"></div>
+
+            <div class="m-section-divider"><i class="fas fa-users"></i> Actividad 2: Taller Grupal</div>
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px;">
+                <div class="m-field">
+                    <label>Nombre del Grupo</label>
+                    <input type="text" id="editTallerEquipo" class="m-input" placeholder="Ej: Expertos Poli">
+                </div>
+                <div class="m-field">
+                    <label>Nota (0 a 100)</label>
+                    <input type="number" id="editTallerNota" class="m-input" min="0" max="100" placeholder="Ej: 84">
+                </div>
+            </div>
+            <div class="m-field">
+                <label>Fortalezas del Equipo (una por línea)</label>
+                <textarea id="editTallerFortalezas" class="m-textarea" placeholder="Escribe cada fortaleza en una línea nueva..."></textarea>
+            </div>
+            <div class="m-field">
+                <label>Ajustes Operativos para el Grupo (uno por línea)</label>
+                <textarea id="editTallerMejoras" class="m-textarea" placeholder="Escribe cada ajuste en una línea nueva..."></textarea>
+            </div>
+            <div class="m-field">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; text-transform: none;">
+                    <input type="checkbox" id="applyToAllTeamMembers" checked>
+                    <span>Aplicar este cambio de Actividad 2 a <strong>todos los integrantes de este mismo equipo</strong> automáticamente</span>
+                </label>
+            </div>
 
             <div class="m-section-divider"><i class="fas fa-microphone-alt"></i> Actividad 1: Elevator Pitch (Individual)</div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
@@ -1002,34 +1069,6 @@
                 <label>Brecha detectada (A corregir)</label>
                 <textarea id="editPitchBrecha" class="m-textarea"></textarea>
             </div>
-
-            <div class="m-section-divider"><i class="fas fa-users"></i> Actividad 2: Taller Grupal</div>
-            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px;">
-                <div class="m-field">
-                    <label>Nombre del Grupo</label>
-                    <input type="text" id="editTallerEquipo" class="m-input" placeholder="Ej: Expertos Poli">
-                </div>
-                <div class="m-field">
-                    <label>Nota (0 a 100)</label>
-                    <input type="number" id="editTallerNota" class="m-input" min="0" max="100" placeholder="Ej: 84">
-                </div>
-            </div>
-            <div class="m-field">
-                <label>Fortalezas del Equipo (una por línea)</label>
-                <textarea id="editTallerFortalezas" class="m-textarea" placeholder="Escribe cada fortaleza en una línea nueva..."></textarea>
-            </div>
-            <div class="m-field">
-                <label>Ajustes Operativos para el Grupo (uno por línea)</label>
-                <textarea id="editTallerMejoras" class="m-textarea" placeholder="Escribe cada ajuste en una línea nueva..."></textarea>
-            </div>
-            <div class="m-field">
-                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; text-transform: none;">
-                    <input type="checkbox" id="applyToAllTeamMembers" checked>
-                    <span>Aplicar este cambio de Actividad 2 a <strong>todos los integrantes de este mismo equipo</strong> automáticamente</span>
-                </label>
-            </div>
-
-            <div id="editExtraActivitiesWrap"></div>
         </div>
         <div class="modal-foot">
             <button type="button" class="btn-studio btn-studio-outline" onclick="closeModal('editModal')">Cancelar</button>
@@ -1040,7 +1079,7 @@
     </div>
 </div>
 
-<!-- MODAL 2: CARGAR NUEVA ACTIVIDAD (ACT 3, ACT 4, ETC.) -->
+<!-- MODAL 2: CARGAR NUEVA ACTIVIDAD MANUAL -->
 <div class="modal-backdrop" id="newActModal">
     <div class="modal-box">
         <div class="modal-head">
@@ -1051,13 +1090,13 @@
             <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px;">
                 <div class="m-field">
                     <label>Título de la Actividad *</label>
-                    <input type="text" id="newActTitle" class="m-input" placeholder="Ej: Actividad 3: Simulador Llamadas Reales">
+                    <input type="text" id="newActTitle" class="m-input" placeholder="Ej: Actividad 4: Simulador Llamadas Reales">
                 </div>
                 <div class="m-field">
                     <label>Modalidad *</label>
                     <select id="newActType" class="m-select">
-                        <option value="Grupal">Grupal</option>
                         <option value="Individual">Individual</option>
+                        <option value="Grupal">Grupal</option>
                     </select>
                 </div>
             </div>
@@ -1068,7 +1107,7 @@
                 </div>
                 <div class="m-field">
                     <label>Calificación / Nivel *</label>
-                    <input type="text" id="newActScore" class="m-input" placeholder="Ej: 90 / 100 o Top">
+                    <input type="text" id="newActScore" class="m-input" placeholder="Ej: 90 / 100 · Sobresaliente">
                 </div>
             </div>
             <div class="m-field">
@@ -1128,7 +1167,7 @@
 
 <script id="portalDataScript">
     // ==========================================================================
-    // BASE DE DATOS MAESTRA POLI 360° (ACTUALIZABLE DESDE LA INTERFAZ VISUAL)
+    // BASE DE DATOS MAESTRA POLI 360° (INCLUYE ACT 1, ACT 2 Y ACT 3 TIPIFICACIÓN)
     // ==========================================================================
     const ADMIN_CODE = "ANGIE360";
     const INITIAL_ADVISORS_DB = [
@@ -1182,7 +1221,16 @@
         "Caso 5 (Última Materia y regla de 3 materias): los $512.300 en pregrado virtual corresponden a la asignatura completa (no por crédito). Si debe 3 materias y solo puede ver 1 por prerrequisitos, paga media matrícula (no matrícula completa)."
       ]
     },
-    "extra_activities": []
+    "extra_activities": [
+      {
+        "titulo": "Actividad 3: Tipificación en Matriz de Soporte (Genesys & HubSpot)",
+        "modalidad": "Individual",
+        "equipo": "",
+        "resultado": "82 / 100 · Bueno / En Consolidación",
+        "fortalezas": "• Excelente criterio al identificar la ruta exacta de la Matriz en 4 de los 5 casos (especialmente en los Casos 1, 2 y 3 donde acertaste con 'Financiera | Información institucional | Canales de atención y medios de pago', y en Caso 4 con 'Académica | Registro de materias | Inscripción de Asignaturas').\n• Muy buen cierre de gestión diferenciando cuándo es Primer contacto informativo vs. Escalado a Dirección Financiera.",
+        "mejoras": "• Dos ajustes clave de nomenclatura y proceso:\n  1) En el Caso 5 (Estefanía - Certificado de Matriculado que no descarga porque tiene 0 materias inscritas), pusiste 'Certificados segundo nivel | Certificado de fecha de inicio y terminación de materias'. El título correcto para el Certificado de Matriculado es 'Administrativa | Certificados de primer nivel | Certificados de primer nivel'.\n  2) Evita mezclar campos genéricos inventados ('Subcategoría / Tema') con la taxonomía oficial del Poli; en HubSpot usamos estrictamente Clase | Detalle | Título de la Matriz."
+      }
+    ]
   },
   {
     "cedula": "52999212",
@@ -1208,7 +1256,16 @@
         "Bitácora de dudas: el equipo la dejó en blanco; es indispensable registrar dudas y retos para fortalecer las sesiones de refuerzo."
       ]
     },
-    "extra_activities": []
+    "extra_activities": [
+      {
+        "titulo": "Actividad 3: Tipificación en Matriz de Soporte (Genesys & HubSpot)",
+        "modalidad": "Individual",
+        "equipo": "",
+        "resultado": "75 / 100 · En Desarrollo",
+        "fortalezas": "• Tabla muy ordenada y clara, con acierto exacto en 4 de los 5 casos de la Sección A:\n  - Caso 1 (Molestia por error en línea y cobro adicional): Financiero | Órdenes de pago | Orden de Matrícula.\n  - Caso 3 (Busca rebaja o facilidades por liquidez): Financiero | Órdenes de pago | Orden de Matrícula.\n  - Caso 4 (Retoma estudios / reintegro): Académico | Reintegro | Reintegro.\n  - Caso 5 (Solicita volante o recibo para pagar): Financiero | Órdenes de pago | Orden de Matrícula.",
+        "mejoras": "• Ajuste clave en el Caso 2 ('Quiere cancelar o retirarse por saturación, falta de disponibilidad horaria y aprietos económicos'): lo tipificaste como 'Académico | Reintegro | Reintegro'. ¡Ojo! Reintegro es únicamente cuando un estudiante inactivo quiere VOLVER a estudiar. Cuando un estudiante activo quiere retirarse/cancelar por dinero o tiempo, primero aplicamos retención consultiva (media matrícula o financiación en 'Financiera | Órdenes de Pago | Orden de matrícula') y, si ya pagó e insiste en retirarse, se tipifica 'Financiera | Devolución | Aplazamiento y Devolución'."
+      }
+    ]
   },
   {
     "cedula": "1025521031",
@@ -1234,7 +1291,16 @@
         "Bitácora de dudas: el equipo la dejó en blanco; es indispensable registrar dudas y retos para fortalecer las sesiones de refuerzo."
       ]
     },
-    "extra_activities": []
+    "extra_activities": [
+      {
+        "titulo": "Actividad 3: Tipificación en Matriz de Soporte (Genesys & HubSpot)",
+        "modalidad": "Individual",
+        "equipo": "",
+        "resultado": "96 / 100 · Sobresaliente",
+        "fortalezas": "• Entregable ejemplar en profundidad operativa: resolviste 8 casos completos cruzando pantallazos reales de la Matriz de Tipificación con guiones de gestión, validaciones en Analytics/Banner y tiempos de respuesta (SLA).\n• Acierto total en 7 de los 8 casos, destacando especialmente tu precisión en:\n  - Caso 2 (Pide descuento o amenaza con aplazar sin haber pagado): Financiera | Órdenes de Pago | Orden de matrícula.\n  - Casos 5, 6 y 7 (Opciones de Abono 20%, CrediPoli 40/60 y pago con cesantías): Financiera | Información institucional | Canales de atención y medios de pago.\n  - Casos 3 y 8 (Reintegro con temor por materias y por incremento de valor): Académica | Reintegro | Reintegro.",
+        "mejoras": "• Ajuste puntual en Caso 1 (Julián Bermúdez - Falla de pasarela con recargo extraordinario de $380.000): tipificaste 'Financiera | Legalización | Legalización de matrícula', pero ese título aplica únicamente cuando el pago YA se debitó/realizó y no se refleja en el sistema financiero. Como la pasarela falló y el estudiante NO alcanzó a pagar (le quedó una orden con recargo extraordinario), el título correcto en la matriz es 'Financiera | Órdenes de Pago | Orden de matrícula' (para revisión/ajuste de factura y recargo)."
+      }
+    ]
   },
   {
     "cedula": "1014188725",
@@ -1273,7 +1339,16 @@
         "Compromiso de nivelación en equipo: completar los casos pendientes (2, 3, 4 y supletorios/incapacidad del 6) y enviar el PDF actualizado."
       ]
     },
-    "extra_activities": []
+    "extra_activities": [
+      {
+        "titulo": "Actividad 3: Tipificación en Matriz de Soporte (Genesys & HubSpot)",
+        "modalidad": "Individual",
+        "equipo": "",
+        "resultado": "92 / 100 · Sobresaliente",
+        "fortalezas": "• 5 de 5 rutas de tipificación (Clase | Detalle | Título) 100% correctas contra la Matriz oficial:\n  - Llamada 1 (Abono 20%): Financiera | Órdenes de Pago | Orden de matrícula.\n  - Llamada 2 (Reintegro tras 1 año): Académica | Reintegro | Reintegro.\n  - Llamada 3 (Inscripción de materias 4° semestre): Académica | Registro de materias | Inscripción de Asignaturas.\n  - Llamada 4 (Certificado de Matriculado): Administrativa | Certificados de primer nivel | Certificados de primer nivel.\n  - Llamada 5 (Aplazamiento por viaje): Financiera | Devolución | Aplazamiento y Devolución.",
+        "mejoras": "• Revisa con lupa la vigencia de datos operativos en tus notas de gestión:\n  1) En Llamada 3 pusiste fechas de 2026 ('27 de julio y 25 de agosto de 2026'), cuando para el periodo 2027-1 la fecha actualizada de inscripción virtual es el 18 de enero.\n  2) En Llamada 5 (viaje de turismo por 6 meses) pusiste 'Crear ticket para congelamiento de clases', pero un viaje de turismo NO es fuerza mayor (no congela el 100%; aplica devolución parcial del 70% dentro de los primeros 15 días calendario y primero debemos intentar retención mostrando que puede estudiar virtual desde el exterior)."
+      }
+    ]
   },
   {
     "cedula": "1024497081",
@@ -1326,7 +1401,16 @@
         "Compromiso de nivelación en equipo: completar los casos pendientes (2, 3, 4 y supletorios/incapacidad del 6) y enviar el PDF actualizado."
       ]
     },
-    "extra_activities": []
+    "extra_activities": [
+      {
+        "titulo": "Actividad 3: Tipificación en Matriz de Soporte (Genesys & HubSpot)",
+        "modalidad": "Individual",
+        "equipo": "",
+        "resultado": "76 / 100 · En Desarrollo",
+        "fortalezas": "• Buen criterio general en la identificación de las clases principales (Financiero vs. Académico) y acierto exacto en los Casos 1, 3, 4 y 5 del Módulo 1 y Caso 1 del Módulo 2.\n• Acertaste en el Caso 2 de CrediPoli 40/60 tipificándolo como 'Financiero | Información Institucional | Canales de atención y medios de pago'.",
+        "mejoras": "• Revisa con detalle tres puntos en la Matriz:\n  1) Módulo 1 - Caso 2 ('Agotada y sin recursos - no tengo tiempo ni plata'): lo tipificaste como 'Reintegro', pero el estudiante no está pidiendo volver tras estar inactivo; está en riesgo de deserción/retiro por falta de tiempo y plata (se maneja retención con media matrícula o financiación en 'Orden de matrícula' / 'Canales de atención y medios de pago').\n  2) Módulo 2 - Caso 3 ('Pago por Cesantías'): pusiste 'Orden de matrícula', pero en la Matriz la información sobre pago con cesantías está explícitamente dentro de 'Financiera | Información institucional | Canales de atención y medios de pago' (solo va a 'Orden de matrícula' en 2do contacto si requiere Creación de Anticipos porque las cesantías superan el valor de la matrícula).\n  3) Recuerda escribir 'Genesys' correctamente y añadir siempre una breve nota de gestión."
+      }
+    ]
   },
   {
     "cedula": "1012418713",
@@ -1352,7 +1436,16 @@
       "tipModelo": "Reemplaza la presión por un micro-compromiso suave: '¿Te parece si revisamos en 2 minutos cómo te quedaría la proyección para este periodo?'"
     },
     "act2_taller": null,
-    "extra_activities": []
+    "extra_activities": [
+      {
+        "titulo": "Actividad 3: Tipificación en Matriz de Soporte (Genesys & HubSpot)",
+        "modalidad": "Individual",
+        "equipo": "",
+        "resultado": "90 / 100 · Sobresaliente",
+        "fortalezas": "• 5 de 5 casos correctamente clasificados en Genesys y HubSpot de acuerdo con la Matriz oficial:\n  - Caso 1 (Proceso de grado): Académica | Proceso de grado | Información general proceso de grado.\n  - Caso 2 (Materia extra / Módulo adicional): Académica | Registro de materias | Supletorios - Módulo Adicional - Vacacional - Intersemestral - Nivelatorios.\n  - Caso 3 (Madre soltera con aprietos económicos que acepta media matrícula): Académica | Registro de materias | Inscripción de Asignaturas (muy bien analizado porque el cierre efectivo fue la inscripción de media matrícula).\n  - Caso 4 (Solicitud envío orden de pago): Financiera | Órdenes de Pago | Orden de matrícula.\n  - Caso 5 (Opciones de pago por falta de recursos / Abono 20%): Financiera | Información institucional | Canales de atención y medios de pago.",
+        "mejoras": "• En tus próximas entregas incluye también la nota completa de gestión (qué validaste en Analytics, qué solución brindaste y el SLA), para entrenar el registro real en HubSpot de principio a fin."
+      }
+    ]
   },
   {
     "cedula": "1000580456",
@@ -1417,7 +1510,16 @@
         "Bitácora de dudas: el equipo la dejó en blanco; es indispensable registrar dudas y retos para fortalecer las sesiones de refuerzo."
       ]
     },
-    "extra_activities": []
+    "extra_activities": [
+      {
+        "titulo": "Actividad 3: Tipificación en Matriz de Soporte (Genesys & HubSpot)",
+        "modalidad": "Individual",
+        "equipo": "",
+        "resultado": "74 / 100 · En Desarrollo",
+        "fortalezas": "• Excelente resumen operativo en los 5 casos: captaste perfectamente la esencia comercial y de servicio de cada llamada (contención sin prometer ajustes en Julián, abono del 20% con ahorro del 10% en Daniela, CrediPoli 40/60 en Sebastián, cesantías familiares en Paola y retención con media matrícula en Viviana).\n• Acierto total en el Caso 2 (Daniela Ríos - Abono 20%): 'Financiera | Órdenes de Pago | Orden de matrícula'.",
+        "mejoras": "• ¡Atención al contexto de la Matriz en los otros 4 casos! Aunque entendiste muy bien qué decirle al estudiante, al buscar el título en la Matriz escogiste rutas que corresponden a otros procesos:\n  - Caso 1 (Julián Bermúdez - Falla en pasarela con recargo extraordinario de $380.000): elegiste 'Canales de atención y medios de pago', pero aquí el estudiante no pregunta cómo pagar; reporta un cobro extraordinario en su factura por falla de pasarela. El título correcto es 'Financiera | Órdenes de Pago | Orden de matrícula'.\n  - Caso 3 (Sebastián Pardo - CrediPoli 40/60): elegiste 'Legalización | Legalización de matrícula', pero el estudiante aún no ha pagado ni legalizado nada; está pidiendo información de financiación. Según la Matriz, CrediPoli va en 'Financiera | Información institucional | Canales de atención y medios de pago'.\n  - Caso 4 (Paola Andrea Gómez - Cesantías): elegiste 'Órdenes de Pago | Otros Servicios Financieros', pero en la Matriz la explicación de pago con cesantías está explícitamente en 'Financiera | Información institucional | Canales de atención y medios de pago'.\n  - Caso 5 (Viviana Salamanca - Agotada/Desiste, propone media matrícula): elegiste 'Gestión académica | Acompañamiento', pero al proponerle media matrícula para continuar pagando y cursando 2 materias, se tipifica en 'Financiera | Órdenes de Pago | Orden de matrícula' (o 'Académica | Registro de materias | Inscripción de Asignaturas' si se gestiona su carga académica).\n  - Nota general: recuerda revisar el SLA exacto de cada fila en la Matriz (no todos son de 5 a 8 días hábiles; por ejemplo, Orden de matrícula es 24 a 72 horas hábiles y Canales de atención es Informativo sin SLA)."
+      }
+    ]
   },
   {
     "cedula": "1016092896",
@@ -1443,7 +1545,16 @@
         "Bitácora de dudas: el equipo la dejó en blanco; es indispensable registrar dudas y retos para fortalecer las sesiones de refuerzo."
       ]
     },
-    "extra_activities": []
+    "extra_activities": [
+      {
+        "titulo": "Actividad 3: Tipificación en Matriz de Soporte (Genesys & HubSpot)",
+        "modalidad": "Individual",
+        "equipo": "",
+        "resultado": "100 / 100 · Excelente",
+        "fortalezas": "• 5 de 5 casos tipificados con precisión exacta contra la Matriz oficial:\n  - Caso 1 (Ceremonia de grado): Académica | Proceso de grado | Información general proceso de grado.\n  - Caso 2 (Certificado de Matriculado): Administrativa | Certificados de primer nivel | Certificados de primer nivel.\n  - Caso 3 (Aplazamiento/Devolución por viaje): Financiera | Devolución | Aplazamiento y Devolución.\n  - Caso 4 (Materia extra en el semestre): Académica | Registro de materias | Supletorios - Módulo Adicional - Vacacional - Intersemestral - Nivelatorios.\n  - Caso 5 (Regreso tras 1 año con cambio a virtual): Académica | Reintegro | Reintegro.\n• Excelente criterio operativo al identificar la necesidad real detrás de cada consulta (sin confundir cambio de modalidad en un estudiante inactivo con un trámite ordinario de cambio de modalidad).",
+        "mejoras": "• Como buena práctica para tus notas en HubSpot, acompaña siempre la ruta exacta (Clase | Detalle | Título) con el SLA/Tiempo de respuesta de la matriz y recuerda validar primero en Analytics si en el Caso 2 el estudiante ya inscribió materias (requisito para que Smart Campus habilite el Certificado de Matriculado) y en el Caso 3 aplicar retención antes de radicar devolución."
+      }
+    ]
   },
   {
     "cedula": "53045814",
@@ -1469,7 +1580,16 @@
         "Compromiso de nivelación en equipo: completar los casos pendientes (2, 3, 4 y supletorios/incapacidad del 6) y enviar el PDF actualizado."
       ]
     },
-    "extra_activities": []
+    "extra_activities": [
+      {
+        "titulo": "Actividad 3: Tipificación en Matriz de Soporte (Genesys & HubSpot)",
+        "modalidad": "Individual",
+        "equipo": "",
+        "resultado": "88 / 100 · Bueno / En Consolidación",
+        "fortalezas": "• Excelente estructura completa: construiste la conversación entera (saludo, validación de identidad de 3 datos, solución y cierre con encuesta) junto con la tipificación exacta en los 5 casos:\n  - Caso 1 (Abono 20%): Financiera | Órdenes de Pago | Orden de matrícula.\n  - Caso 2 (Reintegro): Académica | Reintegro | Reintegro.\n  - Caso 3 (Inscripción 4° semestre): Académica | Registro de materias | Inscripción de Asignaturas.\n  - Caso 4 (Módulo adicional): Académica | Registro de materias | Supletorios - Módulo Adicional - Vacacional - Intersemestral - Nivelatorios.\n  - Caso 5 (Certificado de Matriculado): Administrativa | Certificados de primer nivel | Certificados de primer nivel.",
+        "mejoras": "• Tres ajustes importantes de fondo para evitar errores con estudiantes reales:\n  1) En Caso 5 (Certificado de Matriculado), le dijiste que después de inscribir materias 'le permitirá generar recibo de pago del documento'. ¡Ojo! El Certificado de Matriculado es GRATUITO (0 pesos), no genera recibo de pago.\n  2) En Caso 1, el 20% de $2.400.000 son $480.000 (saldo $1.920.000), pero el ahorro de hasta 10% en virtual se calcula sobre el valor total de la matrícula ($240.000), no sobre el saldo pendiente.\n  3) En Caso 3 (Inscripción virtual por autogestión), la solución es 'Primer contacto / Informativo', no derivación a Operación."
+      }
+    ]
   },
   {
     "cedula": "53132687",
@@ -1521,7 +1641,16 @@
         "Compromiso de nivelación en equipo: completar los casos pendientes (2, 3, 4 y supletorios/incapacidad del 6) y enviar el PDF actualizado."
       ]
     },
-    "extra_activities": []
+    "extra_activities": [
+      {
+        "titulo": "Actividad 3: Tipificación en Matriz de Soporte (Genesys & HubSpot)",
+        "modalidad": "Individual",
+        "equipo": "",
+        "resultado": "84 / 100 · Bueno / En Consolidación",
+        "fortalezas": "• Muy buena lectura del diagnóstico previo en Analytics/Banner y del objetivo pedagógico de cada llamada.\n• Acierto exacto en los Casos 4 y 5:\n  - Caso 4 (Inscripción de materias 4° semestre): Académica | Registro de materias | Inscripción de Asignaturas.\n  - Caso 5 (Certificado de Matriculado): Administrativa | Certificados de primer nivel | Certificados de primer nivel.",
+        "mejoras": "• Revisa los títulos seleccionados en los Casos 1, 2 y 3 frente a la Matriz oficial:\n  - Casos 1 y 2 (Abono 20% y CrediPoli 40/60): elegiste 'Cartera - Deuda o Abonos' y 'Otros Servicios Financieros', pero en la Matriz la descripción dice textualmente que todas las facilidades de pago (pago por bloques, 50/50, pagos mixtos, CrediPoli y cesantías) van en 'Financiera | Información institucional | Canales de atención y medios de pago' (o 'Orden de matrícula' si se genera la orden).\n  - Caso 3 (Reintegro): tipificaste 'Financiera | Becas y ayudas | Gestión becas y ayudas - Reintegro', pero la necesidad principal es retomar estudios tras 1 año inactivo; por tanto su ruta correcta es 'Académica | Reintegro | Reintegro'."
+      }
+    ]
   },
   {
     "cedula": "1001089553",
@@ -1547,7 +1676,16 @@
         "Caso 5 (Última Materia y regla de 3 materias): los $512.300 en pregrado virtual corresponden a la asignatura completa (no por crédito). Si debe 3 materias y solo puede ver 1 por prerrequisitos, paga media matrícula (no matrícula completa)."
       ]
     },
-    "extra_activities": []
+    "extra_activities": [
+      {
+        "titulo": "Actividad 3: Tipificación en Matriz de Soporte (Genesys & HubSpot)",
+        "modalidad": "Individual",
+        "equipo": "",
+        "resultado": "88 / 100 · Bueno / En Consolidación",
+        "fortalezas": "• 8 de 8 tipificaciones en HubSpot (Clase | Detalle | Título) 100% acertadas frente a la Matriz oficial:\n  - Casos 1, 2 y 5 (Abono 20%, CrediPoli 40/60 y Cesantías): Financiera | Información institucional | Canales de atención y medios de pago.\n  - Casos 3, 6 y 8 (Reintegro por valor, cambio de modalidad y seguimiento de solicitud): Académica | Reintegro | Reintegro.\n  - Casos 4 y 7 (Restricción académica y bloques): Académica | Registro de materias | Inscripción de Asignaturas.",
+        "mejoras": "• Ajuste crítico en Genesys (Código de conclusión): en los Casos 3, 6 y 8 escribiste 'GENESYS: REINTEGRO'. Recuerda que en Genesys NO existe un código llamado 'Reintegro'; las clases/conclusiones válidas de Inbound en Genesys son únicamente: Académica, Administrativa, Financiera, Tecnológica, Institucional y Verificación Académica. Por lo tanto, esos 3 casos en Genesys se cierran como 'Académica'."
+      }
+    ]
   },
   {
     "cedula": "1006895851",
@@ -1626,7 +1764,16 @@
         "Caso 6 (Quiz con incapacidad EPS): el supletorio ($92.300) solo aplica para examen parcial o final; para un Quiz no presentado por incapacidad EPS se radica ticket de Ampliación de Actividades con el soporte."
       ]
     },
-    "extra_activities": []
+    "extra_activities": [
+      {
+        "titulo": "Actividad 3: Tipificación en Matriz de Soporte (Genesys & HubSpot)",
+        "modalidad": "Individual",
+        "equipo": "",
+        "resultado": "90 / 100 · Sobresaliente",
+        "fortalezas": "• 5 de 5 casos tipificados con precisión exacta tanto en Genesys como en HubSpot (Clase, Detalle y Título), incluyendo además los tiempos de respuesta (SLA) y áreas de gestión de la Matriz:\n  - Caso 1 (Abono 20%): Financiera | Órdenes de Pago | Orden de matrícula.\n  - Caso 2 (Reintegro): Académica | Reintegro | Reintegro.\n  - Caso 3 (Inscripción de materias): Académica | Registro de materias | Inscripción de Asignaturas.\n  - Caso 4 (Materia extra): Académica | Registro de materias | Supletorios - Módulo Adicional - Vacacional - Intersemestral - Nivelatorios.\n  - Caso 5 (Certificado de Matriculado): Administrativa | Certificados de primer nivel | Certificados de primer nivel.",
+        "mejoras": "• Cuidado con la columna 'Solución / Área de derivación' que copiaste en los Casos 3 y 4: la inscripción de asignaturas desde 2° semestre es de autogestión en Smart Campus (Primer contacto / Informativo, no requiere derivación a Operación - Área global salvo que exista una restricción técnica en el sistema)."
+      }
+    ]
   },
   {
     "cedula": "1016041402",
@@ -1680,7 +1827,16 @@
         "Caso 6 (Quiz con incapacidad EPS): el supletorio ($92.300) solo aplica para examen parcial o final; para un Quiz no presentado por incapacidad EPS se radica ticket de Ampliación de Actividades con el soporte."
       ]
     },
-    "extra_activities": []
+    "extra_activities": [
+      {
+        "titulo": "Actividad 3: Tipificación en Matriz de Soporte (Genesys & HubSpot)",
+        "modalidad": "Individual",
+        "equipo": "",
+        "resultado": "80 / 100 · Bueno / En Consolidación",
+        "fortalezas": "• 4 de 5 casos resueltos con total precisión contra la Matriz oficial:\n  - Caso 1 (Presupuesto limitado / Abono 20%): Financiera | Información institucional | Canales de atención y medios de pago.\n  - Caso 3 (Aplazamiento por salud / fuerza mayor): Financiera | Devolución | Aplazamiento y Devolución.\n  - Caso 4 (Vacacionales virtuales): Académica | Registro de materias | Inscripción de Asignaturas.\n  - Caso 5 (Certificado especial ICETEX): Administrativa | Certificados segundo nivel | Certificados especiales.",
+        "mejoras": "• Error crítico en el Caso 2 (Seguimiento de solicitud de reintegro radicada hace 2 días): lo tipificaste como 'Administrativa | Solicitudes y peticiones | Procesos disciplinarios', lo cual altera gravemente los indicadores de calidad. En la Matriz, el título 'Académica | Reintegro | Reintegro' incluye explícitamente el 2do contacto: 'Cuando el estudiante presente alguna novedad con su proceso de reintegro o requiera validar alguna información puntual sobre su proceso de reintegro'."
+      }
+    ]
   },
   {
     "cedula": "1023931962",
@@ -1733,13 +1889,22 @@
         "Caso 6 (Quiz con incapacidad EPS): el supletorio ($92.300) solo aplica para examen parcial o final; para un Quiz no presentado por incapacidad EPS se radica ticket de Ampliación de Actividades con el soporte."
       ]
     },
-    "extra_activities": []
+    "extra_activities": [
+      {
+        "titulo": "Actividad 3: Tipificación en Matriz de Soporte (Genesys & HubSpot)",
+        "modalidad": "Individual",
+        "equipo": "",
+        "resultado": "95 / 100 · Sobresaliente",
+        "fortalezas": "• 6 de 6 casos tipificados con exactitud frente a la Matriz oficial y acompañados de notas de gestión en HubSpot de altísima calidad comercial y operativa:\n  - Caso 1 (Falla pasarela / recargo): Financiera | Órdenes de Pago | Orden de matrícula.\n  - Caso 2 (Abono 20%): Financiera | Órdenes de Pago | Orden de matrícula.\n  - Caso 3 (Reintegro + beneficio 10% + convenio): Académica | Reintegro | Reintegro.\n  - Caso 4 (Fechas inscripción 4° semestre): Académica | Registro de materias | Inscripción de Asignaturas.\n  - Caso 5 (Materia extra): Académica | Registro de materias | Módulo Adicional.\n  - Caso 6 (Aplazamiento por viaje): Financiera | Devolución | Aplazamiento y Devolución.\n• Excelente manejo de retención en Caso 6 (argumentando flexibilidad virtual 24/7 antes de procesar devolución).",
+        "mejoras": "• En Caso 5, recuerda seleccionar en HubSpot el nombre completo exacto del título tal como aparece en la matriz ('Supletorios - Módulo Adicional - Vacacional - Intersemestral - Nivelatorios') y en Caso 2 ten presente que si la llamada es solo informativa de opciones/facilidades de pago sin generar orden dividida, también aplica 'Financiera | Información institucional | Canales de atención y medios de pago'."
+      }
+    ]
   }
 ];
 </script>
 
 <script>
-    const LOCAL_DB_KEY = "poli360_studio_db_v3";
+    const LOCAL_DB_KEY = "poli360_studio_db_v4";
     let ADVISORS_DB = [];
     let currentPreviewCedula = null;
 
@@ -1769,7 +1934,7 @@
         document.getElementById("toastText").textContent = msg;
         t.classList.add("show");
         clearTimeout(window._tTimer);
-        window._tTimer = setTimeout(() => t.classList.remove("show"), 2800);
+        window._tTimer = setTimeout(() => t.classList.remove("show"), 3000);
     }
 
     initDB();
@@ -1810,15 +1975,17 @@
         tbody.innerHTML = "";
         ADVISORS_DB.forEach(a => {
             const n1 = a.act1_pitch ? a.act1_pitch.nivel : "Sin entrega";
-            const n2 = a.act2_taller ? `${a.act2_taller.nota}/100 · ${a.act2_taller.equipo}` : "Sin entrega";
-            const extCount = (a.extra_activities && a.extra_activities.length) ? `${a.extra_activities.length} act.` : "0";
+            const n2 = a.act2_taller ? `${a.act2_taller.nota}/100` : "Sin entrega";
+            const extList = (a.extra_activities && a.extra_activities.length)
+                ? a.extra_activities.map(x => x.resultado.split("·")[0].trim()).join(" | ")
+                : "Sin entrega";
             const tr = document.createElement("tr");
             tr.innerHTML = `
                 <td><strong>${a.cedula}</strong></td>
                 <td>${a.nombre}</td>
                 <td>${n1}</td>
                 <td>${n2}</td>
-                <td>${extCount}</td>
+                <td><strong>${extList}</strong></td>
                 <td style="white-space: nowrap;">
                     <button class="btn-mini" onclick="previewAdvisor('${a.cedula}')"><i class="fas fa-eye"></i> Ver</button>
                     <button class="btn-mini btn-mini-edit" onclick="openEditModal('${a.cedula}')"><i class="fas fa-pen"></i> Editar</button>
@@ -1866,6 +2033,18 @@
         return map[nivel] || "medio";
     }
 
+    function getScoreBadgeFromText(resText) {
+        const numMatch = String(resText || "").match(/(\d+(\.\d+)?)/);
+        if (numMatch) {
+            const val = parseFloat(numMatch[1]);
+            if (val >= 90) return "badge-top";
+            if (val >= 80) return "badge-medio-alto";
+            if (val >= 70) return "badge-medio";
+            return "badge-alerta";
+        }
+        return "badge-top";
+    }
+
     function renderAdvisorDashboard(advisor, keepAdmin) {
         currentPreviewCedula = advisor.cedula;
         document.getElementById("loginScreen").style.display = "none";
@@ -1880,6 +2059,10 @@
 
         document.getElementById("kpiAct1").textContent = advisor.act1_pitch ? advisor.act1_pitch.nivel : "Pendiente";
         document.getElementById("kpiAct2").textContent = advisor.act2_taller ? `${advisor.act2_taller.nota} / 100` : "Pendiente";
+        const latestExtra = (advisor.extra_activities && advisor.extra_activities.length > 0)
+            ? advisor.extra_activities[advisor.extra_activities.length - 1].resultado.split("·")[0].trim()
+            : "Sin entrega";
+        document.getElementById("kpiAct3").textContent = latestExtra;
 
         // Actividad 1: Elevator Pitch
         const act1BadgeWrap = document.getElementById("act1BadgeWrap");
@@ -1957,49 +2140,137 @@
             `;
         }
 
-        // Render Actividades Adicionales (Act 3, Act 4, etc.)
+        // Render Actividades Adicionales (Act 3, Act 4, etc. - Las más recientes primero)
         const extraContainer = document.getElementById("extraActivitiesContainer");
         extraContainer.innerHTML = "";
-        (advisor.extra_activities || []).forEach((ext, idx) => {
-            const teamTag = ext.equipo
-                ? `<div class="team-banner-pill"><i class="fas fa-users"></i><span>Equipo: ${ext.equipo}</span></div>`
-                : "";
-            const card = document.createElement("article");
-            card.className = "activity-card";
-            card.innerHTML = `
-                <div class="activity-header">
-                    <div class="act-title-group">
-                        <div class="act-icon" style="background: var(--poli-green); color: var(--white);"><i class="fas fa-clipboard-check"></i></div>
-                        <div>
-                            <h3>${ext.titulo}</h3>
-                            <p>Modalidad: ${ext.modalidad} · Evaluado por Formación POLI</p>
+        const extras = advisor.extra_activities || [];
+        if (extras.length > 0) {
+            [...extras].reverse().forEach(ext => {
+                const teamTag = ext.equipo
+                    ? `<div class="team-banner-pill"><i class="fas fa-users"></i><span>Equipo: ${ext.equipo}</span></div>`
+                    : "";
+                const bCls = getScoreBadgeFromText(ext.resultado);
+                const card = document.createElement("article");
+                card.className = "activity-card";
+                card.innerHTML = `
+                    <div class="activity-header">
+                        <div class="act-title-group">
+                            <div class="act-icon" style="background: var(--poli-green); color: var(--white);"><i class="fas fa-clipboard-check"></i></div>
+                            <div>
+                                <h3>${ext.titulo}</h3>
+                                <p>Modalidad: ${ext.modalidad} · Auditoría Matriz de Soporte POLI</p>
+                            </div>
+                        </div>
+                        <span class="badge-pill ${bCls}"><i class="fas fa-star"></i> Resultado: ${ext.resultado}</span>
+                    </div>
+                    <div class="activity-body">
+                        ${teamTag}
+                        <div class="feedback-grid two-col">
+                            <div class="fb-box fb-strength">
+                                <h4><i class="fas fa-check-circle"></i> Fortalezas / Aciertos en Matriz</h4>
+                                <p class="fb-text">${ext.fortalezas}</p>
+                            </div>
+                            <div class="fb-box fb-improve">
+                                <h4><i class="fas fa-wrench"></i> Ajustes de Tipificación y Proceso</h4>
+                                <p class="fb-text">${ext.mejoras}</p>
+                            </div>
                         </div>
                     </div>
-                    <span class="badge-pill badge-top"><i class="fas fa-star"></i> Resultado: ${ext.resultado}</span>
-                </div>
-                <div class="activity-body">
-                    ${teamTag}
-                    <div class="feedback-grid two-col">
-                        <div class="fb-box fb-strength">
-                            <h4><i class="fas fa-check-circle"></i> Fortalezas / Aciertos</h4>
-                            <p class="fb-text">${ext.fortalezas}</p>
+                `;
+                extraContainer.appendChild(card);
+            });
+        } else {
+            extraContainer.innerHTML = `
+                <article class="activity-card">
+                    <div class="activity-header">
+                        <div class="act-title-group">
+                            <div class="act-icon" style="background: #94A3B8; color: var(--white);"><i class="fas fa-clipboard-list"></i></div>
+                            <div>
+                                <h3>Actividad 3: Tipificación en Matriz de Soporte (Genesys & HubSpot)</h3>
+                                <p>Modalidad: Individual · Auditoría Matriz de Soporte POLI</p>
+                            </div>
                         </div>
-                        <div class="fb-box fb-improve">
-                            <h4><i class="fas fa-wrench"></i> Oportunidades de Mejora</h4>
-                            <p class="fb-text">${ext.mejoras}</p>
+                        <span class="badge-pill badge-pending"><i class="fas fa-clock"></i> Sin entrega registrada</span>
+                    </div>
+                    <div class="activity-body">
+                        <div class="no-delivery-box">
+                            <i class="fas fa-file-excel" style="font-size: 1.5rem; margin-bottom: 8px; display: block;"></i>
+                            No se registró entregable asociado a tu cédula en la Actividad de Tipificación en Matriz. Si enviaste tu archivo con otro nombre, repórtalo a tu Formadora.
                         </div>
                     </div>
-                </div>
+                </article>
             `;
-            extraContainer.appendChild(card);
-        });
+        }
     }
 
     // ==========================================================================
-    // FUNCIONES VISUALES DEL STUDIO FORMADORA
+    // FUNCIONES VISUALES DEL STUDIO FORMADORA + IMPORTACIÓN MASIVA EN UN BLOQUE
     // ==========================================================================
     function closeModal(id) {
         document.getElementById(id).classList.remove("open");
+    }
+
+    function openBulkImportModal() {
+        document.getElementById("bulkJsonInput").value = "";
+        document.getElementById("bulkImportModal").classList.add("open");
+    }
+
+    function processBulkImport() {
+        const raw = document.getElementById("bulkJsonInput").value.trim();
+        if (!raw) {
+            alert("Pega primero el bloque JSON de resultados.");
+            return;
+        }
+        try {
+            const payload = JSON.parse(raw);
+            const titulo = payload.titulo || "Nueva Actividad Evaluada";
+            const modalidad = payload.modalidad || "Individual";
+            const resultadosMap = payload.resultados || payload;
+            const replaceSame = document.getElementById("bulkReplaceSameTitle").checked;
+
+            let updatedCount = 0;
+            let notFound = [];
+
+            Object.keys(resultadosMap).forEach(rawCed => {
+                const ced = cleanDoc(rawCed);
+                const item = resultadosMap[rawCed];
+                const adv = ADVISORS_DB.find(a => cleanDoc(a.cedula) === ced);
+                if (!adv) {
+                    notFound.push(rawCed);
+                    return;
+                }
+                if (!adv.extra_activities) adv.extra_activities = [];
+                const entry = {
+                    titulo: item.titulo || titulo,
+                    modalidad: item.modalidad || modalidad,
+                    equipo: item.equipo || "",
+                    resultado: item.resultado || "Evaluado",
+                    fortalezas: item.fortalezas || "",
+                    mejoras: item.mejoras || ""
+                };
+
+                if (replaceSame) {
+                    const existingIdx = adv.extra_activities.findIndex(x => x.titulo === entry.titulo);
+                    if (existingIdx >= 0) {
+                        adv.extra_activities[existingIdx] = entry;
+                    } else {
+                        adv.extra_activities.push(entry);
+                    }
+                } else {
+                    adv.extra_activities.push(entry);
+                }
+                updatedCount++;
+            });
+
+            persistLocal();
+            closeModal("bulkImportModal");
+            openAdminView();
+            let msg = `Bloque cargado: ${updatedCount} asesor(es) actualizado(s)`;
+            if (notFound.length > 0) msg += ` (${notFound.length} cédula(s) no hallada(s))`;
+            showToast(msg);
+        } catch (err) {
+            alert("El formato del bloque JSON tiene un error de sintaxis. Verifica que lo hayas copiado completo.\nDetalle: " + err.message);
+        }
     }
 
     function openEditModal(cedula) {
@@ -2008,18 +2279,6 @@
 
         document.getElementById("editCedula").value = adv.cedula;
         document.getElementById("editModalName").textContent = adv.nombre;
-
-        // Act 1
-        document.getElementById("editPitchNivel").value = adv.act1_pitch ? adv.act1_pitch.nivel : "";
-        document.getElementById("editPitchTip").value = adv.act1_pitch ? (adv.act1_pitch.tipModelo || "") : "";
-        document.getElementById("editPitchAcierto").value = adv.act1_pitch ? (adv.act1_pitch.acierto || "") : "";
-        document.getElementById("editPitchBrecha").value = adv.act1_pitch ? (adv.act1_pitch.brecha || "") : "";
-
-        // Act 2
-        document.getElementById("editTallerEquipo").value = adv.act2_taller ? (adv.act2_taller.equipo || "") : "";
-        document.getElementById("editTallerNota").value = adv.act2_taller ? (adv.act2_taller.nota || "") : "";
-        document.getElementById("editTallerFortalezas").value = adv.act2_taller ? (adv.act2_taller.fortalezas || []).join("\n") : "";
-        document.getElementById("editTallerMejoras").value = adv.act2_taller ? (adv.act2_taller.mejoras || []).join("\n") : "";
 
         // Extra activities editor
         const extWrap = document.getElementById("editExtraActivitiesWrap");
@@ -2045,6 +2304,18 @@
             `;
         });
 
+        // Act 2
+        document.getElementById("editTallerEquipo").value = adv.act2_taller ? (adv.act2_taller.equipo || "") : "";
+        document.getElementById("editTallerNota").value = adv.act2_taller ? (adv.act2_taller.nota || "") : "";
+        document.getElementById("editTallerFortalezas").value = adv.act2_taller ? (adv.act2_taller.fortalezas || []).join("\n") : "";
+        document.getElementById("editTallerMejoras").value = adv.act2_taller ? (adv.act2_taller.mejoras || []).join("\n") : "";
+
+        // Act 1
+        document.getElementById("editPitchNivel").value = adv.act1_pitch ? adv.act1_pitch.nivel : "";
+        document.getElementById("editPitchTip").value = adv.act1_pitch ? (adv.act1_pitch.tipModelo || "") : "";
+        document.getElementById("editPitchAcierto").value = adv.act1_pitch ? (adv.act1_pitch.acierto || "") : "";
+        document.getElementById("editPitchBrecha").value = adv.act1_pitch ? (adv.act1_pitch.brecha || "") : "";
+
         document.getElementById("editModal").classList.add("open");
     }
 
@@ -2062,6 +2333,20 @@
         const cedula = document.getElementById("editCedula").value;
         const adv = ADVISORS_DB.find(a => a.cedula === cedula);
         if (!adv) return;
+
+        // Save Extra Activities edits
+        document.querySelectorAll(".ext-res").forEach(inp => {
+            const i = Number(inp.dataset.idx);
+            if (adv.extra_activities[i]) adv.extra_activities[i].resultado = inp.value.trim();
+        });
+        document.querySelectorAll(".ext-str").forEach(inp => {
+            const i = Number(inp.dataset.idx);
+            if (adv.extra_activities[i]) adv.extra_activities[i].fortalezas = inp.value.trim();
+        });
+        document.querySelectorAll(".ext-imp").forEach(inp => {
+            const i = Number(inp.dataset.idx);
+            if (adv.extra_activities[i]) adv.extra_activities[i].mejoras = inp.value.trim();
+        });
 
         // Save Act 1
         const pNivel = document.getElementById("editPitchNivel").value;
@@ -2094,7 +2379,6 @@
             };
             adv.act2_taller = updatedTaller;
 
-            // Si está marcado aplicar a todo el equipo, sincronizar integrantes del mismo grupo
             if (document.getElementById("applyToAllTeamMembers").checked && oldTeam) {
                 ADVISORS_DB.forEach(member => {
                     if (member.act2_taller && member.act2_taller.equipo === oldTeam) {
@@ -2105,20 +2389,6 @@
         } else {
             adv.act2_taller = null;
         }
-
-        // Save Extra Activities edits
-        document.querySelectorAll(".ext-res").forEach(inp => {
-            const i = Number(inp.dataset.idx);
-            if (adv.extra_activities[i]) adv.extra_activities[i].resultado = inp.value.trim();
-        });
-        document.querySelectorAll(".ext-str").forEach(inp => {
-            const i = Number(inp.dataset.idx);
-            if (adv.extra_activities[i]) adv.extra_activities[i].fortalezas = inp.value.trim();
-        });
-        document.querySelectorAll(".ext-imp").forEach(inp => {
-            const i = Number(inp.dataset.idx);
-            if (adv.extra_activities[i]) adv.extra_activities[i].mejoras = inp.value.trim();
-        });
 
         persistLocal();
         closeModal("editModal");
@@ -2221,10 +2491,8 @@
     }
 
     function downloadUpdatedHTML() {
-        // Embeber el estado actual de ADVISORS_DB dentro del código fuente del HTML para publicarlo directo en GitHub Pages
         const docClone = document.documentElement.cloneNode(true);
 
-        // Limpiar estado visual activo antes de serializar
         const loginScr = docClone.querySelector("#loginScreen");
         const dashScr = docClone.querySelector("#dashboardScreen");
         const admPan = docClone.querySelector("#adminPanel");
