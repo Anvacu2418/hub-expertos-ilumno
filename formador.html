@@ -375,6 +375,45 @@
                     </table>
                 </div>
             </div>
+
+            <!-- PANEL DE RESCATE Y AUDITORÍA EN VIVO DESDE FIREBASE -->
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-xs p-6 space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+                    <div>
+                        <h3 class="text-base font-black text-ilumnoDark flex items-center gap-2">
+                            <i class="fas fa-database text-emerald-600"></i> Rescate y Registro en Vivo de Evaluaciones 360 (Firebase)
+                        </h3>
+                        <p class="text-xs text-slate-500">Muestra <strong>todas</strong> las evaluaciones guardadas en la base de datos (aunque la cédula tenga puntos o el aspirante no esté todavía en tu sábana).</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="pullGradesFromFirebase()" class="px-3.5 py-2 bg-ilumnoTeal hover:bg-[#0089A8] text-white font-bold text-xs rounded-xl transition flex items-center gap-1.5">
+                            <i class="fas fa-sync-alt"></i> Cruzar y Rescatar Notas
+                        </button>
+                        <button onclick="exportFirebaseEvalsCsv()" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition flex items-center gap-1.5">
+                            <i class="fas fa-file-csv"></i> Descargar CSV
+                        </button>
+                    </div>
+                </div>
+                <div id="firebase-evals-error" class="hidden p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs font-bold text-rose-700"></div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-center border-collapse text-xs">
+                        <thead>
+                            <tr class="bg-slate-800 text-white font-bold text-[11px]">
+                                <th class="p-2.5 border border-slate-300">Fecha / Hora</th>
+                                <th class="p-2.5 border border-slate-300">Cédula</th>
+                                <th class="p-2.5 border border-slate-300">Nombre Reportado</th>
+                                <th class="p-2.5 border border-slate-300">Evaluación</th>
+                                <th class="p-2.5 border border-slate-300">Aciertos</th>
+                                <th class="p-2.5 border border-slate-300">Nota %</th>
+                                <th class="p-2.5 border border-slate-300">Estado en Sábana</th>
+                            </tr>
+                        </thead>
+                        <tbody id="body-firebase-evals-rescue" class="divide-y divide-slate-200">
+                            <tr><td colspan="7" class="p-4 text-slate-400">Cargando registros desde Firebase...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </section>
 
         <!-- =================================================================== -->
@@ -1916,15 +1955,79 @@
             }
         };
 
-        // 1. Traer calificaciones presentadas en Evaluaciones 360 (Fase 2 -> Hab. Autogestión Producto, Fase 3 -> Eval. Aplicativos)
+        let cachedFirebaseEvals = [];
+        const cleanCC = (v) => String(v || '').replace(/\D/g, '');
+
+        window.renderFirebaseRescueTable = function(evals) {
+            const tbody = document.getElementById('body-firebase-evals-rescue');
+            if (!tbody) return;
+            if (!evals || evals.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="p-5 text-slate-400">No se encontraron evaluaciones registradas en Firebase aún.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = evals.map(ev => {
+                const cc = cleanCC(ev.cedula);
+                const exists = candidates.some(c => cleanCC(c.cedula) === cc);
+                return `
+                    <tr class="hover:bg-slate-50">
+                        <td class="p-2 border border-slate-200 text-[11px] text-slate-500">${ev.timestamp ? new Date(ev.timestamp).toLocaleString() : 'Sin fecha'}</td>
+                        <td class="p-2 border border-slate-200 font-mono font-bold">${cc || ev.cedula || 'N/A'}</td>
+                        <td class="p-2 border border-slate-200 font-semibold">${ev.name || 'Sin nombre'}</td>
+                        <td class="p-2 border border-slate-200">${ev.phase || ev.phaseKey || ''}</td>
+                        <td class="p-2 border border-slate-200">${ev.score ?? '-'} / ${ev.total ?? '-'}</td>
+                        <td class="p-2 border border-slate-200 font-black ${ev.percentage >= 90 ? 'text-emerald-600' : 'text-amber-600'}">${ev.percentage}%</td>
+                        <td class="p-2 border border-slate-200">
+                            ${exists
+                                ? `<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black">En tu sábana</span>`
+                                : `<button onclick="addMissingCandidateFromEval('${cc}', '${(ev.name || '').replace(/'/g, '')}')" class="px-2.5 py-1 rounded-lg bg-indigo-600 text-white text-[10px] font-bold hover:bg-indigo-700">+ Agregar a sábana</button>`
+                            }
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        };
+
+        window.addMissingCandidateFromEval = function(cedula, fullName) {
+            const parts = (fullName || 'Aspirante Nuevo').trim().split(' ');
+            const nombres = parts.slice(0, Math.ceil(parts.length / 2)).join(' ');
+            const apellidos = parts.slice(Math.ceil(parts.length / 2)).join(' ') || '-';
+            candidates.push(normalizeCandidateSubGrades({
+                req: '532', cedula, apellidos, nombres,
+                university: 'Politécnico Grancolombiano', split: 'Rematricula y Servicio',
+                supervisor: 'Sandra Gomez', novedad: '',
+                evalIlumno: 0, evalComercial: 0, evalAplicativos: 0, habAutogestion: 0,
+                evalFinal: 0, roleplayFinal: 0, puntualidad: 100, asistenciaNota: 100, participacion: 100,
+                days: { 1: 'A', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '' }
+            }));
+            window.persistData();
+            window.pullGradesFromFirebase();
+        };
+
+        window.exportFirebaseEvalsCsv = function() {
+            if (!cachedFirebaseEvals.length) return showToast('No hay registros para exportar', 'info');
+            const rows = [['Fecha', 'Cedula', 'Nombre', 'Fase', 'Aciertos', 'Total', 'Porcentaje']];
+            cachedFirebaseEvals.forEach(e => rows.push([e.timestamp || '', cleanCC(e.cedula), `"${e.name || ''}"`, `"${e.phase || ''}"`, e.score ?? '', e.total ?? '', e.percentage ?? '']));
+            const blob = new Blob([rows.map(r => r.join(',')).join('\n')], { type: 'text/csv;charset=utf-8;' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `rescate_notas_poli_${new Date().toISOString().slice(0, 10)}.csv`;
+            a.click();
+        };
+
         window.pullGradesFromFirebase = async function() {
             if (!db) return;
+            const errBox = document.getElementById('firebase-evals-error');
+            if (errBox) errBox.classList.add('hidden');
             try {
                 const snap = await getDocs(collection(db, 'evaluaciones_poli'));
+                const list = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                list.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
+                cachedFirebaseEvals = list;
+                window.renderFirebaseRescueTable(list);
+
                 let updated = 0;
-                snap.forEach(d => {
-                    const data = d.data();
-                    const match = candidates.find(c => String(c.cedula).trim() === String(data.cedula).trim());
+                [...list].reverse().forEach(data => {
+                    const match = candidates.find(c => cleanCC(c.cedula) === cleanCC(data.cedula));
                     if (match && typeof data.percentage === 'number') {
                         if (data.phaseKey === 'fase2' || (data.phase && data.phase.includes('Fase 2'))) {
                             match.habAutogestion = parseFloat(data.percentage.toFixed(2));
@@ -1937,13 +2040,51 @@
                         }
                     }
                 });
+
+                const progSnap = await getDocs(collection(db, 'expertos_progreso'));
+                progSnap.forEach(d => {
+                    const p = d.data();
+                    const match = candidates.find(c => cleanCC(c.cedula) === cleanCC(p.cedula || d.id));
+                    if (match) {
+                        if (typeof p.scoreFase2 === 'number' && !match.habAutogestion) {
+                            match.habAutogestion = p.scoreFase2;
+                            recalculateCandidateCortes(match);
+                            updated++;
+                        }
+                        if (typeof p.scoreFase3 === 'number' && !match.evalAplicativos) {
+                            match.evalAplicativos = p.scoreFase3;
+                            recalculateCandidateCortes(match);
+                            updated++;
+                        }
+                    }
+                });
+
                 window.persistData();
                 renderAll();
-                showToast(`Sincronizadas ${updated} calificaciones desde Evaluaciones 360`, 'success');
+                showToast(`Rescate completado: ${list.length} registros en DB, ${updated} notas cruzadas`, 'success');
             } catch (e) {
-                showToast('Modo local activo: verifica reglas de lectura en Firestore', 'info');
+                console.error(e);
+                if (errBox) {
+                    errBox.textContent = `Error de acceso a Firestore (${e.code || e.message}). Revisa las Reglas de Seguridad en Firebase Console.`;
+                    errBox.classList.remove('hidden');
+                }
             }
         };
+
+        if (db) {
+            onSnapshot(collection(db, 'evaluaciones_poli'), (snap) => {
+                const list = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                list.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
+                cachedFirebaseEvals = list;
+                window.renderFirebaseRescueTable(list);
+            }, (err) => {
+                const errBox = document.getElementById('firebase-evals-error');
+                if (errBox) {
+                    errBox.textContent = `No se puede leer evaluaciones_poli (${err.code}). Verifica las reglas en Firebase Console.`;
+                    errBox.classList.remove('hidden');
+                }
+            });
+        }
 
         if (db) {
             // 2. Escuchar Avance, Apuntes y permitir enviar Feedback a cada Experto
