@@ -1982,6 +1982,10 @@
             updateUIProgress();
             renderQuestionsList();
             checkInitialAccessOverlay();
+            const savedLesson = localStorage.getItem('ilumno_current_lesson');
+            if (userProfile && userProfile.cedula && savedLesson && savedLesson !== 'home' && LESSONS_DATA[savedLesson]) {
+                navigateToLesson(savedLesson);
+            }
         });
 
         function checkInitialAccessOverlay() {
@@ -2137,6 +2141,7 @@
         // ==========================================
         function navigateToLesson(lessonId) {
             currentLessonId = lessonId;
+            localStorage.setItem('ilumno_current_lesson', lessonId);
             const mainViewport = document.getElementById('main-viewport');
             const viewHome = document.getElementById('view-home');
             const lessonWrapper = document.getElementById('lesson-content-wrapper');
@@ -2272,7 +2277,7 @@
 
             if (combined.includes('evaluacion_satisfaccion') || combined.includes('satisfaccion') || combined.includes('satisfacción')) return '4.2';
             if (combined.includes('evaluacion') || combined.includes('evaluación')) return '4.1';
-            if (combined.includes('index.html') || combined.includes('inicio')) return 'home';
+            if (combined.includes('index.html')) return 'home';
 
             return null;
         }
@@ -2339,6 +2344,50 @@
             const mount = document.getElementById('eval-360-mount');
             if (!mount) return;
 
+            const savedDraft = localStorage.getItem('poli_eval_draft');
+            let draftBanner = '';
+            if (savedDraft) {
+                try {
+                    const d = JSON.parse(savedDraft);
+                    const answeredCount = Object.keys(d.answers || {}).length;
+                    if (answeredCount > 0) {
+                        draftBanner = `
+                            <div class="mb-5 p-4 rounded-2xl bg-amber-50 border border-amber-300 text-left space-y-2">
+                                <p class="text-xs font-black text-amber-900"><i class="fas fa-history mr-1"></i> Tienes una evaluación en curso (${d.phase === 'fase2' ? 'Fase 2' : 'Fase 3'}: ${answeredCount} respondidas)</p>
+                                <button type="button" onclick="resumeSavedQuizDraft()" class="w-full py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-black text-xs rounded-xl transition">
+                                    Continuar donde me quedé
+                                </button>
+                            </div>
+                        `;
+                    }
+                } catch (e) {}
+            }
+
+            const localEvals = JSON.parse(localStorage.getItem('poli_evaluations') || '[]');
+            const cleanCC = String(userProfile.cedula || '').replace(/\D/g, '');
+            const myEvals = localEvals.filter(ev => !cleanCC || String(ev.cedula || '').replace(/\D/g, '') === cleanCC);
+
+            const historyHtml = myEvals.length > 0 ? `
+                <div class="mt-6 pt-5 border-t border-slate-200 text-left">
+                    <h4 class="text-xs font-black text-slate-700 uppercase tracking-wider mb-2.5">
+                        <i class="fas fa-award text-ilumnoTeal mr-1"></i> Tus Notas Registradas
+                    </h4>
+                    <div class="space-y-2">
+                        ${myEvals.slice().reverse().map(ev => `
+                            <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+                                <div>
+                                    <strong class="text-ilumnoDark block">${escapeHtml(ev.phase || ev.phaseKey)}</strong>
+                                    <span class="text-[10px] text-slate-400">${ev.score}/${ev.total} aciertos • ${new Date(ev.timestamp).toLocaleString()}</span>
+                                </div>
+                                <span class="px-3 py-1 rounded-full font-black ${ev.percentage >= 90 ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
+                                    ${ev.percentage}%
+                                </span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            ` : '';
+
             mount.innerHTML = `
                 <div class="max-w-lg mx-auto bg-white p-6 sm:p-8 rounded-3xl shadow-xl border border-slate-200 fade-in">
                     <div class="flex justify-center mb-5">
@@ -2346,21 +2395,17 @@
                             <i class="fa-solid fa-shield-halved text-3xl text-ilumnoYellow"></i>
                         </div>
                     </div>
-                    <h3 class="text-2xl font-black text-center text-[#00264D] mb-1">
-                        Ecosistema de Evaluación 360
-                    </h3>
-                    <p class="text-xs sm:text-sm text-center text-slate-500 mb-6">
-                        Verifica tus datos y selecciona el módulo a evaluar
-                    </p>
-
+                    <h3 class="text-2xl font-black text-center text-[#00264D] mb-1">Ecosistema de Evaluación 360</h3>
+                    <p class="text-xs sm:text-sm text-center text-slate-500 mb-6">Verifica tus datos y selecciona el módulo a evaluar</p>
+                    ${draftBanner}
                     <form onsubmit="startIntegratedQuiz(event)" class="space-y-4">
                         <div>
                             <label class="block text-xs font-bold text-slate-700 mb-1">Nombre Completo</label>
                             <input required id="quiz-student-name" type="text" value="${escapeHtml(userProfile.name || '')}" class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-slate-700 mb-1">Número de Documento</label>
-                            <input required id="quiz-student-cedula" type="text" value="${escapeHtml(userProfile.cedula || '')}" class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Número de Documento (sin puntos ni espacios)</label>
+                            <input required id="quiz-student-cedula" type="text" value="${escapeHtml(String(userProfile.cedula || '').replace(/\D/g, ''))}" class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-slate-700 mb-1">Selecciona el módulo a presentar</label>
@@ -2373,14 +2418,26 @@
                             <span>Comenzar Evaluación</span> <i class="fa-solid fa-arrow-right"></i>
                         </button>
                     </form>
+                    ${historyHtml}
                 </div>
             `;
+        }
+
+        function resumeSavedQuizDraft() {
+            const savedDraft = localStorage.getItem('poli_eval_draft');
+            if (!savedDraft) return;
+            const d = JSON.parse(savedDraft);
+            evalState.phase = d.phase;
+            evalState.questions = QUESTION_BANK_360[d.phase];
+            evalState.currentIndex = d.currentIndex || 0;
+            evalState.answers = d.answers || {};
+            renderIntegratedQuizQuestion();
         }
 
         function startIntegratedQuiz(event) {
             event.preventDefault();
             userProfile.name = document.getElementById('quiz-student-name').value.trim();
-            userProfile.cedula = document.getElementById('quiz-student-cedula').value.trim();
+            userProfile.cedula = document.getElementById('quiz-student-cedula').value.trim().replace(/\D/g, '');
             saveState();
             syncProfileHeaderUI();
 
@@ -2388,6 +2445,7 @@
             evalState.questions = QUESTION_BANK_360[evalState.phase];
             evalState.currentIndex = 0;
             evalState.answers = {};
+            localStorage.removeItem('poli_eval_draft');
 
             renderIntegratedQuizQuestion();
         }
@@ -2398,7 +2456,11 @@
 
             const q = evalState.questions[evalState.currentIndex];
             const isLast = evalState.currentIndex === evalState.questions.length - 1;
-            const allAnswered = Object.keys(evalState.answers).length === evalState.questions.length;
+            const missingIndexes = [];
+            evalState.questions.forEach((_, i) => {
+                if (evalState.answers[i] === undefined) missingIndexes.push(i + 1);
+            });
+            const allAnswered = missingIndexes.length === 0;
 
             let gridHtml = '';
             evalState.questions.forEach((_, idx) => {
@@ -2426,6 +2488,13 @@
                         ${gridHtml}
                     </div>
 
+                    ${isLast && !allAnswered ? `
+                        <div class="bg-amber-50 border border-amber-300 text-amber-900 text-xs font-bold p-3.5 rounded-2xl flex items-center justify-between gap-3">
+                            <span><i class="fas fa-exclamation-triangle mr-1.5 text-amber-600"></i> Para ver tu nota te falta responder: Pregunta(s) ${missingIndexes.join(', ')}</span>
+                            <button type="button" onclick="jumpIntegratedQuiz(${missingIndexes[0] - 1})" class="px-3 py-1.5 bg-amber-500 text-white rounded-lg whitespace-nowrap">Ir a la #${missingIndexes[0]}</button>
+                        </div>
+                    ` : ''}
+
                     <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-lg border border-slate-200">
                         <div class="mb-6">
                             <div class="flex items-center justify-between mb-3">
@@ -2435,16 +2504,10 @@
                                 <span class="text-xs font-bold text-slate-400">${q.topic}</span>
                             </div>
                             <h3 class="text-lg sm:text-xl font-bold text-slate-800 leading-relaxed">${q.text}</h3>
-                            ${q.tip ? `
-                                <div class="mt-4 bg-amber-50 border border-amber-200 text-amber-900 text-xs sm:text-sm p-3.5 rounded-xl flex items-start gap-2">
-                                    <span class="font-medium">${q.tip}</span>
-                                </div>
-                            ` : ''}
+                            ${q.tip ? `<div class="mt-4 bg-amber-50 border border-amber-200 text-amber-900 text-xs sm:text-sm p-3.5 rounded-xl">${q.tip}</div>` : ''}
                         </div>
 
-                        <div class="space-y-3">
-                            ${optionsHtml}
-                        </div>
+                        <div class="space-y-3">${optionsHtml}</div>
 
                         <div class="mt-8 flex justify-between items-center border-t border-slate-100 pt-6">
                             <button type="button" onclick="prevIntegratedQuiz()" ${evalState.currentIndex === 0 ? 'disabled' : ''} class="font-bold py-2.5 px-5 rounded-xl text-xs sm:text-sm flex items-center gap-2 transition ${evalState.currentIndex === 0 ? 'text-slate-300 cursor-not-allowed' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
@@ -2456,8 +2519,8 @@
                                     Siguiente <i class="fa-solid fa-arrow-right"></i>
                                 </button>
                             ` : `
-                                <button type="button" onclick="finishIntegratedQuiz()" ${!allAnswered ? 'disabled' : ''} class="font-black py-3 px-7 rounded-xl text-xs sm:text-sm flex items-center gap-2 transition shadow-md ${allAnswered ? 'bg-ilumnoYellow text-[#00264D] hover:bg-amber-400' : 'bg-slate-200 text-slate-400 cursor-not-allowed'}">
-                                    Finalizar Evaluación <i class="fa-solid fa-check-circle"></i>
+                                <button type="button" onclick="${allAnswered ? 'finishIntegratedQuiz()' : `jumpIntegratedQuiz(${missingIndexes[0] - 1})`}" class="font-black py-3 px-7 rounded-xl text-xs sm:text-sm flex items-center gap-2 transition shadow-md ${allAnswered ? 'bg-ilumnoYellow text-[#00264D] hover:bg-amber-400' : 'bg-amber-100 text-amber-800 hover:bg-amber-200'}">
+                                    ${allAnswered ? 'Finalizar y Ver Nota <i class="fa-solid fa-check-circle"></i>' : `Responder faltante (#${missingIndexes[0]})`}
                                 </button>
                             `}
                         </div>
@@ -2468,6 +2531,11 @@
 
         function answerIntegratedQuiz(optIdx) {
             evalState.answers[evalState.currentIndex] = optIdx;
+            localStorage.setItem('poli_eval_draft', JSON.stringify({
+                phase: evalState.phase,
+                currentIndex: evalState.currentIndex,
+                answers: evalState.answers
+            }));
             renderIntegratedQuizQuestion();
         }
         function nextIntegratedQuiz() {
@@ -2506,9 +2574,11 @@
             const percentage = Math.round((correctCount / evalState.questions.length) * 100);
             const isSuccess = percentage >= 90;
 
+            localStorage.removeItem('poli_eval_draft');
+            const cleanCedula = String(userProfile.cedula || '').replace(/\D/g, '');
             const resultData = {
                 name: userProfile.name,
-                cedula: userProfile.cedula,
+                cedula: cleanCedula,
                 university: userProfile.campaign,
                 split: userProfile.split,
                 phaseKey: evalState.phase,
@@ -3051,7 +3121,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, collection, doc, setDoc, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, doc, getDoc, setDoc, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDTfwHBqGnB9axzTj4XzdVkcq6BcY_ZjqM",
@@ -3063,13 +3133,36 @@
         };
 
         let db;
+        let authReady = Promise.resolve();
         try {
             const app = initializeApp(firebaseConfig);
             const auth = getAuth(app);
             db = getFirestore(app);
-            signInAnonymously(auth).catch(() => {});
+            authReady = signInAnonymously(auth).catch((e) => console.warn("Auth anónimo:", e));
         } catch (err) {
             console.error("Error inicializando Firebase:", err);
+        }
+
+        window.loadExpertFromFirebase = async function() {
+            if (!db || !userProfile.cedula) return;
+            await authReady;
+            try {
+                const cleanCedula = String(userProfile.cedula).replace(/\D/g, '');
+                const snap = await getDoc(doc(db, 'expertos_progreso', cleanCedula));
+                if (snap.exists()) {
+                    const remote = snap.data();
+                    completedLessons = { ...(remote.completedLessons || {}), ...completedLessons };
+                    lessonNotes = { ...(remote.lessonNotes || {}), ...lessonNotes };
+                    saveState();
+                    updateUIProgress();
+                }
+            } catch (e) {
+                console.warn("Error leyendo progreso remoto:", e);
+            }
+        };
+
+        if (userProfile && userProfile.cedula) {
+            window.loadExpertFromFirebase();
         }
 
         // 1. Subir progreso, apuntes y datos del estudiante a Firestore
